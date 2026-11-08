@@ -1,0 +1,175 @@
+{
+  "model": "gpt-6-luna",
+  "checkerVersion": 7,
+  "metrics": {
+    "cases": 40,
+    "errors": 0,
+    "requirements": 100,
+    "baselineAnswerMissing": 18,
+    "answerMissingDetected": 18,
+    "missed": 0,
+    "falseAlerts": 8,
+    "repairsAttempted": 18,
+    "repairsAccepted": 18,
+    "afterAnswerMissing": 0,
+    "afterStatuses": {
+      "answered": 9,
+      "refused": 13,
+      "clarification": 78,
+      "missing": 0
+    },
+    "newOmissions": 0,
+    "legalSentencesNeedingReview": 13,
+    "boundaryCases": 12,
+    "boundaryPassed": 12
+  },
+  "previousMetrics": {
+    "cases": 40,
+    "errors": 0,
+    "requirements": 100,
+    "baselineAnswerMissing": 18,
+    "answerMissingDetected": 15,
+    "missed": 3,
+    "falseAlerts": 8,
+    "repairsAttempted": 15,
+    "repairsAccepted": 13,
+    "repairsInvalid": 2,
+    "afterAnswerMissing": 4,
+    "afterStatuses": {
+      "answered": 12,
+      "refused": 10,
+      "clarification": 74,
+      "missing": 4
+    },
+    "newOmissions": 0,
+    "legalSentencesNeedingReview": 11,
+    "boundaryCases": 12,
+    "boundaryPassed": 12
+  },
+  "oldMissingResolved": [
+    "C15:G2",
+    "C19:G2",
+    "C22:G3",
+    "C39:G2"
+  ],
+  "oldFalseAlertsResolved": [
+    "C03:G2",
+    "C05:G1",
+    "C14:G2",
+    "C26:G2",
+    "C36:G2",
+    "C38:G1",
+    "C38:G2"
+  ],
+  "newResidualOmissions": [],
+  "newFalseAlerts": [
+    "C24:G2",
+    "C27:G3",
+    "C28:G2",
+    "C30:G2",
+    "C37:G1",
+    "C37:G2",
+    "C40:G1"
+  ],
+  "disagreements": [
+    {
+      "caseId": "C23",
+      "id": "G1",
+      "text": "허용되는 공사 시간을 알려 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "공사 종류와 현장에 적용되는 허가·신고 조건 및 관련 기준을 확인해 허용 시간을 안내하려면 공사 시각과 구체적인 현장 위치가 필요할 수 있습니다. 제공된 위치만으로는 현장을 특정하기 어렵습니다.",
+      "rules": [
+        "INFORMATION_KIND_MISMATCH"
+      ]
+    },
+    {
+      "caseId": "C24",
+      "id": "G2",
+      "text": "이미 공개된 정보가 있는지 확인해 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "어떤 신청서나 서비스의 정보가 공개되었는지 확인하려면 대상을 특정할 필요가 있습니다. 공개 여부 자체는 아직 확인하지 않았습니다.",
+      "rules": [
+        "NO_SUBSTANTIVE_RESPONSE"
+      ]
+    },
+    {
+      "caseId": "C27",
+      "id": "G3",
+      "text": "폐가구 수거를 요청합니다.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "수거는 현장 위치에 따라 처리해야 하므로, 가상동이라는 넓은 위치만으로는 수거 장소를 확인하기 어렵습니다.",
+      "rules": [
+        "INFORMATION_ALREADY_PRESENT"
+      ]
+    },
+    {
+      "caseId": "C28",
+      "id": "G2",
+      "text": "우회 가능한 경로를 알려 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "우회 경로는 막힌 횡단보도의 실제 위치와 장애물 현황에 따라 달라지므로, 경로를 안내하려면 해당 정보가 필요합니다.",
+      "rules": [
+        "SHARED_SITE_SCOPE_BLOCKED"
+      ]
+    },
+    {
+      "caseId": "C30",
+      "id": "G2",
+      "text": "수리 책임 주체를 알려 주세요.",
+      "reference": "answered",
+      "flag": true,
+      "reason": "공용부분의 유지·보수 및 관리 주체가 공동주택관리기구라는 일반 안내를 했고, 구체적인 책임은 단지와 고장 상황에 따라 확인해야 한다고 설명했습니다.",
+      "rules": [
+        "INFORMATION_KIND_MISMATCH"
+      ]
+    },
+    {
+      "caseId": "C37",
+      "id": "G1",
+      "text": "보수 계획을 알려 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "보수 계획 확인은 특정 벤치의 현장 상태와 관리 대상 확인에 필요한 현장 위치가 있어야 하므로, 가상동이라는 넓은 위치만으로는 부족합니다.",
+      "rules": [
+        "INFORMATION_KIND_MISMATCH"
+      ]
+    },
+    {
+      "caseId": "C37",
+      "id": "G2",
+      "text": "계획이 없다면 이유를 설명해 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "계획이 없는 이유를 확인하려면 해당 벤치와 공원 관리 대상을 특정할 상세 위치가 필요하므로 적절한 확인 요청입니다.",
+      "rules": [
+        "INFORMATION_KIND_MISMATCH"
+      ]
+    },
+    {
+      "caseId": "C40",
+      "id": "G1",
+      "text": "이전 점검 결과를 알려 주세요.",
+      "reference": "clarification",
+      "flag": true,
+      "reason": "이전 신고 및 점검 기록을 확인해 결과를 안내하려면 해당 하천 위치와 신고 시점을 특정할 정보가 필요합니다.",
+      "rules": [
+        "INFORMATION_KIND_MISMATCH"
+      ]
+    }
+  ],
+  "residual": [],
+  "additionalBoundaries": {
+    "passed": 8,
+    "total": 8
+  },
+  "usage": {
+    "calls": 179,
+    "inputTokens": 346799,
+    "outputTokens": 115217
+  },
+  "source": "evals/results/coverage-v7-harness.json"
+}

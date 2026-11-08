@@ -1,0 +1,166 @@
+{
+  "model": "gpt-6-luna",
+  "metrics": {
+    "cases": 40,
+    "errors": 0,
+    "requirements": 100,
+    "baselineAnswerMissing": 18,
+    "answerMissingDetected": 15,
+    "missed": 3,
+    "falseAlerts": 8,
+    "repairsAttempted": 15,
+    "repairsAccepted": 13,
+    "repairsInvalid": 2,
+    "afterAnswerMissing": 4,
+    "afterStatuses": {
+      "answered": 12,
+      "refused": 10,
+      "clarification": 74,
+      "missing": 4
+    },
+    "newOmissions": 0,
+    "legalSentencesNeedingReview": 11,
+    "boundaryCases": 12,
+    "boundaryPassed": 12
+  },
+  "baselineMetrics": {
+    "cases": 40,
+    "requirements": 100,
+    "baselineSummaryMissing": 0,
+    "summaryMissingDetected": 0,
+    "summaryFalseAlerts": 0,
+    "baselineAnswerMissing": 18,
+    "answerMissingDetected": 15,
+    "answerFalseAlerts": 13,
+    "unmatchedRequirements": 0,
+    "legitimateComplaints": 10,
+    "legitimateFlaggedAsAbusive": 0,
+    "controlledCases": 8,
+    "controlledRequests": 22,
+    "controlledSummaryFlags": 22,
+    "controlledAnswerFlags": 22
+  },
+  "addedLegalSentencesNeedingReview": 9,
+  "disagreements": [
+    {
+      "case": "C03",
+      "gold": "G2",
+      "text": "야간 소음 측정 가능 여부를 알려 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "야간 소음 측정 가능 여부를 해당 현장에서 확인하려면 구체적인 위치와 측정 대상이 된 날짜·시간대가 필요합니다."
+    },
+    {
+      "case": "C05",
+      "gold": "G1",
+      "text": "현장 확인을 요청합니다.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "현장 확인을 하려면 가상동이라는 넓은 위치만으로는 부족하므로, 누수 지점과 현장 상태 등 구체적인 정보가 필요합니다."
+    },
+    {
+      "case": "C14",
+      "gold": "G2",
+      "text": "위험 상황에서 연락할 곳을 알려 주세요.",
+      "reference": "refused",
+      "detector": "missing",
+      "reason": "해당 장소에 적용되는 구체적인 연락처를 확인할 수 없는 이유를 안내했지만, 실제 연락처는 제공하지 않았습니다."
+    },
+    {
+      "case": "C19",
+      "gold": "G2",
+      "text": "새 수거함 설치 가능 여부를 알려 주세요.",
+      "reference": "missing",
+      "detector": "clarification",
+      "reason": "설치 가능 여부에 대한 구체적인 답이나 필요한 정보를 묻는 내용 없이 추후 안내하겠다는 약속만 있습니다."
+    },
+    {
+      "case": "C22",
+      "gold": "G3",
+      "text": "장기 개선 계획이 있는지 알려 주세요.",
+      "reference": "missing",
+      "detector": "clarification",
+      "reason": "장기 개선 계획이 있는지에 대한 구체적인 답은 없고, 확인하겠다는 약속만 있습니다. 현장 위치 정보 요청은 이 문의에 필요한 정보가 아닙니다."
+    },
+    {
+      "case": "C23",
+      "gold": "G1",
+      "text": "허용되는 공사 시간을 알려 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "공사 종류와 현장에 적용되는 허가·신고 조건 및 관련 기준을 확인해 허용 시간을 안내하려면 공사 시각과 구체적인 현장 위치가 필요할 수 있습니다. 제공된 위치만으로는 현장을 특정하기 어렵습니다."
+    },
+    {
+      "case": "C26",
+      "gold": "G2",
+      "text": "상담 기록 열람 방법을 안내해 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "열람할 상담 기록을 특정하기 위해 상담 일자나 기간 및 상담 방식을 확인하는 질문이 필요합니다."
+    },
+    {
+      "case": "C36",
+      "gold": "G2",
+      "text": "관할이 아니라면 이송 절차를 안내해 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "관할 여부와 이송 절차를 판단하려면 실제 위치와 구체적인 민원 내용이 필요합니다. 답변은 관할이 아닌 경우의 절차를 확정해 안내하지 않고, 필요한 정보를 요청했습니다."
+    },
+    {
+      "case": "C38",
+      "gold": "G1",
+      "text": "청구 방법을 알려 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "청구할 정보의 보유 기관을 확인해야 해당 기관의 공식 청구 접수 경로와 절차를 안내할 수 있습니다."
+    },
+    {
+      "case": "C38",
+      "gold": "G2",
+      "text": "공개 가능한 자료 범위를 안내해 주세요.",
+      "reference": "clarification",
+      "detector": "missing",
+      "reason": "요청 자료의 종류와 기간이 있어야 공개 대상 자료의 범위를 확인할 수 있습니다."
+    },
+    {
+      "case": "C39",
+      "gold": "G2",
+      "text": "고장 신고 번호를 알려 주세요.",
+      "reference": "missing",
+      "detector": "clarification",
+      "reason": "고장 신고 번호를 알려 달라는 요청에 번호나 신고 방법을 구체적으로 안내하지 않고, 추후 안내하겠다고만 했습니다. 점검 위치 확인은 이 일반 정보 요청에 필요한 정보가 아닙니다."
+    }
+  ],
+  "residual": [
+    {
+      "case": "C15",
+      "gold": "G2",
+      "text": "검사 결과 공개 방법을 알려 주세요.",
+      "reason": "결과 공개 방법 자체에 대한 설명이나 구체적인 절차를 제시하지 않고, 검토하겠다고만 했습니다. 현장 위치 확인은 일반적인 공개 방법을 안내하는 데 필요한 정보가 아닙니다."
+    },
+    {
+      "case": "C19",
+      "gold": "G2",
+      "text": "새 수거함 설치 가능 여부를 알려 주세요.",
+      "reason": "설치 가능 여부에 대한 구체적인 답이나 필요한 정보를 묻는 내용 없이 추후 안내하겠다는 약속만 있습니다."
+    },
+    {
+      "case": "C22",
+      "gold": "G3",
+      "text": "장기 개선 계획이 있는지 알려 주세요.",
+      "reason": "장기 개선 계획이 있는지에 대한 구체적인 답은 없고, 확인하겠다는 약속만 있습니다. 현장 위치 정보 요청은 이 문의에 필요한 정보가 아닙니다."
+    },
+    {
+      "case": "C39",
+      "gold": "G2",
+      "text": "고장 신고 번호를 알려 주세요.",
+      "reason": "고장 신고 번호를 알려 달라는 요청에 번호나 신고 방법을 구체적으로 안내하지 않고, 추후 안내하겠다고만 했습니다. 점검 위치 확인은 이 일반 정보 요청에 필요한 정보가 아닙니다."
+    }
+  ],
+  "usage": {
+    "calls": 117,
+    "inputTokens": 261362,
+    "outputTokens": 101202
+  },
+  "report": "evals/results/coverage-v2-evidence.json"
+}

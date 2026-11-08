@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS phone_runtime (
+  id TEXT PRIMARY KEY,
+  endpoint TEXT NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

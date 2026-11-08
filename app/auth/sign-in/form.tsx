@@ -1,0 +1,14 @@
+'use client';
+import {useState,type FormEvent} from 'react';
+import {ShieldCheck,ArrowRight,Mail,LoaderCircle} from 'lucide-react';
+import {authClient} from '../../../lib/auth/client';
+export default function LoginForm({email:existing,verified,staffSite}:{email?:string;verified:boolean;staffSite:boolean}){
+  const [email,setEmail]=useState(existing||''),[otp,setOtp]=useState(''),[sent,setSent]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
+  async function submit(e:FormEvent){e.preventDefault();setBusy(true);setError('');try{
+    const result=sent?await authClient.signIn.emailOtp({email,otp}):await authClient.emailOtp.sendVerificationOtp({email,type:'sign-in'});
+    if(result.error)throw new Error(result.error.message||'로그인 요청을 처리하지 못했습니다.');
+    if(sent)window.location.assign('/');else setSent(true);
+  }catch(e){setError(e instanceof Error?e.message:'연결에 실패했습니다. 다시 시도해 주세요.');}finally{setBusy(false);}}
+  async function signOut(){setBusy(true);setError('');try{const r=await authClient.signOut();if(r.error)throw new Error(r.error.message);window.location.reload();}catch{setError('로그아웃에 실패했습니다. 다시 시도해 주세요.');setBusy(false);}}
+  return <main className={"auth-shell "+(staffSite?"admin-auth":"")}><a className="auth-brand" href="/"><ShieldCheck size={30}/><span>민원 쉴드<small>SHIELD & SOLVE</small></span></a><section className="auth-card"><span className="eyebrow">{staffSite?'OFFICER WORKSPACE':'CITIZEN PORTAL'}</span><h1>{existing&&verified?'로그인되어 있습니다':staffSite?'담당자 로그인':'나의 민원, 안전하게'}</h1><p>{staffSite?'승인된 담당자 이메일로 접수 민원과 법령 근거를 확인하세요.':'이메일 인증으로 민원을 접수하고 처리 결과를 확인하세요.'}</p>{existing&&verified?<><p className="auth-email">{existing}</p><a className="button primary full" href="/">홈으로 이동 <ArrowRight size={18}/></a><button className="button outline full" disabled={busy} onClick={signOut}>로그아웃</button></>:<form onSubmit={submit}><label>이메일 주소<input type="email" autoComplete="email" value={email} required disabled={sent||busy} onChange={e=>setEmail(e.target.value)} placeholder="name@example.com"/></label>{sent?<><p className="auth-notice">인증 코드를 보냈습니다. 받은편지함과 스팸함을 확인해 주세요.</p><label>인증 코드<input inputMode="numeric" autoComplete="one-time-code" value={otp} minLength={6} maxLength={8} required onChange={e=>setOtp(e.target.value.replace(/\D/g,''))} placeholder="6자리 코드" autoFocus/></label></>:null}<button className="button primary full" disabled={busy} type="submit">{busy?<LoaderCircle size={18} className="spin"/>:<Mail size={18}/>} {sent?'인증하고 로그인':'이메일 인증 코드 받기'}</button>{sent?<button type="button" className="button quiet full" disabled={busy} onClick={()=>{setSent(false);setOtp('');}}>이메일 변경 / 코드 다시 받기</button>:null}</form>}{error?<p className="auth-error" role="alert">{error}</p>:null}<div className="auth-foot">해커톤 시제품 · 실제 행정기관 접수와 연결되지 않습니다.</div><a className="auth-home" href="/">홈페이지로 돌아가기</a></section></main>;
+}

@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "method": "Real DB/API; provider and workflow dispatch mocked. No AI accuracy claim.",
+  "checks": {
+    "citizenSeesRequestsWithoutInternalDraft": true,
+    "originalAndHistoryPreserved": true,
+    "citizenIsolationAndStaffOnlyProgress": true,
+    "staleAndConcurrentWritesRejected": true,
+    "targetedReplyReopensAndQueuesAnalysis": true,
+    "answerPublicationNeverCompletesRequests": true,
+    "explicitResultCompletesOnlySelectedRequest": true,
+    "editAfterCompletionReopensAndInvalidatesReview": true,
+    "deletedCaseCannotMutate": true
+  },
+  "passed": true,
+  "finishedAt": "2026-11-08T05:53:23.007Z"
+}

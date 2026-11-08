@@ -1,0 +1,26 @@
+{
+  "definition": "Binary missing/not-missing agreement with frozen AI-authored reference labels; development set, not independently human-validated accuracy.",
+  "formula": "(TP + TN) / all requirements",
+  "results": [
+    {
+      "source": "evals/results/coverage-v2-evidence.json",
+      "sha256": "4924767d80ae6bca4b31e19efc1b495e081559327b224d8eb4f57197eea25379",
+      "model": "gpt-6-luna",
+      "tp": 15,
+      "tn": 74,
+      "correct": 89,
+      "total": 100,
+      "referenceAgreement": 0.89
+    },
+    {
+      "source": "evals/results/coverage-v7-harness.json",
+      "sha256": "6b98488c6af30a95e58cf617ee8d7cdde40fd031c2c601fed22ef395cd988084",
+      "model": "gpt-6-luna",
+      "tp": 18,
+      "tn": 74,
+      "correct": 92,
+      "total": 100,
+      "referenceAgreement": 0.92
+    }
+  ]
+}

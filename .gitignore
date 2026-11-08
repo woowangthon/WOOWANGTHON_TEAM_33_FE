@@ -1,0 +1,16 @@
+.vercel
+.env*
+
+node_modules/
+.next/
+outputs/
+*.tsbuildinfo
+.env*
+!.env.example
+!.env.phone.example
+/.swc
+.agents/
+*.lnk
+*.log
+*.zip
+*.tar.gz

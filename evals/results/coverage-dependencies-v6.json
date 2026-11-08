@@ -1,0 +1,622 @@
+{
+  "startedAt": "2026-11-07T15:08:14.176Z",
+  "synthetic": true,
+  "labelStatus": "ai_authored_development_regressions_not_independent",
+  "cases": [
+    {
+      "id": "D01",
+      "expected": "missing",
+      "review": {
+        "version": 6,
+        "draft": "기존 신호기를 점검하기 위해 교차로 위치와 고장 증상을 알려 주세요. 추가 설치 가능성은 추후 검토하겠습니다.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"횡단보도 신호기를 점검하고 새 신호기 추가 설치 가능 여부도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"새 신호기 추가 설치 가능 여부도 알려 주세요.\",\"requests\":[\"새 신호기 추가 설치 가능 여부도 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "새 신호기 추가 설치 가능 여부도 알려 주세요.",
+            "source": "body",
+            "quote": "새 신호기 추가 설치 가능 여부도 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "missing",
+            "responseReason": "구체적 답변·확답 불가 사유·필수 정보 질문이 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:18.757Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "NO_SUBSTANTIVE_RESPONSE"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "new_action",
+              "answerType": "promise",
+              "answerComplete": false,
+              "answerQuotes": [
+                {
+                  "sentenceId": "S2",
+                  "quote": "추가 설치 가능성은 추후 검토하겠습니다."
+                }
+              ],
+              "limitationReason": "",
+              "questionQuotes": [],
+              "scopeQuotes": [],
+              "questionScope": "unclear",
+              "informationKind": "none",
+              "informationNeeded": "",
+              "dependencyReason": "",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"횡단보도 신호기를 점검하고 새 신호기 추가 설치 가능 여부도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "new_action",
+                "quote": "새 신호기 추가 설치 가능 여부도 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "missing",
+      "pass": true
+    },
+    {
+      "id": "D02",
+      "expected": "clarification",
+      "review": {
+        "version": 6,
+        "draft": "추가 설치 가능성을 검토할 구간을 특정해야 합니다. 설치를 원하는 교차로와 현재 보행 경로, 특히 위험한 구간을 알려 주세요.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"횡단보도 신호기를 점검하고 새 신호기 추가 설치 가능 여부도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"새 신호기 추가 설치 가능 여부도 알려 주세요.\",\"requests\":[\"새 신호기 추가 설치 가능 여부도 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "새 신호기 추가 설치 가능 여부도 알려 주세요.",
+            "source": "body",
+            "quote": "새 신호기 추가 설치 가능 여부도 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "clarification",
+            "responseReason": "추가 설치 가능성을 검토할 구간을 특정해야 하기 때문입니다.",
+            "sentenceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:24.204Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "REQUIRED_QUESTION"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "new_action",
+              "answerType": "none",
+              "answerComplete": false,
+              "answerQuotes": [],
+              "limitationReason": "",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "추가 설치 가능성을 검토할 구간을 특정해야 합니다."
+                },
+                {
+                  "sentenceId": "S2",
+                  "quote": "설치를 원하는 교차로와 현재 보행 경로, 특히 위험한 구간을 알려 주세요."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "추가 설치 가능성을 검토할 구간을 특정해야 합니다."
+                },
+                {
+                  "sentenceId": "S2",
+                  "quote": "설치를 원하는 교차로와 현재 보행 경로, 특히 위험한 구간을 알려 주세요."
+                }
+              ],
+              "questionScope": "this_request",
+              "informationKind": "new_action_conditions",
+              "informationNeeded": "설치를 원하는 교차로와 현재 보행 경로, 특히 위험한 구간",
+              "dependencyReason": "추가 설치 가능성을 검토할 구간을 특정해야 하기 때문입니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"횡단보도 신호기를 점검하고 새 신호기 추가 설치 가능 여부도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "new_action",
+                "quote": "새 신호기 추가 설치 가능 여부도 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "clarification",
+      "pass": true
+    },
+    {
+      "id": "D03",
+      "expected": "missing",
+      "review": {
+        "version": 6,
+        "draft": "정확한 주소와 건물 사진을 알려 주시면 담당 기관을 확인해 드리겠습니다.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.\",\"requests\":[\"기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.",
+            "source": "body",
+            "quote": "기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "missing",
+            "responseReason": "이 질문의 정보 종류로 해당 요구에 대한 답변을 대신할 수 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:30.369Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "INFORMATION_KIND_MISMATCH"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "general_procedure",
+              "answerType": "none",
+              "answerComplete": false,
+              "answerQuotes": [],
+              "limitationReason": "",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "정확한 주소와 건물 사진을 알려 주시면 담당 기관을 확인해 드리겠습니다."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "정확한 주소와 건물 사진을 알려 주시면 담당 기관을 확인해 드리겠습니다."
+                }
+              ],
+              "questionScope": "other_request",
+              "informationKind": "location",
+              "informationNeeded": "정확한 주소와 건물 사진",
+              "dependencyReason": "담당 기관을 확인하기 위해 필요합니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "general_procedure",
+                "quote": "기관의 관할과 상관없이 일반적인 민원 이송 절차를 설명해 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "missing",
+      "pass": true
+    },
+    {
+      "id": "D04",
+      "expected": "clarification",
+      "review": {
+        "version": 6,
+        "draft": "관할과 이송 경로는 신청 업무에 따라 달라집니다. 어떤 지원 신청인지, 접수 기관과 접수번호를 알려 주세요.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.\",\"requests\":[\"제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.",
+            "source": "body",
+            "quote": "제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "clarification",
+            "responseReason": "신청 업무에 따라 관할과 이송 경로가 달라지기 때문입니다.",
+            "sentenceIds": [
+              "S2"
+            ]
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:38.337Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "REQUIRED_QUESTION"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "conditional_procedure",
+              "answerType": "limitation",
+              "answerComplete": false,
+              "answerQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "관할과 이송 경로는 신청 업무에 따라 달라집니다."
+                }
+              ],
+              "limitationReason": "관할과 이송 경로가 신청 업무에 따라 달라진다고 설명했습니다.",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S2",
+                  "quote": "어떤 지원 신청인지, 접수 기관과 접수번호를 알려 주세요."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "관할과 이송 경로는 신청 업무에 따라 달라집니다."
+                }
+              ],
+              "questionScope": "this_request",
+              "informationKind": "service_identifier",
+              "informationNeeded": "지원 신청의 종류, 접수 기관과 접수번호",
+              "dependencyReason": "신청 업무에 따라 관할과 이송 경로가 달라지기 때문입니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "conditional_procedure",
+                "quote": "제 신청이 시청 관할이 아니라면 다른 기관으로 옮기는 절차를 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "clarification",
+      "pass": true
+    },
+    {
+      "id": "D05",
+      "expected": "refused",
+      "review": {
+        "version": 6,
+        "draft": "현재 자료에 해당 시설의 운영기관과 고장 신고 연락처가 없어 정확한 번호를 안내하기 어렵습니다.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"이 시설의 고장 신고 연락처를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"이 시설의 고장 신고 연락처를 알려 주세요.\",\"requests\":[\"이 시설의 고장 신고 연락처를 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "이 시설의 고장 신고 연락처를 알려 주세요.",
+            "source": "body",
+            "quote": "이 시설의 고장 신고 연락처를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "refused",
+            "responseReason": "현재 자료에 해당 시설의 운영기관과 고장 신고 연락처가 없다고 답변했습니다.",
+            "sentenceIds": [
+              "S1"
+            ]
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:43.070Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "EXPLICIT_LIMITATION"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "contact_route",
+              "answerType": "limitation",
+              "answerComplete": false,
+              "answerQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "현재 자료에 해당 시설의 운영기관과 고장 신고 연락처가 없어 정확한 번호를 안내하기 어렵습니다."
+                }
+              ],
+              "limitationReason": "현재 자료에 해당 시설의 운영기관과 고장 신고 연락처가 없다고 답변했습니다.",
+              "questionQuotes": [],
+              "scopeQuotes": [],
+              "questionScope": "unclear",
+              "informationKind": "none",
+              "informationNeeded": "",
+              "dependencyReason": "",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"이 시설의 고장 신고 연락처를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "contact_route",
+                "quote": "이 시설의 고장 신고 연락처를 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "refused",
+      "pass": true
+    },
+    {
+      "id": "D06",
+      "expected": "missing",
+      "review": {
+        "version": 6,
+        "draft": "현장 점검을 위해 고장 난 승강기의 위치와 증상을 알려 주세요. 신고 전화번호는 확인 후 안내하겠습니다.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"고장 난 승강기를 점검해 주세요. 신고 전화번호도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"신고 전화번호도 알려 주세요.\",\"requests\":[\"신고 전화번호도 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "신고 전화번호도 알려 주세요.",
+            "source": "body",
+            "quote": "신고 전화번호도 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "missing",
+            "responseReason": "이 질문의 정보 종류로 해당 요구에 대한 답변을 대신할 수 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:53.532Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "INFORMATION_KIND_MISMATCH"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "contact_route",
+              "answerType": "promise",
+              "answerComplete": false,
+              "answerQuotes": [
+                {
+                  "sentenceId": "S2",
+                  "quote": "신고 전화번호는 확인 후 안내하겠습니다."
+                }
+              ],
+              "limitationReason": "",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "현장 점검을 위해 고장 난 승강기의 위치와 증상을 알려 주세요."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "현장 점검을 위해"
+                }
+              ],
+              "questionScope": "other_request",
+              "informationKind": "location",
+              "informationNeeded": "고장 난 승강기의 위치와 증상",
+              "dependencyReason": "현장 점검에 필요한 정보입니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"고장 난 승강기를 점검해 주세요. 신고 전화번호도 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "contact_route",
+                "quote": "신고 전화번호도 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "missing",
+      "pass": true
+    },
+    {
+      "id": "D07",
+      "expected": "clarification",
+      "review": {
+        "version": 6,
+        "draft": "조회할 계획 문서를 특정할 수 있도록 사업명과 시행 기관 또는 사업 연도를 알려 주세요.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.\",\"requests\":[\"이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.",
+            "source": "body",
+            "quote": "이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "clarification",
+            "responseReason": "조회할 계획 문서를 특정하는 데 필요합니다.",
+            "sentenceIds": [
+              "S1"
+            ]
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:08:58.222Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "REQUIRED_QUESTION"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "plan_existence",
+              "answerType": "none",
+              "answerComplete": false,
+              "answerQuotes": [],
+              "limitationReason": "",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "조회할 계획 문서를 특정할 수 있도록 사업명과 시행 기관 또는 사업 연도를 알려 주세요."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "조회할 계획 문서를 특정할 수 있도록 사업명과 시행 기관 또는 사업 연도를 알려 주세요."
+                }
+              ],
+              "questionScope": "this_request",
+              "informationKind": "plan_identifier",
+              "informationNeeded": "사업명과 시행 기관 또는 사업 연도",
+              "dependencyReason": "조회할 계획 문서를 특정하는 데 필요합니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "plan_existence",
+                "quote": "이전 정비 사업의 개선 계획이 남아 있는지 확인해 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "clarification",
+      "pass": true
+    },
+    {
+      "id": "D08",
+      "expected": "missing",
+      "review": {
+        "version": 6,
+        "draft": "임시 보수 현장을 찾기 위해 파손 위치와 사진을 보내 주세요. 장기 정비 계획은 확인하겠습니다.",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"보도가 파손됐습니다. 임시 보수와 장기 정비 계획 유무를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+        "analysisSnapshot": "{\"summary\":\"장기 정비 계획 유무를 알려 주세요.\",\"requests\":[\"장기 정비 계획 유무를 알려 주세요.\"]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "장기 정비 계획 유무를 알려 주세요.",
+            "source": "body",
+            "quote": "장기 정비 계획 유무를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "입력과 동일",
+            "responseStatus": "missing",
+            "responseReason": "이 질문의 정보 종류로 해당 요구에 대한 답변을 대신할 수 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-11-07T15:09:03.028Z",
+        "harness": {
+          "version": 1,
+          "decisions": [
+            {
+              "id": "R1",
+              "rule": "INFORMATION_KIND_MISMATCH"
+            }
+          ],
+          "observations": [
+            {
+              "id": "R1",
+              "requestKind": "plan_existence",
+              "answerType": "promise",
+              "answerComplete": false,
+              "answerQuotes": [
+                {
+                  "sentenceId": "S2",
+                  "quote": "장기 정비 계획은 확인하겠습니다."
+                }
+              ],
+              "limitationReason": "",
+              "questionQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "임시 보수 현장을 찾기 위해 파손 위치와 사진을 보내 주세요."
+                }
+              ],
+              "scopeQuotes": [
+                {
+                  "sentenceId": "S1",
+                  "quote": "임시 보수 현장을 찾기 위해"
+                }
+              ],
+              "questionScope": "other_request",
+              "informationKind": "location",
+              "informationNeeded": "파손 위치와 사진",
+              "dependencyReason": "임시 보수 현장을 찾기 위해 필요한 정보입니다.",
+              "alreadyProvided": false
+            }
+          ],
+          "plan": {
+            "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"합성 의존 관계 검증\"},{\"id\":\"body\",\"text\":\"보도가 파손됐습니다. 임시 보수와 장기 정비 계획 유무를 알려 주세요.\"}],\"location\":\"청주시 가상동\",\"category\":\"기타\",\"occurredAt\":\"2026-11-07\"}",
+            "items": [
+              {
+                "id": "R1",
+                "kind": "plan_existence",
+                "quote": "장기 정비 계획 유무를 알려 주세요."
+              }
+            ]
+          }
+        }
+      },
+      "actual": "missing",
+      "pass": true
+    }
+  ],
+  "hashes": {
+    "evals/coverage-dependencies-8.json": "619770ef4b2ad60773b48758a8e90c50e3ddb619d3d5064b236fce0e77b578d8",
+    "lib/coverage-ai.ts": "7b8bf23b54e3b1b2030e9d9c121789188e2728c6bb9da6298115671d33c14c20",
+    "lib/coverage-policy.ts": "6518ab7735b347984aff4f166aed9bc2f107b3aa9e3c9ff30c867876ee248b95",
+    "lib/coverage.ts": "7bd7af2c848ba9ea238a1179c70e9747cba0dd0ce22def4b242a467cfa4ac8d8"
+  },
+  "model": "gpt-6-luna",
+  "finishedAt": "2026-11-07T15:09:03.029Z",
+  "passed": 8
+}

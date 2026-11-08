@@ -1,0 +1,1242 @@
+[
+  {
+    "id": "C01",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 골목 쓰레기",
+      "body": "이 씨발, 일 좀 해라. 가상동 골목에 쓰레기가 쌓여 악취가 납니다. 쓰레기를 수거해 주세요. 재발 방지 방법을 안내해 주세요. 수거 가능한 시점을 알려 주세요.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "쓰레기를 수거해 주세요.",
+        "source": "body",
+        "quote": "쓰레기를 수거해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "재발 방지 방법을 안내해 주세요.",
+        "source": "body",
+        "quote": "재발 방지 방법을 안내해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "수거 가능한 시점을 알려 주세요.",
+        "source": "body",
+        "quote": "수거 가능한 시점을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C02",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 굴착 복구 지연",
+      "body": "이 무능한 인간들아, 한심하다. 가상로 도로를 파 놓은 상태가 두 주째 이어집니다. 복구가 늦어진 이유를 알려 주세요. 복구 예정일을 안내해 주세요. 보행자 안전 통로를 마련해 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "복구가 늦어진 이유를 알려 주세요.",
+        "source": "body",
+        "quote": "복구가 늦어진 이유를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "복구 예정일을 안내해 주세요.",
+        "source": "body",
+        "quote": "복구 예정일을 안내해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "보행자 안전 통로를 마련해 주세요.",
+        "source": "body",
+        "quote": "보행자 안전 통로를 마련해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C03",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 야간 공사",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상동에서 밤 11시에도 공사가 계속됩니다. 작업 시간을 확인해 주세요. 야간 소음 측정 가능 여부를 알려 주세요. 적용되는 소음 기준을 안내해 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "작업 시간을 확인해 주세요.",
+        "source": "body",
+        "quote": "작업 시간을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "야간 소음 측정 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "야간 소음 측정 가능 여부를 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "적용되는 소음 기준을 안내해 주세요.",
+        "source": "body",
+        "quote": "적용되는 소음 기준을 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C04",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 버스 정류장",
+      "body": "이 씨발, 일 좀 해라. 가상 정류장 의자가 부서져 있습니다. 의자를 수리해 주세요. 수리 전 이용 가능한 대기 장소를 알려 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "의자를 수리해 주세요.",
+        "source": "body",
+        "quote": "의자를 수리해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "수리 전 이용 가능한 대기 장소를 알려 주세요.",
+        "source": "body",
+        "quote": "수리 전 이용 가능한 대기 장소를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C05",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 천장 누수",
+      "body": "이 무능한 인간들아, 한심하다. 가상 아파트 천장에서 물이 샙니다. 현장 확인을 요청합니다. 관리사무소와 시청 중 어디에 문의할지 알려 주세요. 분쟁 조정 신청 절차를 안내해 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현장 확인을 요청합니다.",
+        "source": "body",
+        "quote": "현장 확인을 요청합니다."
+      },
+      {
+        "id": "G2",
+        "text": "관리사무소와 시청 중 어디에 문의할지 알려 주세요.",
+        "source": "body",
+        "quote": "관리사무소와 시청 중 어디에 문의할지 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "분쟁 조정 신청 절차를 안내해 주세요.",
+        "source": "body",
+        "quote": "분쟁 조정 신청 절차를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C06",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 공원 조명",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 공원 산책로 조명이 꺼져 있습니다. 고장 난 조명을 점검해 주세요. 수리 예상 일정을 알려 주세요.",
+      "category": "동물·공원",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "고장 난 조명을 점검해 주세요.",
+        "source": "body",
+        "quote": "고장 난 조명을 점검해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "수리 예상 일정을 알려 주세요.",
+        "source": "body",
+        "quote": "수리 예상 일정을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C07",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 대형 폐기물",
+      "body": "이 씨발, 일 좀 해라. 가상동에서 이사하며 책상과 침대를 버리려 합니다. 배출 신청 방법을 알려 주세요. 품목별 비용을 안내해 주세요. 취소했을 때 환불 방법을 알려 주세요.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "배출 신청 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "배출 신청 방법을 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "품목별 비용을 안내해 주세요.",
+        "source": "body",
+        "quote": "품목별 비용을 안내해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "취소했을 때 환불 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "취소했을 때 환불 방법을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C08",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 굴뚝 검은 연기",
+      "body": "이 무능한 인간들아, 한심하다. 가상 공장 굴뚝에서 검은 연기와 냄새가 납니다. 현장을 점검해 주세요. 주민이 제출해야 할 자료를 안내해 주세요. 점검 결과를 알려 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현장을 점검해 주세요.",
+        "source": "body",
+        "quote": "현장을 점검해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "주민이 제출해야 할 자료를 안내해 주세요.",
+        "source": "body",
+        "quote": "주민이 제출해야 할 자료를 안내해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "점검 결과를 알려 주세요.",
+        "source": "body",
+        "quote": "점검 결과를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C09",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 불법 주정차",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 초등학교 앞 횡단보도를 차량이 막고 있습니다. 현장을 확인해 주세요. 신고 사진 촬영 기준을 알려 주세요. 반복 주차를 줄일 대책을 안내해 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현장을 확인해 주세요.",
+        "source": "body",
+        "quote": "현장을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "신고 사진 촬영 기준을 알려 주세요.",
+        "source": "body",
+        "quote": "신고 사진 촬영 기준을 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "반복 주차를 줄일 대책을 안내해 주세요.",
+        "source": "body",
+        "quote": "반복 주차를 줄일 대책을 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C10",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 처리 지연",
+      "body": "이 씨발, 일 좀 해라. 가상 민원을 접수한 뒤 아무런 안내를 못 받았습니다. 현재 진행 상태를 알려 주세요. 지연 이유를 설명해 주세요. 다음 안내 시점을 알려 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현재 진행 상태를 알려 주세요.",
+        "source": "body",
+        "quote": "현재 진행 상태를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "지연 이유를 설명해 주세요.",
+        "source": "body",
+        "quote": "지연 이유를 설명해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "다음 안내 시점을 알려 주세요.",
+        "source": "body",
+        "quote": "다음 안내 시점을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C11",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 공사 균열",
+      "body": "이 무능한 인간들아, 한심하다. 옆 공사 이후 가상 주택 벽에 금이 갔습니다. 안전 점검 가능 여부를 알려 주세요. 피해 사실을 남기는 방법을 안내해 주세요. 배상 상담 창구를 알려 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "안전 점검 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "안전 점검 가능 여부를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "피해 사실을 남기는 방법을 안내해 주세요.",
+        "source": "body",
+        "quote": "피해 사실을 남기는 방법을 안내해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "배상 상담 창구를 알려 주세요.",
+        "source": "body",
+        "quote": "배상 상담 창구를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C12",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 음식물 배출",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상동 공동 수거함이 가득 찼습니다. 수거함을 비워 주세요. 수거 전 임시 배출 방법을 안내해 주세요.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "수거함을 비워 주세요.",
+        "source": "body",
+        "quote": "수거함을 비워 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "수거 전 임시 배출 방법을 안내해 주세요.",
+        "source": "body",
+        "quote": "수거 전 임시 배출 방법을 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C13",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 교통 신호",
+      "body": "이 씨발, 일 좀 해라. 가상 사거리 보행 신호가 너무 짧습니다. 보행 시간을 조사해 주세요. 신호 시간 조정 가능 여부를 알려 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "보행 시간을 조사해 주세요.",
+        "source": "body",
+        "quote": "보행 시간을 조사해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "신호 시간 조정 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "신호 시간 조정 가능 여부를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C14",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 들개 출몰",
+      "body": "이 무능한 인간들아, 한심하다. 가상 산책길에 목줄 없는 개들이 돌아다닙니다. 현장 확인을 요청합니다. 위험 상황에서 연락할 곳을 알려 주세요. 신고할 때 필요한 정보를 안내해 주세요.",
+      "category": "동물·공원",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현장 확인을 요청합니다.",
+        "source": "body",
+        "quote": "현장 확인을 요청합니다."
+      },
+      {
+        "id": "G2",
+        "text": "위험 상황에서 연락할 곳을 알려 주세요.",
+        "source": "body",
+        "quote": "위험 상황에서 연락할 곳을 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "신고할 때 필요한 정보를 안내해 주세요.",
+        "source": "body",
+        "quote": "신고할 때 필요한 정보를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C15",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 하천 악취",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 하천에서 냄새가 나고 물색이 달라졌습니다. 수질 검사를 요청합니다. 검사 결과 공개 방법을 알려 주세요. 산책을 피해야 하는지 안내해 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "수질 검사를 요청합니다.",
+        "source": "body",
+        "quote": "수질 검사를 요청합니다."
+      },
+      {
+        "id": "G2",
+        "text": "검사 결과 공개 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "검사 결과 공개 방법을 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "산책을 피해야 하는지 안내해 주세요.",
+        "source": "body",
+        "quote": "산책을 피해야 하는지 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C16",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 부서 이송",
+      "body": "이 씨발, 일 좀 해라. 가상 민원이 여러 부서로 옮겨지고 있습니다. 현재 담당 부서를 알려 주세요. 이송 사유를 설명해 주세요. 제가 다시 접수해야 하는지 알려 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현재 담당 부서를 알려 주세요.",
+        "source": "body",
+        "quote": "현재 담당 부서를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "이송 사유를 설명해 주세요.",
+        "source": "body",
+        "quote": "이송 사유를 설명해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "제가 다시 접수해야 하는지 알려 주세요.",
+        "source": "body",
+        "quote": "제가 다시 접수해야 하는지 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C17",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 보도블록 파손",
+      "body": "이 무능한 인간들아, 한심하다. 가상 시장 입구 보도블록이 들떠 있습니다. 파손 구간을 보수해 주세요. 보수 전 위험 표시를 해 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "파손 구간을 보수해 주세요.",
+        "source": "body",
+        "quote": "파손 구간을 보수해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "보수 전 위험 표시를 해 주세요.",
+        "source": "body",
+        "quote": "보수 전 위험 표시를 해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C18",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 위험 간판",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 상가 간판이 기울어져 있습니다. 간판 안전을 확인해 주세요. 위험한 경우 통행 제한을 검토해 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "간판 안전을 확인해 주세요.",
+        "source": "body",
+        "quote": "간판 안전을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "위험한 경우 통행 제한을 검토해 주세요.",
+        "source": "body",
+        "quote": "위험한 경우 통행 제한을 검토해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C19",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 폐건전지",
+      "body": "이 씨발, 일 좀 해라. 가상 마을에 폐건전지 수거함이 없습니다. 가까운 배출 장소를 알려 주세요. 새 수거함 설치 가능 여부를 알려 주세요.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "가까운 배출 장소를 알려 주세요.",
+        "source": "body",
+        "quote": "가까운 배출 장소를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "새 수거함 설치 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "새 수거함 설치 가능 여부를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C20",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 놀이터 시설",
+      "body": "이 무능한 인간들아, 한심하다. 가상 놀이터 미끄럼틀에 날카로운 부분이 있습니다. 시설을 점검해 주세요. 정비 전 사용 중지 표시를 해 주세요. 정비 결과를 알려 주세요.",
+      "category": "동물·공원",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "시설을 점검해 주세요.",
+        "source": "body",
+        "quote": "시설을 점검해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "정비 전 사용 중지 표시를 해 주세요.",
+        "source": "body",
+        "quote": "정비 전 사용 중지 표시를 해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "정비 결과를 알려 주세요.",
+        "source": "body",
+        "quote": "정비 결과를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C21",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 확성기 소음",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 상점에서 하루 종일 확성기를 틉니다. 소음 규정을 안내해 주세요. 현장 확인을 요청합니다. 신고 기록을 남기는 방법을 알려 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "소음 규정을 안내해 주세요.",
+        "source": "body",
+        "quote": "소음 규정을 안내해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "현장 확인을 요청합니다.",
+        "source": "body",
+        "quote": "현장 확인을 요청합니다."
+      },
+      {
+        "id": "G3",
+        "text": "신고 기록을 남기는 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "신고 기록을 남기는 방법을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C22",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 도로 침수",
+      "body": "이 씨발, 일 좀 해라. 비가 오면 가상로 배수구 주변이 잠깁니다. 배수구를 점검해 주세요. 막힌 곳을 청소해 주세요. 장기 개선 계획이 있는지 알려 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "배수구를 점검해 주세요.",
+        "source": "body",
+        "quote": "배수구를 점검해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "막힌 곳을 청소해 주세요.",
+        "source": "body",
+        "quote": "막힌 곳을 청소해 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "장기 개선 계획이 있는지 알려 주세요.",
+        "source": "body",
+        "quote": "장기 개선 계획이 있는지 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C23",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "insult",
+    "complaint": {
+      "title": "가상 사례: 공사 시간",
+      "body": "이 무능한 인간들아, 한심하다. 가상 빌라 옆에서 새벽 공사가 진행됩니다. 허용되는 공사 시간을 알려 주세요. 공사장에 시간 준수를 안내해 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "허용되는 공사 시간을 알려 주세요.",
+        "source": "body",
+        "quote": "허용되는 공사 시간을 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "공사장에 시간 준수를 안내해 주세요.",
+        "source": "body",
+        "quote": "공사장에 시간 준수를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C24",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "threat",
+    "complaint": {
+      "title": "가상 사례: 개인정보 열람",
+      "body": "해결 안 하면 찾아가서 때려 버리겠다. 가상 민원 신청서에 제 연락처를 잘못 적었습니다. 연락처 수정 절차를 알려 주세요. 이미 공개된 정보가 있는지 확인해 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "연락처 수정 절차를 알려 주세요.",
+        "source": "body",
+        "quote": "연락처 수정 절차를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "이미 공개된 정보가 있는지 확인해 주세요.",
+        "source": "body",
+        "quote": "이미 공개된 정보가 있는지 확인해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C25",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "profanity",
+    "complaint": {
+      "title": "가상 사례: 가로수 가지",
+      "body": "이 씨발, 일 좀 해라. 가상로 가로수 가지가 창문에 닿습니다. 현장을 확인해 주세요. 가지치기 가능 여부를 알려 주세요. 불가능하다면 이유를 설명해 주세요.",
+      "category": "동물·공원",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "현장을 확인해 주세요.",
+        "source": "body",
+        "quote": "현장을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "가지치기 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "가지치기 가능 여부를 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "불가능하다면 이유를 설명해 주세요.",
+        "source": "body",
+        "quote": "불가능하다면 이유를 설명해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C26",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "sexual_harassment",
+    "complaint": {
+      "title": "가상 사례: 상담 기록",
+      "body": "여직원 몸매부터 보여 줘. 전화로 야한 얘기나 하자. 가상 상담 과정의 안내 내용이 서로 달랐습니다. 정확한 신청 절차를 알려 주세요. 상담 기록 열람 방법을 안내해 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "정확한 신청 절차를 알려 주세요.",
+        "source": "body",
+        "quote": "정확한 신청 절차를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "상담 기록 열람 방법을 안내해 주세요.",
+        "source": "body",
+        "quote": "상담 기록 열람 방법을 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C27",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "sexual_harassment",
+    "complaint": {
+      "title": "가상 사례: 불법 투기 사진",
+      "body": "여직원 몸매부터 보여 줘. 전화로 야한 얘기나 하자. 가상 공터에 폐가구를 버리는 장면을 촬영했습니다. 사진 제출 방법을 알려 주세요. 개인정보를 가려야 하는지 알려 주세요. 폐가구 수거를 요청합니다.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "사진 제출 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "사진 제출 방법을 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "개인정보를 가려야 하는지 알려 주세요.",
+        "source": "body",
+        "quote": "개인정보를 가려야 하는지 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "폐가구 수거를 요청합니다.",
+        "source": "body",
+        "quote": "폐가구 수거를 요청합니다."
+      }
+    ]
+  },
+  {
+    "id": "C28",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "sexual_harassment",
+    "complaint": {
+      "title": "가상 사례: 장애인 이동",
+      "body": "여직원 몸매부터 보여 줘. 전화로 야한 얘기나 하자. 가상 횡단보도 경사로가 막혀 휠체어가 못 지나갑니다. 장애물을 치워 주세요. 우회 가능한 경로를 알려 주세요. 재발 방지 조치를 검토해 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "장애물을 치워 주세요.",
+        "source": "body",
+        "quote": "장애물을 치워 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "우회 가능한 경로를 알려 주세요.",
+        "source": "body",
+        "quote": "우회 가능한 경로를 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "재발 방지 조치를 검토해 주세요.",
+        "source": "body",
+        "quote": "재발 방지 조치를 검토해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C29",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "sexual_harassment",
+    "complaint": {
+      "title": "가상 사례: 먼지 비산",
+      "body": "여직원 몸매부터 보여 줘. 전화로 야한 얘기나 하자. 가상 공사장 먼지가 창문으로 들어옵니다. 방진 시설을 확인해 주세요. 먼지 측정 가능 여부를 알려 주세요. 조치 결과를 안내해 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "방진 시설을 확인해 주세요.",
+        "source": "body",
+        "quote": "방진 시설을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "먼지 측정 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "먼지 측정 가능 여부를 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "조치 결과를 안내해 주세요.",
+        "source": "body",
+        "quote": "조치 결과를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C30",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "abusive_with_valid_requests",
+    "expectedExpression": "sexual_harassment",
+    "complaint": {
+      "title": "가상 사례: 승강기 고장",
+      "body": "여직원 몸매부터 보여 줘. 전화로 야한 얘기나 하자. 가상 공동주택 승강기가 자주 멈춥니다. 안전 점검을 요청합니다. 수리 책임 주체를 알려 주세요. 거동이 불편한 주민의 지원 창구를 알려 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "안전 점검을 요청합니다.",
+        "source": "body",
+        "quote": "안전 점검을 요청합니다."
+      },
+      {
+        "id": "G2",
+        "text": "수리 책임 주체를 알려 주세요.",
+        "source": "body",
+        "quote": "수리 책임 주체를 알려 주세요."
+      },
+      {
+        "id": "G3",
+        "text": "거동이 불편한 주민의 지원 창구를 알려 주세요.",
+        "source": "body",
+        "quote": "거동이 불편한 주민의 지원 창구를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C31",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 화난 항의",
+      "body": "세 번 문의했는데 아직도 제대로 설명을 못 들었습니다. 정말 답답합니다. 이전 안내가 달라진 이유를 설명해 주세요. 최종적으로 필요한 서류를 알려 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "이전 안내가 달라진 이유를 설명해 주세요.",
+        "source": "body",
+        "quote": "이전 안내가 달라진 이유를 설명해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "최종적으로 필요한 서류를 알려 주세요.",
+        "source": "body",
+        "quote": "최종적으로 필요한 서류를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C32",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 강한 비판",
+      "body": "가상동 도로 관리가 너무 부실합니다. 세금을 내는 이유가 뭡니까? 도로 파손을 확인해 주세요. 보수 일정을 알려 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "도로 파손을 확인해 주세요.",
+        "source": "body",
+        "quote": "도로 파손을 확인해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "보수 일정을 알려 주세요.",
+        "source": "body",
+        "quote": "보수 일정을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C33",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 수거 불만",
+      "body": "가상동 수거가 일주일째 안 됐습니다. 이런 행정은 납득하기 어렵습니다. 미수거 사유를 알려 주세요. 수거 가능 시점을 안내해 주세요.",
+      "category": "생활폐기물",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "미수거 사유를 알려 주세요.",
+        "source": "body",
+        "quote": "미수거 사유를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "수거 가능 시점을 안내해 주세요.",
+        "source": "body",
+        "quote": "수거 가능 시점을 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C34",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 소음 재항의",
+      "body": "가상 공사장 소음으로 잠을 못 잡니다. 담당 부서의 대응에 실망했습니다. 접수 처리 상태를 알려 주세요. 야간 점검을 검토해 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "접수 처리 상태를 알려 주세요.",
+        "source": "body",
+        "quote": "접수 처리 상태를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "야간 점검을 검토해 주세요.",
+        "source": "body",
+        "quote": "야간 점검을 검토해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C35",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 상급 기관 문의",
+      "body": "설명이 계속 바뀌어 화가 납니다. 정식으로 이의를 제기하겠습니다. 이의 제기 절차를 안내해 주세요. 처리 결과 문서를 받는 방법을 알려 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "이의 제기 절차를 안내해 주세요.",
+        "source": "body",
+        "quote": "이의 제기 절차를 안내해 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "처리 결과 문서를 받는 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "처리 결과 문서를 받는 방법을 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C36",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 책임 설명 요구",
+      "body": "가상 건축 민원에서 부서끼리 책임만 미루는 것 같습니다. 담당 부서를 명확하게 알려 주세요. 관할이 아니라면 이송 절차를 안내해 주세요.",
+      "category": "건축·주거",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "담당 부서를 명확하게 알려 주세요.",
+        "source": "body",
+        "quote": "담당 부서를 명확하게 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "관할이 아니라면 이송 절차를 안내해 주세요.",
+        "source": "body",
+        "quote": "관할이 아니라면 이송 절차를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C37",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 정비 촉구",
+      "body": "가상 공원 벤치가 몇 달째 그대로입니다. 이렇게 방치해서야 되겠습니까? 보수 계획을 알려 주세요. 계획이 없다면 이유를 설명해 주세요.",
+      "category": "동물·공원",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "보수 계획을 알려 주세요.",
+        "source": "body",
+        "quote": "보수 계획을 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "계획이 없다면 이유를 설명해 주세요.",
+        "source": "body",
+        "quote": "계획이 없다면 이유를 설명해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C38",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 정보 공개 예고",
+      "body": "가상 사업비 집행 설명이 이해되지 않습니다. 정보공개를 청구하겠습니다. 청구 방법을 알려 주세요. 공개 가능한 자료 범위를 안내해 주세요.",
+      "category": "기타",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "청구 방법을 알려 주세요.",
+        "source": "body",
+        "quote": "청구 방법을 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "공개 가능한 자료 범위를 안내해 주세요.",
+        "source": "body",
+        "quote": "공개 가능한 자료 범위를 안내해 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C39",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 사고 우려",
+      "body": "가상로가 어두워 사고가 날까 걱정됩니다. 사고 나기 전에 좀 살펴주세요. 가로등 점검을 요청합니다. 고장 신고 번호를 알려 주세요.",
+      "category": "도로·교통",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "가로등 점검을 요청합니다.",
+        "source": "body",
+        "quote": "가로등 점검을 요청합니다."
+      },
+      {
+        "id": "G2",
+        "text": "고장 신고 번호를 알려 주세요.",
+        "source": "body",
+        "quote": "고장 신고 번호를 알려 주세요."
+      }
+    ]
+  },
+  {
+    "id": "C40",
+    "synthetic": true,
+    "labelStatus": "ai_authored_pending_human_review",
+    "group": "legitimate_criticism",
+    "expectedExpression": "legitimate",
+    "complaint": {
+      "title": "가상 사례: 반복 신고",
+      "body": "가상 하천 냄새를 여러 번 신고했습니다. 도대체 개선 의지가 있습니까? 이전 점검 결과를 알려 주세요. 추가 조사 가능 여부를 알려 주세요.",
+      "category": "소음·환경",
+      "location": "청주시 가상동 — 평가용",
+      "occurred_at": "2026-10-30"
+    },
+    "expectedRequests": [
+      {
+        "id": "G1",
+        "text": "이전 점검 결과를 알려 주세요.",
+        "source": "body",
+        "quote": "이전 점검 결과를 알려 주세요."
+      },
+      {
+        "id": "G2",
+        "text": "추가 조사 가능 여부를 알려 주세요.",
+        "source": "body",
+        "quote": "추가 조사 가능 여부를 알려 주세요."
+      }
+    ]
+  }
+]

@@ -1,0 +1,1323 @@
+{
+  "startedAt": "2026-11-08T05:52:11.440Z",
+  "synthetic": true,
+  "labelStatus": "agent_authored_pending_independent_human_review",
+  "method": "12 new scenarios, 36 original requirements. Fixed summary keeps first two and omits third. A scripted citizen then corrects the second, withdraws the third, and adds a new request. Audit runs on each version; this is not a same-input before/after accuracy comparison, not end-to-end RAG, and not independent human validation.",
+  "hashes": {
+    "evals/request-tracking-12.json": "57defdc1de4124a6d2c2e8c79a262e58dc6aac29651961d41b3ea4822f40e430",
+    "lib/coverage-ai.ts": "2c1b656195befe40e66bfcdbacd72b01c836d088d89f482a82044d1ba99d6450",
+    "lib/coverage.ts": "edb189b426fd17e984929acd2f6c2cc028c5a897c5955128d90df9675c3f6cbe",
+    "lib/request-tracking.ts": "22bae9f454ce42b190f690912c91d8c683e4463c9c30ed50a8a4a55d144f1b0a",
+    "lib/structured-ai.ts": "73eb5b24ec92325f1f54ce924d03a957b045acfbe2426c1178081de88585991b",
+    "evals/run-request-tracking.cjs": "60efd10853031bd072c21201f43df0f3c2ca393592a604a804930ce41dc6afdb"
+  },
+  "cases": [
+    {
+      "id": "N02",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "야간 공사 현장을 확인해 달라는 요구",
+            "source": "body",
+            "quote": "야간 공사 현장을 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "summary에 현장 확인 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "오후 9시 공사가 허용되는지 알려 달라는 요구",
+            "source": "body",
+            "quote": "오후 9시 공사가 허용되는지 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "summary에 오후 9시 공사의 허용 여부를 알려 달라는 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "소음 측정 결과를 보내 달라는 요구",
+            "source": "body",
+            "quote": "소음 측정 결과도 보내 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "summary와 requests에 소음 측정 결과를 보내 달라는 요청이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"야간 공사 문의\"},{\"id\":\"body\",\"text\":\"시끄러워서 잠을 못 잡니다. 야간 공사 현장을 확인해 주세요. 오후 9시 공사가 허용되는지 알려 주세요. 소음 측정 결과도 보내 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"야간 공사 현장을 확인해 주세요. 오후 9시 공사가 허용되는지 알려 주세요.\",\"requests\":[\"야간 공사 현장을 확인해 주세요.\",\"오후 9시 공사가 허용되는지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:15.612Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "야간 공사 현장을 확인해 주세요.",
+            "source": "request:Q1",
+            "quote": "야간 공사 현장을 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 야간 공사 현장을 확인해 달라는 내용이 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "오후 9시가 아니라 오전 6시 공사가 허용되는지 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "오후 9시가 아니라 오전 6시 공사가 허용되는지 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "중립 요약은 오후 9시 공사가 허용되는지 묻고 있어, 오전 6시와 오후 9시의 대조가 보존되지 않았습니다."
+          },
+          {
+            "id": "62d9c82c-59f2-4a2e-a0cb-8f00bd9af382",
+            "text": "공사 예정 종료일을 확인해 주세요.",
+            "source": "request:62d9c82c-59f2-4a2e-a0cb-8f00bd9af382",
+            "quote": "공사 예정 종료일을 확인해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 공사 예정 종료일을 확인해 달라는 내용이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"야간 공사 문의\"},{\"id\":\"body\",\"text\":\"시끄러워서 잠을 못 잡니다. 야간 공사 현장을 확인해 주세요. 오후 9시 공사가 허용되는지 알려 주세요. 소음 측정 결과도 보내 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"야간 공사 현장을 확인해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"오후 9시가 아니라 오전 6시 공사가 허용되는지 알려 주세요.\"},{\"id\":\"request:62d9c82c-59f2-4a2e-a0cb-8f00bd9af382\",\"text\":\"공사 예정 종료일을 확인해 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"야간 공사 현장을 확인해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"오후 9시가 아니라 오전 6시 공사가 허용되는지 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"소음 측정 결과도 보내 주세요.\",\"withdrawn\":true},{\"id\":\"62d9c82c-59f2-4a2e-a0cb-8f00bd9af382\",\"text\":\"공사 예정 종료일을 확인해 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"야간 공사 현장을 확인해 주세요. 오후 9시 공사가 허용되는지 알려 주세요.\",\"requests\":[\"야간 공사 현장을 확인해 주세요.\",\"오후 9시 공사가 허용되는지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:18.742Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "62d9c82c-59f2-4a2e-a0cb-8f00bd9af382",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N01",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "무단투기 쓰레기를 수거해 달라는 요구",
+            "source": "body",
+            "quote": "무단투기 쓰레기를 수거해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약에 쓰레기 수거 요구가 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "금요일 수거가 가능한지 알려 달라는 요구",
+            "source": "body",
+            "quote": "금요일 수거가 가능한지 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약에 금요일 수거 가능 여부를 알려 달라는 요구가 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "재발 방지 안내판 설치를 검토해 달라는 요구",
+            "source": "body",
+            "quote": "재발 방지 안내판 설치를 검토해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 안내판 설치 검토 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"수거와 수거 일정\"},{\"id\":\"body\",\"text\":\"쓰레기가 그대로라 화가 납니다. 무단투기 쓰레기를 수거해 주세요. 금요일 수거가 가능한지 알려 주세요. 재발 방지 안내판 설치를 검토해 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"무단투기 쓰레기를 수거해 주세요. 금요일 수거가 가능한지 알려 주세요.\",\"requests\":[\"무단투기 쓰레기를 수거해 주세요.\",\"금요일 수거가 가능한지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:15.831Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "무단투기 쓰레기를 수거해 주세요.",
+            "source": "request:Q1",
+            "quote": "무단투기 쓰레기를 수거해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "무단투기 쓰레기 수거 요청이 요약에 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "금요일이 아니라 월요일 수거가 가능한지 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "금요일이 아니라 월요일 수거가 가능한지 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 금요일 수거 가능 여부를 묻고 있어, 금요일이 아닌 월요일 수거 가능 여부라는 조건이 달라졌습니다."
+          },
+          {
+            "id": "b5bf15c3-d88a-47ac-8dec-b25c8c426a3c",
+            "text": "수거 담당 부서의 연락처를 알려 주세요.",
+            "source": "request:b5bf15c3-d88a-47ac-8dec-b25c8c426a3c",
+            "quote": "수거 담당 부서의 연락처를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 수거 담당 부서의 연락처 요청이 포함되어 있지 않습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"수거와 수거 일정\"},{\"id\":\"body\",\"text\":\"쓰레기가 그대로라 화가 납니다. 무단투기 쓰레기를 수거해 주세요. 금요일 수거가 가능한지 알려 주세요. 재발 방지 안내판 설치를 검토해 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"무단투기 쓰레기를 수거해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"금요일이 아니라 월요일 수거가 가능한지 알려 주세요.\"},{\"id\":\"request:b5bf15c3-d88a-47ac-8dec-b25c8c426a3c\",\"text\":\"수거 담당 부서의 연락처를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"무단투기 쓰레기를 수거해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"금요일이 아니라 월요일 수거가 가능한지 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"재발 방지 안내판 설치를 검토해 주세요.\",\"withdrawn\":true},{\"id\":\"b5bf15c3-d88a-47ac-8dec-b25c8c426a3c\",\"text\":\"수거 담당 부서의 연락처를 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"무단투기 쓰레기를 수거해 주세요. 금요일 수거가 가능한지 알려 주세요.\",\"requests\":[\"무단투기 쓰레기를 수거해 주세요.\",\"금요일 수거가 가능한지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:19.921Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "b5bf15c3-d88a-47ac-8dec-b25c8c426a3c",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N04",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "고장 난 공원 조명을 점검해 달라는 요구",
+            "source": "body",
+            "quote": "고장 난 공원 조명을 점검해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청에 조명 점검 요구가 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "동문 조명의 수리 일정을 알려 달라는 요구",
+            "source": "body",
+            "quote": "동문 조명의 수리 일정을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청에 수리 일정 안내 요구가 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "야간 순찰 확대를 검토해 달라는 요구",
+            "source": "body",
+            "quote": "야간 순찰 확대를 검토해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청에 야간 순찰 확대 검토가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"공원 조명 확인\"},{\"id\":\"body\",\"text\":\"공원이 어두워 불안합니다. 고장 난 공원 조명을 점검해 주세요. 동문 조명의 수리 일정을 알려 주세요. 야간 순찰 확대를 검토해 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"고장 난 공원 조명을 점검해 주세요. 동문 조명의 수리 일정을 알려 주세요.\",\"requests\":[\"고장 난 공원 조명을 점검해 주세요.\",\"동문 조명의 수리 일정을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:22.500Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "고장 난 공원 조명을 점검해 주세요.",
+            "source": "request:Q1",
+            "quote": "고장 난 공원 조명을 점검해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 고장 난 공원 조명의 점검 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "동문이 아니라 서문 조명의 수리 일정을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "동문이 아니라 서문 조명의 수리 일정을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 서문이 아닌 동문 조명의 수리 일정을 요청해 원문의 방향이 달라졌습니다."
+          },
+          {
+            "id": "069dcaca-9aa3-46a2-8860-03f9be340af6",
+            "text": "최근 조명 점검 기록의 열람 방법을 알려 주세요.",
+            "source": "request:069dcaca-9aa3-46a2-8860-03f9be340af6",
+            "quote": "최근 조명 점검 기록의 열람 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 최근 조명 점검 기록의 열람 방법을 알려 달라는 요청이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"공원 조명 확인\"},{\"id\":\"body\",\"text\":\"공원이 어두워 불안합니다. 고장 난 공원 조명을 점검해 주세요. 동문 조명의 수리 일정을 알려 주세요. 야간 순찰 확대를 검토해 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"고장 난 공원 조명을 점검해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"동문이 아니라 서문 조명의 수리 일정을 알려 주세요.\"},{\"id\":\"request:069dcaca-9aa3-46a2-8860-03f9be340af6\",\"text\":\"최근 조명 점검 기록의 열람 방법을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"고장 난 공원 조명을 점검해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"동문이 아니라 서문 조명의 수리 일정을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"야간 순찰 확대를 검토해 주세요.\",\"withdrawn\":true},{\"id\":\"069dcaca-9aa3-46a2-8860-03f9be340af6\",\"text\":\"최근 조명 점검 기록의 열람 방법을 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"고장 난 공원 조명을 점검해 주세요. 동문 조명의 수리 일정을 알려 주세요.\",\"requests\":[\"고장 난 공원 조명을 점검해 주세요.\",\"동문 조명의 수리 일정을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:25.874Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "069dcaca-9aa3-46a2-8860-03f9be340af6",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N03",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "정류장 지붕 누수를 보수해 주세요.",
+            "source": "body",
+            "quote": "정류장 지붕 누수를 보수해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약에 지붕 누수 보수 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "정류장 지붕 보수 시기를 알려 주세요.",
+            "source": "body",
+            "quote": "언제 고칩니까",
+            "summaryStatus": "missing",
+            "summaryReason": "보수 시기나 처리 일정에 대한 안내가 요약에 없습니다."
+          },
+          {
+            "id": "R3",
+            "text": "101번 버스의 우회 여부를 알려 주세요.",
+            "source": "body",
+            "quote": "101번 버스의 우회 여부를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약에 101번 버스의 우회 여부 안내 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "R4",
+            "text": "보수 전 임시 대기 장소를 안내해 주세요.",
+            "source": "body",
+            "quote": "보수 전 임시 대기 장소를 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "임시 대기 장소 안내 요청이 요약에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"버스정류장 보수\"},{\"id\":\"body\",\"text\":\"도대체 언제 고칩니까. 정류장 지붕 누수를 보수해 주세요. 101번 버스의 우회 여부를 알려 주세요. 보수 전 임시 대기 장소를 안내해 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"정류장 지붕 누수를 보수해 주세요. 101번 버스의 우회 여부를 알려 주세요.\",\"requests\":[\"정류장 지붕 누수를 보수해 주세요.\",\"101번 버스의 우회 여부를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:22.621Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "정류장 지붕 누수를 보수해 주세요.",
+            "source": "request:Q1",
+            "quote": "정류장 지붕 누수를 보수해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "정류장 지붕 누수를 보수해 달라는 요구가 요약에 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "101번이 아니라 202번 버스의 우회 여부를 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "101번이 아니라 202번 버스의 우회 여부를 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 101번 버스의 우회 여부를 다루며, 원문의 202번 버스와 101번이 아니라는 조건을 보존하지 않았습니다."
+          },
+          {
+            "id": "6d56b033-9f73-4d9a-be52-f226e5600fa0",
+            "text": "보수 작업 담당 기관을 알려 주세요.",
+            "source": "request:6d56b033-9f73-4d9a-be52-f226e5600fa0",
+            "quote": "보수 작업 담당 기관을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "보수 작업 담당 기관을 알려 달라는 요구가 요약에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"버스정류장 보수\"},{\"id\":\"body\",\"text\":\"도대체 언제 고칩니까. 정류장 지붕 누수를 보수해 주세요. 101번 버스의 우회 여부를 알려 주세요. 보수 전 임시 대기 장소를 안내해 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"정류장 지붕 누수를 보수해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"101번이 아니라 202번 버스의 우회 여부를 알려 주세요.\"},{\"id\":\"request:6d56b033-9f73-4d9a-be52-f226e5600fa0\",\"text\":\"보수 작업 담당 기관을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"정류장 지붕 누수를 보수해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"101번이 아니라 202번 버스의 우회 여부를 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"보수 전 임시 대기 장소를 안내해 주세요.\",\"withdrawn\":true},{\"id\":\"6d56b033-9f73-4d9a-be52-f226e5600fa0\",\"text\":\"보수 작업 담당 기관을 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"정류장 지붕 누수를 보수해 주세요. 101번 버스의 우회 여부를 알려 주세요.\",\"requests\":[\"정류장 지붕 누수를 보수해 주세요.\",\"101번 버스의 우회 여부를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:26.031Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "6d56b033-9f73-4d9a-be52-f226e5600fa0",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N06",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "보행로의 적치물을 치워 달라는 요구",
+            "source": "body",
+            "quote": "보행로의 적치물을 치워 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구가 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "유모차가 지나갈 우회 경로를 알려 달라는 요구",
+            "source": "body",
+            "quote": "유모차가 지나갈 우회 경로를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구가 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "보행로 관리 부서를 알려 달라는 요구",
+            "source": "body",
+            "quote": "보행로 관리 부서를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "summary와 requests에 관리 부서를 알려 달라는 내용이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"보행로 이동 지원\"},{\"id\":\"body\",\"text\":\"왜 계속 방치합니까. 보행로의 적치물을 치워 주세요. 유모차가 지나갈 우회 경로를 알려 주세요. 보행로 관리 부서를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"보행로의 적치물을 치워 주세요. 유모차가 지나갈 우회 경로를 알려 주세요.\",\"requests\":[\"보행로의 적치물을 치워 주세요.\",\"유모차가 지나갈 우회 경로를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:28.376Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "보행로의 적치물을 치워 주세요.",
+            "source": "request:Q1",
+            "quote": "보행로의 적치물을 치워 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 보행로의 적치물을 치워 달라는 요구가 그대로 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "유모차가 아니라 전동휠체어가 지나갈 우회 경로를 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "유모차가 아니라 전동휠체어가 지나갈 우회 경로를 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "중립 요약은 전동휠체어 대신 유모차가 지나갈 경로로 적어 요구의 대상이 달라졌습니다."
+          },
+          {
+            "id": "34dbd4c6-1123-4dcb-a692-71c8bed9da1a",
+            "text": "같은 위치의 이전 신고 처리 결과를 확인해 주세요.",
+            "source": "request:34dbd4c6-1123-4dcb-a692-71c8bed9da1a",
+            "quote": "같은 위치의 이전 신고 처리 결과를 확인해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 같은 위치의 이전 신고 처리 결과를 확인해 달라는 내용이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"보행로 이동 지원\"},{\"id\":\"body\",\"text\":\"왜 계속 방치합니까. 보행로의 적치물을 치워 주세요. 유모차가 지나갈 우회 경로를 알려 주세요. 보행로 관리 부서를 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"보행로의 적치물을 치워 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"유모차가 아니라 전동휠체어가 지나갈 우회 경로를 알려 주세요.\"},{\"id\":\"request:34dbd4c6-1123-4dcb-a692-71c8bed9da1a\",\"text\":\"같은 위치의 이전 신고 처리 결과를 확인해 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"보행로의 적치물을 치워 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"유모차가 아니라 전동휠체어가 지나갈 우회 경로를 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"보행로 관리 부서를 알려 주세요.\",\"withdrawn\":true},{\"id\":\"34dbd4c6-1123-4dcb-a692-71c8bed9da1a\",\"text\":\"같은 위치의 이전 신고 처리 결과를 확인해 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"보행로의 적치물을 치워 주세요. 유모차가 지나갈 우회 경로를 알려 주세요.\",\"requests\":[\"보행로의 적치물을 치워 주세요.\",\"유모차가 지나갈 우회 경로를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:31.559Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "34dbd4c6-1123-4dcb-a692-71c8bed9da1a",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N05",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "배수구에 쌓인 낙엽을 제거해 달라는 요구",
+            "source": "body",
+            "quote": "배수구에 쌓인 낙엽을 제거해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청 목록에 낙엽 제거 요구가 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "11월 12일 전 점검이 가능한지 알려 달라는 요구",
+            "source": "body",
+            "quote": "11월 12일 전 점검이 가능한지 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청 목록에 해당 날짜 전 점검 가능 여부 안내 요구가 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "주변 배수 시설 증설 계획을 알려 달라는 요구",
+            "source": "body",
+            "quote": "주변 배수 시설 증설 계획을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "주변 배수 시설 증설 계획을 안내해 달라는 요구가 요약과 요청 목록에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"침수 예방 요청\"},{\"id\":\"body\",\"text\":\"하수구가 또 막혔습니다. 배수구에 쌓인 낙엽을 제거해 주세요. 11월 12일 전 점검이 가능한지 알려 주세요. 주변 배수 시설 증설 계획을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"배수구에 쌓인 낙엽을 제거해 주세요. 11월 12일 전 점검이 가능한지 알려 주세요.\",\"requests\":[\"배수구에 쌓인 낙엽을 제거해 주세요.\",\"11월 12일 전 점검이 가능한지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:29.104Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "배수구에 쌓인 낙엽을 제거해 주세요.",
+            "source": "request:Q1",
+            "quote": "배수구에 쌓인 낙엽을 제거해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구가 요약에 그대로 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "11월 12일이 아니라 11월 10일 전 점검이 가능한지 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "11월 12일이 아니라 11월 10일 전 점검이 가능한지 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약에는 11월 12일 전으로 기재되어 있어 요청한 날짜 조건과 다릅니다."
+          },
+          {
+            "id": "027cb944-a42a-437b-89d4-391f3f2376ef",
+            "text": "집중호우 때 연락할 신고 창구를 알려 주세요.",
+            "source": "request:027cb944-a42a-437b-89d4-391f3f2376ef",
+            "quote": "집중호우 때 연락할 신고 창구를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 집중호우 때 연락할 신고 창구를 알려 달라는 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"침수 예방 요청\"},{\"id\":\"body\",\"text\":\"하수구가 또 막혔습니다. 배수구에 쌓인 낙엽을 제거해 주세요. 11월 12일 전 점검이 가능한지 알려 주세요. 주변 배수 시설 증설 계획을 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"배수구에 쌓인 낙엽을 제거해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"11월 12일이 아니라 11월 10일 전 점검이 가능한지 알려 주세요.\"},{\"id\":\"request:027cb944-a42a-437b-89d4-391f3f2376ef\",\"text\":\"집중호우 때 연락할 신고 창구를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"배수구에 쌓인 낙엽을 제거해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"11월 12일이 아니라 11월 10일 전 점검이 가능한지 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"주변 배수 시설 증설 계획을 알려 주세요.\",\"withdrawn\":true},{\"id\":\"027cb944-a42a-437b-89d4-391f3f2376ef\",\"text\":\"집중호우 때 연락할 신고 창구를 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"배수구에 쌓인 낙엽을 제거해 주세요. 11월 12일 전 점검이 가능한지 알려 주세요.\",\"requests\":[\"배수구에 쌓인 낙엽을 제거해 주세요.\",\"11월 12일 전 점검이 가능한지 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:32.273Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "027cb944-a42a-437b-89d4-391f3f2376ef",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N07",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "홈페이지의 잘못된 휴관일을 수정해 주세요.",
+            "source": "body",
+            "quote": "홈페이지의 잘못된 휴관일을 수정해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구의 핵심이 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "토요일 자료실 운영 시간을 알려 주세요.",
+            "source": "body",
+            "quote": "토요일 자료실 운영 시간을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구의 핵심이 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "예약 취소 절차를 알려 주세요.",
+            "source": "body",
+            "quote": "예약 취소 절차를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "summary와 requests에 예약 취소 절차 안내 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"도서관 이용 안내\"},{\"id\":\"body\",\"text\":\"안내가 달라서 불편합니다. 홈페이지의 잘못된 휴관일을 수정해 주세요. 토요일 자료실 운영 시간을 알려 주세요. 예약 취소 절차를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"홈페이지의 잘못된 휴관일을 수정해 주세요. 토요일 자료실 운영 시간을 알려 주세요.\",\"requests\":[\"홈페이지의 잘못된 휴관일을 수정해 주세요.\",\"토요일 자료실 운영 시간을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:34.194Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "홈페이지의 잘못된 휴관일을 수정해 주세요.",
+            "source": "request:Q1",
+            "quote": "홈페이지의 잘못된 휴관일을 수정해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 홈페이지의 잘못된 휴관일을 수정하라는 요구가 그대로 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "토요일이 아니라 일요일 자료실 운영 시간을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "토요일이 아니라 일요일 자료실 운영 시간을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요구는 토요일이 아닌 일요일의 운영 시간을 묻지만, 중립 요약은 토요일 운영 시간을 묻는 것으로 바꾸었습니다."
+          },
+          {
+            "id": "8b428172-a389-49d1-ac58-b3f0332cff7a",
+            "text": "장애인 자료 배달 서비스를 신청하는 방법을 알려 주세요.",
+            "source": "request:8b428172-a389-49d1-ac58-b3f0332cff7a",
+            "quote": "장애인 자료 배달 서비스를 신청하는 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 장애인 자료 배달 서비스 신청 방법을 알려 달라는 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"도서관 이용 안내\"},{\"id\":\"body\",\"text\":\"안내가 달라서 불편합니다. 홈페이지의 잘못된 휴관일을 수정해 주세요. 토요일 자료실 운영 시간을 알려 주세요. 예약 취소 절차를 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"홈페이지의 잘못된 휴관일을 수정해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"토요일이 아니라 일요일 자료실 운영 시간을 알려 주세요.\"},{\"id\":\"request:8b428172-a389-49d1-ac58-b3f0332cff7a\",\"text\":\"장애인 자료 배달 서비스를 신청하는 방법을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"홈페이지의 잘못된 휴관일을 수정해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"토요일이 아니라 일요일 자료실 운영 시간을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"예약 취소 절차를 알려 주세요.\",\"withdrawn\":true},{\"id\":\"8b428172-a389-49d1-ac58-b3f0332cff7a\",\"text\":\"장애인 자료 배달 서비스를 신청하는 방법을 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"홈페이지의 잘못된 휴관일을 수정해 주세요. 토요일 자료실 운영 시간을 알려 주세요.\",\"requests\":[\"홈페이지의 잘못된 휴관일을 수정해 주세요.\",\"토요일 자료실 운영 시간을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:37.226Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "8b428172-a389-49d1-ac58-b3f0332cff7a",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N08",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "보도를 막은 나뭇가지를 정리해 달라는 요구",
+            "source": "body",
+            "quote": "보도를 막은 나뭇가지를 정리해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 requests에 나뭇가지 정리 요구가 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "가로수 제거 비용의 부담 주체를 알려 달라는 요구",
+            "source": "body",
+            "quote": "가로수 제거 비용의 부담 주체를 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 requests에 비용 부담 주체 안내 요구가 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "뿌리로 들뜬 보도의 보수 계획을 알려 달라는 요구",
+            "source": "body",
+            "quote": "뿌리로 들뜬 보도의 보수 계획을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 requests에 보도 보수 계획 안내 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"가로수 관리\"},{\"id\":\"body\",\"text\":\"지나가기가 어렵습니다. 보도를 막은 나뭇가지를 정리해 주세요. 가로수 제거 비용의 부담 주체를 알려 주세요. 뿌리로 들뜬 보도의 보수 계획을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"보도를 막은 나뭇가지를 정리해 주세요. 가로수 제거 비용의 부담 주체를 알려 주세요.\",\"requests\":[\"보도를 막은 나뭇가지를 정리해 주세요.\",\"가로수 제거 비용의 부담 주체를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:35.206Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "보도를 막은 나뭇가지를 정리해 주세요.",
+            "source": "request:Q1",
+            "quote": "보도를 막은 나뭇가지를 정리해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약에 보도를 막은 나뭇가지를 정리해 달라는 요구가 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "가로수 제거가 아니라 가지치기 비용의 부담 주체를 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "가로수 제거가 아니라 가지치기 비용의 부담 주체를 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 가지치기 비용이 아닌 가로수 제거 비용의 부담 주체를 묻고 있어 요구의 대상이 달라졌습니다."
+          },
+          {
+            "id": "d9d4d2fe-cf7f-4d79-8d55-417d8358768a",
+            "text": "현장 점검 결과를 서면으로 알려 주세요.",
+            "source": "request:d9d4d2fe-cf7f-4d79-8d55-417d8358768a",
+            "quote": "현장 점검 결과를 서면으로 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 현장 점검 결과를 서면으로 알려 달라는 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"가로수 관리\"},{\"id\":\"body\",\"text\":\"지나가기가 어렵습니다. 보도를 막은 나뭇가지를 정리해 주세요. 가로수 제거 비용의 부담 주체를 알려 주세요. 뿌리로 들뜬 보도의 보수 계획을 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"보도를 막은 나뭇가지를 정리해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"가로수 제거가 아니라 가지치기 비용의 부담 주체를 알려 주세요.\"},{\"id\":\"request:d9d4d2fe-cf7f-4d79-8d55-417d8358768a\",\"text\":\"현장 점검 결과를 서면으로 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"보도를 막은 나뭇가지를 정리해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"가로수 제거가 아니라 가지치기 비용의 부담 주체를 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"뿌리로 들뜬 보도의 보수 계획을 알려 주세요.\",\"withdrawn\":true},{\"id\":\"d9d4d2fe-cf7f-4d79-8d55-417d8358768a\",\"text\":\"현장 점검 결과를 서면으로 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"보도를 막은 나뭇가지를 정리해 주세요. 가로수 제거 비용의 부담 주체를 알려 주세요.\",\"requests\":[\"보도를 막은 나뭇가지를 정리해 주세요.\",\"가로수 제거 비용의 부담 주체를 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:38.503Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "d9d4d2fe-cf7f-4d79-8d55-417d8358768a",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N10",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "다친 길고양이의 구조 가능 여부를 확인해 달라는 요구",
+            "source": "body",
+            "quote": "다친 길고양이의 구조 가능 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청에 구조 가능 여부 확인이 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "보호센터의 주말 운영 시간을 알려 달라는 요구",
+            "source": "body",
+            "quote": "보호센터의 주말 운영 시간을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 요청에 주말 운영 시간 안내가 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "구조 후 인계 절차를 알려 달라는 요구",
+            "source": "body",
+            "quote": "구조 후 인계 절차를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청에 구조 후 인계 절차 안내가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"동물 보호 신고\"},{\"id\":\"body\",\"text\":\"친구가 담당자에게 욕을 했지만 제 요청은 따로 있습니다. 다친 길고양이의 구조 가능 여부를 확인해 주세요. 보호센터의 주말 운영 시간을 알려 주세요. 구조 후 인계 절차를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"다친 길고양이의 구조 가능 여부를 확인해 주세요. 보호센터의 주말 운영 시간을 알려 주세요.\",\"requests\":[\"다친 길고양이의 구조 가능 여부를 확인해 주세요.\",\"보호센터의 주말 운영 시간을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:41.465Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "다친 길고양이의 구조 가능 여부를 확인해 주세요.",
+            "source": "request:Q1",
+            "quote": "다친 길고양이의 구조 가능 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 다친 길고양이의 구조 가능 여부 확인이 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "보호센터의 주말이 아니라 평일 야간 운영 시간을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "보호센터의 주말이 아니라 평일 야간 운영 시간을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 주말 운영 시간을 묻고 있어, 주말이 아니라 평일 야간 운영 시간을 묻는 원래 요구와 다릅니다."
+          },
+          {
+            "id": "b1425299-9298-4dce-937f-081e70a58851",
+            "text": "사진으로 구조 신고를 보완하는 방법을 알려 주세요.",
+            "source": "request:b1425299-9298-4dce-937f-081e70a58851",
+            "quote": "사진으로 구조 신고를 보완하는 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 사진으로 구조 신고를 보완하는 방법에 대한 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"동물 보호 신고\"},{\"id\":\"body\",\"text\":\"친구가 담당자에게 욕을 했지만 제 요청은 따로 있습니다. 다친 길고양이의 구조 가능 여부를 확인해 주세요. 보호센터의 주말 운영 시간을 알려 주세요. 구조 후 인계 절차를 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"다친 길고양이의 구조 가능 여부를 확인해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"보호센터의 주말이 아니라 평일 야간 운영 시간을 알려 주세요.\"},{\"id\":\"request:b1425299-9298-4dce-937f-081e70a58851\",\"text\":\"사진으로 구조 신고를 보완하는 방법을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"다친 길고양이의 구조 가능 여부를 확인해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"보호센터의 주말이 아니라 평일 야간 운영 시간을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"구조 후 인계 절차를 알려 주세요.\",\"withdrawn\":true},{\"id\":\"b1425299-9298-4dce-937f-081e70a58851\",\"text\":\"사진으로 구조 신고를 보완하는 방법을 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"다친 길고양이의 구조 가능 여부를 확인해 주세요. 보호센터의 주말 운영 시간을 알려 주세요.\",\"requests\":[\"다친 길고양이의 구조 가능 여부를 확인해 주세요.\",\"보호센터의 주말 운영 시간을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:45.082Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "b1425299-9298-4dce-937f-081e70a58851",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N09",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "신청서가 누락되었는지 또는 접수되었는지 확인해 달라는 요구",
+            "source": "body",
+            "quote": "제출한 신청서의 접수 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "신청서의 접수 여부 확인 요구가 요약에 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "주거 지원 신청 자격을 알려 달라는 요구",
+            "source": "body",
+            "quote": "주거 지원 신청 자격을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "주거 지원 신청 자격 안내 요구가 요약에 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "누락 서류를 알려 달라는 요구",
+            "source": "body",
+            "quote": "누락 서류를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "누락 서류 안내 요구가 요약과 요청 목록에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"복지 신청 확인\"},{\"id\":\"body\",\"text\":\"신청이 누락됐는지 답이 없습니다. 제출한 신청서의 접수 여부를 확인해 주세요. 주거 지원 신청 자격을 알려 주세요. 누락 서류를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"제출한 신청서의 접수 여부를 확인해 주세요. 주거 지원 신청 자격을 알려 주세요.\",\"requests\":[\"제출한 신청서의 접수 여부를 확인해 주세요.\",\"주거 지원 신청 자격을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:42.829Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "제출한 신청서의 접수 여부를 확인해 주세요.",
+            "source": "request:Q1",
+            "quote": "제출한 신청서의 접수 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 제출한 신청서의 접수 여부를 확인해 달라는 내용이 그대로 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "주거 지원이 아니라 긴급 생계 지원 신청 자격을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "주거 지원이 아니라 긴급 생계 지원 신청 자격을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "원문은 주거 지원이 아닌 긴급 생계 지원의 신청 자격을 요청하지만, 요약은 주거 지원 신청 자격을 요청하는 것으로 바꾸었습니다."
+          },
+          {
+            "id": "38a84f51-f44c-400e-8c4d-2499c95b2096",
+            "text": "온라인으로 진행 상황을 조회하는 방법을 알려 주세요.",
+            "source": "request:38a84f51-f44c-400e-8c4d-2499c95b2096",
+            "quote": "온라인으로 진행 상황을 조회하는 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 온라인으로 진행 상황을 조회하는 방법에 대한 내용이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"복지 신청 확인\"},{\"id\":\"body\",\"text\":\"신청이 누락됐는지 답이 없습니다. 제출한 신청서의 접수 여부를 확인해 주세요. 주거 지원 신청 자격을 알려 주세요. 누락 서류를 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"제출한 신청서의 접수 여부를 확인해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"주거 지원이 아니라 긴급 생계 지원 신청 자격을 알려 주세요.\"},{\"id\":\"request:38a84f51-f44c-400e-8c4d-2499c95b2096\",\"text\":\"온라인으로 진행 상황을 조회하는 방법을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"제출한 신청서의 접수 여부를 확인해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"주거 지원이 아니라 긴급 생계 지원 신청 자격을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"누락 서류를 알려 주세요.\",\"withdrawn\":true},{\"id\":\"38a84f51-f44c-400e-8c4d-2499c95b2096\",\"text\":\"온라인으로 진행 상황을 조회하는 방법을 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"제출한 신청서의 접수 여부를 확인해 주세요. 주거 지원 신청 자격을 알려 주세요.\",\"requests\":[\"제출한 신청서의 접수 여부를 확인해 주세요.\",\"주거 지원 신청 자격을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:46.587Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "38a84f51-f44c-400e-8c4d-2499c95b2096",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N11",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "공영주차장 차단기를 점검해 달라는 요구",
+            "source": "body",
+            "quote": "공영주차장 차단기를 점검해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 requests에 차단기 점검 요구가 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "월 정기권 환불 기준을 알려 달라는 요구",
+            "source": "body",
+            "quote": "월 정기권 환불 기준을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요약과 requests에 환불 기준 안내 요구가 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "수리 완료 예정일을 알려 달라는 요구",
+            "source": "body",
+            "quote": "수리 완료 예정일을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 requests에 수리 완료 예정일 안내 요구가 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"주차장 시설 점검\"},{\"id\":\"body\",\"text\":\"차단기가 고장 나 계속 불편합니다. 공영주차장 차단기를 점검해 주세요. 월 정기권 환불 기준을 알려 주세요. 수리 완료 예정일을 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"공영주차장 차단기를 점검해 주세요. 월 정기권 환불 기준을 알려 주세요.\",\"requests\":[\"공영주차장 차단기를 점검해 주세요.\",\"월 정기권 환불 기준을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:47.959Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "공영주차장 차단기를 점검해 주세요.",
+            "source": "request:Q1",
+            "quote": "공영주차장 차단기를 점검해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "중립 요약에 공영주차장 차단기 점검 요청이 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "월 정기권이 아니라 당일 주차권 환불 기준을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "월 정기권이 아니라 당일 주차권 환불 기준을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "요약은 월 정기권 환불 기준을 다루며, 당일 주차권 기준과 월 정기권이 아니라는 구분을 보존하지 않았습니다."
+          },
+          {
+            "id": "2b14379d-a45a-45e1-8e79-3f4b9dd3ad51",
+            "text": "차단기 고장 중 출차 절차를 알려 주세요.",
+            "source": "request:2b14379d-a45a-45e1-8e79-3f4b9dd3ad51",
+            "quote": "차단기 고장 중 출차 절차를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "중립 요약에 차단기 고장 중 출차 절차 안내 요청이 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"주차장 시설 점검\"},{\"id\":\"body\",\"text\":\"차단기가 고장 나 계속 불편합니다. 공영주차장 차단기를 점검해 주세요. 월 정기권 환불 기준을 알려 주세요. 수리 완료 예정일을 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"공영주차장 차단기를 점검해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"월 정기권이 아니라 당일 주차권 환불 기준을 알려 주세요.\"},{\"id\":\"request:2b14379d-a45a-45e1-8e79-3f4b9dd3ad51\",\"text\":\"차단기 고장 중 출차 절차를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"공영주차장 차단기를 점검해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"월 정기권이 아니라 당일 주차권 환불 기준을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"수리 완료 예정일을 알려 주세요.\",\"withdrawn\":true},{\"id\":\"2b14379d-a45a-45e1-8e79-3f4b9dd3ad51\",\"text\":\"차단기 고장 중 출차 절차를 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"공영주차장 차단기를 점검해 주세요. 월 정기권 환불 기준을 알려 주세요.\",\"requests\":[\"공영주차장 차단기를 점검해 주세요.\",\"월 정기권 환불 기준을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:51.717Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "2b14379d-a45a-45e1-8e79-3f4b9dd3ad51",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    },
+    {
+      "id": "N12",
+      "original": {
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "회의록 공개 가능 여부를 확인해 달라는 요구",
+            "source": "body",
+            "quote": "회의록 공개 가능 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구의 핵심이 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R2",
+            "text": "2025년 예산 집행 자료의 조회 방법을 알려 달라는 요구",
+            "source": "body",
+            "quote": "2025년 예산 집행 자료의 조회 방법을 알려 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "자료의 조회 방법을 알려 달라는 요구가 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "R3",
+            "text": "공개가 어려운 경우 구체적인 사유를 알려 달라는 요구",
+            "source": "body",
+            "quote": "공개가 어렵다면 구체적인 사유를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "공개가 어려운 경우 구체적인 사유를 안내해 달라는 조건부 요구가 요약과 요청 목록에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"정보 공개 요청\"},{\"id\":\"body\",\"text\":\"이전 답변에서 두 가지를 빼먹었습니다. 회의록 공개 가능 여부를 확인해 주세요. 2025년 예산 집행 자료의 조회 방법을 알려 주세요. 공개가 어렵다면 구체적인 사유를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\"}",
+        "analysisSnapshot": "{\"summary\":\"회의록 공개 가능 여부를 확인해 주세요. 2025년 예산 집행 자료의 조회 방법을 알려 주세요.\",\"requests\":[\"회의록 공개 가능 여부를 확인해 주세요.\",\"2025년 예산 집행 자료의 조회 방법을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:49.590Z"
+      },
+      "originalChecks": [
+        {
+          "index": 0,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 1,
+          "expectedPreserved": true,
+          "found": true,
+          "actualPreserved": true
+        },
+        {
+          "index": 2,
+          "expectedPreserved": false,
+          "found": true,
+          "actualPreserved": false
+        }
+      ],
+      "confirmed": {
+        "requirements": [
+          {
+            "id": "Q1",
+            "text": "회의록 공개 가능 여부를 확인해 주세요.",
+            "source": "request:Q1",
+            "quote": "회의록 공개 가능 여부를 확인해 주세요.",
+            "summaryStatus": "preserved",
+            "summaryReason": "요구의 핵심 내용이 중립 요약의 summary와 requests에 포함되어 있습니다."
+          },
+          {
+            "id": "Q2",
+            "text": "2025년이 아니라 2026년 예산 집행 자료의 조회 방법을 알려 주세요.",
+            "source": "request:Q2",
+            "quote": "2025년이 아니라 2026년 예산 집행 자료의 조회 방법을 알려 주세요.",
+            "summaryStatus": "distorted",
+            "summaryReason": "원래 요구는 2025년이 아니라 2026년 자료를 대상으로 하지만, 요약은 2025년 자료로 바꾸어 적었습니다."
+          },
+          {
+            "id": "bbf86589-7aa1-4262-a812-4cb42a901531",
+            "text": "정보 공개 결정에 이의를 제기하는 절차를 알려 주세요.",
+            "source": "request:bbf86589-7aa1-4262-a812-4cb42a901531",
+            "quote": "정보 공개 결정에 이의를 제기하는 절차를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "정보 공개 결정에 이의를 제기하는 절차에 관한 내용이 요약의 summary와 requests에 없습니다."
+          }
+        ],
+        "noRequestReason": "",
+        "sourceSnapshot": "{\"sources\":[{\"id\":\"title\",\"text\":\"정보 공개 요청\"},{\"id\":\"body\",\"text\":\"이전 답변에서 두 가지를 빼먹었습니다. 회의록 공개 가능 여부를 확인해 주세요. 2025년 예산 집행 자료의 조회 방법을 알려 주세요. 공개가 어렵다면 구체적인 사유를 알려 주세요.\"},{\"id\":\"request:Q1\",\"text\":\"회의록 공개 가능 여부를 확인해 주세요.\"},{\"id\":\"request:Q2\",\"text\":\"2025년이 아니라 2026년 예산 집행 자료의 조회 방법을 알려 주세요.\"},{\"id\":\"request:bbf86589-7aa1-4262-a812-4cb42a901531\",\"text\":\"정보 공개 결정에 이의를 제기하는 절차를 알려 주세요.\"}],\"location\":\"청주시 가상 장소\",\"category\":\"기타\",\"occurredAt\":\"2026-11-08\",\"confirmedRequests\":[{\"id\":\"Q1\",\"text\":\"회의록 공개 가능 여부를 확인해 주세요.\",\"withdrawn\":false},{\"id\":\"Q2\",\"text\":\"2025년이 아니라 2026년 예산 집행 자료의 조회 방법을 알려 주세요.\",\"withdrawn\":false},{\"id\":\"Q3\",\"text\":\"공개가 어렵다면 구체적인 사유를 알려 주세요.\",\"withdrawn\":true},{\"id\":\"bbf86589-7aa1-4262-a812-4cb42a901531\",\"text\":\"정보 공개 결정에 이의를 제기하는 절차를 알려 주세요.\",\"withdrawn\":false}]}",
+        "analysisSnapshot": "{\"summary\":\"회의록 공개 가능 여부를 확인해 주세요. 2025년 예산 집행 자료의 조회 방법을 알려 주세요.\",\"requests\":[\"회의록 공개 가능 여부를 확인해 주세요.\",\"2025년 예산 집행 자료의 조회 방법을 알려 주세요.\"]}",
+        "checkedAt": "2026-11-08T05:52:53.292Z"
+      },
+      "confirmedChecks": [
+        {
+          "id": "Q1",
+          "expectedPreserved": true,
+          "actualPreserved": true
+        },
+        {
+          "id": "Q2",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        },
+        {
+          "id": "bbf86589-7aa1-4262-a812-4cb42a901531",
+          "expectedPreserved": false,
+          "actualPreserved": false
+        }
+      ],
+      "activeCount": 3,
+      "completed": true
+    }
+  ],
+  "usage": {
+    "calls": 24,
+    "inputTokens": 11465,
+    "outputTokens": 7378
+  },
+  "model": "gpt-6-luna",
+  "metrics": {
+    "completeCases": 12,
+    "errors": 0,
+    "original": {
+      "requirements": 36,
+      "agreement": 36,
+      "missedOmissions": 0,
+      "falseAlerts": 0,
+      "extractionMissing": 0
+    },
+    "afterCitizenCorrection": {
+      "requirements": 36,
+      "agreement": 36,
+      "missedOmissions": 0,
+      "falseAlerts": 0,
+      "confirmedRowsPreserved": 36,
+      "expectedRows": 36,
+      "withdrawnRowsReintroduced": 0
+    }
+  },
+  "finishedAt": "2026-11-08T05:52:53.293Z"
+}

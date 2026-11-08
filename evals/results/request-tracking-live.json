@@ -1,0 +1,170 @@
+{
+  "testedAt": "2026-11-08T06:04:01.562Z",
+  "synthetic": true,
+  "method": "Production citizen/staff browser UI, real OpenAI/law retrieval/workflows, read-only DB assertions. Staff completion is a synthetic record, not a real field action.",
+  "complaintId": "SS-8AE965486CD0",
+  "urls": [
+    "https://shield-and-solve.vercel.app",
+    "https://shield-solve-staff.vercel.app"
+  ],
+  "checks": {
+    "citizenEditWithdrawAddShared": true,
+    "originalUnchanged": true,
+    "perRequestReplyReopens": true,
+    "confirmedRequestsPreservedAfterWorkflow": true,
+    "withdrawnExcludedFromAudit": true,
+    "staffProgressSurvivesReanalysis": true,
+    "onlyOneRequestCompleted": true
+  },
+  "workflow": {
+    "state": "completed",
+    "generation": 2,
+    "stages": [
+      "plan",
+      "evidence",
+      "analysis",
+      "requirements",
+      "review",
+      "coverage"
+    ]
+  },
+  "tracking": {
+    "version": 1,
+    "confirmedAt": "2026-11-08T06:02:06.464Z",
+    "items": [
+      {
+        "id": "Q1",
+        "text": "쓰레기 수거를 요청함",
+        "originalText": "쓰레기 수거를 요청함",
+        "withdrawn": false,
+        "state": "completed",
+        "note": "합성 검증: 수거 완료 결과 기록 동작을 확인했습니다. 실제 작업은 아닙니다.",
+        "history": [
+          {
+            "at": "2026-11-08T06:02:06.464Z",
+            "actor": "citizen",
+            "action": "confirm",
+            "text": "쓰레기 수거를 요청함",
+            "state": "received",
+            "withdrawn": false,
+            "note": "시민이 요구를 확인했습니다."
+          },
+          {
+            "at": "2026-11-08T06:02:35.856Z",
+            "actor": "staff",
+            "action": "progress",
+            "text": "쓰레기 수거를 요청함",
+            "state": "waiting",
+            "withdrawn": false,
+            "note": "수거할 위치의 상세 주소를 알려 주세요."
+          },
+          {
+            "at": "2026-11-08T06:02:48.901Z",
+            "actor": "citizen",
+            "action": "reply",
+            "text": "쓰레기 수거를 요청함",
+            "state": "received",
+            "withdrawn": false,
+            "note": "가상로 15 입구입니다. 실제 주소가 없는 합성 검증입니다."
+          },
+          {
+            "at": "2026-11-08T06:03:17.572Z",
+            "actor": "staff",
+            "action": "progress",
+            "text": "쓰레기 수거를 요청함",
+            "state": "completed",
+            "withdrawn": false,
+            "note": "합성 검증: 수거 완료 결과 기록 동작을 확인했습니다. 실제 작업은 아닙니다."
+          }
+        ]
+      },
+      {
+        "id": "Q2",
+        "text": "월요일 수거 가능 여부와 일정을 알려 주세요.",
+        "originalText": "쓰레기 수거 일정을 알려 달라고 요청함",
+        "withdrawn": false,
+        "state": "received",
+        "note": "",
+        "history": [
+          {
+            "at": "2026-11-08T06:02:06.464Z",
+            "actor": "citizen",
+            "action": "edit",
+            "text": "월요일 수거 가능 여부와 일정을 알려 주세요.",
+            "state": "received",
+            "withdrawn": false,
+            "note": "시민이 요구를 수정했습니다."
+          }
+        ]
+      },
+      {
+        "id": "Q3",
+        "text": "대형폐기물 배출 신고 방법을 알려 달라고 요청함",
+        "originalText": "대형폐기물 배출 신고 방법을 알려 달라고 요청함",
+        "withdrawn": true,
+        "state": "received",
+        "note": "",
+        "history": [
+          {
+            "at": "2026-11-08T06:02:06.464Z",
+            "actor": "citizen",
+            "action": "edit",
+            "text": "대형폐기물 배출 신고 방법을 알려 달라고 요청함",
+            "state": "received",
+            "withdrawn": true,
+            "note": "시민이 요구를 수정했습니다."
+          }
+        ]
+      },
+      {
+        "id": "5b4ac502-61ff-4544-a880-6844bdd0cc5e",
+        "text": "수거 담당 부서의 연락처를 알려 주세요.",
+        "originalText": "수거 담당 부서의 연락처를 알려 주세요.",
+        "withdrawn": false,
+        "state": "received",
+        "note": "",
+        "history": [
+          {
+            "at": "2026-11-08T06:02:06.464Z",
+            "actor": "citizen",
+            "action": "edit",
+            "text": "수거 담당 부서의 연락처를 알려 주세요.",
+            "state": "received",
+            "withdrawn": false,
+            "note": "시민이 요구를 확인했습니다."
+          }
+        ]
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "id": "Q1",
+      "text": "쓰레기 수거를 요청함",
+      "source": "request:Q1",
+      "quote": "쓰레기 수거를 요청함",
+      "summaryStatus": "preserved",
+      "summaryReason": "중립 요약의 요청 목록에 쓰레기 수거 요청이 그대로 포함되어 있습니다."
+    },
+    {
+      "id": "Q2",
+      "text": "월요일 수거 가능 여부와 일정을 알려 주세요.",
+      "source": "request:Q2",
+      "quote": "월요일 수거 가능 여부와 일정을 알려 주세요.",
+      "summaryStatus": "preserved",
+      "summaryReason": "중립 요약에 월요일 수거 가능 여부와 일정을 알려 달라는 요청이 포함되어 있습니다."
+    },
+    {
+      "id": "5b4ac502-61ff-4544-a880-6844bdd0cc5e",
+      "text": "수거 담당 부서의 연락처를 알려 주세요.",
+      "source": "request:5b4ac502-61ff-4544-a880-6844bdd0cc5e",
+      "quote": "수거 담당 부서의 연락처를 알려 주세요.",
+      "summaryStatus": "preserved",
+      "summaryReason": "중립 요약의 요청 목록에 수거 담당 부서의 연락처를 알려 달라는 요청이 포함되어 있습니다."
+    }
+  ],
+  "evidenceCandidates": 3,
+  "screenshot": "outputs/request-tracking-citizen.jpg",
+  "cleanup": "Synthetic complaint moved to recoverable trash through production API; verified deleted_at.",
+  "cleanupAt": "2026-11-08T06:05:57.647Z"
+}

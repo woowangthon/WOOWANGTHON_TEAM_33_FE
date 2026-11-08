@@ -1,0 +1,65 @@
+{
+  "startedAt": "2026-11-07T14:28:22.440Z",
+  "synthetic": true,
+  "checks": {
+    "pairedGuestSession": true,
+    "citizenPage": true,
+    "staffPage": true,
+    "created": true,
+    "sharedStaffInbox": true,
+    "automaticAnalysis": true,
+    "coverageVersion2": true,
+    "matchingDraft": true,
+    "sentenceReviewCurrent": true,
+    "syntheticCaseRemoved": true
+  },
+  "transitions": [
+    {
+      "at": "2026-11-07T14:28:27.568Z",
+      "state": "processing",
+      "message": "민원 내용을 확인하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T14:28:37.967Z",
+      "state": "processing",
+      "message": "발생일에 맞는 법령·조례를 검색하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T14:28:48.182Z",
+      "state": "processing",
+      "message": "요구사항과 답변 초안을 정리하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T14:28:59.143Z",
+      "state": "processing",
+      "message": "답변의 문장별 근거를 대조하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T14:29:09.533Z",
+      "state": "processing",
+      "message": "요구사항마다 답변이 있는지 확인하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T14:29:19.705Z",
+      "state": "completed",
+      "message": "법령 검색·분석을 완료했습니다."
+    }
+  ],
+  "caseId": "SS-E342C080F75C",
+  "requirements": [
+    {
+      "text": "가상공원 입구에 쌓인 쓰레기를 현장에서 수거해 달라는 요청",
+      "responseStatus": "clarification",
+      "summaryStatus": "preserved"
+    },
+    {
+      "text": "대형폐기물 배출 신고 방법을 안내해 달라는 요청",
+      "responseStatus": "answered",
+      "summaryStatus": "preserved"
+    }
+  ],
+  "citations": 5,
+  "repair": null,
+  "passed": true,
+  "finishedAt": "2026-11-07T14:29:19.911Z"
+}

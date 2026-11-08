@@ -1,0 +1,42 @@
+{
+  "name": "shield-and-solve",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.cjs",
+    "test:phone": "node --test phone/*.test.mjs evals/phone-handoff/filter-relay.test.mjs evals/phone-handoff/text-pipeline.test.mjs",
+    "db:migrate": "node --env-file=.env.local scripts/migrate.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/auth": "latest",
+    "@vercel/functions": "latest",
+    "lucide-react": "^1.31.0",
+    "next": "16.4.3",
+    "pg": "^8.16.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "workflow": "5.2.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "tsx": "^4.20.0",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "zod": "4.6.7",
+    "better-auth": "1.7.14",
+    "undici": "7.30.1"
+  }
+}

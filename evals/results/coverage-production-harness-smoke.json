@@ -1,0 +1,72 @@
+{
+  "startedAt": "2026-11-07T15:36:08.617Z",
+  "synthetic": true,
+  "checks": {
+    "pairedGuestSession": true,
+    "citizenPage": true,
+    "staffPage": true,
+    "created": true,
+    "sharedStaffInbox": true,
+    "automaticAnalysis": true,
+    "coverageVersionCurrent": true,
+    "matchingDraft": true,
+    "sentenceReviewCurrent": true,
+    "sourcePlanSaved": true,
+    "syntheticCaseRemoved": true
+  },
+  "transitions": [
+    {
+      "at": "2026-11-07T15:36:17.631Z",
+      "state": "queued",
+      "message": ""
+    },
+    {
+      "at": "2026-11-07T15:36:28.036Z",
+      "state": "processing",
+      "message": "발생일에 맞는 법령·조례를 검색하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T15:36:38.200Z",
+      "state": "processing",
+      "message": "원문 요구가 요약에 빠짐없이 반영됐는지 확인하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T15:36:48.860Z",
+      "state": "processing",
+      "message": "요구사항마다 답변이 있는지 확인하고 있습니다."
+    },
+    {
+      "at": "2026-11-07T15:36:59.052Z",
+      "state": "completed",
+      "message": "법령 검색·분석을 완료했습니다."
+    }
+  ],
+  "caseId": "SS-C1EF598C1207",
+  "requirements": [
+    {
+      "text": "청주시 가상공원 입구에 쌓인 쓰레기를 현장 수거해 달라는 요청",
+      "responseStatus": "refused",
+      "summaryStatus": "preserved"
+    },
+    {
+      "text": "대형폐기물 배출 신고 방법 안내 요청",
+      "responseStatus": "answered",
+      "summaryStatus": "preserved"
+    }
+  ],
+  "coverageVersion": 7,
+  "harnessRules": [
+    {
+      "id": "R1",
+      "rule": "EXPLICIT_LIMITATION"
+    },
+    {
+      "id": "R2",
+      "rule": "DIRECT_ANSWER"
+    }
+  ],
+  "citations": 5,
+  "repair": null,
+  "passed": true,
+  "finishedAt": "2026-11-07T15:36:59.255Z"
+}

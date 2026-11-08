@@ -1,0 +1,1607 @@
+{
+  "source": "evals/results/coverage-v7-harness.json",
+  "checkerVersion": 7,
+  "apiCalls": 0,
+  "reviews": [
+    {
+      "caseId": "C01",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C01",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C02",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C02",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C03",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C03",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C04",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C04",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C05",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "DIRECT_ANSWER"
+        }
+      ]
+    },
+    {
+      "caseId": "C05",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "DIRECT_ANSWER"
+        }
+      ]
+    },
+    {
+      "caseId": "C06",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C06",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C07",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C07",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C08",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C08",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C09",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C09",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C10",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C10",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C11",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_ACTUAL_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C11",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C12",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C12",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C13",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C13",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C14",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C14",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C15",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C15",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C16",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C16",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C17",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C17",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C18",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C18",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C19",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C19",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C20",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C20",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C21",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C21",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "DIRECT_ANSWER"
+        }
+      ]
+    },
+    {
+      "caseId": "C22",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C22",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C23",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C23",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C24",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C24",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C25",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C25",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C26",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C26",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C27",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R2",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        },
+        {
+          "id": "R3",
+          "rule": "INFORMATION_ALREADY_PRESENT"
+        }
+      ]
+    },
+    {
+      "caseId": "C27",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C28",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "SHARED_SITE_SCOPE_BLOCKED"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C28",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C29",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C29",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C30",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C30",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "DIRECT_ANSWER"
+        },
+        {
+          "id": "R3",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C31",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C31",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C32",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C32",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C33",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C33",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C34",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C34",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C35",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C35",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C36",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C36",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C37",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R2",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        }
+      ]
+    },
+    {
+      "caseId": "C37",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C38",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C38",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C39",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "C39",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        },
+        {
+          "id": "R3",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "C40",
+      "stage": "detected",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "C40",
+      "stage": "repaired",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        },
+        {
+          "id": "R2",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "B01",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        }
+      ]
+    },
+    {
+      "caseId": "B02",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "B03",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_ALREADY_PRESENT"
+        }
+      ]
+    },
+    {
+      "caseId": "B04",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_KIND_MISMATCH"
+        }
+      ]
+    },
+    {
+      "caseId": "B05",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "B06",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "INFORMATION_ALREADY_PRESENT"
+        }
+      ]
+    },
+    {
+      "caseId": "B07",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "EXPLICIT_LIMITATION"
+        }
+      ]
+    },
+    {
+      "caseId": "B08",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "B09",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "B10",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "NO_SUBSTANTIVE_RESPONSE"
+        }
+      ]
+    },
+    {
+      "caseId": "B11",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "REQUIRED_QUESTION"
+        }
+      ]
+    },
+    {
+      "caseId": "B12",
+      "stage": "review",
+      "pass": true,
+      "differences": [],
+      "rules": [
+        {
+          "id": "R1",
+          "rule": "DIRECT_ANSWER"
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "evals/results/coverage-v7-harness.json": "6b98488c6af30a95e58cf617ee8d7cdde40fd031c2c601fed22ef395cd988084",
+    "lib/coverage-harness.ts": "4c155b97217fdfba2d59b2d985431b06da0165d12f3c2aa4a8a9414fa5594c5b",
+    "lib/coverage.ts": "7bd7af2c848ba9ea238a1179c70e9747cba0dd0ce22def4b242a467cfa4ac8d8",
+    "lib/coverage-policy.ts": "b7ea24063197a4ad5dd0512d475164c67346234c14f255f7e10ab2ce345d2e8b",
+    "evals/replay-coverage-rules.cjs": "49d39364402a282ca76579dc1cb0112ef0684568b7c1579270aef5f9f9a38f7c"
+  },
+  "passed": true
+}

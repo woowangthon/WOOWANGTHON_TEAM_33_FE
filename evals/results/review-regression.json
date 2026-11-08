@@ -1,0 +1,62 @@
+{
+  "synthetic": true,
+  "model": "gpt-6-luna",
+  "checkedAt": "2026-10-31T14:07:53.795Z",
+  "expected": [
+    "not_legal",
+    "not_legal",
+    "needs_review",
+    "needs_review",
+    "needs_review"
+  ],
+  "actual": [
+    "not_legal",
+    "not_legal",
+    "needs_review",
+    "needs_review",
+    "needs_review"
+  ],
+  "result": {
+    "draft": "쓰레기 수거 요청을 확인했습니다.\n수거 가능한 시점은 현장 위치와 폐기물 종류를 확인하기 전에는 확정하기 어렵습니다.\n쓰레기 수거를 완료했습니다.\n내일 오전 9시에 방문하겠습니다.\n폐기물을 버리면 과태료 100만 원을 부과합니다.",
+    "status": "checked",
+    "sentences": [
+      {
+        "id": "S1",
+        "text": "쓰레기 수거 요청을 확인했습니다.",
+        "status": "not_legal",
+        "reason": "요청 내용을 확인했다는 수신 확인입니다.",
+        "references": []
+      },
+      {
+        "id": "S2",
+        "text": "수거 가능한 시점은 현장 위치와 폐기물 종류를 확인하기 전에는 확정하기 어렵습니다.",
+        "status": "not_legal",
+        "reason": "정보가 부족해 수거 시점을 확정하기 어렵다는 설명입니다.",
+        "references": []
+      },
+      {
+        "id": "S3",
+        "text": "쓰레기 수거를 완료했습니다.",
+        "status": "needs_review",
+        "reason": "수거 완료를 주장하지만 이를 확인할 사실 근거가 없습니다.",
+        "references": []
+      },
+      {
+        "id": "S4",
+        "text": "내일 오전 9시에 방문하겠습니다.",
+        "status": "needs_review",
+        "reason": "구체적인 방문 일정을 약속하지만 뒷받침할 근거가 없습니다.",
+        "references": []
+      },
+      {
+        "id": "S5",
+        "text": "폐기물을 버리면 과태료 100만 원을 부과합니다.",
+        "status": "needs_review",
+        "reason": "과태료 부과의 법적 근거와 금액을 확인할 조문이 제공되지 않았습니다.",
+        "references": []
+      }
+    ],
+    "checkedAt": "2026-10-31T14:07:53.794Z",
+    "validatorVersion": 2
+  }
+}

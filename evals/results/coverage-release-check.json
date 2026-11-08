@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "current": {
+    "cases": 40,
+    "requirements": 100,
+    "falseAlerts": 8,
+    "missed": 0,
+    "afterAnswerMissing": 0
+  },
+  "baseline": {
+    "cases": 40,
+    "requirements": 100,
+    "falseAlerts": 8,
+    "missed": 3,
+    "afterAnswerMissing": 4
+  },
+  "failures": [],
+  "sources": {
+    "current": "evals/results/coverage-v7-harness.json",
+    "previous": "evals/results/coverage-v2-evidence.json"
+  },
+  "hashes": {
+    "evals/results/coverage-v7-harness.json": "6b98488c6af30a95e58cf617ee8d7cdde40fd031c2c601fed22ef395cd988084",
+    "evals/results/coverage-v2-evidence.json": "4924767d80ae6bca4b31e19efc1b495e081559327b224d8eb4f57197eea25379",
+    "C:\\Users\\LJY\\Documents\\ChatGPT\\정연\\shield-solve-vercel\\evals\\coverage-release-gate.cjs": "3fe6168d1c317f345eace3dc2163b37b7153cd2c042d09f89fe3dbe7140a1e2f"
+  }
+}

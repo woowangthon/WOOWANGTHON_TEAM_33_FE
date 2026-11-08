@@ -1,0 +1,27 @@
+export type Status = 'received' | 'reviewing' | 'waiting' | 'resolved';
+export const statuses: Record<Status, string> = { received:'접수', reviewing:'검토 중', waiting:'보완 요청', resolved:'답변 완료' };
+export const categories = ['생활폐기물', '소음·환경', '도로·교통', '건축·주거', '동물·공원', '기타'] as const;
+export type SentenceCheck = {id:string;text:string;status:'supported'|'needs_review'|'not_legal';reason:string;references:{citationId:string;quote:string}[]};
+export type DraftReview = {draft:string;status:'checked'|'unavailable';sentences:SentenceCheck[];checkedAt:string;validatorVersion?:number};
+export type Supplement = {id:string;role:'staff'|'citizen';text:string;createdAt:string;attachments:{id:string;name:string;mime:string;size:number}[]};
+export type Citation = { id:string; title:string; article:string; text:string; sourceUrl:string; effectiveDate:string; jurisdiction:string; kind:string; relation?:string };
+export type ExpressionFinding = {kind:'profanity'|'insult'|'threat'|'criticism';source:'title'|'body';quote:string;reason:string};
+export type Analysis = {
+  safeTitle?:string; expressionFindings?:ExpressionFinding[];
+  summary:string; requests:string[]; questions:string[]; shieldLevel:'normal'|'caution'|'threat'; shieldReason:string;
+  sensitiveQuotes:string[]; actions:string[]; draft:string; citationIds:string[]; citations:Citation[]; warnings:string[];
+  generatedAt:string; model:string; retrievalMode:string;
+};
+export type Task = { id:string; label:string; done:boolean };
+export type AutoState = 'idle'|'queued'|'processing'|'blocked'|'completed'|'failed';
+export const autoStates:Record<AutoState,string>={idle:'분석 전',queued:'자동 분석 대기',processing:'자동 분석 중',blocked:'분석 대기',completed:'분석 완료',failed:'재시도 필요'};
+export type Complaint = { id:string; title:string; body:string; category:string; location:string; occurred_at:string;
+  display_title?:string;
+  deleted_at?:string|null; supplements?:Supplement[]; published_citations?:Citation[];
+  draft_review?:DraftReview|null;
+  auto_state?:AutoState; auto_message?:string;
+  status:Status; analysis:Analysis|null; evidence?:{citations:Citation[];warnings:string[];mode:string;generatedAt:string}|null; draft:string; published:string; tasks:Task[]; is_sample:number; created_at:string; updated_at:string; revision:number;
+};
+export type Event = {id:string; label:string; created_at:string};
+export type LawDocument = {id:string; source_id:string; title:string; kind:string; jurisdiction:string; effective_date:string; source_url:string; articleCount:number; imported_at:string};
+export type AppSettings = { geminiReady:boolean; aiReady?:boolean; aiProviderLabel?:string; publicInbox?:boolean; lawReady:boolean; encryptionReady:boolean; model:string };

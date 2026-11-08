@@ -1,0 +1,8 @@
+.env*
+.agents
+node_modules
+.next
+outputs
+tests
+*.tsbuildinfo
+evals

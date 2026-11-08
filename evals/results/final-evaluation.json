@@ -1,0 +1,2867 @@
+{
+  "startedAt": "2026-10-31T13:59:39.309Z",
+  "model": "gpt-6-luna",
+  "synthetic": true,
+  "labelStatus": "ai_authored_pending_human_review",
+  "method": "Fixed baseline outputs. Same model family in a separate grading call. Revised rubric explicitly checks necessary clarification before classifying omissions; initial grading and detector outputs remain in coverage-evaluation.json. Development evaluation, not a blinded held-out test.",
+  "cases": [
+    {
+      "id": "C01",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인을 위해 정확한 위치와 주변 표지물 또는 사진을 알려 주시면 확인에 도움이 됩니다.",
+            "neededInformation": "정확한 위치와 주변 표지물 또는 사진",
+            "reason": "가상동이라는 넓은 위치만 제공되어 골목의 쓰레기를 현장에서 확인하고 수거 가능 여부를 판단하려면 상세 위치가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "제공해 주신 내용을 바탕으로 적치 상황과 수거 가능 여부를 확인한 뒤, 가능한 수거 시점과 재발 방지 방법을 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "재발 방지 방법을 제시하지 않고 추후 안내하겠다는 약속만 했습니다. 상세 위치 요청은 이 요구에 필요한 정보가 아닙니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인을 위해 정확한 위치와 주변 표지물 또는 사진을 알려 주시면 확인에 도움이 됩니다.",
+            "neededInformation": "정확한 위치와 주변 표지물 또는 사진",
+            "reason": "현장별 수거 가능 시점을 판단하려면 수거 대상의 상세 위치를 확인할 필요가 있습니다. 구체적인 일정은 현장 확인 전에는 확정하기 어렵다고 안내했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인을 위해 정확한 위치와 주변 표지물 또는 사진을 알려 주시면 확인에 도움이 됩니다.",
+          "neededInformation": "정확한 위치와 주변 표지물 또는 사진",
+          "reason": "가상동이라는 넓은 위치만 제공되어 골목의 쓰레기를 현장에서 확인하고 수거 가능 여부를 판단하려면 상세 위치가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "제공해 주신 내용을 바탕으로 적치 상황과 수거 가능 여부를 확인한 뒤, 가능한 수거 시점과 재발 방지 방법을 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "재발 방지 방법을 제시하지 않고 추후 안내하겠다는 약속만 했습니다. 상세 위치 요청은 이 요구에 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인을 위해 정확한 위치와 주변 표지물 또는 사진을 알려 주시면 확인에 도움이 됩니다.",
+          "neededInformation": "정확한 위치와 주변 표지물 또는 사진",
+          "reason": "현장별 수거 가능 시점을 판단하려면 수거 대상의 상세 위치를 확인할 필요가 있습니다. 구체적인 일정은 현장 확인 전에는 확정하기 어렵다고 안내했습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 위치와 공사 구간, 도로 관리 주체 및 공사 시행자를 확인한 뒤 복구가 지연된 사유와 복구 예정일을 확인하여 안내드리겠습니다.",
+            "neededInformation": "실제 도로명과 굴착 구간, 도로 관리 주체 및 공사 시행자",
+            "reason": "평가용 위치로 실제 현장과 공사 주체가 특정되지 않아 지연 사유를 확인하는 데 필요한 정보를 요청하고 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 위치와 공사 구간, 도로 관리 주체 및 공사 시행자를 확인한 뒤 복구가 지연된 사유와 복구 예정일을 확인하여 안내드리겠습니다.",
+            "neededInformation": "실제 도로명과 굴착 구간, 도로 관리 주체 및 공사 시행자",
+            "reason": "복구 일정은 해당 굴착 현장과 공사 주체를 확인해야 안내할 수 있으며, 평가용 위치만 제시되어 있어 추가 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 실제 도로명과 굴착 구간을 알려주시면 도움이 됩니다.",
+            "neededInformation": "실제 도로명과 굴착 구간",
+            "reason": "보행자 통행 여건과 안전시설 설치 상태를 확인하고 안전 통로 마련 조치를 검토하려면 실제 현장 위치가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 위치와 공사 구간, 도로 관리 주체 및 공사 시행자를 확인한 뒤 복구가 지연된 사유와 복구 예정일을 확인하여 안내드리겠습니다.",
+          "neededInformation": "실제 도로명과 굴착 구간, 도로 관리 주체 및 공사 시행자",
+          "reason": "평가용 위치로 실제 현장과 공사 주체가 특정되지 않아 지연 사유를 확인하는 데 필요한 정보를 요청하고 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 위치와 공사 구간, 도로 관리 주체 및 공사 시행자를 확인한 뒤 복구가 지연된 사유와 복구 예정일을 확인하여 안내드리겠습니다.",
+          "neededInformation": "실제 도로명과 굴착 구간, 도로 관리 주체 및 공사 시행자",
+          "reason": "복구 일정은 해당 굴착 현장과 공사 주체를 확인해야 안내할 수 있으며, 평가용 위치만 제시되어 있어 추가 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 실제 도로명과 굴착 구간을 알려주시면 도움이 됩니다.",
+          "neededInformation": "실제 도로명과 굴착 구간",
+          "reason": "보행자 통행 여건과 안전시설 설치 상태를 확인하고 안전 통로 마련 조치를 검토하려면 실제 현장 위치가 필요합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대",
+            "reason": "공사 현장의 작업 시간을 확인하려면 어느 현장인지와 공사가 진행된 날짜·시간대에 대한 구체적인 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대",
+            "reason": "야간 소음 측정 가능 여부를 해당 현장에서 확인하려면 구체적인 위치와 측정 대상이 된 날짜·시간대가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "야간 소음 측정이 가능한지와 해당 현장에 적용되는 기준은 관련 사항을 확인하여 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "적용되는 소음 기준을 실제로 안내하지 않았습니다. 일반적인 기준 안내에 현장 위치나 날짜·시간대가 필수라고 볼 수 없으며, 답변은 추후 안내하겠다는 약속에 그칩니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대",
+          "reason": "공사 현장의 작업 시간을 확인하려면 어느 현장인지와 공사가 진행된 날짜·시간대에 대한 구체적인 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "공사 현장의 구체적인 위치와 공사가 진행된 날짜 및 시간대",
+          "reason": "야간 소음 측정 가능 여부를 해당 현장에서 확인하려면 구체적인 위치와 측정 대상이 된 날짜·시간대가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "야간 소음 측정이 가능한지와 해당 현장에 적용되는 기준은 관련 사항을 확인하여 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "적용되는 소음 기준을 실제로 안내하지 않았습니다. 일반적인 기준 안내에 현장 위치나 날짜·시간대가 필수라고 볼 수 없으며, 답변은 추후 안내하겠다는 약속에 그칩니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 정류장 위치를 확인할 수 있는 정보를 알려 주시면 현장과 수리 가능 여부를 확인하고",
+            "neededInformation": "정확한 정류장 위치를 확인할 수 있는 정보",
+            "reason": "수리와 현장 확인은 정확한 정류장 위치가 있어야 진행할 수 있습니다. 주어진 위치는 가상동으로만 제시되어 있어 현장에 필요한 상세 위치를 묻는 것은 적절합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 정류장 위치를 확인할 수 있는 정보를 알려 주시면 현장과 수리 가능 여부를 확인하고, 수리 전 이용 가능한 대기 장소가 있는지도 확인해 안내드리겠습니다.",
+            "neededInformation": "정확한 정류장 위치를 확인할 수 있는 정보",
+            "reason": "수리 전 이용 가능한 대기 장소가 있는지 확인하려면 해당 정류장의 정확한 위치를 알아야 합니다. 주어진 위치는 가상동으로만 제시되어 있어 현장에 필요한 상세 위치를 묻는 것은 적절합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 정류장 위치를 확인할 수 있는 정보를 알려 주시면 현장과 수리 가능 여부를 확인하고",
+          "neededInformation": "정확한 정류장 위치를 확인할 수 있는 정보",
+          "reason": "수리와 현장 확인은 정확한 정류장 위치가 있어야 진행할 수 있습니다. 주어진 위치는 가상동으로만 제시되어 있어 현장에 필요한 상세 위치를 묻는 것은 적절합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 정류장 위치를 확인할 수 있는 정보를 알려 주시면 현장과 수리 가능 여부를 확인하고, 수리 전 이용 가능한 대기 장소가 있는지도 확인해 안내드리겠습니다.",
+          "neededInformation": "정확한 정류장 위치를 확인할 수 있는 정보",
+          "reason": "수리 전 이용 가능한 대기 장소가 있는지 확인하려면 해당 정류장의 정확한 위치를 알아야 합니다. 주어진 위치는 가상동으로만 제시되어 있어 현장에 필요한 상세 위치를 묻는 것은 적절합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "누수 위치와 현재 상태, 피해 범위 및 사진 등 확인 자료를 알려 주시면 문의 경로를 안내하는 데 도움이 됩니다.",
+            "neededInformation": "누수의 구체적인 위치와 현재 상태, 피해 범위 및 사진 등 확인 자료",
+            "reason": "현장 확인을 하려면 가상동이라는 넓은 위치만으로는 부족하므로, 누수 지점과 현장 상태 등 구체적인 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "answered",
+            "replyQuote": "공동주택 관리사무소장은 하자의 발견 및 하자보수 청구 등에 관한 업무를 집행합니다【공동주택관리법 제64조】.",
+            "neededInformation": "",
+            "reason": "관리사무소가 하자 발견 및 하자보수 청구 업무를 담당한다고 안내해 문의처에 대한 답을 제공했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "answered",
+            "replyQuote": "분쟁조정을 신청하려면 청주시 조례에 따라 분쟁조정신청서에 필요한 증거자료 또는 서류를 첨부해 신청해야 합니다【청주시 공동주택 관리 조례 제22조】.",
+            "neededInformation": "",
+            "reason": "분쟁조정 신청서와 증거자료 또는 서류를 첨부해 신청하는 절차를 안내했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "누수 위치와 현재 상태, 피해 범위 및 사진 등 확인 자료를 알려 주시면 문의 경로를 안내하는 데 도움이 됩니다.",
+          "neededInformation": "누수의 구체적인 위치와 현재 상태, 피해 범위 및 사진 등 확인 자료",
+          "reason": "현장 확인을 하려면 가상동이라는 넓은 위치만으로는 부족하므로, 누수 지점과 현장 상태 등 구체적인 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "answered",
+          "replyQuote": "공동주택 관리사무소장은 하자의 발견 및 하자보수 청구 등에 관한 업무를 집행합니다【공동주택관리법 제64조】.",
+          "neededInformation": "",
+          "reason": "관리사무소가 하자 발견 및 하자보수 청구 업무를 담당한다고 안내해 문의처에 대한 답을 제공했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "answered",
+          "replyQuote": "분쟁조정을 신청하려면 청주시 조례에 따라 분쟁조정신청서에 필요한 증거자료 또는 서류를 첨부해 신청해야 합니다【청주시 공동주택 관리 조례 제22조】.",
+          "neededInformation": "",
+          "reason": "분쟁조정 신청서와 증거자료 또는 서류를 첨부해 신청하는 절차를 안내했습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 현장 확인을 위해 공원의 명칭과 조명이 꺼진 산책로 구간을 알려 주시면 점검 여부와 가능한 조치 및 수리 예상 일정을 확인해 안내드리겠습니다.",
+            "neededInformation": "공원의 명칭과 조명이 꺼진 산책로 구간",
+            "reason": "현장에서 해당 조명을 식별하고 점검하려면 실제 공원과 산책로 구간을 특정할 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 현장 확인을 위해 공원의 명칭과 조명이 꺼진 산책로 구간을 알려 주시면 점검 여부와 가능한 조치 및 수리 예상 일정을 확인해 안내드리겠습니다.",
+            "neededInformation": "공원의 명칭과 조명이 꺼진 산책로 구간",
+            "reason": "현장 확인과 점검 가능 여부를 바탕으로 수리 예상 일정을 안내할 수 있으므로, 실제 공원과 산책로 구간을 특정할 정보가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 현장 확인을 위해 공원의 명칭과 조명이 꺼진 산책로 구간을 알려 주시면 점검 여부와 가능한 조치 및 수리 예상 일정을 확인해 안내드리겠습니다.",
+          "neededInformation": "공원의 명칭과 조명이 꺼진 산책로 구간",
+          "reason": "현장에서 해당 조명을 식별하고 점검하려면 실제 공원과 산책로 구간을 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 현장 확인을 위해 공원의 명칭과 조명이 꺼진 산책로 구간을 알려 주시면 점검 여부와 가능한 조치 및 수리 예상 일정을 확인해 안내드리겠습니다.",
+          "neededInformation": "공원의 명칭과 조명이 꺼진 산책로 구간",
+          "reason": "현장 확인과 점검 가능 여부를 바탕으로 수리 예상 일정을 안내할 수 있으므로, 실제 공원과 산책로 구간을 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "신청 방법을 안내하거나 구체적인 절차를 제시하지 않고 추후 안내하겠다고만 했습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "품목별 비용을 제시하지 않고 확인 후 안내하겠다고만 했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "취소 시 환불 방법이나 조건을 안내하지 않고 추후 안내하겠다고만 했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "신청 방법을 안내하거나 구체적인 절차를 제시하지 않고 추후 안내하겠다고만 했습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "품목별 비용을 제시하지 않고 확인 후 안내하겠다고만 했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "관련 절차와 비용, 환불 조건을 확인해 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "취소 시 환불 방법이나 조건을 안내하지 않고 추후 안내하겠다고만 했습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인과 제출자료 안내를 위해 실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부를 알려주시기 바랍니다.",
+            "neededInformation": "실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부",
+            "reason": "현장 점검을 위해 신고된 공장이나 배출시설의 구체적 위치와 발생 상황을 확인할 필요가 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "answered",
+            "replyQuote": "보유하고 계신 사진·영상이나 발생 상황 기록이 있다면 함께 제출해 주시면 확인에 참고하겠습니다.",
+            "neededInformation": "",
+            "reason": "사진·영상 및 발생 상황 기록을 참고자료로 제출할 수 있다고 안내했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인과 제출자료 안내를 위해 실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부를 알려주시기 바랍니다.",
+            "neededInformation": "실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부",
+            "reason": "점검 결과는 현장 점검 후 확인할 수 있으므로, 결과 안내에 앞서 점검에 필요한 구체적 위치와 발생 상황을 확인해야 합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인과 제출자료 안내를 위해 실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부를 알려주시기 바랍니다.",
+          "neededInformation": "실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부",
+          "reason": "현장 점검을 위해 신고된 공장이나 배출시설의 구체적 위치와 발생 상황을 확인할 필요가 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "answered",
+          "replyQuote": "보유하고 계신 사진·영상이나 발생 상황 기록이 있다면 함께 제출해 주시면 확인에 참고하겠습니다.",
+          "neededInformation": "",
+          "reason": "사진·영상 및 발생 상황 기록을 참고자료로 제출할 수 있다고 안내했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인과 제출자료 안내를 위해 실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부를 알려주시기 바랍니다.",
+          "neededInformation": "실제 발생 장소(공장 또는 배출시설을 특정할 수 있는 정보), 발생 날짜와 시간·반복 여부",
+          "reason": "점검 결과는 현장 점검 후 확인할 수 있으므로, 결과 안내에 앞서 점검에 필요한 구체적 위치와 발생 상황을 확인해야 합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 위치와 발생 시각 등 현장 확인에 필요한 정보를 알려주시면 확인에 참고하겠습니다.",
+            "neededInformation": "정확한 위치와 발생 시각",
+            "reason": "현장 확인을 위해서는 넓은 행정구역만으로는 부족할 수 있어 구체적인 위치와 발생 시각이 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "신고 사진 촬영 기준과 반복 주차를 줄이기 위한 방안은 관련 안내와 현장 상황을 확인한 뒤 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "촬영 기준을 안내하거나 그에 필요한 정보를 구체적으로 묻지 않고, 추후 안내만 약속했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "신고 사진 촬영 기준과 반복 주차를 줄이기 위한 방안은 관련 안내와 현장 상황을 확인한 뒤 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "반복 주차를 줄일 대책을 제시하거나 그 요구에 필요한 정보를 구체적으로 묻지 않고, 추후 안내만 약속했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 위치와 발생 시각 등 현장 확인에 필요한 정보를 알려주시면 확인에 참고하겠습니다.",
+          "neededInformation": "정확한 위치와 발생 시각",
+          "reason": "현장 확인을 위해서는 넓은 행정구역만으로는 부족할 수 있어 구체적인 위치와 발생 시각이 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "신고 사진 촬영 기준과 반복 주차를 줄이기 위한 방안은 관련 안내와 현장 상황을 확인한 뒤 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "촬영 기준을 안내하거나 그에 필요한 정보를 구체적으로 묻지 않고, 추후 안내만 약속했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "신고 사진 촬영 기준과 반복 주차를 줄이기 위한 방안은 관련 안내와 현장 상황을 확인한 뒤 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "반복 주차를 줄일 대책을 제시하거나 그 요구에 필요한 정보를 구체적으로 묻지 않고, 추후 안내만 약속했습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "접수일과 접수번호",
+            "reason": "현재 진행 상태를 확인하려면 어떤 민원인지 특정할 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "접수일과 접수번호",
+            "reason": "해당 민원의 지연 사유를 확인하려면 어떤 민원인지 특정할 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "접수일과 접수번호",
+            "reason": "해당 민원의 다음 안내 시점을 확인하려면 어떤 민원인지 특정할 정보가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "접수일과 접수번호",
+          "reason": "현재 진행 상태를 확인하려면 어떤 민원인지 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "접수일과 접수번호",
+          "reason": "해당 민원의 지연 사유를 확인하려면 어떤 민원인지 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "민원을 정확히 확인할 수 있도록 접수일과 접수번호를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "접수일과 접수번호",
+          "reason": "해당 민원의 다음 안내 시점을 확인하려면 어떤 민원인지 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 안내를 위해 실제 주택 주소와 주택 유형, 공사 현장 위치 및 공사 시기, 균열을 처음 확인한 날짜를 알려주시기 바랍니다.",
+            "neededInformation": "실제 주택 주소와 주택 유형, 공사 현장 위치 및 공사 시기, 균열을 처음 확인한 날짜",
+            "reason": "안전 점검 가능 여부를 판단하고 현장에 맞는 안내를 하려면 실제 주택과 공사 현장의 위치 및 균열 발생 시점 정보가 필요할 수 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "안전 점검 가능 여부와 피해 기록 방법, 배상 관련 상담 경로를 확인해 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "피해 기록 방법을 구체적으로 안내하지 않고, 확인 후 안내하겠다는 약속만 했습니다. 사진이나 균열 크기·변화 기록을 요청했지만 이는 방법 안내에 필요한 정보 질문으로 보기 어렵습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "안전 점검 가능 여부와 피해 기록 방법, 배상 관련 상담 경로를 확인해 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "배상 상담 창구나 상담 절차를 제시하지 않고 확인 후 안내하겠다는 약속만 했습니다. 요청한 상담 경로 안내에는 실제 주소 등 추가 정보가 반드시 필요하다고 보기 어렵습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 안내를 위해 실제 주택 주소와 주택 유형, 공사 현장 위치 및 공사 시기, 균열을 처음 확인한 날짜를 알려주시기 바랍니다.",
+          "neededInformation": "실제 주택 주소와 주택 유형, 공사 현장 위치 및 공사 시기, 균열을 처음 확인한 날짜",
+          "reason": "안전 점검 가능 여부를 판단하고 현장에 맞는 안내를 하려면 실제 주택과 공사 현장의 위치 및 균열 발생 시점 정보가 필요할 수 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "안전 점검 가능 여부와 피해 기록 방법, 배상 관련 상담 경로를 확인해 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "피해 기록 방법을 구체적으로 안내하지 않고, 확인 후 안내하겠다는 약속만 했습니다. 사진이나 균열 크기·변화 기록을 요청했지만 이는 방법 안내에 필요한 정보 질문으로 보기 어렵습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "안전 점검 가능 여부와 피해 기록 방법, 배상 관련 상담 경로를 확인해 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "배상 상담 창구나 상담 절차를 제시하지 않고 확인 후 안내하겠다는 약속만 했습니다. 요청한 상담 경로 안내에는 실제 주소 등 추가 정보가 반드시 필요하다고 보기 어렵습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "원활한 확인을 위해 수거함의 정확한 위치와 현재 상태를 알 수 있는 상세 위치나 사진을 보내 주시면 감사하겠습니다.",
+            "neededInformation": "수거함의 정확한 위치와 현재 상태를 알 수 있는 상세 위치나 사진",
+            "reason": "가상동이라는 넓은 위치만 주어져 있어 현장 수거를 위해 정확한 위치 확인이 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "확인 후 수거 요청과 임시 배출 방법 안내를 담당 업무로 전달할 수 있도록 검토하겠습니다.",
+            "neededInformation": "",
+            "reason": "임시 배출 방법을 안내하거나 구체적인 안내 절차를 제시하지 않고 검토하겠다고만 했습니다. 현장 위치는 일반적인 임시 배출 방법 안내에 필요한 정보가 아닙니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "원활한 확인을 위해 수거함의 정확한 위치와 현재 상태를 알 수 있는 상세 위치나 사진을 보내 주시면 감사하겠습니다.",
+          "neededInformation": "수거함의 정확한 위치와 현재 상태를 알 수 있는 상세 위치나 사진",
+          "reason": "가상동이라는 넓은 위치만 주어져 있어 현장 수거를 위해 정확한 위치 확인이 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "확인 후 수거 요청과 임시 배출 방법 안내를 담당 업무로 전달할 수 있도록 검토하겠습니다.",
+          "neededInformation": "",
+          "reason": "임시 배출 방법을 안내하거나 구체적인 안내 절차를 제시하지 않고 검토하겠다고만 했습니다. 현장 위치는 일반적인 임시 배출 방법 안내에 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C13",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 실제 대상 교차로의 위치나 교차로명을 알려 주시면 감사하겠습니다.",
+            "neededInformation": "실제 대상 교차로의 위치나 교차로명",
+            "reason": "가상 사거리라는 정보만으로는 조사할 보행 신호를 특정하기 어려우므로 실제 위치가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 실제 대상 교차로의 위치나 교차로명을 알려 주시면 감사하겠습니다.",
+            "neededInformation": "실제 대상 교차로의 위치나 교차로명",
+            "reason": "신호 시간 조정 가능 여부를 확인하려면 대상 신호가 있는 실제 교차로를 특정해야 합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 실제 대상 교차로의 위치나 교차로명을 알려 주시면 감사하겠습니다.",
+          "neededInformation": "실제 대상 교차로의 위치나 교차로명",
+          "reason": "가상 사거리라는 정보만으로는 조사할 보행 신호를 특정하기 어려우므로 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 실제 대상 교차로의 위치나 교차로명을 알려 주시면 감사하겠습니다.",
+          "neededInformation": "실제 대상 교차로의 위치나 교차로명",
+          "reason": "신호 시간 조정 가능 여부를 확인하려면 대상 신호가 있는 실제 교차로를 특정해야 합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C14",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 위치(주변 기준점 포함), 출몰 날짜와 시간, 현재도 출몰 중인지 알려 주시면 감사하겠습니다.",
+            "neededInformation": "정확한 위치(주변 기준점 포함), 출몰 날짜와 시간, 현재도 출몰 중인지 여부",
+            "reason": "현장 확인을 위해 실제 현장 위치와 출몰 시점·현재 상황이 필요하며, 제공된 위치는 평가용으로 실제 정보인지 확인이 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "refused",
+            "replyQuote": "제공된 자료만으로는 해당 장소에 적용되는 구체적인 연락처나 신고 절차를 확인하기 어렵습니다.",
+            "neededInformation": "",
+            "reason": "해당 장소에 적용되는 구체적인 연락처를 확인할 수 없는 이유를 안내했지만, 실제 연락처는 제공하지 않았습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "refused",
+            "replyQuote": "제공된 자료만으로는 해당 장소에 적용되는 구체적인 연락처나 신고 절차를 확인하기 어렵습니다.",
+            "neededInformation": "",
+            "reason": "해당 장소의 신고 절차를 확인할 수 없는 이유를 안내했지만, 신고에 필요한 정보는 구체적으로 안내하지 않았습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 위치(주변 기준점 포함), 출몰 날짜와 시간, 현재도 출몰 중인지 알려 주시면 감사하겠습니다.",
+          "neededInformation": "정확한 위치(주변 기준점 포함), 출몰 날짜와 시간, 현재도 출몰 중인지 여부",
+          "reason": "현장 확인을 위해 실제 현장 위치와 출몰 시점·현재 상황이 필요하며, 제공된 위치는 평가용으로 실제 정보인지 확인이 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "refused",
+          "replyQuote": "제공된 자료만으로는 해당 장소에 적용되는 구체적인 연락처나 신고 절차를 확인하기 어렵습니다.",
+          "neededInformation": "",
+          "reason": "해당 장소에 적용되는 구체적인 연락처를 확인할 수 없는 이유를 안내했지만, 실제 연락처는 제공하지 않았습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "refused",
+          "replyQuote": "제공된 자료만으로는 해당 장소에 적용되는 구체적인 연락처나 신고 절차를 확인하기 어렵습니다.",
+          "neededInformation": "",
+          "reason": "해당 장소의 신고 절차를 확인할 수 없는 이유를 안내했지만, 신고에 필요한 정보는 구체적으로 안내하지 않았습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C15",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "수질 검사 요청과 검사 결과 공개 방법, 산책 안전 안내를 검토할 수 있도록 기재하신 위치가 실제 대상인지와 변화가 관찰된 시점·지점을 확인 부탁드립니다.",
+            "neededInformation": "실제 대상 위치와 변화가 관찰된 시점·지점",
+            "reason": "현장 수질 검사를 검토하려면 평가용으로 기재된 위치가 실제 대상인지와 관찰된 시점·지점이 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "검사 가능 여부와 결과 안내 방법을 검토하고",
+            "neededInformation": "",
+            "reason": "결과 공개 방법 자체에 대한 설명이나 구체적인 절차를 제시하지 않고, 검토하겠다고만 했습니다. 현장 위치 확인은 일반적인 공개 방법을 안내하는 데 필요한 정보가 아닙니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "기재하신 위치가 실제 대상인지와 변화가 관찰된 시점·지점을 확인 부탁드립니다. 현장 상황 및 관련 절차를 확인한 후 검사 가능 여부와 결과 안내 방법을 검토하고, 확인된 상황을 바탕으로 산책 관련 안내를 드리겠습니다.",
+            "neededInformation": "실제 대상 위치와 변화가 관찰된 시점·지점",
+            "reason": "산책 안전 안내는 실제 현장과 변화가 관찰된 시점·지점에 따른 확인이 필요하므로, 해당 정보를 요청한 것은 요구와 관련된 clarification입니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "수질 검사 요청과 검사 결과 공개 방법, 산책 안전 안내를 검토할 수 있도록 기재하신 위치가 실제 대상인지와 변화가 관찰된 시점·지점을 확인 부탁드립니다.",
+          "neededInformation": "실제 대상 위치와 변화가 관찰된 시점·지점",
+          "reason": "현장 수질 검사를 검토하려면 평가용으로 기재된 위치가 실제 대상인지와 관찰된 시점·지점이 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "검사 가능 여부와 결과 안내 방법을 검토하고",
+          "neededInformation": "",
+          "reason": "결과 공개 방법 자체에 대한 설명이나 구체적인 절차를 제시하지 않고, 검토하겠다고만 했습니다. 현장 위치 확인은 일반적인 공개 방법을 안내하는 데 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "기재하신 위치가 실제 대상인지와 변화가 관찰된 시점·지점을 확인 부탁드립니다. 현장 상황 및 관련 절차를 확인한 후 검사 가능 여부와 결과 안내 방법을 검토하고, 확인된 상황을 바탕으로 산책 관련 안내를 드리겠습니다.",
+          "neededInformation": "실제 대상 위치와 변화가 관찰된 시점·지점",
+          "reason": "산책 안전 안내는 실제 현장과 변화가 관찰된 시점·지점에 따른 확인이 필요하므로, 해당 정보를 요청한 것은 요구와 관련된 clarification입니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C16",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+            "neededInformation": "접수번호",
+            "reason": "해당 민원의 현재 담당 부서를 확인하려면 개별 접수 건을 조회할 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+            "neededInformation": "접수번호",
+            "reason": "해당 민원의 이송 이력을 확인해야 이송 사유를 안내할 수 있으므로 접수번호가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+            "neededInformation": "접수번호",
+            "reason": "기존 접수 건으로 처리가 가능한지 판단하려면 해당 접수 건을 확인할 접수번호가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+          "neededInformation": "접수번호",
+          "reason": "해당 민원의 현재 담당 부서를 확인하려면 개별 접수 건을 조회할 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+          "neededInformation": "접수번호",
+          "reason": "해당 민원의 이송 이력을 확인해야 이송 사유를 안내할 수 있으므로 접수번호가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 접수번호가 있으시면 알려주시기 바랍니다.",
+          "neededInformation": "접수번호",
+          "reason": "기존 접수 건으로 처리가 가능한지 판단하려면 해당 접수 건을 확인할 접수번호가 필요합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C17",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "위치가 평가용 가상 사례로 기재되어 있어 실제 현장 확인을 위해 정확한 위치 정보(인근 주소 또는 출입구 등)를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "정확한 위치 정보(인근 주소 또는 출입구 등)",
+            "reason": "파손 구간의 현장 확인과 보수 가능 여부 판단에 실제 위치가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "위치가 평가용 가상 사례로 기재되어 있어 실제 현장 확인을 위해 정확한 위치 정보(인근 주소 또는 출입구 등)를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "정확한 위치 정보(인근 주소 또는 출입구 등)",
+            "reason": "위험 표시를 할 현장과 보행 안전 우려를 확인하려면 실제 위치가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "위치가 평가용 가상 사례로 기재되어 있어 실제 현장 확인을 위해 정확한 위치 정보(인근 주소 또는 출입구 등)를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "정확한 위치 정보(인근 주소 또는 출입구 등)",
+          "reason": "파손 구간의 현장 확인과 보수 가능 여부 판단에 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "위치가 평가용 가상 사례로 기재되어 있어 실제 현장 확인을 위해 정확한 위치 정보(인근 주소 또는 출입구 등)를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "정확한 위치 정보(인근 주소 또는 출입구 등)",
+          "reason": "위험 표시를 할 현장과 보행 안전 우려를 확인하려면 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C18",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료를 보내주시면, 현장 확인 및 필요한 안전 조치의 검토에 참고하겠습니다.",
+            "neededInformation": "정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료",
+            "reason": "기재된 곳이 평가용 가상 장소라 실제 현장 확인을 위해 상세한 위치가 필요합니다. 간판 상태를 파악할 사진도 확인에 도움이 됩니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료를 보내주시면, 현장 확인 및 필요한 안전 조치의 검토에 참고하겠습니다.",
+            "neededInformation": "정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료",
+            "reason": "위험 여부를 확인하고 현장에 통행 제한 조치를 검토하려면 실제 현장의 정확한 위치와 간판 상태에 관한 정보가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료를 보내주시면, 현장 확인 및 필요한 안전 조치의 검토에 참고하겠습니다.",
+          "neededInformation": "정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료",
+          "reason": "기재된 곳이 평가용 가상 장소라 실제 현장 확인을 위해 상세한 위치가 필요합니다. 간판 상태를 파악할 사진도 확인에 도움이 됩니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료를 보내주시면, 현장 확인 및 필요한 안전 조치의 검토에 참고하겠습니다.",
+          "neededInformation": "정확한 위치와 간판의 현재 상태를 알 수 있는 사진 등 자료",
+          "reason": "위험 여부를 확인하고 현장에 통행 제한 조치를 검토하려면 실제 현장의 정확한 위치와 간판 상태에 관한 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C19",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "가까운 배출 장소를 안내해 드릴 수 있도록 실제 거주 지역이나 기준이 될 주소를 알려 주시기 바랍니다.",
+            "neededInformation": "실제 거주 지역이나 기준이 될 주소",
+            "reason": "가까운 배출 장소를 안내하려면 실제 위치가 필요하며, 제시된 위치는 평가용 가상 주소라고 밝혀져 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "새 수거함 설치 가능 여부는 해당 지역의 여건을 확인한 뒤 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "설치 가능 여부에 대한 구체적인 답이나 필요한 정보를 묻는 내용 없이 추후 안내하겠다는 약속만 있습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "가까운 배출 장소를 안내해 드릴 수 있도록 실제 거주 지역이나 기준이 될 주소를 알려 주시기 바랍니다.",
+          "neededInformation": "실제 거주 지역이나 기준이 될 주소",
+          "reason": "가까운 배출 장소를 안내하려면 실제 위치가 필요하며, 제시된 위치는 평가용 가상 주소라고 밝혀져 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "새 수거함 설치 가능 여부는 해당 지역의 여건을 확인한 뒤 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "설치 가능 여부에 대한 구체적인 답이나 필요한 정보를 묻는 내용 없이 추후 안내하겠다는 약속만 있습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C20",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+            "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+            "reason": "시설 상태를 현장에서 확인하고 점검할 대상을 특정하려면 실제 위치가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+            "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+            "reason": "사용 중지 표시 등 현장 안전조치를 할 시설을 특정하려면 실제 위치가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+            "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+            "reason": "정비 여부와 결과를 확인해 안내하려면 해당 시설을 특정할 실제 위치가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+          "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+          "reason": "시설 상태를 현장에서 확인하고 점검할 대상을 특정하려면 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+          "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+          "reason": "사용 중지 표시 등 현장 안전조치를 할 시설을 특정하려면 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "기재하신 위치가 평가용으로 되어 있어, 실제 대상 공원명이나 구체적인 위치를 알려 주시면 시설 상태와 필요한 안전조치 여부를 확인하는 데 도움이 됩니다.",
+          "neededInformation": "실제 대상 공원명이나 구체적인 위치",
+          "reason": "정비 여부와 결과를 확인해 안내하려면 해당 시설을 특정할 실제 위치가 필요합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C21",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "소음 관련 규정과 현장 확인 가능 여부를 살펴보려면 대상 위치와 소음이 발생한 날짜·시간대, 지속 시간 등 추가 정보가 필요합니다.",
+            "neededInformation": "",
+            "reason": "소음 규정을 안내하거나 구체적인 절차를 답하지 않고 살펴보겠다고만 했습니다. 대상 위치는 일반적인 규정 안내에 필요한 정보가 아닙니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "참고로 기재하신 위치가 평가용으로 표시되어 있어 실제 민원 대상 위치인지 확인을 부탁드립니다.",
+            "neededInformation": "실제 민원 대상 위치와 소음 발생 날짜·시간대, 지속 시간",
+            "reason": "기재된 위치는 평가용으로 표시된 가상동뿐이어서 현장 확인을 위해 실제 상세 위치와 소음 발생 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "신고 기록을 남기는 방법도 확인하여 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "신고 기록을 남기는 구체적인 방법이나 절차를 제시하지 않고 추후 안내하겠다고만 했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "소음 관련 규정과 현장 확인 가능 여부를 살펴보려면 대상 위치와 소음이 발생한 날짜·시간대, 지속 시간 등 추가 정보가 필요합니다.",
+          "neededInformation": "",
+          "reason": "소음 규정을 안내하거나 구체적인 절차를 답하지 않고 살펴보겠다고만 했습니다. 대상 위치는 일반적인 규정 안내에 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "참고로 기재하신 위치가 평가용으로 표시되어 있어 실제 민원 대상 위치인지 확인을 부탁드립니다.",
+          "neededInformation": "실제 민원 대상 위치와 소음 발생 날짜·시간대, 지속 시간",
+          "reason": "기재된 위치는 평가용으로 표시된 가상동뿐이어서 현장 확인을 위해 실제 상세 위치와 소음 발생 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "신고 기록을 남기는 방법도 확인하여 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "신고 기록을 남기는 구체적인 방법이나 절차를 제시하지 않고 추후 안내하겠다고만 했습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C22",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "가능하시다면 침수 지점을 확인할 수 있는 가까운 주소나 표지, 침수가 발생하는 시기와 현재 상황을 알려 주시면 확인에 도움이 됩니다.",
+            "neededInformation": "침수 지점을 특정할 수 있는 가까운 주소나 표지, 침수 시기와 현재 상황",
+            "reason": "가상로 배수구 주변이라는 정보만으로는 점검할 현장을 특정하기 어려워, 현장 점검에 필요한 상세 위치와 상황을 요청하고 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "가능하시다면 침수 지점을 확인할 수 있는 가까운 주소나 표지, 침수가 발생하는 시기와 현재 상황을 알려 주시면 확인에 도움이 됩니다.",
+            "neededInformation": "막힌 배수구를 특정할 수 있는 가까운 주소나 표지, 침수 시기와 현재 상황",
+            "reason": "현장 청소 대상인 막힌 배수구의 위치와 상황을 특정해야 하므로 상세 위치와 침수 정보를 요청하고 있습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "장기 개선 계획의 존재 여부와 안내 가능한 내용도 확인하겠습니다.",
+            "neededInformation": "",
+            "reason": "장기 개선 계획이 있는지에 대한 구체적인 답은 없고, 확인하겠다는 약속만 있습니다. 현장 위치 정보 요청은 이 문의에 필요한 정보가 아닙니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "가능하시다면 침수 지점을 확인할 수 있는 가까운 주소나 표지, 침수가 발생하는 시기와 현재 상황을 알려 주시면 확인에 도움이 됩니다.",
+          "neededInformation": "침수 지점을 특정할 수 있는 가까운 주소나 표지, 침수 시기와 현재 상황",
+          "reason": "가상로 배수구 주변이라는 정보만으로는 점검할 현장을 특정하기 어려워, 현장 점검에 필요한 상세 위치와 상황을 요청하고 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "가능하시다면 침수 지점을 확인할 수 있는 가까운 주소나 표지, 침수가 발생하는 시기와 현재 상황을 알려 주시면 확인에 도움이 됩니다.",
+          "neededInformation": "막힌 배수구를 특정할 수 있는 가까운 주소나 표지, 침수 시기와 현재 상황",
+          "reason": "현장 청소 대상인 막힌 배수구의 위치와 상황을 특정해야 하므로 상세 위치와 침수 정보를 요청하고 있습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "장기 개선 계획의 존재 여부와 안내 가능한 내용도 확인하겠습니다.",
+          "neededInformation": "",
+          "reason": "장기 개선 계획이 있는지에 대한 구체적인 답은 없고, 확인하겠다는 약속만 있습니다. 현장 위치 정보 요청은 이 문의에 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C23",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 공사가 진행된 날짜와 시각, 현장 위치를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "공사가 진행된 날짜와 시각, 현장 위치",
+            "reason": "공사 종류와 현장에 적용되는 허가·신고 조건 및 관련 기준을 확인해 허용 시간을 안내하려면 공사 시각과 구체적인 현장 위치가 필요할 수 있습니다. 제공된 위치만으로는 현장을 특정하기 어렵습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 공사가 진행된 날짜와 시각, 현장 위치를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "공사가 진행된 날짜와 시각, 구체적인 현장 위치",
+            "reason": "공사장에 시간 준수 안내를 할 수 있는지 현장 정보를 확인해야 하며, 제공된 위치는 가상동 수준이라 현장을 특정하기 어렵습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 공사가 진행된 날짜와 시각, 현장 위치를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "공사가 진행된 날짜와 시각, 현장 위치",
+          "reason": "공사 종류와 현장에 적용되는 허가·신고 조건 및 관련 기준을 확인해 허용 시간을 안내하려면 공사 시각과 구체적인 현장 위치가 필요할 수 있습니다. 제공된 위치만으로는 현장을 특정하기 어렵습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 공사가 진행된 날짜와 시각, 현장 위치를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "공사가 진행된 날짜와 시각, 구체적인 현장 위치",
+          "reason": "공사장에 시간 준수 안내를 할 수 있는지 현장 정보를 확인해야 하며, 제공된 위치는 가상동 수준이라 현장을 특정하기 어렵습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C24",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "어떤 신청서 또는 서비스를 이용하셨는지 확인해 주시면, 해당 절차를 확인하여 안내드리겠습니다.",
+            "neededInformation": "이용한 신청서 또는 서비스",
+            "reason": "연락처 수정 절차는 신청서나 서비스에 따라 달라질 수 있어, 해당 절차를 확인하는 데 필요한 정보입니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "어떤 신청서 또는 서비스를 이용하셨는지 확인해 주시면, 해당 절차를 확인하여 안내드리겠습니다.",
+            "neededInformation": "이용한 신청서 또는 서비스",
+            "reason": "어떤 신청서나 서비스의 정보가 공개되었는지 확인하려면 대상을 특정할 필요가 있습니다. 공개 여부 자체는 아직 확인하지 않았습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "어떤 신청서 또는 서비스를 이용하셨는지 확인해 주시면, 해당 절차를 확인하여 안내드리겠습니다.",
+          "neededInformation": "이용한 신청서 또는 서비스",
+          "reason": "연락처 수정 절차는 신청서나 서비스에 따라 달라질 수 있어, 해당 절차를 확인하는 데 필요한 정보입니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "어떤 신청서 또는 서비스를 이용하셨는지 확인해 주시면, 해당 절차를 확인하여 안내드리겠습니다.",
+          "neededInformation": "이용한 신청서 또는 서비스",
+          "reason": "어떤 신청서나 서비스의 정보가 공개되었는지 확인하려면 대상을 특정할 필요가 있습니다. 공개 여부 자체는 아직 확인하지 않았습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C25",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+            "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+            "reason": "현장 확인을 하려면 가상동·가상로라는 넓은 위치만으로는 대상 가로수를 특정하기 어려워 추가 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+            "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+            "reason": "가지치기 가능 여부는 해당 가로수의 현장 상태를 확인해야 판단할 수 있으므로 대상 가로수를 특정할 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+            "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+            "reason": "가지치기가 어렵다고 판단되는 경우 그 사유를 안내하려면 해당 가로수의 현장 상태를 확인해야 하므로 대상 가로수를 특정할 정보가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+          "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+          "reason": "현장 확인을 하려면 가상동·가상로라는 넓은 위치만으로는 대상 가로수를 특정하기 어려워 추가 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+          "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+          "reason": "가지치기 가능 여부는 해당 가로수의 현장 상태를 확인해야 판단할 수 있으므로 대상 가로수를 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "현장 확인을 위해 정확한 위치나 해당 가로수를 식별할 수 있는 정보를 추가로 알려 주시면 검토에 도움이 됩니다.",
+          "neededInformation": "정확한 위치 또는 해당 가로수를 식별할 수 있는 정보",
+          "reason": "가지치기가 어렵다고 판단되는 경우 그 사유를 안내하려면 해당 가로수의 현장 상태를 확인해야 하므로 대상 가로수를 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C26",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "필요한 내용을 확인할 수 있도록 신청하려는 업무의 종류와 열람을 원하시는 상담의 일자 또는 기간, 상담 방식을 알려 주시면 감사하겠습니다.",
+            "neededInformation": "신청하려는 업무의 종류",
+            "reason": "정확한 신청 절차는 신청하려는 업무에 따라 달라질 수 있으므로 업무 종류를 확인하는 질문이 해당 요구에 필요한 정보 요청입니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "필요한 내용을 확인할 수 있도록 신청하려는 업무의 종류와 열람을 원하시는 상담의 일자 또는 기간, 상담 방식을 알려 주시면 감사하겠습니다.",
+            "neededInformation": "열람하려는 상담의 일자 또는 기간과 상담 방식",
+            "reason": "열람할 상담 기록을 특정하기 위해 상담 일자나 기간 및 상담 방식을 확인하는 질문이 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "필요한 내용을 확인할 수 있도록 신청하려는 업무의 종류와 열람을 원하시는 상담의 일자 또는 기간, 상담 방식을 알려 주시면 감사하겠습니다.",
+          "neededInformation": "신청하려는 업무의 종류",
+          "reason": "정확한 신청 절차는 신청하려는 업무에 따라 달라질 수 있으므로 업무 종류를 확인하는 질문이 해당 요구에 필요한 정보 요청입니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "필요한 내용을 확인할 수 있도록 신청하려는 업무의 종류와 열람을 원하시는 상담의 일자 또는 기간, 상담 방식을 알려 주시면 감사하겠습니다.",
+          "neededInformation": "열람하려는 상담의 일자 또는 기간과 상담 방식",
+          "reason": "열람할 상담 기록을 특정하기 위해 상담 일자나 기간 및 상담 방식을 확인하는 질문이 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C27",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "사진 제출 경로와 제출 시 개인정보 보호 방법을 확인하여 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "사진 제출 방법을 구체적으로 안내하지 않고 확인 후 안내하겠다는 약속만 했습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "사진 제출 경로와 제출 시 개인정보 보호 방법을 확인하여 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "개인정보를 가려야 하는지 구체적으로 답하지 않고 확인 후 안내하겠다는 약속만 했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "수거 요청 확인을 위해 구체적인 위치 정보가 필요할 수 있으며",
+            "neededInformation": "폐가구가 놓인 구체적인 위치",
+            "reason": "수거는 현장 위치에 따라 처리해야 하므로, 가상동이라는 넓은 위치만으로는 수거 장소를 확인하기 어렵습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "사진 제출 경로와 제출 시 개인정보 보호 방법을 확인하여 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "사진 제출 방법을 구체적으로 안내하지 않고 확인 후 안내하겠다는 약속만 했습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "사진 제출 경로와 제출 시 개인정보 보호 방법을 확인하여 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "개인정보를 가려야 하는지 구체적으로 답하지 않고 확인 후 안내하겠다는 약속만 했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "수거 요청 확인을 위해 구체적인 위치 정보가 필요할 수 있으며",
+          "neededInformation": "폐가구가 놓인 구체적인 위치",
+          "reason": "수거는 현장 위치에 따라 처리해야 하므로, 가상동이라는 넓은 위치만으로는 수거 장소를 확인하기 어렵습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C28",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+            "reason": "장애물을 현장에서 확인하고 제거 조치를 검토하려면 실제 위치와 장애물 현황이 필요합니다. 제공된 위치는 가상동이라는 넓은 범위뿐입니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+            "reason": "우회 경로는 막힌 횡단보도의 실제 위치와 장애물 현황에 따라 달라지므로, 경로를 안내하려면 해당 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+            "reason": "재발 방지 조치를 검토하려면 문제가 발생한 현장과 장애물의 종류를 확인할 필요가 있습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+          "reason": "장애물을 현장에서 확인하고 제거 조치를 검토하려면 실제 위치와 장애물 현황이 필요합니다. 제공된 위치는 가상동이라는 넓은 범위뿐입니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+          "reason": "우회 경로는 막힌 횡단보도의 실제 위치와 장애물 현황에 따라 달라지므로, 경로를 안내하려면 해당 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 해당 횡단보도의 위치와 장애물의 종류를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "해당 횡단보도의 정확한 위치와 장애물의 종류",
+          "reason": "재발 방지 조치를 검토하려면 문제가 발생한 현장과 장애물의 종류를 확인할 필요가 있습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C29",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+            "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보",
+            "reason": "방진시설을 현장에서 확인하려면 대상 공사장의 실제 위치를 알아야 하며, 기재된 위치는 평가용으로 표시되어 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+            "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료",
+            "reason": "먼지 측정 가능 여부를 검토하려면 측정 대상 현장과 먼지 유입 상황을 확인할 정보가 필요합니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+            "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보",
+            "reason": "현장 확인과 조치 결과 안내를 위해서는 대상 공사장의 실제 위치를 확인해야 합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+          "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보",
+          "reason": "방진시설을 현장에서 확인하려면 대상 공사장의 실제 위치를 알아야 하며, 기재된 위치는 평가용으로 표시되어 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+          "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료",
+          "reason": "먼지 측정 가능 여부를 검토하려면 측정 대상 현장과 먼지 유입 상황을 확인할 정보가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 민원인 경우 공사장을 확인할 수 있는 주소나 주변 정보, 먼지 유입 시기와 관련 자료를 알려 주시면 확인에 참고하겠습니다.",
+          "neededInformation": "공사장을 확인할 수 있는 주소나 주변 정보",
+          "reason": "현장 확인과 조치 결과 안내를 위해서는 대상 공사장의 실제 위치를 확인해야 합니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C30",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 단지명 또는 주소, 고장 발생 시기와 빈도, 현재 운행 여부 및 기존 점검·수리 이력을 알려 주시면 확인에 도움이 됩니다.",
+            "neededInformation": "정확한 단지명 또는 주소, 고장 발생 시기와 빈도, 현재 운행 여부 및 기존 점검·수리 이력",
+            "reason": "현장 점검을 진행하거나 점검 절차를 구체적으로 안내하려면 평가용 가상 위치 대신 실제 단지 위치와 고장·점검 상황을 확인할 필요가 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "answered",
+            "replyQuote": "공동주택 공용부분의 유지·보수 및 관리를 위해 공동주택관리기구를 구성하도록 규정하고 있습니다【공동주택관리법 제9조】. 다만, 구체적인 수리 책임과 점검 절차는 단지의 관리 방식 및 고장 상황을 확인해야 안내할 수 있습니다.",
+            "neededInformation": "",
+            "reason": "공용부분의 유지·보수 및 관리 주체가 공동주택관리기구라는 일반 안내를 했고, 구체적인 책임은 단지와 고장 상황에 따라 확인해야 한다고 설명했습니다."
+          },
+          {
+            "id": "G3",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "거동이 불편한 주민에게 필요한 지원의 유형도 함께 알려 주시면 관련 창구를 확인해 안내드리겠습니다.",
+            "neededInformation": "거동이 불편한 주민에게 필요한 지원의 유형",
+            "reason": "지원 유형에 따라 관련 창구가 달라질 수 있으므로, 어떤 지원이 필요한지 확인해야 적절한 창구를 안내할 수 있습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 단지명 또는 주소, 고장 발생 시기와 빈도, 현재 운행 여부 및 기존 점검·수리 이력을 알려 주시면 확인에 도움이 됩니다.",
+          "neededInformation": "정확한 단지명 또는 주소, 고장 발생 시기와 빈도, 현재 운행 여부 및 기존 점검·수리 이력",
+          "reason": "현장 점검을 진행하거나 점검 절차를 구체적으로 안내하려면 평가용 가상 위치 대신 실제 단지 위치와 고장·점검 상황을 확인할 필요가 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "answered",
+          "replyQuote": "공동주택 공용부분의 유지·보수 및 관리를 위해 공동주택관리기구를 구성하도록 규정하고 있습니다【공동주택관리법 제9조】. 다만, 구체적인 수리 책임과 점검 절차는 단지의 관리 방식 및 고장 상황을 확인해야 안내할 수 있습니다.",
+          "neededInformation": "",
+          "reason": "공용부분의 유지·보수 및 관리 주체가 공동주택관리기구라는 일반 안내를 했고, 구체적인 책임은 단지와 고장 상황에 따라 확인해야 한다고 설명했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G3",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "거동이 불편한 주민에게 필요한 지원의 유형도 함께 알려 주시면 관련 창구를 확인해 안내드리겠습니다.",
+          "neededInformation": "거동이 불편한 주민에게 필요한 지원의 유형",
+          "reason": "지원 유형에 따라 관련 창구가 달라질 수 있으므로, 어떤 지원이 필요한지 확인해야 적절한 창구를 안내할 수 있습니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C31",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점을 알려 주시면 도움이 됩니다.",
+            "neededInformation": "어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점",
+            "reason": "안내가 달라진 이유를 확인하려면 어떤 업무의 안내였는지와 이전·최근 안내 내용 또는 안내 시점이 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점을 알려 주시면 도움이 됩니다.",
+            "neededInformation": "어떤 업무와 관련된 문의인지",
+            "reason": "최종적으로 필요한 서류는 업무에 따라 달라지므로, 해당 업무가 무엇인지 확인해야 합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점을 알려 주시면 도움이 됩니다.",
+          "neededInformation": "어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점",
+          "reason": "안내가 달라진 이유를 확인하려면 어떤 업무의 안내였는지와 이전·최근 안내 내용 또는 안내 시점이 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 어떤 업무와 관련된 문의인지, 이전 및 최근 안내 내용이나 안내를 받은 시점을 알려 주시면 도움이 됩니다.",
+          "neededInformation": "어떤 업무와 관련된 문의인지",
+          "reason": "최종적으로 필요한 서류는 업무에 따라 달라지므로, 해당 업무가 무엇인지 확인해야 합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C32",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "점검할 도로의 정확한 위치와 파손을 확인한 날짜, 가능하다면 사진을 보내 주시면 관리청과 점검 가능 여부를 확인하는 데 도움이 됩니다.",
+            "neededInformation": "점검할 도로의 정확한 위치",
+            "reason": "기재된 위치가 평가용으로 되어 있어 현장을 특정할 수 없으므로, 파손 여부를 확인하려면 정확한 위치가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "점검할 도로의 정확한 위치와 파손을 확인한 날짜, 가능하다면 사진을 보내 주시면 관리청과 점검 가능 여부를 확인하는 데 도움이 됩니다.",
+            "neededInformation": "점검할 도로의 정확한 위치",
+            "reason": "보수 일정은 해당 도로와 파손 현장을 확인해야 안내할 수 있으므로, 현장 특정에 필요한 정확한 위치를 요청한 것은 이 요구에 필요한 정보 요청입니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "점검할 도로의 정확한 위치와 파손을 확인한 날짜, 가능하다면 사진을 보내 주시면 관리청과 점검 가능 여부를 확인하는 데 도움이 됩니다.",
+          "neededInformation": "점검할 도로의 정확한 위치",
+          "reason": "기재된 위치가 평가용으로 되어 있어 현장을 특정할 수 없으므로, 파손 여부를 확인하려면 정확한 위치가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "점검할 도로의 정확한 위치와 파손을 확인한 날짜, 가능하다면 사진을 보내 주시면 관리청과 점검 가능 여부를 확인하는 데 도움이 됩니다.",
+          "neededInformation": "점검할 도로의 정확한 위치",
+          "reason": "보수 일정은 해당 도로와 파손 현장을 확인해야 안내할 수 있으므로, 현장 특정에 필요한 정확한 위치를 요청한 것은 이 요구에 필요한 정보 요청입니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C33",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 수거 대상 위치와 폐기물 종류를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "수거 대상의 상세 위치와 폐기물 종류",
+            "reason": "가상동이라는 넓은 위치만 제시되어 있어 미수거 사유를 현장 수거 기록과 대조해 확인하려면 상세 위치와 폐기물 종류가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 확인을 위해 수거 대상 위치와 폐기물 종류를 알려 주시면 감사하겠습니다.",
+            "neededInformation": "수거 대상의 상세 위치와 폐기물 종류",
+            "reason": "수거 가능 시점을 확인하려면 어느 위치의 어떤 폐기물인지 확인해야 하므로, 제시된 넓은 위치 외에 상세 위치와 폐기물 종류가 필요합니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 수거 대상 위치와 폐기물 종류를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "수거 대상의 상세 위치와 폐기물 종류",
+          "reason": "가상동이라는 넓은 위치만 제시되어 있어 미수거 사유를 현장 수거 기록과 대조해 확인하려면 상세 위치와 폐기물 종류가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 확인을 위해 수거 대상 위치와 폐기물 종류를 알려 주시면 감사하겠습니다.",
+          "neededInformation": "수거 대상의 상세 위치와 폐기물 종류",
+          "reason": "수거 가능 시점을 확인하려면 어느 위치의 어떤 폐기물인지 확인해야 하므로, 제시된 넓은 위치 외에 상세 위치와 폐기물 종류가 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C34",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 공사장의 정확한 위치, 소음이 발생한 날짜와 시간대, 접수번호가 있다면 해당 번호를 알려주시기 바랍니다.",
+            "neededInformation": "접수번호",
+            "reason": "접수 처리 상태를 확인하려면 기존 접수번호가 필요할 수 있어 해당 정보를 요청했습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "확인을 위해 공사장의 정확한 위치, 소음이 발생한 날짜와 시간대, 접수번호가 있다면 해당 번호를 알려주시기 바랍니다.",
+            "neededInformation": "공사장의 정확한 위치, 소음이 발생한 날짜와 시간대",
+            "reason": "야간 점검 가능성을 검토하려면 현장 위치와 소음 발생 시간대가 필요하므로 해당 정보를 요청했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 공사장의 정확한 위치, 소음이 발생한 날짜와 시간대, 접수번호가 있다면 해당 번호를 알려주시기 바랍니다.",
+          "neededInformation": "접수번호",
+          "reason": "접수 처리 상태를 확인하려면 기존 접수번호가 필요할 수 있어 해당 정보를 요청했습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "확인을 위해 공사장의 정확한 위치, 소음이 발생한 날짜와 시간대, 접수번호가 있다면 해당 번호를 알려주시기 바랍니다.",
+          "neededInformation": "공사장의 정확한 위치, 소음이 발생한 날짜와 시간대",
+          "reason": "야간 점검 가능성을 검토하려면 현장 위치와 소음 발생 시간대가 필요하므로 해당 정보를 요청했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C35",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정식 이의 제기 절차와 처리 결과 문서의 수령 방법을 확인해 안내드리려면, 이의를 제기하려는 사안의 종류와 이미 받으신 처분 또는 결과 통지의 종류 및 수령 날짜를 알려주시기 바랍니다.",
+            "neededInformation": "이의를 제기하려는 사안의 종류, 이미 받은 처분 또는 결과 통지의 종류와 수령 날짜",
+            "reason": "이의 제기 절차는 사안과 처분 종류에 따라 달라질 수 있어, 해당 절차를 안내하기 위해 필요한 정보를 구체적으로 요청했습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정식 이의 제기 절차와 처리 결과 문서의 수령 방법을 확인해 안내드리려면, 이의를 제기하려는 사안의 종류와 이미 받으신 처분 또는 결과 통지의 종류 및 수령 날짜를 알려주시기 바랍니다.",
+            "neededInformation": "이의를 제기하려는 사안의 종류, 이미 받은 처분 또는 결과 통지의 종류와 수령 날짜",
+            "reason": "처리 결과 문서를 받는 방법을 확인하려면 어떤 처분이나 결과 통지를 언제 받았는지 등 사안별 정보가 필요하므로, 이를 구체적으로 요청했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정식 이의 제기 절차와 처리 결과 문서의 수령 방법을 확인해 안내드리려면, 이의를 제기하려는 사안의 종류와 이미 받으신 처분 또는 결과 통지의 종류 및 수령 날짜를 알려주시기 바랍니다.",
+          "neededInformation": "이의를 제기하려는 사안의 종류, 이미 받은 처분 또는 결과 통지의 종류와 수령 날짜",
+          "reason": "이의 제기 절차는 사안과 처분 종류에 따라 달라질 수 있어, 해당 절차를 안내하기 위해 필요한 정보를 구체적으로 요청했습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정식 이의 제기 절차와 처리 결과 문서의 수령 방법을 확인해 안내드리려면, 이의를 제기하려는 사안의 종류와 이미 받으신 처분 또는 결과 통지의 종류 및 수령 날짜를 알려주시기 바랍니다.",
+          "neededInformation": "이의를 제기하려는 사안의 종류, 이미 받은 처분 또는 결과 통지의 종류와 수령 날짜",
+          "reason": "처리 결과 문서를 받는 방법을 확인하려면 어떤 처분이나 결과 통지를 언제 받았는지 등 사안별 정보가 필요하므로, 이를 구체적으로 요청했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C36",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 민원이라면 확인을 위해 구체적인 위치와 건축 민원 내용 또는 접수번호를 알려 주시기 바랍니다.",
+            "neededInformation": "구체적인 실제 위치와 건축 민원 내용 또는 접수번호",
+            "reason": "평가용 가상 위치만으로는 담당 부서를 특정하기 어렵다고 설명하며, 담당 부서 확인에 필요한 실제 위치와 민원 정보를 요청했습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "실제 민원이라면 확인을 위해 구체적인 위치와 건축 민원 내용 또는 접수번호를 알려 주시기 바랍니다.",
+            "neededInformation": "구체적인 실제 위치와 건축 민원 내용 또는 접수번호",
+            "reason": "관할 여부와 이송 절차를 판단하려면 실제 위치와 구체적인 민원 내용이 필요합니다. 답변은 관할이 아닌 경우의 절차를 확정해 안내하지 않고, 필요한 정보를 요청했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 민원이라면 확인을 위해 구체적인 위치와 건축 민원 내용 또는 접수번호를 알려 주시기 바랍니다.",
+          "neededInformation": "구체적인 실제 위치와 건축 민원 내용 또는 접수번호",
+          "reason": "평가용 가상 위치만으로는 담당 부서를 특정하기 어렵다고 설명하며, 담당 부서 확인에 필요한 실제 위치와 민원 정보를 요청했습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "실제 민원이라면 확인을 위해 구체적인 위치와 건축 민원 내용 또는 접수번호를 알려 주시기 바랍니다.",
+          "neededInformation": "구체적인 실제 위치와 건축 민원 내용 또는 접수번호",
+          "reason": "관할 여부와 이송 절차를 판단하려면 실제 위치와 구체적인 민원 내용이 필요합니다. 답변은 관할이 아닌 경우의 절차를 확정해 안내하지 않고, 필요한 정보를 요청했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C37",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "보수 계획과, 계획이 없는 경우 그 사유를 확인하여 안내드릴 수 있도록 정확한 공원명과 벤치 위치를 알려 주시기 바랍니다.",
+            "neededInformation": "정확한 공원명과 벤치 위치",
+            "reason": "보수 계획 확인은 특정 벤치의 현장 상태와 관리 대상 확인에 필요한 현장 위치가 있어야 하므로, 가상동이라는 넓은 위치만으로는 부족합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "보수 계획과, 계획이 없는 경우 그 사유를 확인하여 안내드릴 수 있도록 정확한 공원명과 벤치 위치를 알려 주시기 바랍니다.",
+            "neededInformation": "정확한 공원명과 벤치 위치",
+            "reason": "계획이 없는 이유를 확인하려면 해당 벤치와 공원 관리 대상을 특정할 상세 위치가 필요하므로 적절한 확인 요청입니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "보수 계획과, 계획이 없는 경우 그 사유를 확인하여 안내드릴 수 있도록 정확한 공원명과 벤치 위치를 알려 주시기 바랍니다.",
+          "neededInformation": "정확한 공원명과 벤치 위치",
+          "reason": "보수 계획 확인은 특정 벤치의 현장 상태와 관리 대상 확인에 필요한 현장 위치가 있어야 하므로, 가상동이라는 넓은 위치만으로는 부족합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "보수 계획과, 계획이 없는 경우 그 사유를 확인하여 안내드릴 수 있도록 정확한 공원명과 벤치 위치를 알려 주시기 바랍니다.",
+          "neededInformation": "정확한 공원명과 벤치 위치",
+          "reason": "계획이 없는 이유를 확인하려면 해당 벤치와 공원 관리 대상을 특정할 상세 위치가 필요하므로 적절한 확인 요청입니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C38",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 안내를 위해 어느 사업의 집행 내역인지, 확인을 원하시는 자료의 종류와 대상 기간을 알려 주시기 바랍니다.",
+            "neededInformation": "사업명 또는 사업 주체",
+            "reason": "청구할 정보의 보유 기관을 확인해야 해당 기관의 공식 청구 접수 경로와 절차를 안내할 수 있습니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 안내를 위해 어느 사업의 집행 내역인지, 확인을 원하시는 자료의 종류와 대상 기간을 알려 주시기 바랍니다.",
+            "neededInformation": "확인하려는 자료의 종류와 대상 기간",
+            "reason": "요청 자료의 종류와 기간이 있어야 공개 대상 자료의 범위를 확인할 수 있습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 안내를 위해 어느 사업의 집행 내역인지, 확인을 원하시는 자료의 종류와 대상 기간을 알려 주시기 바랍니다.",
+          "neededInformation": "사업명 또는 사업 주체",
+          "reason": "청구할 정보의 보유 기관을 확인해야 해당 기관의 공식 청구 접수 경로와 절차를 안내할 수 있습니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 안내를 위해 어느 사업의 집행 내역인지, 확인을 원하시는 자료의 종류와 대상 기간을 알려 주시기 바랍니다.",
+          "neededInformation": "확인하려는 자료의 종류와 대상 기간",
+          "reason": "요청 자료의 종류와 기간이 있어야 공개 대상 자료의 범위를 확인할 수 있습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    },
+    {
+      "id": "C39",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "정확한 점검 위치를 확인할 수 있도록 가상로의 구체적인 구간이나 인근 기준물을 알려 주시면 관리 주체와 점검 가능 여부를 확인하겠습니다.",
+            "neededInformation": "가상로의 구체적인 구간이나 인근 기준물",
+            "reason": "현장 점검 위치를 특정해야 점검 가능 여부를 확인할 수 있으며, 제공된 위치는 청주시 가상동으로 넓어 현장 위치 정보가 더 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "missing",
+            "replyQuote": "고장 신고 방법을 안내드리겠습니다.",
+            "neededInformation": "",
+            "reason": "고장 신고 번호를 알려 달라는 요청에 번호나 신고 방법을 구체적으로 안내하지 않고, 추후 안내하겠다고만 했습니다. 점검 위치 확인은 이 일반 정보 요청에 필요한 정보가 아닙니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "정확한 점검 위치를 확인할 수 있도록 가상로의 구체적인 구간이나 인근 기준물을 알려 주시면 관리 주체와 점검 가능 여부를 확인하겠습니다.",
+          "neededInformation": "가상로의 구체적인 구간이나 인근 기준물",
+          "reason": "현장 점검 위치를 특정해야 점검 가능 여부를 확인할 수 있으며, 제공된 위치는 청주시 가상동으로 넓어 현장 위치 정보가 더 필요합니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "missing",
+          "replyQuote": "고장 신고 방법을 안내드리겠습니다.",
+          "neededInformation": "",
+          "reason": "고장 신고 번호를 알려 달라는 요청에 번호나 신고 방법을 구체적으로 안내하지 않고, 추후 안내하겠다고만 했습니다. 점검 위치 확인은 이 일반 정보 요청에 필요한 정보가 아닙니다.",
+          "matchedIds": [
+            "R3"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        }
+      ]
+    },
+    {
+      "id": "C40",
+      "grade": {
+        "checks": [
+          {
+            "id": "G1",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "민원에 적힌 위치가 평가용으로 표시되어 있어, 확인을 위해 정확한 하천 위치와 가능한 경우 기존 신고 일자를 알려 주시기 바랍니다.",
+            "neededInformation": "정확한 하천 위치와 가능한 경우 기존 신고 일자",
+            "reason": "이전 신고 및 점검 기록을 확인해 결과를 안내하려면 해당 하천 위치와 신고 시점을 특정할 정보가 필요합니다."
+          },
+          {
+            "id": "G2",
+            "summaryPreserved": true,
+            "answerStatus": "clarification",
+            "replyQuote": "다만 추가 조사 여부는 위치와 현장 상황 등을 확인한 뒤 검토가 필요합니다. 민원에 적힌 위치가 평가용으로 표시되어 있어, 확인을 위해 정확한 하천 위치와 가능한 경우 기존 신고 일자를 알려 주시기 바랍니다.",
+            "neededInformation": "정확한 하천 위치",
+            "reason": "추가 조사 가능 여부는 위치와 현장 상황에 따라 달라진다고 답변했고, 현장 확인에 필요한 구체적 위치를 요청했습니다."
+          }
+        ]
+      },
+      "compared": [
+        {
+          "id": "G1",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "민원에 적힌 위치가 평가용으로 표시되어 있어, 확인을 위해 정확한 하천 위치와 가능한 경우 기존 신고 일자를 알려 주시기 바랍니다.",
+          "neededInformation": "정확한 하천 위치와 가능한 경우 기존 신고 일자",
+          "reason": "이전 신고 및 점검 기록을 확인해 결과를 안내하려면 해당 하천 위치와 신고 시점을 특정할 정보가 필요합니다.",
+          "matchedIds": [
+            "R1"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": true
+        },
+        {
+          "id": "G2",
+          "summaryPreserved": true,
+          "answerStatus": "clarification",
+          "replyQuote": "다만 추가 조사 여부는 위치와 현장 상황 등을 확인한 뒤 검토가 필요합니다. 민원에 적힌 위치가 평가용으로 표시되어 있어, 확인을 위해 정확한 하천 위치와 가능한 경우 기존 신고 일자를 알려 주시기 바랍니다.",
+          "neededInformation": "정확한 하천 위치",
+          "reason": "추가 조사 가능 여부는 위치와 현장 상황에 따라 달라진다고 답변했고, 현장 확인에 필요한 구체적 위치를 요청했습니다.",
+          "matchedIds": [
+            "R2"
+          ],
+          "summaryFlagged": false,
+          "answerFlagged": false
+        }
+      ]
+    }
+  ],
+  "controlled": [
+    {
+      "id": "C01",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 골목 쓰레기\"},{\"id\":\"body\",\"text\":\"이 씨발, 일 좀 해라. 가상동 골목에 쓰레기가 쌓여 악취가 납니다. 쓰레기를 수거해 주세요. 재발 방지 방법을 안내해 주세요. 수거 가능한 시점을 알려 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "가상동 골목에 쌓인 쓰레기를 수거해 달라는 요구",
+            "source": "body",
+            "quote": "쓰레기를 수거해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 쓰레기 수거 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "쓰레기 수거 조치나 절차를 안내하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "쓰레기 재발 방지 방법을 안내해 달라는 요구",
+            "source": "body",
+            "quote": "재발 방지 방법을 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 재발 방지 방법 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "재발 방지 방법을 안내하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "수거 가능한 시점을 알려 달라는 요구",
+            "source": "body",
+            "quote": "수거 가능한 시점을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 수거 가능 시점 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "수거 가능 시점이나 일정 확인에 필요한 구체적인 정보를 안내하지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:00:53.357Z"
+      }
+    },
+    {
+      "id": "C02",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 굴착 복구 지연\"},{\"id\":\"body\",\"text\":\"이 무능한 인간들아, 한심하다. 가상로 도로를 파 놓은 상태가 두 주째 이어집니다. 복구가 늦어진 이유를 알려 주세요. 복구 예정일을 안내해 주세요. 보행자 안전 통로를 마련해 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "도로 복구가 지연된 이유를 알려 달라는 요구",
+            "source": "body",
+            "quote": "복구가 늦어진 이유를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "지연 사유를 알려 달라는 요구가 요약과 요청 목록에 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "복구 지연 이유를 설명하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "도로 복구 예정일을 안내해 달라는 요구",
+            "source": "body",
+            "quote": "복구 예정일을 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "복구 예정일 안내 요구가 요약과 요청 목록에 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "복구 예정일이나 일정을 확정할 수 없는 이유 또는 필요한 확인 질문을 안내하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "보행자 안전 통로를 마련해 달라는 요구",
+            "source": "body",
+            "quote": "보행자 안전 통로를 마련해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "보행자 안전 통로 마련 요구가 요약과 요청 목록에 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "보행자 안전 통로 마련에 대해 답하지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:00:57.844Z"
+      }
+    },
+    {
+      "id": "C03",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 야간 공사\"},{\"id\":\"body\",\"text\":\"해결 안 하면 찾아가서 때려 버리겠다. 가상동에서 밤 11시에도 공사가 계속됩니다. 작업 시간을 확인해 주세요. 야간 소음 측정 가능 여부를 알려 주세요. 적용되는 소음 기준을 안내해 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "작업 시간을 확인해 달라는 요구",
+            "source": "body",
+            "quote": "작업 시간을 확인해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 작업 시간 확인이 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "작업 시간을 확인하거나 확인 절차·일정을 안내하는 내용이 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "야간 소음 측정이 가능한지 알려 달라는 요구",
+            "source": "body",
+            "quote": "야간 소음 측정 가능 여부를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 야간 소음 측정 가능 여부 안내가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "야간 소음 측정 가능 여부를 다루지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "적용되는 소음 기준을 안내해 달라는 요구",
+            "source": "body",
+            "quote": "적용되는 소음 기준을 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 적용 소음 기준 안내가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "적용되는 소음 기준을 안내하지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:02.371Z"
+      }
+    },
+    {
+      "id": "C04",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 2,
+      "summaryFlags": 2,
+      "answerFlags": 2,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 버스 정류장\"},{\"id\":\"body\",\"text\":\"이 씨발, 일 좀 해라. 가상 정류장 의자가 부서져 있습니다. 의자를 수리해 주세요. 수리 전 이용 가능한 대기 장소를 알려 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "정류장 의자를 수리해 달라는 요구",
+            "source": "body",
+            "quote": "의자를 수리해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 requests에 의자 수리 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "의자 수리 요구를 다루는 답변이 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "수리 전 이용 가능한 대기 장소를 알려 달라는 요구",
+            "source": "body",
+            "quote": "수리 전 이용 가능한 대기 장소를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 requests에 수리 전 대기 장소 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "수리 전 이용 가능한 대기 장소를 안내하는 답변이 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:05.852Z"
+      }
+    },
+    {
+      "id": "C05",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 천장 누수\"},{\"id\":\"body\",\"text\":\"이 무능한 인간들아, 한심하다. 가상 아파트 천장에서 물이 샙니다. 현장 확인을 요청합니다. 관리사무소와 시청 중 어디에 문의할지 알려 주세요. 분쟁 조정 신청 절차를 안내해 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "천장 누수 현장을 확인해 달라는 요구",
+            "source": "body",
+            "quote": "현장 확인을 요청합니다.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청사항에 현장 확인 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "누수 현장 확인 요청에 대한 안내가 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "관리사무소와 시청 중 어디에 문의해야 하는지 안내해 달라는 요구",
+            "source": "body",
+            "quote": "관리사무소와 시청 중 어디에 문의할지 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청사항에 문의처 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "관리사무소와 시청 중 어디에 문의해야 하는지 안내하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "분쟁 조정 신청 절차를 안내해 달라는 요구",
+            "source": "body",
+            "quote": "분쟁 조정 신청 절차를 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청사항에 분쟁 조정 신청 절차 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "분쟁 조정 신청 절차를 안내하지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:10.723Z"
+      }
+    },
+    {
+      "id": "C06",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 2,
+      "summaryFlags": 2,
+      "answerFlags": 2,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 공원 조명\"},{\"id\":\"body\",\"text\":\"해결 안 하면 찾아가서 때려 버리겠다. 가상 공원 산책로 조명이 꺼져 있습니다. 고장 난 조명을 점검해 주세요. 수리 예상 일정을 알려 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "꺼진 공원 산책로 조명을 점검해 달라는 요구",
+            "source": "body",
+            "quote": "고장 난 조명을 점검해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "조명 점검 요청이 요약과 요청 목록에 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "조명 점검을 안내하거나 처리하겠다는 답변이 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "조명 수리 예상 일정을 알려 달라는 요구",
+            "source": "body",
+            "quote": "수리 예상 일정을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "수리 예상 일정 안내 요청이 요약과 요청 목록에 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "수리 예상 일정이나 일정을 확정할 수 없는 이유, 필요한 확인 질문이 제시되지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:14.664Z"
+      }
+    },
+    {
+      "id": "C07",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 대형 폐기물\"},{\"id\":\"body\",\"text\":\"이 씨발, 일 좀 해라. 가상동에서 이사하며 책상과 침대를 버리려 합니다. 배출 신청 방법을 알려 주세요. 품목별 비용을 안내해 주세요. 취소했을 때 환불 방법을 알려 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "대형 폐기물 배출 신청 방법을 안내해 주세요.",
+            "source": "body",
+            "quote": "배출 신청 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 신청 방법 안내가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "배출 신청 방법을 안내하는 내용이 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "폐기물 품목별 비용을 안내해 주세요.",
+            "source": "body",
+            "quote": "품목별 비용을 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 품목별 비용 안내가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "품목별 비용 안내가 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "취소 시 환불 방법을 안내해 주세요.",
+            "source": "body",
+            "quote": "취소했을 때 환불 방법을 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약과 요청 목록에 취소 시 환불 방법 안내가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "취소 시 환불 방법 안내가 없습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:19.805Z"
+      }
+    },
+    {
+      "id": "C08",
+      "label": "Artificially emptied summary/requests and replaced reply with a greeting; NOT naturally occurring baseline errors.",
+      "expectedRequests": 3,
+      "summaryFlags": 3,
+      "answerFlags": 3,
+      "review": {
+        "version": 1,
+        "draft": "안녕하세요. 민원을 보내 주셔서 감사합니다.",
+        "sourceSnapshot": "[{\"id\":\"title\",\"text\":\"가상 사례: 굴뚝 검은 연기\"},{\"id\":\"body\",\"text\":\"이 무능한 인간들아, 한심하다. 가상 공장 굴뚝에서 검은 연기와 냄새가 납니다. 현장을 점검해 주세요. 주민이 제출해야 할 자료를 안내해 주세요. 점검 결과를 알려 주세요.\"}]",
+        "analysisSnapshot": "{\"summary\":\"민원이 접수되었습니다.\",\"requests\":[]}",
+        "requirements": [
+          {
+            "id": "R1",
+            "text": "현장을 점검해 달라는 요구",
+            "source": "body",
+            "quote": "현장을 점검해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 현장 점검 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "현장 점검에 관한 안내나 조치가 없습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R2",
+            "text": "주민이 제출해야 할 자료를 안내해 달라는 요구",
+            "source": "body",
+            "quote": "주민이 제출해야 할 자료를 안내해 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 제출 자료 안내 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "주민이 제출할 자료를 안내하지 않았습니다.",
+            "sentenceIds": []
+          },
+          {
+            "id": "R3",
+            "text": "점검 결과를 알려 달라는 요구",
+            "source": "body",
+            "quote": "점검 결과를 알려 주세요.",
+            "summaryStatus": "missing",
+            "summaryReason": "요약에 점검 결과 통보 요구가 없습니다.",
+            "responseStatus": "missing",
+            "responseReason": "점검 결과를 알려 주지 않았습니다.",
+            "sentenceIds": []
+          }
+        ],
+        "noRequestReason": "",
+        "checkedAt": "2026-10-31T14:01:24.293Z"
+      }
+    }
+  ],
+  "metrics": {
+    "cases": 40,
+    "requirements": 100,
+    "baselineSummaryMissing": 0,
+    "summaryMissingDetected": 0,
+    "summaryFalseAlerts": 0,
+    "baselineAnswerMissing": 18,
+    "answerMissingDetected": 15,
+    "answerFalseAlerts": 13,
+    "unmatchedRequirements": 0,
+    "legitimateComplaints": 10,
+    "legitimateFlaggedAsAbusive": 0,
+    "controlledCases": 8,
+    "controlledRequests": 22,
+    "controlledSummaryFlags": 22,
+    "controlledAnswerFlags": 22
+  },
+  "finishedAt": "2026-10-31T14:01:49.839Z"
+}
