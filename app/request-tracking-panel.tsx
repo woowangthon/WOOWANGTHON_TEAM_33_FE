@@ -26,8 +26,8 @@ export default function RequestTrackingPanel({complaint:c,staff,onChanged}:{comp
   }
   function edit(){setRows(tracking.items.map(r=>({id:r.id,text:r.text,withdrawn:r.withdrawn,key:r.id})));setEditRevision(c.revision);setEditing(true);setError('');setNotice('');}
   return <section className="request-tracking card">
-    <div className="request-tracking-heading"><div><h2>{staff?'요구별 처리 현황':'요구사항 확인 및 처리 현황'}</h2><p>{counts.active}개 요청 · 처리 완료 {counts.completed} · 처리 불가 {counts.unavailable} · 진행 중 {counts.pending}</p></div>
-      <span className="request-confirmation">{tracking.confirmedAt?'시민 확인 완료':'시민 확인 전'}</span>
+    <div className="request-tracking-heading"><div><h2>{staff?'요청 사항':'요구사항 확인 및 처리 현황'}</h2><p>{[`${counts.active}건`,counts.pending?`진행 중 ${counts.pending}`:'',counts.completed?`처리 완료 ${counts.completed}`:'',counts.unavailable?`처리 불가 ${counts.unavailable}`:''].filter(Boolean).join(' · ')}</p></div>
+      <span className={'request-confirmation'+(tracking.confirmedAt?' confirmed':'')}>{(staff?'민원인 ':'')+(tracking.confirmedAt?'확인 완료':'확인 전')}</span>
     </div>
     {!staff&&!editing?<div className="request-citizen-actions"><button type="button" className="button outline small" disabled={busy} onClick={edit}>{tracking.confirmedAt?'요구사항 수정':'요구사항 확인·수정'}</button></div>:null}
     {editing?<form className="request-editor" onSubmit={e=>{e.preventDefault();void save({action:'confirm',items:rows.map(({key:_key,...r})=>r)},editRevision).catch(()=>{});}}>
@@ -39,7 +39,7 @@ export default function RequestTrackingPanel({complaint:c,staff,onChanged}:{comp
       {item.note?<p className="request-note">{show(item.note)}</p>:null}
       {!item.withdrawn?(staff?<details className="request-change"><summary>상태 변경</summary><ProgressForm key={item.id} item={item} staff save={save} busy={busy} revision={c.revision}/></details>:<ProgressForm key={item.id} item={item} staff={false} save={save} busy={busy} revision={c.revision}/>):null}
       {item.history.length?<details className="request-history"><summary>변경 이력 ({item.history.length})</summary>{[...item.history].reverse().map((h,j)=><div key={h.at+':'+j}><small>{h.actor==='citizen'?'민원인':'담당자'} · {new Date(h.at).toLocaleString('ko-KR')} · {h.withdrawn?'요청 철회':progressLabels[h.state]}</small><p>{show(h.text)}</p><p>{show(h.note)}</p></div>)}</details>:null}
-    </article>):<p className="request-empty">정리된 요구사항이 아직 없습니다.{staff?' 분석 완료 후 확인해 주세요.':' 요구사항을 직접 추가할 수 있습니다.'}</p>}</div>}
+    </article>):<p className="request-empty">{staff?'분석이 끝나면 요청 사항이 여기에 정리됩니다.':'정리된 요구사항이 아직 없습니다. 요구사항을 직접 추가할 수 있습니다.'}</p>}</div>}
     {error?<p className="request-error" role="alert">{error}</p>:null}{notice?<p role="status" className="request-notice">{notice}</p>:null}
   </section>;
 }

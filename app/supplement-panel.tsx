@@ -17,7 +17,7 @@ export default function SupplementPanel({complaint:c,staff,onChanged}:{complaint
   }
   if(!staff&&!c.supplements?.length&&!editable)return null;
   return <section className="card supplement-panel panel-padding">
-    <h2>{staff?'보완 요청·답변':'보완 요청 및 추가 답변'}</h2>
+    <h2>{staff?'보완 요청':'보완 요청 및 추가 답변'}</h2>
     {(c.supplements||[]).map(s=><article className={'supplement-message '+s.role} key={s.id}>
       <header><strong>{s.role==='staff'?'담당자':'민원인'}</strong><time>{new Date(s.createdAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</time></header>
       <p className="preserve">{staff?maskText(s.text):s.text}</p>

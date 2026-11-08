@@ -14,13 +14,11 @@ import {
   Inbox,
   Library,
   ArrowUpRight,
-  ChevronRight,
   ChevronLeft,
   Plus,
   Search,
   SlidersHorizontal,
   Sparkles,
-  Check,
   CheckCheck,
   Clock3,
   CircleHelp,
@@ -35,7 +33,6 @@ import {
   EyeOff,
   FileText,
   BookOpen,
-  Link2,
   RefreshCw,
   X,
   CheckCircle2,
@@ -43,7 +40,6 @@ import {
   Menu,
   Send,
   PanelLeftClose,
-  ListChecks,
   Circle,
   Download,
   Trash2,
@@ -307,12 +303,124 @@ export function ComplaintDetail({
       <div className="detail-grid">
         <div className="detail-main">
           <ExpressionPanel complaint={c}/>
+          <section className="card summary-card">
+            <div className="detail-tabs">
+              <button
+                className={tab === "solve" ? "active" : ""}
+                onClick={() => setTab("solve")}
+              >
+                <Sparkles size={16} />
+                요약
+              </button>
+              <button
+                className={tab === "original" ? "active" : ""}
+                onClick={() => setTab("original")}
+              >
+                <FileText size={16} />
+                원문
+              </button>
+              <button
+                className={tab === "history" ? "active" : ""}
+                onClick={() => setTab("history")}
+              >
+                <Clock3 size={16} />
+                처리 이력 <span>{events.length}</span>
+              </button>
+              {a && tab === "solve" ? (
+                <Button
+                  kind="quiet small"
+                  className="tab-action"
+                  onClick={onAnalyze}
+                  disabled={!!busy || c.status === "resolved"}
+                >
+                  <RefreshCw
+                    size={14}
+                    className={busy === "analyze" ? "spin" : ""}
+                  />
+                  다시 분석
+                </Button>
+              ) : null}
+            </div>
+            {tab === "original" ? (
+              <div className="panel-padding">
+                {original ? (
+                  <div className="original-text"><h4>{c.title}</h4><p>{c.body}</p></div>
+                ) : (
+                  <div className="protected-placeholder">
+                    <ShieldCheck size={26} />
+                    <p>민원인의 원문은 기본으로 가려 둡니다.</p>
+                  </div>
+                )}
+                <Button
+                  kind="outline small"
+                  className="original-toggle"
+                  onClick={() => setOriginal(!original)}
+                >
+                  {original ? <EyeOff size={15} /> : <Eye size={15} />}
+                  {original ? "원문 가리기" : "원문 보기"}
+                </Button>
+              </div>
+            ) : tab === "history" ? (
+              <div className="panel-padding timeline">
+                {events.map((e) => (
+                  <div key={e.id}>
+                    <span className="timeline-dot" />
+                    <strong>{e.label}</strong>
+                    <small>{fmt(e.created_at, true)}</small>
+                  </div>
+                ))}
+              </div>
+            ) : !a ? (
+              <div className="analysis-empty">
+                <span className="analysis-orb">
+                  <Sparkles size={28} />
+                </span>
+                <h2>아직 분석 결과가 없습니다</h2>
+                <Button
+                  kind="primary"
+                  onClick={onAnalyze}
+                  disabled={!ready || !!busy || c.status === "resolved"}
+                >
+                  {busy === "analyze" ? (
+                    <LoaderCircle className="spin" size={17} />
+                  ) : (
+                    <Sparkles size={17} />
+                  )}{" "}
+                  {busy === "analyze" ? "분석 중…" : "분석 시작"}
+                </Button>
+              </div>
+            ) : (
+              <div className="panel-padding analysis-result">
+                <p className="summary-box">{a.summary}</p>
+                {a.questions.length ? (
+                  <div className="summary-questions">
+                    <h3>
+                      <CircleHelp size={15} />
+                      민원인에게 확인할 내용
+                    </h3>
+                    <ul className="question-list">
+                      {a.questions.map((s, i) => (
+                        <li key={i}>{s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                {a.warnings.map((w, i) => (
+                  <p className="warning-line" key={i}>
+                    <AlertCircle size={14} />
+                    {w}
+                  </p>
+                ))}
+              </div>
+            )}
+          </section>
+          <RequestTrackingPanel key={'requests:'+c.id} complaint={c} staff onChanged={onRefresh}/>
           <section className="card response-editor">
             <div className="card-header">
               <div>
                 <h2>
                   <FileText size={18} />
-                  담당자 답변 초안
+                  답변 작성
                 </h2>
               </div>
             </div>
@@ -346,7 +454,7 @@ export function ComplaintDetail({
                       checked={reviewed}
                       onChange={(e) => setReviewed(e.target.checked)}
                     />
-                    사실관계와 인용 근거를 확인했으며, 이 답변을 등록합니다.
+                    사실관계와 법령 근거를 확인했습니다.
                   </label>
                   <div className="editor-actions">
                     <span>{draft.length.toLocaleString()} / 10,000</span>
@@ -373,208 +481,14 @@ export function ComplaintDetail({
             </div>
           </section>
           <CoveragePanel key={c.id} complaint={c} draft={draft} busy={!!busy} onVerify={()=>onVerify(draft)} onChanged={onRefresh}/>
-          <RequestTrackingPanel key={'requests:'+c.id} complaint={c} staff onChanged={onRefresh}/>
-          <SupplementPanel complaint={c} staff onChanged={onRefresh}/>
-          <RecordReportPanel key={c.id+':'+(c.analysis?.generatedAt||'')} complaint={c} busy={!!busy}/>
-          <section className="card">
-            <div className="detail-tabs">
-              <button
-                className={tab === "solve" ? "active" : ""}
-                onClick={() => setTab("solve")}
-              >
-                <Sparkles size={16} />
-                AI 분석·해결
-              </button>
-              <button
-                className={tab === "original" ? "active" : ""}
-                onClick={() => setTab("original")}
-              >
-                <FileText size={16} />
-                접수 원문
-              </button>
-              <button
-                className={tab === "history" ? "active" : ""}
-                onClick={() => setTab("history")}
-              >
-                <Clock3 size={16} />
-                처리 이력 <span>{events.length}</span>
-              </button>
-            </div>
-            {tab === "original" ? (
-              <div className="panel-padding">
-                <div className="section-heading">
-                  <h3>접수 원문</h3>
-                  <Button
-                    kind="outline small"
-                    onClick={() => setOriginal(!original)}
-                  >
-                    {original ? <EyeOff size={15} /> : <Eye size={15} />}원문{" "}
-                    {original ? "접기" : "펼치기"}
-                  </Button>
-                </div>
-                {original ? (
-                  <div className="original-text"><h4>{c.title}</h4><p>{c.body}</p></div>
-                ) : (
-                  <div className="protected-placeholder">
-                    <ShieldCheck size={30} />
-                    <h3>원문 접힘</h3>
-                  </div>
-                )}
-              </div>
-            ) : tab === "history" ? (
-              <div className="panel-padding timeline">
-                {events.map((e) => (
-                  <div key={e.id}>
-                    <span className="timeline-dot" />
-                    <strong>{e.label}</strong>
-                    <small>{fmt(e.created_at, true)}</small>
-                  </div>
-                ))}
-              </div>
-            ) : !a ? (
-              <div className="analysis-empty">
-                <span className="analysis-orb">
-                  <Sparkles size={32} />
-                </span>
-                <h2>민원 자동 분석 결과</h2>
-
-                <Button
-                  kind="primary"
-                  onClick={onAnalyze}
-                  disabled={!ready || !!busy || c.status === "resolved"}
-                >
-                  {busy === "analyze" ? (
-                    <LoaderCircle className="spin" size={17} />
-                  ) : (
-                    <Sparkles size={17} />
-                  )}{" "}
-                  {busy === "analyze"
-                    ? "분석하고 근거를 찾는 중…"
-                    : "자동 분석 재시도"}
-                </Button>
-              </div>
-            ) : (
-              <div className="panel-padding analysis-result">
-                <div className="section-heading">
-                  <Button
-                    kind="quiet small"
-                    onClick={onAnalyze}
-                    disabled={!!busy || c.status === "resolved"}
-                  >
-                    <RefreshCw
-                      size={14}
-                      className={busy === "analyze" ? "spin" : ""}
-                    />
-                    다시 분석
-                  </Button>
-                </div>
-                <h3>민원의 핵심</h3>
-                <p className="summary-box">{a.summary}</p>
-                <div className="analysis-two">
-                  <div>
-                    <h3>
-                      <ListChecks size={16} />
-                      요청한 내용
-                    </h3>
-                    <ul className="check-list">
-                      {a.requests.map((s, i) => (
-                        <li key={i}>
-                          <Check size={15} />
-                          {s}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h3>
-                      <CircleHelp size={16} />
-                      추가로 확인할 사항
-                    </h3>
-                    {a.questions.length ? (
-                      <ul className="question-list">
-                        {a.questions.map((s, i) => (
-                          <li key={i}>{s}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="muted-text">
-                        AI가 제안한 추가 질문이 없습니다.
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className="source-section">
-                  <div className="section-heading">
-                    <h3>
-                      <BookOpen size={17} />
-                      답변에 인용한 법령·조례
-                    </h3>
-                    <span className="count-label">
-                      {a.citations.length}개 근거
-                    </span>
-                  </div>
-                  {a.citations.length ? (
-                    a.citations.map((source, i) => (
-                      <details className="source-card" key={source.id}>
-                        <summary>
-                          <span className="source-index">{i + 1}</span>
-                          <div>
-                            <strong>{source.title}</strong>
-                            <span>
-                              {source.article} · {source.jurisdiction}
-                            </span>
-                          </div>
-                          <ChevronRight size={17} />
-                        </summary>
-                        <div className="source-body">
-                          <p className="preserve">{source.text}</p>
-                          {source.relation ? (
-                            <span className="relation">
-                              <Link2 size={13} />
-                              {source.relation}
-                            </span>
-                          ) : null}
-                          <div>
-                            <small>
-                              시행일 {source.effectiveDate}
-                            </small>
-                            <a
-                              href={source.sourceUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              공식 원문 <ArrowUpRight size={13} />
-                            </a>
-                          </div>
-                        </div>
-                      </details>
-                    ))
-                  ) : (
-                    <div className="inline-empty">
-                      <BookOpen size={20} />
-                      {c.evidence?.citations.length
-                        ? `검색 후보 ${c.evidence.citations.length}개 중 답변에 인용한 조문이 없습니다.`
-                        : '검색 조건에 맞는 조문을 찾지 못했습니다.'}
-                    </div>
-                  )}
-                  {a.warnings.map((w, i) => (
-                    <p className="warning-line" key={i}>
-                      <AlertCircle size={14} />
-                      {w}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
           <EvidencePanel
             evidence={c.evidence}
+            cited={a?.citations || []}
             ready={lawReady}
             busy={!!busy}
             completed={c.status === "resolved"}
             onSearch={onEvidence}
           />
-
         </div>
         <aside className="detail-aside">
           <section className="card status-panel">
@@ -608,7 +522,7 @@ export function ComplaintDetail({
               </div>
               <div>
                 <dt>관할</dt>
-                <dd>청주시 · 확인 필요</dd>
+                <dd>청주시</dd>
               </div>
             </dl>
           </section>
@@ -645,6 +559,8 @@ export function ComplaintDetail({
               <p className="muted-text">등록된 후속 조치가 없습니다.</p>
             )}
           </section>
+          <SupplementPanel complaint={c} staff onChanged={onRefresh}/>
+          <RecordReportPanel key={c.id+':'+(c.analysis?.generatedAt||'')} complaint={c} busy={!!busy}/>
         </aside>
       </div>
     </>

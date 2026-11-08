@@ -417,6 +417,9 @@ export default function StaffWorkspace({
             </div>
           ) : selected ? (
             <>
+              {selected.auto_state === "completed" &&
+              selected.status !== "waiting" &&
+              !selected.deleted_at ? null : (
               <div
                 className={
                   "admin-processing " + (selected.auto_state || "idle")
@@ -457,6 +460,7 @@ export default function StaffWorkspace({
                   </button>
                 ) : null}
               </div>
+              )}
               <div className={!authenticated ? "admin-readonly" : ""}>
                 <ComplaintDetail
                   c={selected}

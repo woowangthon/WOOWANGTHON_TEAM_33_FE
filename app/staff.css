@@ -62,3 +62,43 @@
 .expression-tag{padding:5px 9px;border-radius:3px;font-size:12px;background:#fff3e8;color:#8a4d24}
 .expression-tag.criticism{background:#edf3fa;color:#3f5c7e}
 .compact-coverage summary:focus-visible,.review-passed>summary:focus-visible{outline:2px solid #356bb3;outline-offset:3px}
+/* 상세 화면: 요약 → 요청 → 답변 → 법령 순서, 카드 간격 통일 */
+.staff-app .detail-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.staff-app .detail-main>*,.staff-app .detail-aside>*{margin:0}
+.staff-app .detail-main>.card,.staff-app .detail-main>.request-tracking,.staff-app .detail-aside>.card{border:1px solid #d7dfe9;border-radius:4px}
+@media(min-width:1181px){.staff-app .detail-grid{grid-template-columns:minmax(0,1fr) 280px}.staff-app .detail-aside{display:flex;flex-direction:column;align-items:stretch;gap:16px}}
+.staff-app .detail-tabs{align-items:center}
+.staff-app .detail-tabs .tab-action{margin-left:auto;white-space:nowrap}
+.staff-app .analysis-result .summary-box{margin:0}
+.summary-questions{margin-top:18px}
+.summary-questions h3{display:flex;align-items:center;gap:6px;font-size:12px;color:#3d5373;margin-bottom:8px}
+.summary-questions ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:13px;color:#33465f;line-height:1.7}
+.staff-app .protected-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;padding:32px 16px;margin:0}
+.staff-app .protected-placeholder p{margin:0;font-size:12px;color:#657387}
+.original-toggle{margin-top:14px}
+/* 주의 표현: 감지됐을 때만 한 줄 */
+.staff-app .expression-panel>details>summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 18px;cursor:pointer;list-style:none;color:#3f5c7e}
+.staff-app .expression-panel>details>summary::-webkit-details-marker{display:none}
+.staff-app .expression-panel strong{font-size:13px}
+.staff-app .expression-panel.abusive{background:#fffaf5;border-color:#efd9c4}
+.staff-app .expression-panel.abusive>details>summary{color:#8a4d24}
+.expression-toggle{margin-left:auto;font-size:12px;color:#365c86}
+.expression-panel details[open] .expression-toggle{color:#7c8ba0}
+.expression-quote-list{list-style:none;margin:0;padding:2px 18px 16px 45px;display:grid;gap:10px;font-size:12px}
+.expression-quote-list li{display:grid;gap:4px}
+.expression-quote-list li>span{font-size:11px;color:#64758b}
+.expression-quote-list q{white-space:pre-wrap;color:#4a5665}
+/* 관련 법령: 한 목록, 답변 인용 먼저 */
+.staff-app .evidence-panel{border-top-width:1px}
+.evidence-count{font-size:12px;color:#7c8ba0;margin:4px 0 0}
+.evidence-actions{display:flex;gap:8px;align-items:center}
+.staff-app .source-card.cited{border-color:#c6d6ea}
+.staff-app .source-card.cited summary{background:#f4f8fd}
+.source-card summary strong{display:block}
+.source-card summary span{font-size:11px;color:#6b7686}
+.cited-tag{font-style:normal;font-size:11px;padding:3px 7px;border-radius:3px;background:#e3ecf8;color:#2f5687;white-space:nowrap}
+/* 요청 사항 */
+.staff-app .request-tracking{border-top-width:1px}
+.request-confirmation.confirmed{background:#eaf5ee;color:#2f6b47}
+.compact-coverage>details>summary>span{margin-left:auto}
+@media(max-width:600px){.staff-app .detail-tabs .tab-action{font-size:0;gap:0;padding:6px}.staff-app .expression-panel>details>summary{padding:12px 14px}}
