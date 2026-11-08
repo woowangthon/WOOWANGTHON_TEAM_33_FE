@@ -132,7 +132,8 @@ export default function CitizenPortal({
   const [section, setSection] = useState<Section>("home"),
     [mobile, setMobile] = useState(false),
     [query, setQuery] = useState(""),
-    [searchText, setSearchText] = useState("");
+    [searchText, setSearchText] = useState(""),
+    [applyKey, setApplyKey] = useState(0);
   const [detail, setDetail] = useState<Complaint | null>(null),
     [events, setEvents] = useState<Event[]>([]),
     [busy, setBusy] = useState(false),
@@ -171,6 +172,7 @@ export default function CitizenPortal({
     activeSection.current = next;
     setBusy(false);
     setSection(next);
+    if (next === "apply") setApplyKey((k) => k + 1);
     setDetail(null);
     setError("");
     setMobile(false);
@@ -449,6 +451,7 @@ export default function CitizenPortal({
                 ) : null}
                 {section === "apply" ? (
                   <ApplicationForm
+                    key={applyKey}
                     aiProviderLabel={aiProviderLabel}
                     publicInbox={publicInbox}
                     onSubmit={onSubmit}
