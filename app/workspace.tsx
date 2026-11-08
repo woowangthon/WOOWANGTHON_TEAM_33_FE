@@ -196,7 +196,7 @@ export default function Workspace({
   }, []);
   useEffect(()=>{
     let active=true,inFlight=false;
-    const timer=setInterval(async()=>{if(document.hidden||inFlight)return;inFlight=true;try{const next=await api<Overview>('overview');if(active)setData(next);}catch{}finally{inFlight=false;}},6000);
+    const timer=setInterval(async()=>{if(document.hidden||inFlight)return;inFlight=true;try{const next=await api<Overview>('overview?poll=1');if(active)setData(prev=>({...prev,...next}));}catch{}finally{inFlight=false;}},15000);
     return ()=>{active=false;clearInterval(timer);};
   },[]);
   return (

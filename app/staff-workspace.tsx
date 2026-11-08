@@ -158,11 +158,13 @@ export default function StaffWorkspace({
       if (document.hidden || inFlight || running.current) return;
       inFlight = true;
       try {
-        const d = await api<Overview>("overview");
-        if (!active) return;
-        setData(d);
+        // An open complaint only needs its own record; the full inbox is
+        // refreshed while browsing the list. Keeps database egress small.
         const id = selectedId.current;
-        if (id) {
+        if (!id) {
+          const d = await api<Overview>("overview?poll=1");
+          if (active) setData((prev) => ({ ...prev, ...d }));
+        } else {
           const result = await api<{ complaint: Complaint; events: Event[] }>(
             "complaints/" + id + "?trash=1",
           );
@@ -176,7 +178,7 @@ export default function StaffWorkspace({
       } finally {
         inFlight = false;
       }
-    }, 6000);
+    }, 15000);
     return () => {
       active = false;
       clearInterval(timer);

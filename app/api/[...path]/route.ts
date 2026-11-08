@@ -150,14 +150,18 @@ async function handler(
       const keys = staff
         ? await credentials(office)
         : { gemini: "", openai: "", provider: "", law: "", model: "" };
-      const docs =
-        staff || user.isGuest
+      // Background polls skip the law library; it only changes on explicit import.
+      const poll = url.searchParams.get("poll") === "1";
+      // Count articles in SQL so the full article text never leaves the database.
+      const docs = poll
+        ? null
+        : staff || user.isGuest
           ? await database()
               .prepare(
-                "SELECT * FROM documents WHERE owner=? ORDER BY imported_at DESC",
+                "SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC",
               )
               .bind(office)
-              .all<StoredDoc>()
+              .all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
           : { results: [] };
       return json({
         trashComplaints:staff?rows.results.filter(r=>r.deleted_at).map(decodeComplaint):[],
@@ -173,10 +177,14 @@ async function handler(
           encryptionReady: staff && !!runtime.APP_SECRET,
           model: keys.model,
         },
-        documents: docs.results.map(({ owner: _owner, articles, ...d }) => ({
-          ...d,
-          articleCount: JSON.parse(articles).length,
-        })),
+        ...(docs
+          ? {
+              documents: docs.results.map(({ article_count, ...d }) => ({
+                ...d,
+                articleCount: Number(article_count),
+              })),
+            }
+          : {}),
         user: { name: user.fullName || user.email },
       });
     }

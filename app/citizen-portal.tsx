@@ -163,7 +163,7 @@ export default function CitizenPortal({
   useEffect(()=>{
     if(!detailId)return;
     let active=true,inFlight=false;
-    const timer=setInterval(async()=>{if(document.hidden||inFlight)return;inFlight=true;try{const response=await fetch('/api/complaints/'+detailId);if(!response.ok)return;const d=await response.json();if(active){setDetail(d.complaint);setEvents(d.events);}}catch{}finally{inFlight=false;}},6000);
+    const timer=setInterval(async()=>{if(document.hidden||inFlight)return;inFlight=true;try{const response=await fetch('/api/complaints/'+detailId);if(!response.ok)return;const d=await response.json();if(active){setDetail(d.complaint);setEvents(d.events);}}catch{}finally{inFlight=false;}},15000);
     return ()=>{active=false;clearInterval(timer);};
   },[detailId]);
   const go = (next: Section) => {
