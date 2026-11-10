@@ -1,0 +1,415 @@
+{
+  "datasetHash": "6cb6fd72e4b6eba62b2aaffa521d2da6746c5f34d2ebab3cfc67ca2a5150c4ef",
+  "labelStatus": "assistant_authored_reference_draft_pending_independent_human_review",
+  "model": "gpt-6-luna",
+  "actualModels": [
+    "gpt-6-luna"
+  ],
+  "startedAt": "2026-11-10T14:41:33.807Z",
+  "finishedAt": "2026-11-10T14:49:03.112Z",
+  "totalCases": 64,
+  "completedCases": 64,
+  "groups": {
+    "real_public": {
+      "cases": 24,
+      "detection": {
+        "total": 24,
+        "available": 24,
+        "positive": 0,
+        "negative": 24,
+        "tp": 0,
+        "fp": 0,
+        "tn": 24,
+        "fn": 0,
+        "unavailablePositive": 0,
+        "unavailableNegative": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositiveRateAvailable": 0,
+        "accuracyAvailable": 1,
+        "f1": null
+      },
+      "rawModelDetection": {
+        "total": 24,
+        "available": 24,
+        "positive": 0,
+        "negative": 24,
+        "tp": 0,
+        "fp": 0,
+        "tn": 24,
+        "fn": 0,
+        "unavailablePositive": 0,
+        "unavailableNegative": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositiveRateAvailable": 0,
+        "accuracyAvailable": 1,
+        "f1": null
+      },
+      "analysisExtraction": {
+        "cases": 24,
+        "gradedCases": 24,
+        "allRequirementsPreservedCases": 22,
+        "referenceRequirements": 54,
+        "gradedRequirements": 54,
+        "preserved": 52,
+        "partial": 2,
+        "missing": 0,
+        "distorted": 0,
+        "ungraded": 0,
+        "extractedRequests": 57,
+        "supportedRequests": 57,
+        "unsupportedRequests": 0,
+        "preservationRateAll": 0.962963,
+        "preservationRateGraded": 0.962963,
+        "supportedRequestRate": 1
+      },
+      "auditExtraction": {
+        "cases": 24,
+        "gradedCases": 24,
+        "allRequirementsPreservedCases": 22,
+        "referenceRequirements": 54,
+        "gradedRequirements": 54,
+        "preserved": 52,
+        "partial": 2,
+        "missing": 0,
+        "distorted": 0,
+        "ungraded": 0,
+        "extractedRequests": 70,
+        "supportedRequests": 69,
+        "unsupportedRequests": 1,
+        "preservationRateAll": 0.962963,
+        "preservationRateGraded": 0.962963,
+        "supportedRequestRate": 0.985714
+      }
+    },
+    "synthetic": {
+      "cases": 40,
+      "detection": {
+        "total": 40,
+        "available": 40,
+        "positive": 26,
+        "negative": 14,
+        "tp": 26,
+        "fp": 2,
+        "tn": 12,
+        "fn": 0,
+        "unavailablePositive": 0,
+        "unavailableNegative": 0,
+        "precision": 0.928571,
+        "recall": 1,
+        "falsePositiveRateAvailable": 0.142857,
+        "accuracyAvailable": 0.95,
+        "f1": 0.962963
+      },
+      "rawModelDetection": {
+        "total": 40,
+        "available": 40,
+        "positive": 26,
+        "negative": 14,
+        "tp": 25,
+        "fp": 0,
+        "tn": 14,
+        "fn": 1,
+        "unavailablePositive": 0,
+        "unavailableNegative": 0,
+        "precision": 1,
+        "recall": 0.961538,
+        "falsePositiveRateAvailable": 0,
+        "accuracyAvailable": 0.975,
+        "f1": 0.980392
+      },
+      "analysisExtraction": {
+        "cases": 40,
+        "gradedCases": 40,
+        "allRequirementsPreservedCases": 39,
+        "referenceRequirements": 80,
+        "gradedRequirements": 80,
+        "preserved": 79,
+        "partial": 1,
+        "missing": 0,
+        "distorted": 0,
+        "ungraded": 0,
+        "extractedRequests": 82,
+        "supportedRequests": 81,
+        "unsupportedRequests": 1,
+        "preservationRateAll": 0.9875,
+        "preservationRateGraded": 0.9875,
+        "supportedRequestRate": 0.987805
+      },
+      "auditExtraction": {
+        "cases": 40,
+        "gradedCases": 38,
+        "allRequirementsPreservedCases": 37,
+        "referenceRequirements": 80,
+        "gradedRequirements": 76,
+        "preserved": 75,
+        "partial": 1,
+        "missing": 0,
+        "distorted": 0,
+        "ungraded": 4,
+        "extractedRequests": 78,
+        "supportedRequests": 78,
+        "unsupportedRequests": 0,
+        "preservationRateAll": 0.9375,
+        "preservationRateGraded": 0.986842,
+        "supportedRequestRate": 1
+      }
+    }
+  },
+  "slices": {
+    "public_complaint": {
+      "total": 24,
+      "available": 24,
+      "positive": 0,
+      "negative": 24,
+      "tp": 0,
+      "fp": 0,
+      "tn": 24,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": null,
+      "recall": null,
+      "falsePositiveRateAvailable": 0,
+      "accuracyAvailable": 1,
+      "f1": null
+    },
+    "direct_profanity": {
+      "total": 8,
+      "available": 8,
+      "positive": 8,
+      "negative": 0,
+      "tp": 8,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRateAvailable": null,
+      "accuracyAvailable": 1,
+      "f1": 1
+    },
+    "obfuscated": {
+      "total": 6,
+      "available": 6,
+      "positive": 6,
+      "negative": 0,
+      "tp": 6,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRateAvailable": null,
+      "accuracyAvailable": 1,
+      "f1": 1
+    },
+    "personal_insult": {
+      "total": 6,
+      "available": 6,
+      "positive": 6,
+      "negative": 0,
+      "tp": 6,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRateAvailable": null,
+      "accuracyAvailable": 1,
+      "f1": 1
+    },
+    "threat": {
+      "total": 4,
+      "available": 4,
+      "positive": 4,
+      "negative": 0,
+      "tp": 4,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRateAvailable": null,
+      "accuracyAvailable": 1,
+      "f1": 1
+    },
+    "sexual": {
+      "total": 2,
+      "available": 2,
+      "positive": 2,
+      "negative": 0,
+      "tp": 2,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRateAvailable": null,
+      "accuracyAvailable": 1,
+      "f1": 1
+    },
+    "legitimate_criticism": {
+      "total": 8,
+      "available": 8,
+      "positive": 0,
+      "negative": 8,
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": null,
+      "recall": null,
+      "falsePositiveRateAvailable": 0,
+      "accuracyAvailable": 1,
+      "f1": null
+    },
+    "benign_homonym": {
+      "total": 4,
+      "available": 4,
+      "positive": 0,
+      "negative": 4,
+      "tp": 0,
+      "fp": 2,
+      "tn": 2,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": 0,
+      "recall": null,
+      "falsePositiveRateAvailable": 0.5,
+      "accuracyAvailable": 0.5,
+      "f1": 0
+    },
+    "benign_control": {
+      "total": 2,
+      "available": 2,
+      "positive": 0,
+      "negative": 2,
+      "tp": 0,
+      "fp": 0,
+      "tn": 2,
+      "fn": 0,
+      "unavailablePositive": 0,
+      "unavailableNegative": 0,
+      "precision": null,
+      "recall": null,
+      "falsePositiveRateAvailable": 0,
+      "accuracyAvailable": 1,
+      "f1": null
+    }
+  },
+  "primaryKindRecall": {
+    "profanity": {
+      "expected": 14,
+      "detected": 14,
+      "recall": 1
+    },
+    "insult": {
+      "expected": 7,
+      "detected": 7,
+      "recall": 1
+    },
+    "threat": {
+      "expected": 4,
+      "detected": 4,
+      "recall": 1
+    },
+    "sexual_harassment": {
+      "expected": 2,
+      "detected": 2,
+      "recall": 1
+    }
+  },
+  "criticism": {
+    "tp": 10,
+    "fp": 0,
+    "tn": 6,
+    "fn": 1,
+    "unavailable": 0,
+    "labeledCases": 17,
+    "recall": 0.909091,
+    "precision": 1
+  },
+  "exactExpressionQuotes": {
+    "total": 50,
+    "valid": 50
+  },
+  "analysisLatencyMs": {
+    "median": 5966,
+    "p95": 11027
+  },
+  "apiCalls": 200,
+  "usage": {
+    "input_tokens": 181272,
+    "output_tokens": 109454,
+    "total_tokens": 290726
+  },
+  "errors": [],
+  "auditErrors": [
+    {
+      "id": "syn-22",
+      "error": "요구사항의 원문 발췌가 실제 민원과 일치하지 않습니다."
+    },
+    {
+      "id": "syn-39",
+      "error": "요구사항의 원문 발췌가 실제 민원과 일치하지 않습니다."
+    }
+  ],
+  "adjudication": {
+    "automaticJudgeCompleted": 62,
+    "assistantReviewedCases": 2,
+    "independentHumanReviewedCases": 0,
+    "caseIds": [
+      "kalis-0421",
+      "syn-26"
+    ],
+    "at": "2026-11-10T14:50:51.984827+00:00"
+  },
+  "evaluationHistory": {
+    "initialAnalysisSuccess": 64,
+    "initialAuditSuccess": 62,
+    "initialJudgeInvalidCases": [
+      "kalis-0500",
+      "kalis-0704",
+      "kalis-0421",
+      "syn-15",
+      "syn-26",
+      "syn-36",
+      "syn-39",
+      "syn-40"
+    ],
+    "judgeRetryCalls": 8,
+    "judgeRetryRecovered": 6,
+    "assistantAdjudicated": 2,
+    "productionGenerationRetriesForSelection": 0
+  },
+  "scopeFindings": [
+    {
+      "caseId": "syn-26",
+      "stage": "analysis",
+      "requestIndex": 1,
+      "finding": "Sexual demand was included as an administrative request; separate requirement audit omitted it. Source-supported is not equivalent to a valid administrative request."
+    }
+  ],
+  "limitations": [
+    "Assistant-authored reference drafts; no independent human labels.",
+    "Same model family semantic judge; not independent validation.",
+    "Curated small sample; not a representative field accuracy estimate.",
+    "No law retrieval, legal interpretation correctness, end-to-end site or voice evaluation.",
+    "Final service postprocessing is evaluated; raw-model scores are a diagnostic comparison, not a controlled intervention."
+  ]
+}
