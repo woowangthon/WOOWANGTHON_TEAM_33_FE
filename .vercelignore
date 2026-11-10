@@ -6,3 +6,4 @@ outputs
 tests
 *.tsbuildinfo
 evals
+*.mp4

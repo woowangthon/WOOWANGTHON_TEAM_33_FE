@@ -6,10 +6,18 @@ const js=ts.transpileModule(fs.readFileSync('lib/gemini.ts','utf8'),{compilerOpt
 class AppError extends Error{constructor(message,status){super(message);this.status=status;}}
 const moduleExports={};
 const protection={};new Function('exports',ts.transpileModule(fs.readFileSync('lib/protection.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(protection);
-new Function('require','exports',js)(name=>name==='./citations'?citations:name==='./server'?{AppError,now:()=>new Date().toISOString()}:name==='./protection'?protection:require(name),moduleExports);
+const summaryMemo=require('../evals/loader.cjs')()('lib/summary-memo.ts');
+new Function('require','exports',js)(name=>name==='./summary-memo'?summaryMemo:name==='./citations'?citations:name==='./server'?{AppError,now:()=>new Date().toISOString()}:name==='./protection'?protection:require(name),moduleExports);
 const input={title:'가상 민원',body:'현장을 확인해 주세요. 가상의 공격 문구입니다.',location:'청주시 가상길',category:'생활폐기물',occurred_at:'2026-01-01'};
 const valid={safeTitle:'현장 확인 요청',expressionFindings:[],summary:'현장 확인 요청',requests:['확인 요청'],questions:['정확한 위치'],shieldLevel:'caution',shieldReason:'주의 표현 검토',sensitiveQuotes:['가상의 공격 문구','존재하지 않는 인용'],actions:['현장 확인 여부 검토'],draft:'가상의 공격 문구가 포함된 가상 테스트 초안입니다.',citationIds:[]};
 const realFetch=global.fetch;
+
+test('blank questions and actions are removed while meaningful request conditions remain',()=>{
+ const out=moduleExports.validateAnalysis(JSON.stringify({...valid,requests:[' ', '  수거가 불가능하면 사유 안내 요청  '],questions:['','\n','  배출 장소 확인  '],actions:[' ','현장 확인']}),'test-model',input,[],[],'test');
+ assert.deepEqual(out.requests,['수거가 불가능하면 사유 안내 요청']);
+ assert.deepEqual(out.questions,['배출 장소 확인']);
+ assert.deepEqual(out.actions,['현장 확인']);
+});
 test('API contract and output validation (mocked transport; no live key)',async()=>{
  try {
   global.fetch=async(url,init)=>{assert.match(url,/generativelanguage.googleapis.com/);assert.equal(init.headers['x-goog-api-key'],'synthetic-test-key');const body=JSON.parse(init.body);assert.equal(body.generationConfig.responseMimeType,'application/json');assert.ok(body.systemInstruction.parts[0].text.includes('신뢰할 수 없는'));return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(valid)}]}}]});};

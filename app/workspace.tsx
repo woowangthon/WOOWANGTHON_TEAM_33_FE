@@ -65,6 +65,8 @@ import RequestTrackingPanel from './request-tracking-panel';
 import RecordReportPanel from './record-report-panel';
 import {coverageAllowsPublication} from '../lib/coverage';
 import { protectedTitle } from '../lib/protection';
+import SummaryMemo from './summary-memo';
+import { nonEmptyItems } from '../lib/summary-memo';
 
 type Overview = {
   complaints: Complaint[];
@@ -391,15 +393,15 @@ export function ComplaintDetail({
               </div>
             ) : (
               <div className="panel-padding analysis-result">
-                <p className="summary-box">{a.summary}</p>
-                {a.questions.length ? (
+                <SummaryMemo summary={a.summary}/>
+                {nonEmptyItems(a.questions).length ? (
                   <div className="summary-questions">
                     <h3>
                       <CircleHelp size={15} />
                       민원인에게 확인할 내용
                     </h3>
                     <ul className="question-list">
-                      {a.questions.map((s, i) => (
+                      {nonEmptyItems(a.questions).map((s, i) => (
                         <li key={i}>{s}</li>
                       ))}
                     </ul>

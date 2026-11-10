@@ -70,6 +70,12 @@
 .staff-app .detail-tabs{align-items:center}
 .staff-app .detail-tabs .tab-action{margin-left:auto;white-space:nowrap}
 .staff-app .analysis-result .summary-box{margin:0}
+.summary-paragraph{white-space:pre-wrap;overflow-wrap:anywhere}
+.summary-memo{display:grid;gap:10px}
+.summary-memo-row{display:grid;grid-template-columns:3.5em minmax(0,1fr);column-gap:16px;align-items:baseline}
+.summary-memo dt{font-weight:600;color:inherit}
+.summary-memo dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+@media(max-width:600px){.summary-memo-row{column-gap:10px}.summary-memo{padding:14px}}
 .summary-questions{margin-top:18px}
 .summary-questions h3{display:flex;align-items:center;gap:6px;font-size:12px;color:#3d5373;margin-bottom:8px}
 .summary-questions ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:13px;color:#33465f;line-height:1.7}

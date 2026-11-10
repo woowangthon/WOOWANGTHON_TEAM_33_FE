@@ -16,3 +16,4 @@ scripts/port.mjs
 *.log
 *.zip
 *.tar.gz
+*.mp4
