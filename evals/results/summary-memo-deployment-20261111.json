@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-11",
+  "sourceCommit": "02ce07bc826b88b43fe5d0a714f7730861448e83",
+  "scope": "Production build, browser guest entry and delivered UI assets; no complaint creation, reanalysis or updates",
+  "deployments": [
+    {
+      "site": "https://shield-and-solve.vercel.app",
+      "deploymentId": "dpl_DypbWBLqv14eGw2P1LXiWFkzKD2T",
+      "projectId": "prj_4w5VgLkQacKZpUq7vILClgB1sOMf",
+      "state": "READY",
+      "target": "production",
+      "httpStatus": 200,
+      "memoComponentDelivered": true,
+      "memoCssDelivered": true,
+      "legacyParagraphCodeDelivered": true
+    },
+    {
+      "site": "https://shield-solve-staff.vercel.app",
+      "deploymentId": "dpl_49rJz79wjR4PxQjRnVEE1GpCZyaG",
+      "projectId": "prj_HuD4pXNQhDNaHterKbstlAbyA1tn",
+      "state": "READY",
+      "target": "production",
+      "httpStatus": 200,
+      "memoComponentDelivered": true,
+      "memoCssDelivered": true,
+      "legacyParagraphCodeDelivered": true
+    }
+  ]
+}

@@ -24,3 +24,9 @@ node --env-file=.env.local evals/run-summary-memo.cjs
 ```
 
 시연 영상은 Git 및 Vercel 업로드 제외 대상이다.
+
+## 운영 반영
+
+소스 커밋 `02ce07b`를 시민·담당자 사이트에 각각 운영 배포했다. 두 배포 모두 `READY`이며 공개 주소의 정상 브라우저 진입, HTTP 200, 새 메모 컴포넌트·CSS와 기존 문단 표시 코드의 전달을 확인했다. 운영 민원의 접수·재분석·수정은 수행하지 않았다. 브라우저 진입 과정의 비회원 세션은 생성된다.
+
+운영 배포 식별자와 확인 범위: [배포 확인 기록](../evals/results/summary-memo-deployment-20261111.json).
