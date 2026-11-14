@@ -21,7 +21,9 @@ export function groundFacts(value:unknown,c:SummarySource):SummaryFact[] {
   if(facts.length&&!facts.some(f=>f.essential))throw new Error('Summary facts must identify the core business content');
   return facts.map((fact,index)=>({...fact,id:'F'+(index+1)}));
 }
-const sentenceSchema=z.object({text:z.string().trim().min(1),factIds:z.array(z.string()).min(1),supported:z.boolean(),attackFree:z.boolean(),reason:z.string()});
+// An unsupported sentence legitimately has no fact IDs. Keep that observation so
+// the normal repair path handles it instead of retrying the validator request.
+const sentenceSchema=z.object({text:z.string().trim().min(1),factIds:z.array(z.string()),supported:z.boolean(),attackFree:z.boolean(),reason:z.string()});
 const reviewSchema=z.object({sentences:z.array(sentenceSchema),missingFactIds:z.array(z.string()),omittedBusinessFacts:z.array(z.string()),factErrors:z.array(z.object({factId:z.string(),reason:z.string()}))});
 export type SummaryReview=z.infer<typeof reviewSchema>;
 export type SummaryAudit={version:number;sourceHash:string;model:string;facts:SummaryFact[];attempts:{summary:string;facts?:SummaryFact[];review:SummaryReview;issues:string[]}[];verifiedAt:string;status:'verified'};

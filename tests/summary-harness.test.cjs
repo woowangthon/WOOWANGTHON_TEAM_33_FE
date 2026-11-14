@@ -56,3 +56,20 @@ test('changed source and stale checkpoints cannot reuse summary verification',as
  const h=harness(()=>assert.fail());
  await assert.rejects(h.verifyBusinessSummary(keys,{...source,title:'변경된 제목'},h.groundFacts(factInput,source),good,{progress:{version:2,sourceHash:h.sourceHash(source),summary:good,repairsUsed:0,phase:'reviewing',attempts:[]}}),/stale/);
 });
+test('the bounded repair can recover a missed protection fact with new literal evidence',async()=>{
+ const initial='이웃의 협박 피해를 신고합니다.';
+ const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good,facts:factInput}:count===1?review(initial,['F1'],{omittedBusinessFacts:['보호조치 요청']}):review());
+ const out=await h.verifyBusinessSummary(keys,source,h.groundFacts(factInput.slice(0,1),source),initial);
+ assert.equal(out.audit.facts.length,2);assert.equal(out.audit.attempts[0].facts.length,1);assert.equal(out.audit.attempts[1].facts.length,2);assert.equal(out.summary,good);
+});
+test('new facts proposed by a repair must pass literal grounding before any completion',async()=>{
+ const h=harness(name=>name==='business_summary_repair'?{summary:good,facts:[{...factInput[0],quote:'없는 인용'}]}:review(good,['F1']));
+ await assert.rejects(h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good),/exact source evidence/);
+ assert.equal(h.calls.filter(c=>c.name==='business_summary_repair').length,1);
+});
+test('an unsupported sentence with no fact IDs reaches repair instead of a validator retry loop',async()=>{
+ const bad='이미 보호조치를 완료했습니다.';
+ const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good,facts:factInput}:count===1?review(bad,[],{sentences:[{text:bad,factIds:[],supported:false,attackFree:true,reason:'없는 처리 완료'}]}):review());
+ const out=await h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),bad);
+ assert.equal(out.summary,good);assert.equal(h.calls.length,3);assert.equal(out.audit.attempts.length,2);
+});
