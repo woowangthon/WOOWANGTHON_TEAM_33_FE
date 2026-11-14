@@ -9,7 +9,7 @@ function harness(answer){
 const keys={provider:'openai',model:'synthetic-model'},source={title:'합성 피해 신고',body:'이웃이 저를 협박했습니다. 보호조치를 요청합니다.',location:'가상 장소',occurred_at:'2026-11-01'};
 const factInput=[{kind:'reported_harm',source:'body',quote:'이웃이 저를 협박했습니다',value:'이웃으로부터 협박 피해를 입었다고 신고함',essential:true},{kind:'protection_request',source:'body',quote:'보호조치를 요청합니다',value:'보호조치 요청',essential:false}];
 const good='이웃의 협박 피해를 신고하고 보호조치를 요청합니다.';
-const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],missingFactIds:[],omittedBusinessFacts:[],factErrors:[],...extra});
+const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],missingFactIds:[],omissions:[],factErrors:[],...extra});
 test('facts require exact evidence in the declared source; source content determines IDs',()=>{
  const h=harness(()=>assert.fail());assert.equal(h.groundFacts(factInput,source)[1].id,'F2');
  assert.throws(()=>h.groundFacts([{...factInput[0],quote:'없는 원문'}],source),/exact source evidence/);
@@ -28,7 +28,7 @@ test('code catches omitted protection despite a positive reviewer and repairs ex
 });
 test('invented IDs, altered review text, false semantic judgments and source omissions fail validation',()=>{
  const h=harness(()=>assert.fail()),facts=h.groundFacts(factInput,source);
- for(const r of [review(good,['invented']),review('다른 문장'),review(good,['F1','F2'],{omittedBusinessFacts:['원문 업무 내용 누락']}),review(good,['F1','F2'],{factErrors:[{factId:'F1',reason:'원문은 단정하지 않음'}]})])assert.ok(h.summaryIssues(good,facts,r).length);
+ for(const r of [review(good,['invented']),review('다른 문장'),review(good,['F1','F2'],{omissions:[{source:'body',quote:'보호조치를 요청합니다',role:'protection_request',reason:'업무 내용 누락'}]}),review(good,['F1','F2'],{factErrors:[{factId:'F1',reason:'원문은 단정하지 않음'}]})])assert.ok(h.summaryIssues(good,facts,r).length);
  for(const field of ['supported','attackFree']){const r=review();r.sentences[0][field]=false;assert.ok(h.summaryIssues(good,facts,r).length);}
 });
 test('continued failure stops after one repair and never substitutes a title',async()=>{
@@ -58,7 +58,7 @@ test('changed source and stale checkpoints cannot reuse summary verification',as
 });
 test('the bounded repair can recover a missed protection fact with new literal evidence',async()=>{
  const initial='이웃의 협박 피해를 신고합니다.';
- const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good,facts:factInput}:count===1?review(initial,['F1'],{omittedBusinessFacts:['보호조치 요청']}):review());
+ const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good,facts:factInput}:count===1?review(initial,['F1'],{omissions:[{source:'body',quote:'보호조치를 요청합니다',role:'protection_request',reason:'보호조치 요청'}]}):review());
  const out=await h.verifyBusinessSummary(keys,source,h.groundFacts(factInput.slice(0,1),source),initial);
  assert.equal(out.audit.facts.length,2);assert.equal(out.audit.attempts[0].facts.length,1);assert.equal(out.audit.attempts[1].facts.length,2);assert.equal(out.summary,good);
 });
@@ -72,4 +72,17 @@ test('an unsupported sentence with no fact IDs reaches repair instead of a valid
  const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good,facts:factInput}:count===1?review(bad,[],{sentences:[{text:bad,factIds:[],supported:false,attackFree:true,reason:'없는 처리 완료'}]}):review());
  const out=await h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),bad);
  assert.equal(out.summary,good);assert.equal(h.calls.length,3);assert.equal(out.audit.attempts.length,2);
+});
+test('intentional exclusions cannot be turned into mandatory summary content',()=>{
+ const h=harness(()=>assert.fail()),attack='담당자를 찾아가 해치겠다',c={...source,body:source.body+' '+attack},facts=h.groundFacts(factInput,c),r=review();
+ r.omissions=[{source:'body',quote:attack,role:'direct_attack',reason:'의도적 제외'}];
+ assert.deepEqual(h.summaryIssues(good,facts,r,c),[]);
+ r.omissions[0].role='business';
+ const findings=[{kind:'threat',scope:'direct_attack',source:'body',quote:attack,reason:'직접 공격'}];
+ assert.deepEqual(h.summaryIssues(good,facts,r,c,findings),[]);
+ r.omissions[0].role='reported_harm';assert.ok(h.summaryIssues(good,facts,r,c,findings).length,'reported harm is never silently excluded by an attack signal');
+});
+test('omission observations themselves require literal source evidence',()=>{
+ const h=harness(()=>assert.fail()),r=review();r.omissions=[{source:'body',quote:'없는 발췌',role:'nonessential_context',reason:'자료 설명'}];
+ assert.match(h.summaryIssues(good,h.groundFacts(factInput,source),r,source).join(' '),/발췌가 일치/);
 });

@@ -101,7 +101,7 @@ export async function processComplaint(id: string) {
       keys.provider,
       plan?.facts,
     );
-    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary);
+    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary,{findings:generated.expressionFindings});
     const analysis={...generated,summary:verified.summary,summaryHarness:verified.audit};
     // Read the latest draft after the network calls; never overwrite staff edits or approvals.
     const current = await database()

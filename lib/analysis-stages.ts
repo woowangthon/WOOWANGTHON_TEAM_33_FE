@@ -5,7 +5,7 @@ import { semanticPlan,rerank } from './semantic-search';
 import { generateAnalysis } from './ai';
 import { structuredAI } from './structured-ai';
 import type { Analysis,Complaint } from './types';
-import { verifyBusinessSummary,sourceHash,SummaryRejectedError,type SummaryProgress } from './summary-harness';
+import { verifyBusinessSummary,sourceHash,SummaryRejectedError,requiredOmissions,type SummaryProgress } from './summary-harness';
 import { harnessPolicy } from './harness-policy';
 
 export type Stage='plan'|'evidence'|'analysis'|'summary'|'requirements'|'review'|'coverage'|'finish';
@@ -59,7 +59,7 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
   if(stage==='summary') {
     if(!cp.analysis||!cp.plan?.facts||cp.plan.sourceHash!==sourceHash(c))throw new Error('Grounded summary checkpoint missing');
     try {
-      const verified=await verifyBusinessSummary(keys,c,cp.plan.facts,cp.analysis.summary,{progress:cp.summaryProgress,onProgress:async progress=>{
+      const verified=await verifyBusinessSummary(keys,c,cp.plan.facts,cp.analysis.summary,{progress:cp.summaryProgress,findings:cp.analysis.expressionFindings,onProgress:async progress=>{
         cp.summaryProgress=progress;
         await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
       }});
@@ -70,7 +70,7 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
         console.warn('Summary verification rejected',{id,version:harnessPolicy.version,issues:error.audit.attempts.at(-1)?.issues||['업무 사실을 확인하지 못했습니다.']});
         // A bad fact extraction must be rebuilt on an explicit retry, rather than
         // repeatedly rewriting a summary around the same incorrect facts.
-        if(error.audit.attempts.some(a=>a.review.factErrors.length||a.review.omittedBusinessFacts.length))delete cp.plan;
+        if(error.audit.attempts.some(a=>a.review.factErrors.length||requiredOmissions(a.review).length))delete cp.plan;
         await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
       }
       throw error;
