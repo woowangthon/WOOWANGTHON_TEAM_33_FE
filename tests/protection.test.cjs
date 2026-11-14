@@ -40,3 +40,9 @@ test('verified victim reports are displayed intact without keyword deletion or t
  const c={title:'보호 요청',body:'원문',analysis:{summary,summaryHarness:{status:'verified'}}};
  assert.equal(ex.businessSummary(c),summary);
 });
+
+test('word-list signals cannot override a completed contextual assessment',()=>{
+ const c={title:'피해 신고',body:'병신이라는 말을 들었습니다.',analysis:{expressionFindings:[{kind:'profanity',scope:'reported_speech',source:'body',quote:'병신',reason:'인용 신고'}]}};
+ assert.deepEqual(ex.expressionFindings(c),[]);assert.equal(ex.allExpressionFindings(c).length,1);
+ assert.deepEqual(ex.expressionFindings({...c,analysis:{expressionFindings:[]}}),[]);
+});

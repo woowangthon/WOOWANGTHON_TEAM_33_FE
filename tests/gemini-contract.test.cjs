@@ -25,7 +25,7 @@ test('unretrieved citations are rejected (mocked transport)',async()=>{
 
 test('title abuse is included and invented threats cannot change the protection level',async()=>{
  try {
-  global.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'threat',source:'body',quote:'죽이겠다',reason:'없는 발언'}]})}]}}]});
+  global.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'profanity',scope:'direct_attack',source:'title',quote:'씨발',reason:'직접적인 공격 표현'},{kind:'threat',source:'body',quote:'죽이겠다',reason:'없는 발언'}]})}]}}]});
   const out=await moduleExports.generateAnalysis('synthetic-test-key','test-model',{...input,title:'씨발 쓰레기',body:'현장 확인을 부탁합니다.'},[],[],'test');
   assert.equal(out.shieldLevel,'caution');assert.doesNotMatch(out.safeTitle,/씨발/);assert.ok(out.sensitiveQuotes.includes('씨발'));assert.deepEqual(out.expressionFindings.map(f=>[f.kind,f.source]),[['profanity','title']]);
  }finally{global.fetch=realFetch;}
@@ -71,4 +71,13 @@ test('invalid credentials, model and quota failures are never automatically retr
    assert.equal(attempts,1);
   }
  }finally{global.fetch=realFetch;}
+});
+
+test('reported third-party attacks are masked but do not label the reporter as abusive',async()=>{
+ try {
+  const quote='저에게 모욕적인 말을 했습니다';
+  global.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({...valid,sensitiveQuotes:[],expressionFindings:[{kind:'insult',scope:'reported_speech',source:'body',quote,reason:'제3자의 폭언 피해 신고'}]})}]}}]});
+  const out=await moduleExports.generateAnalysis('synthetic-test-key','test-model',{...input,body:quote+' 보호조치를 요청합니다.'},[],[],'test');
+  assert.equal(out.shieldLevel,'normal');assert.equal(out.expressionFindings[0].scope,'reported_speech');assert.ok(out.sensitiveQuotes.includes(quote));
+ } finally {global.fetch=realFetch;}
 });

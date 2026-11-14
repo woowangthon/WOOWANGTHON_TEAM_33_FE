@@ -35,8 +35,14 @@ export function businessSummary(c:Pick<Complaint,'title'|'body'|'analysis'|'disp
   return result;
 }
 export function expressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
+  return allExpressionFindings(c).filter(f=>f.scope!=='reported_speech');
+}
+export function allExpressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
   const findings = (c.analysis?.expressionFindings || []).filter(f => c[f.source].includes(f.quote));
   const result = [...findings];
+  // A completed contextual assessment is authoritative. The vocabulary list is
+  // only a display signal before analysis or for legacy records without findings.
+  if(c.analysis?.expressionFindings)return result;
   for (const source of ['title', 'body'] as const) {
     for (const quote of profanityQuotes(c[source])) {
       if (!result.some(f => f.kind === 'profanity' && f.source === source && f.quote.includes(quote)))
