@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-14",
+  "sourceCommit": "1dca562a10f6dd79b092a322fa25e6025ee98f09",
+  "deployments": [
+    {
+      "id": "dpl_3fWfrEjGVRBeCqjqdZNMbdYDWp2r",
+      "projectName": "shield-and-solve",
+      "projectId": "prj_4w5VgLkQacKZpUq7vILClgB1sOMf",
+      "state": "READY",
+      "target": "production",
+      "sha": "1dca562a10f6dd79b092a322fa25e6025ee98f09",
+      "alias": [
+        "shield-and-solve.vercel.app",
+        "shield-and-solve-dielion44-1747s-projects.vercel.app"
+      ]
+    },
+    {
+      "id": "dpl_BoZBo9FJF1eYTY4wtVMNE3wzfp5M",
+      "projectName": "shield-solve-staff",
+      "projectId": "prj_HuD4pXNQhDNaHterKbstlAbyA1tn",
+      "state": "READY",
+      "target": "production",
+      "sha": "1dca562a10f6dd79b092a322fa25e6025ee98f09",
+      "alias": [
+        "shield-solve-staff.vercel.app",
+        "shield-solve-staff-dielion44-1747s-projects.vercel.app"
+      ]
+    }
+  ],
+  "browserChecks": {
+    "sites": [
+      "https://shield-and-solve.vercel.app",
+      "https://shield-solve-staff.vercel.app"
+    ],
+    "httpStatus": 200,
+    "assetsPerSite": 9,
+    "workMemo": true,
+    "pendingTitle": true,
+    "supplementDisclosure": true
+  },
+  "scope": "Both production project builds and browser-delivered source assets verified. No complaint writes, no new production AI calls. Existing analyses unchanged. Voice server not running or live-retested."
+}
