@@ -25,7 +25,7 @@ import {
   type FormEvent,
 } from "react";
 import { expressionFindings,protectedTitle } from '../lib/protection';
-import {createSignalRefresh,visibleComplaint,type ComplaintNotification} from '../lib/complaint-notifications';
+import {createSignalRefresh,visibleComplaint} from '../lib/complaint-notifications';
 import {
   autoStates,
   categories,
@@ -167,10 +167,8 @@ export default function StaffWorkspace({
     const source=new EventSource('/api/complaint-events');
     source.addEventListener('ready',()=>{if(active){expectedReconnect=false;setConnectionLost(false);sync.signal();}});
     source.addEventListener('reconnect',()=>{expectedReconnect=true;});
-    source.addEventListener('complaint',event=>{
+    source.addEventListener('complaint',()=>{
       if(!active)return;
-      const change=JSON.parse((event as MessageEvent).data) as ComplaintNotification;
-      if(change.kind==='failed')setNotice({message:'민원 자동 분석을 완료하지 못했습니다.',error:true});
       sync.signal();
     });
     source.onerror=()=>{if(active&&!expectedReconnect)setConnectionLost(true);};
@@ -243,7 +241,6 @@ export default function StaffWorkspace({
     setPage(1);
   }
   const readyComplaints=data.complaints.filter(visibleComplaint);
-  const failedComplaints=data.complaints.filter(c=>c.auto_state==='failed'&&!visibleComplaint(c));
   const filtered = (view==="trash"?(data.trashComplaints||[]):readyComplaints).filter(
     (c) =>
       (applied.status === "all" || c.status === applied.status) &&
@@ -391,13 +388,6 @@ export default function StaffWorkspace({
             </div>
           ) : null}
           {connectionLost?<div className="admin-alert error" role="status">실시간 연결이 끊겼습니다. 다시 연결 중입니다.</div>:null}
-          {failedComplaints.length>0&&view==='inbox'&&!selected?<div className="admin-alert error" role="alert">
-            <span>{failedComplaints.length}건의 자동 분석을 완료하지 못했습니다.</span>
-            <button className="button outline small" disabled={!!busy} onClick={()=>void run('retry',async()=>{
-              await Promise.all(failedComplaints.map(c=>api('complaints/'+c.id+'/analyze','POST',{})));
-              await refresh();
-            })}>재시도</button>
-          </div>:null}
           <div hidden={view!=='phone'||!!selected}><PhoneDesk staff={true} onRegistered={()=>void refresh()}/></div>
           {view==='phone'&&!selected?null:loading ? (
             <div className="admin-loading">
@@ -705,6 +695,7 @@ export default function StaffWorkspace({
                                   {c.is_sample ? <em>가상 사례</em> : null}
                                 </small>
                                 <strong>{protectedTitle(c)}</strong>
+                                {c.auto_state==='failed'?<span>AI 요약 실패 · 원문 확인 필요</span>:null}
                                 {expressionFindings(c).some(f=>f.kind!=='criticism')?<em className="expression-list-flag">주의 표현</em>:null}
                                 <span>{c.location}</span>
                               </button>
@@ -728,7 +719,7 @@ export default function StaffWorkspace({
                     <h3>
                       {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length
                         ? "조회 조건에 맞는 민원이 없습니다."
-                        : view==='trash'?'휴지통이 비어 있습니다.':'분석이 완료된 민원이 없습니다.'}
+                                : view==='trash'?'휴지통이 비어 있습니다.':'표시할 민원이 없습니다.'}
                     </h3>
                     <p>
                       {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length

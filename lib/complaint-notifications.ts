@@ -3,7 +3,7 @@ import type { Complaint } from './types';
 
 export type ComplaintNotification={id:string;revision:number;kind:'completed'|'updated'|'failed'};
 export function visibleComplaint(c:Complaint) {
-  return (c.auto_state==='completed' && !!c.analysis) || c.status==='resolved';
+  return (c.auto_state==='completed' && !!c.analysis) || c.status==='resolved' || c.auto_state==='failed';
 }
 export function notificationForOffice(payload:string|undefined,office:string):ComplaintNotification|null {
   try {

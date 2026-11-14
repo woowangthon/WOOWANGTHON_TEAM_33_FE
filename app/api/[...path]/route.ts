@@ -241,8 +241,8 @@ async function handler(
         if(!staff)throw new AppError('담당자 권한이 필요합니다.',403);
         const checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}'));
         return json({id:c.id,state:c.auto_state,audit:c.analysis?.summaryHarness||null,pending:{
-          facts:checkpoint.plan?.facts||null,candidate:checkpoint.analysis?.summary||null,
-          review:checkpoint.summaryFailure||null,progress:checkpoint.summaryProgress||null,
+          facts:checkpoint.plan?.facts||null,candidate:checkpoint.analysis?.summary||null,requests:checkpoint.analysis?.requests||null,
+          review:checkpoint.summaryFailure||null,progress:checkpoint.summaryProgress||null,recovery:checkpoint.summaryRecovery||null,
           stages:{plan:!!checkpoint.plan,evidence:!!checkpoint.evidence,analysis:!!checkpoint.analysis,summary:!!checkpoint.summary},
         }});
       }

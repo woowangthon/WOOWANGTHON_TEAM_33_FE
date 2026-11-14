@@ -2,14 +2,14 @@ const fs=require('node:fs'),ts=require('typescript'),test=require('node:test'),a
 const policy=require('../evals/loader.cjs')()('lib/harness-policy.ts');
 function harness(answer){
  const calls=[],out={};
- const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});const value=answer(name,input,calls.length);return name==='business_summary_repair'&&value&&!('facts' in value)?{...value,facts:input.facts}:value;}},'./harness-policy':policy};
+ const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});const value=answer(name,input,calls.length);return name==='business_summary_repair'&&value?{...value,facts:value.facts??input.facts,requests:value.requests??input.requests}:value;}},'./harness-policy':policy};
  new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/summary-harness.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(name=>name in stubs?stubs[name]:require(name),out);
- return {...out,calls};
+ return {...out,calls,verifyBusinessSummary:(keys,c,facts,candidate,options={})=>out.verifyBusinessSummary(keys,c,facts,candidate,{requests:['보호조치를 요청합니다.'],...options})};
 }
 const keys={provider:'openai',model:'synthetic-model'},source={title:'합성 피해 신고',body:'이웃이 저를 협박했습니다. 보호조치를 요청합니다.',location:'가상 장소',occurred_at:'2026-11-01'};
 const factInput=[{kind:'reported_harm',source:'body',quote:'이웃이 저를 협박했습니다',value:'이웃으로부터 협박 피해를 입었다고 신고함',essential:true},{kind:'protection_request',source:'body',quote:'보호조치를 요청합니다',value:'보호조치 요청',essential:false}];
 const good='이웃의 협박 피해를 신고하고 보호조치를 요청합니다.';
-const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],missingFactIds:[],omissions:[],factErrors:[],...extra});
+const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],requests:[{index:0,text:'보호조치를 요청합니다.',factIds:['F2'],supported:true,attackFree:true,reason:''}],missingFactIds:[],omissions:[],factErrors:[],...extra});
 test('facts require exact evidence in the declared source; source content determines IDs',()=>{
  const h=harness(()=>assert.fail());assert.equal(h.groundFacts(factInput,source)[1].id,'F2');
  assert.throws(()=>h.groundFacts([{...factInput[0],quote:'없는 원문'}],source),/exact source evidence/);
@@ -28,9 +28,9 @@ test('a grounded summary longer than 220 characters and two sentences passes wit
  ];
  const summary=sentences.join(' '),c={...source,title:'가상 공원 시설 점검 요청',body:summary};
  const facts=sentences.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true}));
- const h=harness(()=>review(summary,[],{sentences:sentences.map((text,i)=>({text,factIds:['F'+(i+1)],supported:true,attackFree:true,reason:'원문에 명시된 시설별 점검 요청'}))}));
+ const h=harness(()=>review(summary,[],{sentences:sentences.map((text,i)=>({text,factIds:['F'+(i+1)],supported:true,attackFree:true,reason:'원문에 명시된 시설별 점검 요청'})),requests:sentences.map((text,index)=>({index,text,factIds:['F'+(index+1)],supported:true,attackFree:true,reason:''}))}));
  assert.ok(summary.length>220);assert.ok(sentences.length>2);
- const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(facts,c),summary);
+ const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(facts,c),summary,{requests:sentences});
  assert.equal(out.summary,summary);assert.equal(out.audit.status,'verified');assert.equal(h.calls.length,1);
 });
 test('code catches omitted protection despite a positive reviewer and repairs exactly once',async()=>{
@@ -99,4 +99,24 @@ test('intentional exclusions cannot be turned into mandatory summary content',()
 test('omission observations themselves require literal source evidence',()=>{
  const h=harness(()=>assert.fail()),r=review();r.omissions=[{source:'body',quote:'없는 발췌',role:'nonessential_context',reason:'자료 설명'}];
  assert.match(h.summaryIssues(good,h.groundFacts(factInput,source),r,source).join(' '),/발췌가 일치/);
+});
+
+test('all requests are preserved internally without repeating each one in the summary',async()=>{
+ const summary='보도 파손으로 통행이 어렵습니다.',requests=['보도를 보수해 주세요.','보수 일정을 알려 주세요.'];
+ const c={...source,body:[summary,...requests].join(' ')};
+ const raw=[{kind:'problem',source:'body',quote:summary,value:summary,essential:true},...requests.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true}))];
+ const h=harness((name,input)=>name==='business_summary_repair'?{summary,facts:raw,requests}:review(summary,['F1'],{missingFactIds:['F2','F3'],requests:input.requests.map((text,index)=>({index,text,factIds:['F'+(index+2)],supported:true,attackFree:true,reason:''}))}));
+ const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(raw,c),summary,{requests:requests.slice(0,1)});
+ assert.equal(out.summary,summary);assert.deepEqual(out.requests,requests);
+ assert.match(out.audit.attempts[0].issues.join(' '),/요청이 내부 목록에서 빠졌/);assert.equal(h.calls.length,3);
+ assert.deepEqual(out.audit.attempts[1].issues,[]);
+});
+
+test('request checks reject invented IDs, changed text, duplicate indices and unsupported connections',()=>{
+ const h=harness(()=>assert.fail()),facts=h.groundFacts(factInput,source),requests=['보호조치를 요청합니다.'];
+ const goodReview=review();assert.deepEqual(h.requestIssues(requests,facts,goodReview),[]);
+ const cases=[{factIds:['unknown']},{factIds:['F1']},{text:'다른 요청'},{index:1},{supported:false},{attackFree:false},{factIds:[]}];
+ for(const change of cases){const r=review();Object.assign(r.requests[0],change);assert.ok(h.requestIssues(requests,facts,r).length);}
+ const duplicate=review();duplicate.requests.push({...duplicate.requests[0]});assert.ok(h.requestIssues(requests,facts,duplicate).length);
+ assert.ok(h.requestIssues(requests,facts,{...review(),requests:[]}).length);
 });

@@ -19,7 +19,7 @@ export async function queueAnalysis(id: string) {
   const stale = new Date(Date.now() - 240000).toISOString();
   const result = await database()
     .prepare(
-      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state!='processing' OR auto_started_at<?)",
+      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure' - 'summaryRecovery')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state NOT IN ('processing','queued') OR (auto_state='processing' AND auto_started_at<?))",
     )
     .bind(id, stale)
     .run();
@@ -101,8 +101,8 @@ export async function processComplaint(id: string) {
       keys.provider,
       plan?.facts,
     );
-    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary,{findings:generated.expressionFindings});
-    const analysis={...generated,summary:verified.summary,summaryHarness:verified.audit};
+    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary,{requests:generated.requests,findings:generated.expressionFindings});
+    const analysis={...generated,summary:verified.summary,requests:verified.requests,summaryHarness:verified.audit};
     // Read the latest draft after the network calls; never overwrite staff edits or approvals.
     const current = await database()
       .prepare("SELECT * FROM complaints WHERE id=? AND auto_token=?")

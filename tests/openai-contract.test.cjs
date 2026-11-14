@@ -28,6 +28,19 @@ test('OpenAI uses strict Responses output and the shared grounded protection/cit
  } finally {global.fetch=realFetch;}
 });
 
+test('OpenAI and Gemini receive the same extracted facts through the shared generator',async()=>{
+ const facts=[{id:'F1',kind:'requested_action',source:'body',quote:'현장 확인을 요청합니다.',value:'현장 확인 요청',essential:true}],seen=[],previousValidation=[{summary:'현장 확인',issues:['내부 요청 누락'],review:{requests:[]}}];
+ try {
+  global.fetch=async(url,init)=>{
+   const body=JSON.parse(init.body),openai=url.includes('api.openai.com');
+   seen.push(openai?JSON.parse(body.input):JSON.parse(body.contents[0].parts[0].text));
+   return openai?result(valid):Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(valid)}]}}]});
+  };
+  for(const provider of ['openai','gemini'])await generateAnalysis('synthetic-key','synthetic-model',complaint,[citation],[],'test',provider,facts,previousValidation);
+  assert.deepEqual(seen[0].groundedFacts,facts);assert.deepEqual(seen[1].groundedFacts,facts);assert.deepEqual(seen[0].previousValidation,previousValidation);assert.deepEqual(seen[0],seen[1]);
+ }finally{global.fetch=realFetch;}
+});
+
 test('OpenAI refuses incomplete, refused and invalid responses without storing an analysis',async()=>{
  try {
   for(const data of [

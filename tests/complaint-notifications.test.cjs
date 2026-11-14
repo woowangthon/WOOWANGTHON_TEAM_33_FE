@@ -4,11 +4,12 @@ function load(file,stubs,timers={setInterval,clearInterval,setTimeout,clearTimeo
   const out={};new Function('require','exports',...Object.keys(timers),ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(name=>{assert.ok(name in stubs,'Unexpected dependency '+name);return stubs[name];},out,...Object.values(timers));return out;
 }
 const core=load('lib/complaint-notifications.ts',{'./access':{PUBLIC_OFFICE:'office:public'}});
-test('only complete analysis or published responses enter the staff list',()=>{
-  for(const auto_state of ['idle','queued','processing','blocked','failed'])assert.equal(core.visibleComplaint({auto_state,status:'reviewing',analysis:{}}),false);
+test('complete responses and final failures enter the staff list; pending work stays hidden',()=>{
+  for(const auto_state of ['idle','queued','processing','blocked'])assert.equal(core.visibleComplaint({auto_state,status:'reviewing',analysis:{}}),false);
   assert.equal(core.visibleComplaint({auto_state:'completed',analysis:null}),false);
   assert.equal(core.visibleComplaint({auto_state:'completed',analysis:{}}),true);
   assert.equal(core.visibleComplaint({status:'resolved'}),true);
+  assert.equal(core.visibleComplaint({auto_state:'failed',status:'received',analysis:null}),true);
 });
 test('notifications follow the same office boundaries as the API and strip owner information',()=>{
   const payload=owner=>JSON.stringify({owner,id:'synthetic',revision:4,kind:'completed',body:'must not be sent'});
