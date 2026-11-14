@@ -82,3 +82,10 @@ test('restoring a complaint without analysis schedules it; restoring an existing
     assert.match(h.writes[0].sql,/THEN 'queued'/);
   }
 });
+test('harness diagnostics are staff-only, read-only, and omit unrelated checkpoint fields',async()=>{
+ const checkpoint={plan:{facts:[]},analysis:{summary:'검사 중인 합성 요약'},secret:'must-not-be-returned'};
+ const h=apiHarness({analysis_checkpoint:JSON.stringify(checkpoint)}),response=await h.call('complaints/test/harness');
+ assert.equal(response.status,200);const data=await response.json();assert.equal(data.pending.candidate,'검사 중인 합성 요약');assert.doesNotMatch(JSON.stringify(data),/must-not-be-returned/);
+ await h.flush();assert.equal(h.starts.length,0);assert.equal(h.writes.length,0);
+ assert.equal((await apiHarness({analysis_checkpoint:JSON.stringify(checkpoint)},false).call('complaints/test/harness')).status,403);
+});

@@ -14,6 +14,7 @@ async function executeStage(id:string,generation:number,stage:Stage) {
   'use step';
   try{return await runAnalysisStage(id,generation,stage);}
   catch(error){
+    console.warn('Analysis stage failed',{id,stage,name:error instanceof Error?error.name:'unknown',status:error&&typeof error==='object'&&'status' in error?error.status:undefined});
     if(error instanceof Error&&'retryable' in error&&error.retryable===false)throw new FatalError(error.message);
     throw new RetryableError('Analysis stage temporarily unavailable',{retryAfter:'15s'});
   }

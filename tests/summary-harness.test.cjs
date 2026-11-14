@@ -2,7 +2,7 @@ const fs=require('node:fs'),ts=require('typescript'),test=require('node:test'),a
 const policy=require('../evals/loader.cjs')()('lib/harness-policy.ts');
 function harness(answer){
  const calls=[],out={};
- const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});return answer(name,input,calls.length);}},'./harness-policy':policy};
+ const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});const value=answer(name,input,calls.length);return name==='business_summary_repair'&&value&&!('facts' in value)?{...value,facts:input.facts}:value;}},'./harness-policy':policy};
  new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/summary-harness.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(name=>name in stubs?stubs[name]:require(name),out);
  return {...out,calls};
 }
@@ -39,9 +39,9 @@ test('continued failure stops after one repair and never substitutes a title',as
  const empty=harness(()=>assert.fail('No paid request for missing business facts'));
  await assert.rejects(empty.verifyBusinessSummary(keys,source,[],''),e=>e.retryable===false);
 });
-test('invalid extracted meaning is rejected instead of rewriting around a bad fact',async()=>{
- const h=harness(()=>review(good,['F1','F2'],{factErrors:[{factId:'F1',reason:'근거 없는 확정'}]}));
- await assert.rejects(h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good),e=>e.retryable===false);assert.equal(h.calls.length,1);
+test('invalid extracted meaning is never accepted after an unsuccessful repair',async()=>{
+ const h=harness(name=>name==='business_summary_repair'?{summary:good}:review(good,['F1','F2'],{factErrors:[{factId:'F1',reason:'근거 없는 확정'}]}));
+ await assert.rejects(h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good),e=>e.retryable===false);assert.equal(h.calls.length,3);
 });
 test('an interrupted paid repair is checkpointed and never repeated by a workflow retry',async()=>{
  let progress;

@@ -235,6 +235,17 @@ async function handler(
       const c = decodeComplaint(row);
       if(c.deleted_at&&!(staff&&(url.searchParams.get("trash")==="1"||method==="PATCH")))throw new AppError("민원을 찾을 수 없습니다.",404);
       const complaintOwner = String(row.owner);
+      // Read-only diagnostics share the complaint's existing staff/office scope.
+      // Credentials and unrelated checkpoint fields are never projected.
+      if(path.length===3&&path[2]==='harness'&&method==='GET') {
+        if(!staff)throw new AppError('담당자 권한이 필요합니다.',403);
+        const checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}'));
+        return json({id:c.id,state:c.auto_state,audit:c.analysis?.summaryHarness||null,pending:{
+          facts:checkpoint.plan?.facts||null,candidate:checkpoint.analysis?.summary||null,
+          review:checkpoint.summaryFailure||null,progress:checkpoint.summaryProgress||null,
+          stages:{plan:!!checkpoint.plan,evidence:!!checkpoint.evidence,analysis:!!checkpoint.analysis,summary:!!checkpoint.summary},
+        }});
+      }
       if (path.length === 2 && method === "GET") {
         if (staff && !c.deleted_at && c.status !== 'resolved' &&
           (c.auto_state === 'queued' || (c.auto_state === 'idle' && !c.analysis))) {
