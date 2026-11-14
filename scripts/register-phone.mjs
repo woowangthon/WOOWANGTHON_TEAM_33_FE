@@ -12,6 +12,8 @@ export async function registerPhone(endpoint,config){
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   const config=parseEnv(await readFile(new URL('../.env.phone.local',import.meta.url),'utf8'));
-  const state=JSON.parse(await readFile(new URL('../outputs/phone-runtime/state.json',import.meta.url),'utf8'));
+  const port=Number(process.env.PHONE_PORT||config.PHONE_PORT||4318);
+  if(!Number.isInteger(port)||port<1||port>65535)throw Error('Invalid_phone_port');
+  const state=JSON.parse(await readFile(new URL('../outputs/phone-runtime'+(port===4318?'':'-'+port)+'/state.json',import.meta.url),'utf8'));
   await registerPhone(state.url,config);console.log('Web voice endpoint registered.');
 }
