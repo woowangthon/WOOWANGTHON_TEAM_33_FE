@@ -315,7 +315,6 @@ export default function StaffWorkspace({
         <aside className={"admin-sidebar " + (menu ? "open" : "")}>
           <div className="admin-side-title">
             <span>민원업무</span>
-            <strong>청주시</strong>
           </div>
           <button
             className={"admin-side-main " + (view === "inbox" ? "active" : "")}
