@@ -8,13 +8,11 @@ import {
   ClipboardList,
   Download,
   ExternalLink,
-  House,
   Inbox,
   LoaderCircle,
   Menu,
   Phone,
   RefreshCw,
-  Search,
   X,
 } from "lucide-react";
 import {
@@ -257,7 +255,6 @@ export default function StaffWorkspace({
     status === "all"
       ? readyComplaints.length
       : readyComplaints.filter((c) => c.status === status).length;
-  const heading = selected ? "민원 상세 검토" : views[view];
   function exportCsv() {
     const cell = (s: string) =>
       '"' + s.replace(/^[\s]*[=+@-]/, "'$&").replaceAll('"', '""') + '"';
@@ -360,14 +357,6 @@ export default function StaffWorkspace({
           />
         ) : null}
         <main id="staff-main" className="admin-content">
-          <div className="admin-breadcrumb">
-            <House size={13} />
-            <span>업무포털</span>
-            <ChevronRight size={12} />
-            <span>민원 관리</span>
-            <ChevronRight size={12} />
-            <strong>{heading}</strong>
-          </div>
           {notice ? (
             <div
               className={"admin-alert " + (notice.error ? "error" : "")}
@@ -534,6 +523,7 @@ export default function StaffWorkspace({
                   <button
                     key={s}
                     className={applied.status === s ? "active" : ""}
+                    aria-pressed={applied.status === s}
                     onClick={() => statusFilter(s)}
                   >
                     <span>{label}</span>
@@ -545,6 +535,35 @@ export default function StaffWorkspace({
                 ))}
               </section>
               <form className="admin-filter" onSubmit={search}>
+                <div className="admin-search-row">
+                  <label className="admin-search-label">
+                    <span>민원 검색</span>
+                    <input
+                      placeholder="민원 제목, 접수번호 또는 발생 위치 검색"
+                      value={filter.query}
+                      onChange={(e) =>
+                        setFilter({ ...filter, query: e.target.value })
+                      }
+                    />
+                  </label>
+                  <button className="button primary" type="submit">조회</button>
+                  <button
+                    className="button quiet"
+                    type="button"
+                    onClick={() => {
+                      setFilter(initialFilter);
+                      setApplied(initialFilter);
+                      setPage(1);
+                    }}
+                  >
+                    초기화
+                  </button>
+                </div>
+                <details className="admin-filter-details">
+                  <summary>
+                    상세 조건
+                    {applied.status !== "all" || applied.category !== "all" || applied.from || applied.to ? <span>적용 중</span> : null}
+                  </summary>
                 <div className="admin-filter-row">
                   <label>
                     <span>접수 기간</span>
@@ -601,33 +620,8 @@ export default function StaffWorkspace({
                     </select>
                   </label>
                 </div>
-                <div className="admin-filter-row second">
-                  <label>
-                    <span>검색어</span>
-                    <input
-                      placeholder="민원 제목, 접수번호 또는 발생 위치"
-                      value={filter.query}
-                      onChange={(e) =>
-                        setFilter({ ...filter, query: e.target.value })
-                      }
-                    />
-                  </label>
-                  <button className="button primary" type="submit">
-                    <Search size={16} />
-                    조회
-                  </button>
-                  <button
-                    className="button outline"
-                    type="button"
-                    onClick={() => {
-                      setFilter(initialFilter);
-                      setApplied(initialFilter);
-                      setPage(1);
-                    }}
-                  >
-                    초기화
-                  </button>
-                </div>
+                <button className="button outline admin-filter-apply" type="submit">조건 적용</button>
+                </details>
               </form>
               <section className="admin-list">
                 <div className="admin-list-toolbar">
