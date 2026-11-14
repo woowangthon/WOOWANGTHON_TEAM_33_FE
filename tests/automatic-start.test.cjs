@@ -49,7 +49,7 @@ function apiHarness(overrides={},staff=true){
   const source=fs.readFileSync('app/api/[...path]/route.ts','utf8');
   const stubs=Object.fromEntries([...source.matchAll(/from\s+['"]([^'"]+)['"]/g)].map(m=>[m[1],{}]));
   Object.assign(stubs,{
-    'zod':require('zod'),'next/server':{after:f=>scheduled.push(f)},'../../user':{getCurrentUser:async()=>({userId:'guest:test',isStaff:staff,isGuest:true})},
+    '../../../lib/public-data':{publicDataSource:()=>null},'zod':require('zod'),'next/server':{after:f=>scheduled.push(f)},'../../user':{getCurrentUser:async()=>({userId:'guest:test',isStaff:staff,isGuest:true})},
     '../../../lib/server':{AppError,database:()=>db,now:()=> '2026-11-14T00:00:00.000Z',decodeComplaint:()=>c,eventStatement:()=>({run:async()=>{}}),rateLimit:async()=>{}},
     '../../../lib/analysis-dispatch':{startAnalysis:async id=>starts.push(id)},
     '../../../lib/access':{officeForOwner:()=> 'office:test',officeScope:()=> '1=1',publicStaffInbox:()=>true,publicComplaint:x=>x},

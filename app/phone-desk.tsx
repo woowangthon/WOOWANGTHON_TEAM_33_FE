@@ -7,7 +7,7 @@ import {categories} from '../lib/types';
 type Segment={turnId:string;text:string;status:string;at:string;facts:{kind:string;value:string}[]};
 type Call={id:string;status:'waiting'|'connecting'|'active'|'ended';source:string;startedAt:string;connectedAt?:string;shield:boolean;finalizing?:boolean;segments:Segment[];reason?:string};
 type Wire={event:string;callId?:string;connectedAt?:string;message?:string;reason?:string;enabled?:boolean;payload?:string;media?:{payload:string};calls?:Call[]}&Partial<Segment>;
-type Draft={title:string;body:string;location:string;category:string;receipt:string};
+type Draft={title:string;body:string;location:string;category:string;occurredAt:string;receipt:string};
 type Session={context:AudioContext;node?:AudioWorkletNode;microphone?:MediaStream;socket?:WebSocket;player?:AudioBufferSourceNode;timer?:ReturnType<typeof setTimeout>;disposed:boolean};
 
 function release(session:Session){
@@ -31,7 +31,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const [drafts,setDrafts]=useState<Record<string,Partial<Draft>>>({}),[saving,setSaving]=useState('');
   const session=useRef<Session|null>(null),active=useRef(''),currentCall=useRef(''),savingRef=useRef(''),sampleRef=useRef(false);
   const call=calls.find(c=>c.id===selected),segments=call?.segments||[];
-  const draft:Draft={title:call?.source==='demo'?'[가상 사례] 음성 상담 민원':'음성 상담 민원',body:segments.map(s=>s.text).join('\n\n'),location:segments.flatMap(s=>s.facts).find(f=>f.kind==='location')?.value||'',category:'기타',receipt:'',...drafts[selected]};
+  const draft:Draft={title:call?.source==='demo'?'[가상 사례] 음성 상담 민원':'음성 상담 민원',body:segments.map(s=>s.text).join('\n\n'),location:segments.flatMap(s=>s.facts).find(f=>f.kind==='location')?.value||'',category:'기타',occurredAt:'',receipt:'',...drafts[selected]};
   const processing=!!call?.finalizing||Object.values(pending).includes(selected);
   const connected=!['offline','ended'].includes(state);
   const statusLabel=state==='active'?'상담 중':state==='waiting'?'담당자 연결 대기':state==='ready'?'수신 대기 중':state==='connecting'?'연결 중':state==='ended'?'상담 종료':'상담 연결';
@@ -151,7 +151,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     event.preventDefault();if(!call||call.status!=='ended'||processing||draft.receipt||savingRef.current)return;
     const callId=call.id;savingRef.current=callId;setSaving(callId);
     try{
-      const response=await fetch('/api/complaints',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,occurredAt:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()),consent:true,channel:'phone',sample:call.source==='demo'})});
+      const response=await fetch('/api/complaints',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...draft,consent:true,channel:'phone',sample:call.source==='demo'})});
       const value=await response.json();if(!response.ok)throw new Error(value.error);
       setDrafts(previous=>({...previous,[callId]:{...draft,receipt:value.id}}));setMessage('민원을 접수했습니다.');onRegistered?.(value.id);
     }catch(error){setMessage(error instanceof Error?error.message:'접수하지 못했습니다.');}finally{savingRef.current='';setSaving('');}
@@ -190,7 +190,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
       <div className="phone-panel"><div className="phone-panel-title"><h2>상담 내용</h2>{call?.status==='waiting'&&state==='ready'&&<button className="primary" onClick={()=>send({event:'accept',callId:call.id})}><Phone size={16}/>전화 받기</button>}{call?.status==='active'&&active.current===call.id&&<button onClick={()=>send({event:call.shield?'resume':'shield',callId:call.id})}>{call.shield?<Volume2 size={17}/>:<VolumeX size={17}/>}{call.shield?'원음 듣기':'수신 음성 가리기'}</button>}</div>
         {call?.shield&&<div className="phone-shield"><VolumeX size={18}/>수신 음성 보호 중 · 내 목소리는 전달됩니다.</div>}
         <div className="phone-transcript" aria-live="polite">{!segments.length?<p className="phone-empty">{call?.status==='active'?'민원 내용을 듣고 있습니다.':'통화를 선택해 주세요.'}</p>:segments.map((segment,index)=><article key={segment.turnId}><time>{String(index+1).padStart(2,'0')}</time><div><p>{segment.text}</p>{segment.status==='needs_review'&&<small>내용 확인 필요</small>}</div></article>)}{processing&&<p className="phone-processing"><LoaderCircle className="spin" size={15}/>내용 정리 중</p>}</div>
-        {!!segments.length&&<form className="phone-registration" onSubmit={register}><h2>민원 접수</h2><div className="phone-fields"><label>제목<input value={draft.title} onChange={event=>changeDraft({title:event.target.value})} minLength={3} maxLength={120} required disabled={!!draft.receipt}/></label><label>발생 장소<input value={draft.location} onChange={event=>changeDraft({location:event.target.value})} minLength={2} maxLength={200} required disabled={!!draft.receipt}/></label><label>민원 분야<select value={draft.category} onChange={event=>changeDraft({category:event.target.value})} disabled={!!draft.receipt}>{categories.map(category=><option key={category}>{category}</option>)}</select></label></div><label>접수 내용<textarea value={draft.body} onChange={event=>changeDraft({body:event.target.value})} minLength={10} maxLength={6000} rows={6} required disabled={!!draft.receipt}/></label><button className="primary" disabled={!!saving||!!draft.receipt||call?.status!=='ended'||processing}>{draft.receipt?'접수 완료':saving===selected?'접수 중':call?.status!=='ended'?'통화 종료 후 접수':processing?'내용 정리 중':'민원 접수 및 법령 분석'}<ChevronRight size={16}/></button>{draft.receipt&&<a className="phone-receipt" href="/">접수번호 {draft.receipt} · 접수함 열기</a>}</form>}
+        {!!segments.length&&<form className="phone-registration" onSubmit={register}><h2>민원 접수</h2><div className="phone-fields"><label>제목<input value={draft.title} onChange={event=>changeDraft({title:event.target.value})} minLength={3} maxLength={120} required disabled={!!draft.receipt}/></label><label>발생 장소<input value={draft.location} onChange={event=>changeDraft({location:event.target.value})} minLength={2} maxLength={200} required disabled={!!draft.receipt}/></label><label>발생일 (선택)<input type="date" value={draft.occurredAt} onChange={event=>changeDraft({occurredAt:event.target.value})} disabled={!!draft.receipt}/></label><label>민원 분야<select value={draft.category} onChange={event=>changeDraft({category:event.target.value})} disabled={!!draft.receipt}>{categories.map(category=><option key={category}>{category}</option>)}</select></label></div><label>접수 내용<textarea value={draft.body} onChange={event=>changeDraft({body:event.target.value})} minLength={10} maxLength={6000} rows={6} required disabled={!!draft.receipt}/></label><button className="primary" disabled={!!saving||!!draft.receipt||call?.status!=='ended'||processing}>{draft.receipt?'접수 완료':saving===selected?'접수 중':call?.status!=='ended'?'통화 종료 후 접수':processing?'내용 정리 중':'민원 접수 및 법령 분석'}<ChevronRight size={16}/></button>{draft.receipt&&<a className="phone-receipt" href="/">접수번호 {draft.receipt} · 접수함 열기</a>}</form>}
       </div>
     </div>}
   </section>;

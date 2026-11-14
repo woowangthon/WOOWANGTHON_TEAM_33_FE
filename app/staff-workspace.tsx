@@ -387,7 +387,7 @@ export default function StaffWorkspace({
               {selected.auto_state === "completed" || selected.deleted_at ? null : (
               <div
                 className={
-                  "admin-processing " + (selected.auto_state || "idle")
+                  "admin-processing " + (selected.auto_state || "idle") + (/크레딧|잔액/.test(selected.auto_message||'')?' quota-error':'')
                 }
                 role="status"
               >
@@ -401,7 +401,7 @@ export default function StaffWorkspace({
                   )}
                 </span>
                 <div>
-                  <strong>{selected.deleted_at?"휴지통":autoStates[selected.auto_state || "idle"]}</strong>
+                  <strong>{selected.deleted_at?"휴지통":/크레딧|잔액/.test(selected.auto_message||'')?'OpenAI 크레딧 확인 필요':autoStates[selected.auto_state || "idle"]}</strong>
                   <p>{selected.auto_message || ""}</p>
                 </div>
                 {authenticated &&
@@ -685,7 +685,7 @@ export default function StaffWorkspace({
                               >
                                 <small>
                                   {c.id}
-                                  {c.is_sample ? <em>가상 사례</em> : null}
+                                  {c.source_data ? <em>공개 데이터</em> : c.is_sample ? <em>가상 사례</em> : null}
                                 </small>
                                 <strong>{protectedTitle(c)}</strong>
                                 {c.auto_state==='failed'?<span>AI 요약 실패 · 원문 확인 필요</span>:null}

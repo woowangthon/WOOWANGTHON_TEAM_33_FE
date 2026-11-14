@@ -1,5 +1,12 @@
 # 외부 기술·데이터·자산
 
+## 2026-11-15 제출용 자료
+
+- [한국남동발전㈜ 환경관련 민원사항 현황_20220914](https://www.data.go.kr/data/15093026/fileData.do): 13건, 이용허락범위 제한 없음. `lib/public-complaints.json`에 민원내용·원본 접수일만 저장하고 기관 처리내용은 입력에서 제외한다. 기관 요약문이며 시민 전체 원문이 아니다. 원본 CSV SHA256: `4eb3db580d7ac8dfc8009620a2f6cde93ecc92288dcd18b515e34a20bbf0061f`.
+- [2runo/Curse-detection-data](https://github.com/2runo/Curse-detection-data): MIT, Copyright (c) 2020 2runo, commit `ff241621e103b6f220d30de324d0d07987887308`. 5,825문장을 수집했으며 이번 통화 시험에는 댓글 2건을 사용했다. 실제 민원으로 표시하지 않는다. 원본과 LICENSE를 수집 폴더에 함께 보존한다.
+- 음성 검증: Windows Microsoft Heami TTS로 공개 민원·MIT 댓글의 수정하지 않은 원문을 읽었다. 합성 음성이며 실제 민원인 녹음이 아니다. Gemini `gemini-3.5-transcribe-live` / `gemini-3.5-flash-lite`, 웹 분석은 OpenAI `gpt-6-luna` 설정으로 실제 호출했다.
+- 기존 지자체 게시판 3건·합성 평가 자료는 과거 개발 기록이며 새 공개 시연 데이터에 포함하지 않는다. [현재 검증](SUBMISSION-2026-11-15.md)을 우선한다.
+
 ## 직접 구현한 부분
 
 민원 접수·공통 접수함, 원문 보호 UI, 공식 법령 응답 파싱·조문 검색·시행일 필터, AI 호출 구성 및 구조화 검증, 문장별 근거와 요구 누락 검사, 사람 승인 흐름, 기록 보고서, 웹 음성 중계·차단·정제 텍스트 표시를 이 저장소에서 구현했다. AI 모델 자체나 통신망을 학습·개발한 것은 아니다. 개발 과정에서 Codex를 사용했다.

@@ -3,7 +3,7 @@ class AppError extends Error{constructor(message,status=400){super(message);this
 function harness(overrides={}){
  const c={id:'test',owner:'guest:test',revision:3,status:'reviewing',auto_state:'completed',draft:'',published:'',tasks:[],draft_review:null,coverage_review:null,...overrides},writes=[];
  const route={},stubs={
-  'zod':require('zod'),'next/server':{},'../../user':{getCurrentUser:async()=>({userId:'guest:test',isStaff:true,isGuest:true})},
+  '../../../lib/public-data':{publicDataSource:()=>null},'zod':require('zod'),'next/server':{},'../../user':{getCurrentUser:async()=>({userId:'guest:test',isStaff:true,isGuest:true})},
   '../../../lib/server':{AppError,now:()=> 'now',decodeComplaint:()=>c,eventStatement:()=>({run:async()=>{}}),rateLimit:async()=>{},database:()=>({batch:async statements=>Promise.all(statements.map(s=>s.run())),prepare:sql=>({bind:(...values)=>({first:async()=>{if(sql.includes('SET tasks=')){writes.push({sql,values});return overrides.taskConflict?null:{revision:c.revision+1};}return c;},run:async()=>{writes.push({sql,values});return {meta:{changes:1}};}})})})},
   '../../../lib/task-history':require('../evals/loader.cjs')()('lib/task-history.ts'),
   '../../../lib/analysis-dispatch':{startAnalysis:async()=>{}},
@@ -46,9 +46,9 @@ test('retiring staff manual intake preserves citizen and telephone intake',async
  const input={title:'가상 검증 민원',body:'이 민원은 자동 검증을 위한 합성 자료입니다.',category:'기타',location:'가상동',occurredAt:'2020-01-01',consent:true};
  process.env.SITE_MODE='staff';const h=harness();
  assert.equal((await h.request('complaints','POST',input)).status,410);assert.equal(h.writes.length,0);
- assert.equal((await h.request('complaints','POST',{...input,channel:'phone'})).status,201);assert.equal(h.writes[0].values.at(-1),'phone');
+ assert.equal((await h.request('complaints','POST',{...input,channel:'phone'})).status,201);assert.equal(h.writes[0].values[11],'phone');
  process.env.SITE_MODE='citizen';const citizen=harness();
- assert.equal((await citizen.request('complaints','POST',input)).status,201);assert.equal(citizen.writes[0].values.at(-1),'web');
+ assert.equal((await citizen.request('complaints','POST',input)).status,201);assert.equal(citizen.writes[0].values[11],'web');
  assert.equal((await citizen.request('complaints','POST',{...input,channel:'phone'})).status,403);assert.equal(citizen.writes.length,1);
 });
 test('legacy waiting records remain reviewable with their original history preserved',()=>{

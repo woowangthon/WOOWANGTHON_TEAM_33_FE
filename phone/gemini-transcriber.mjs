@@ -26,10 +26,13 @@ export class GeminiTranscriber {
     if(message.setupComplete)this.resolveReady?.();
     const c=message.serverContent;if(!c)return;
     if(typeof c.interimInputTranscription?.text==='string'){
-      this.lastTranscriptAt=performance.now();this.partial=c.interimInputTranscription.text;this.onInterim(this.partial,transcriptRange(c.interimInputTranscription));
+      this.lastTranscriptAt=performance.now();this.partial=c.interimInputTranscription.text;this.partialRange=transcriptRange(c.interimInputTranscription);this.onInterim(this.partial,this.partialRange);
     }
     if(typeof c.inputTranscription?.text==='string'){
-      this.lastTranscriptAt=performance.now();this.partial='';if(c.inputTranscription.text.trim())this.onFinal(c.inputTranscription.text,transcriptRange(c.inputTranscription));
+      // Live finals currently omit offsets. Use only the last timed interim's covered
+      // prefix; do not guess its trailing audio from arrival time or the next utterance.
+      const range=transcriptRange(c.inputTranscription)||this.partialRange||null;
+      this.lastTranscriptAt=performance.now();this.partial='';this.partialRange=null;if(c.inputTranscription.text.trim())this.onFinal(c.inputTranscription.text,range);
     }
   }
   push(pcm){

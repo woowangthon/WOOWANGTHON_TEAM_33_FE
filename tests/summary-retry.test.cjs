@@ -34,7 +34,7 @@ function recoveryHarness({factError=false,missing=false,conflict=false,interrupt
  const writes=[];
  const api=load('lib/analysis-stages.ts',{
   './server':{database:()=>({prepare:sql=>({bind:(...values)=>({first:async()=>missing?null:row,run:async()=>{writes.push({sql,values});if(conflict)return {meta:{changes:0}};row.analysis_checkpoint=values[0];return {meta:{changes:1}};}})})}),decodeComplaint:()=>c},
-  './summary-harness':{sourceHash:()=> 'same',requiredOmissions:r=>r.omissions},'./harness-policy':policy,'./access':{},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{}
+  './summary-harness':{sourceHash:()=> 'same',requiredOmissions:r=>r.omissions},'./harness-policy':policy,'./access':{},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{},'./reply-harness':{replyIsVerified:()=>true}
  });
  return {retry:n=>api.prepareSummaryRetry('synthetic',3,n),writes,checkpoint:()=>JSON.parse(row.analysis_checkpoint)};
 }

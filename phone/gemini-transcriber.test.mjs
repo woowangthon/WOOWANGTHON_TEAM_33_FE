@@ -23,3 +23,10 @@ test('provider shutdown fails closed with a sanitized code and ignores late tran
  const errors=[],updates=[],factory=await server(t,(e,send)=>{if(e.setup)send({error:{code:429,message:'private-provider-detail'}});});
  const stt=new GeminiTranscriber({apiKey:'not-used',socketFactory:factory,onError:e=>errors.push(e),onInterim:e=>updates.push(e)});t.after(()=>stt.close());await assert.rejects(stt.start(),/API_429/);assert.equal(JSON.stringify(errors).includes('private-provider-detail'),false);stt.receive({serverContent:{interimInputTranscription:{text:'late'}}});assert.equal(updates.length,0);
 });
+test('a final without offsets only inherits its own last timed prefix, never arrival time or a previous turn',()=>{
+ const finals=[],stt=new GeminiTranscriber({apiKey:'test',onFinal:(text,range)=>finals.push({text,range})});
+ stt.receive({serverContent:{interimInputTranscription:{text:'일반 민원',startOffset:'0.120s',endOffset:'1.640s'}}});
+ stt.receive({serverContent:{inputTranscription:{text:'일반 민원입니다'}}});
+ stt.receive({serverContent:{inputTranscription:{text:'다음 발화'}}});
+ assert.deepEqual(finals.map(f=>f.range),[{startMs:120,endMs:1640},null]);
+});

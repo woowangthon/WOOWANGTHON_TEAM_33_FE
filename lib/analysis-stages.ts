@@ -7,10 +7,11 @@ import { structuredAI } from './structured-ai';
 import type { Analysis,Complaint } from './types';
 import { verifyBusinessSummary,sourceHash,SummaryRejectedError,requiredOmissions,type SummaryProgress,type SummaryAudit } from './summary-harness';
 import { harnessPolicy } from './harness-policy';
+import {verifyReply,replyIsVerified,type ReplyProgress} from './reply-harness';
 
-export type Stage='plan'|'evidence'|'analysis'|'summary'|'requirements'|'review'|'coverage'|'finish';
+export type Stage='plan'|'evidence'|'analysis'|'summary'|'reply'|'requirements'|'review'|'coverage'|'finish';
 type SummaryFailure=Omit<SummaryAudit,'verifiedAt'|'status'>;
-type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string;summary?:boolean;summaryFailure?:SummaryFailure;summaryProgress?:SummaryProgress;summaryRecovery?:{sourceHash:string;used:number;failures:SummaryFailure[]}};
+type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string;summary?:boolean;summaryFailure?:SummaryFailure;summaryProgress?:SummaryProgress;replyProgress?:ReplyProgress;summaryRecovery?:{sourceHash:string;used:number;failures:SummaryFailure[]}};
 export function supplementedComplaint(c:Complaint,photoNotes=''):Complaint {
   const messages=(c.supplements||[]).map(s=>`${s.role==='staff'?'담당자 보완 질문':'민원인 보완 답변'}: ${s.text}`).join('\n');
   const confirmed=c.request_tracking?.confirmedAt?JSON.stringify(c.request_tracking.items.map(r=>({request:r.text,withdrawn:r.withdrawn}))):'';
@@ -27,10 +28,10 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
   const source=supplementedComplaint(original,cp.photoNotes);
   const currentPlan=cp.plan?.harnessVersion===harnessPolicy.version&&cp.plan.sourceHash===sourceHash(source)&&!!cp.plan.facts;
   if(stage==='plan'&&currentPlan)return true;
-  if(stage==='plan'&&!currentPlan){delete cp.plan;delete cp.evidence;delete cp.analysis;delete cp.summary;delete cp.summaryFailure;delete cp.summaryProgress;}
+  if(stage==='plan'&&!currentPlan){delete cp.plan;delete cp.evidence;delete cp.analysis;delete cp.summary;delete cp.summaryFailure;delete cp.summaryProgress;delete cp.replyProgress;}
   if((stage==='evidence'||stage==='analysis')&&cp[stage]&&currentPlan)return true;
   if(stage==='summary'&&cp.analysis?.summaryHarness?.status==='verified'&&cp.analysis.summaryHarness.version===harnessPolicy.version&&cp.analysis.summaryHarness.sourceHash===sourceHash(source))return true;
-  const messages={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'민원 요약과 답변 초안을 정리하고 있습니다.',summary:'요약의 원문 근거를 확인하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
+  const messages={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'민원 요약과 답변 초안을 정리하고 있습니다.',summary:'요약의 원문 근거를 확인하고 있습니다.',reply:'답변 초안의 요청별 대응을 확인하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
   await database().prepare("UPDATE complaints SET auto_state='processing',auto_message=?,auto_started_at=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(messages[stage],now(),id,generation).run();
   if(stage==='plan') {
     await rateLimit(office,'automatic',100);
@@ -77,6 +78,19 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
       throw error;
     }
   }
+  // finish also checks this for workflows started before the reply stage existed.
+  if(stage==='reply'||stage==='finish') {
+    if(!cp.analysis||!cp.evidence)throw new Error('Checkpoint incomplete');
+    if(cp.analysis.summaryHarness?.status!=='verified'||cp.analysis.summaryHarness.version!==harnessPolicy.version||cp.analysis.summaryHarness.sourceHash!==sourceHash(c))throw new Error('Summary verification missing or stale');
+    if(!replyIsVerified(c,cp.analysis,cp.evidence.citations)){
+      const verified=await verifyReply(keys,c,cp.analysis,cp.evidence.citations,{progress:cp.replyProgress,onProgress:async progress=>{
+        cp.replyProgress=progress;
+        await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
+      }});
+      cp.analysis={...cp.analysis,draft:verified.draft,citationIds:verified.citationIds,citations:verified.citations,replyHarness:verified.audit};delete cp.replyProgress;
+      await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
+    }
+  }
   if(stage==='finish') {
     if(!cp.analysis||!cp.evidence)throw new Error('Checkpoint incomplete');
     if(cp.analysis.summaryHarness?.status!=='verified'||cp.analysis.summaryHarness.version!==harnessPolicy.version||cp.analysis.summaryHarness.sourceHash!==sourceHash(c))throw new Error('Summary verification missing or stale');
@@ -106,11 +120,12 @@ export async function prepareSummaryRetry(id:string,generation:number,attempt:nu
   if(!cp.plan?.facts?.length||cp.summaryFailure.attempts.some(a=>a.review.factErrors.length||requiredOmissions(a.review).length)){
     delete cp.plan;delete cp.evidence;
   }
-  delete cp.analysis;delete cp.summary;delete cp.summaryFailure;delete cp.summaryProgress;
+  delete cp.analysis;delete cp.summary;delete cp.summaryFailure;delete cp.summaryProgress;delete cp.replyProgress;
   const result=await database().prepare("UPDATE complaints SET analysis_checkpoint=?,auto_message='저장된 근거를 바탕으로 요약과 요청을 다시 정리합니다.' WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed' AND analysis_checkpoint=?").bind(JSON.stringify(cp),id,generation,stored).run();
   if(!result.meta.changes)throw new Error('Checkpoint changed while preparing summary retry');
   return true;
 }
-export async function failAnalysis(id:string,generation:number) {
-  await database().prepare("UPDATE complaints SET auto_state='failed',auto_message='원문을 확인하거나 재시도해 주세요. 저장한 단계부터 다시 진행합니다.' WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(id,generation).run();
+export async function failAnalysis(id:string,generation:number,quota=false) {
+  const message=quota?'OpenAI 크레딧 또는 사용 한도가 부족합니다. 관리자 계정에서 잔액을 확인한 뒤 재시도해 주세요. 접수 원문은 보존됩니다.':'원문을 확인하거나 재시도해 주세요. 저장한 단계부터 다시 진행합니다.';
+  await database().prepare("UPDATE complaints SET auto_state='failed',auto_message=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(message,id,generation).run();
 }

@@ -7,7 +7,7 @@ export async function analyzeComplaint(id:string,generation:number) {
   try {
     for(let pass=0;;pass++) {
       let rejected=false;
-      for(const stage of ['plan','evidence','analysis','summary','finish'] as const) {
+      for(const stage of ['plan','evidence','analysis','summary','reply','finish'] as const) {
         const result=await executeStage(id,generation,stage,pass);
         if(result==='rejected'){rejected=true;break;}
         if(!result)return {cancelled:true};
@@ -16,7 +16,7 @@ export async function analyzeComplaint(id:string,generation:number) {
       if(!await restartSummary(id,generation,pass+1))break;
     }
     await markFailed(id,generation);return {completed:false};
-  } catch {await markFailed(id,generation);return {completed:false};}
+  } catch(error) {await markFailed(id,generation,error instanceof Error&&/잔액|크레딧/.test(error.message));return {completed:false};}
 }
 async function executeStage(id:string,generation:number,stage:Stage,pass:number) {
   'use step';
@@ -33,7 +33,7 @@ async function restartSummary(id:string,generation:number,attempt:number) {
   'use step';
   return prepareSummaryRetry(id,generation,attempt);
 }
-async function markFailed(id:string,generation:number) {
+async function markFailed(id:string,generation:number,quota=false) {
   'use step';
-  await failAnalysis(id,generation);
+  await failAnalysis(id,generation,quota);
 }

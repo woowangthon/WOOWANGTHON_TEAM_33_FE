@@ -221,6 +221,7 @@ export function ComplaintDetail({
         </button>
         <section className="card panel-padding">
           <h1>{protectedTitle(c)}</h1>
+          {c.source_data?<p className="data-source">공개 데이터 검증 · <a href={c.source_data.url} target="_blank" rel="noreferrer">{c.source_data.provider} · {c.source_data.recordId}</a></p>:null}
           <Badge status={c.status} />
           <p className="preserve">{c.body}</p>
           <h2>답변</h2>

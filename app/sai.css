@@ -248,3 +248,6 @@ body.site-staff .auth-home, body.site-staff .admin-auth .auth-home { color: var(
 @media (prefers-contrast: more) {
   body.site-staff { --sai-muted: #34465e; --sai-line: #8293ac; --sai-accent-line: #8293ac; }
 }
+body.site-staff .admin-processing.quota-error { border: 2px solid #a82727; background: #fff2f0; color: #8b2020; padding: 24px; }
+body.site-staff .admin-processing.quota-error strong { font-size: 21px; color: #8b2020; }
+body.site-staff .data-source { font-size: 13px; color: var(--sai-muted); margin-top: 10px; }

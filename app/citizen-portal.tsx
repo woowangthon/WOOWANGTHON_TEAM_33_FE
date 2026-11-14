@@ -1019,7 +1019,7 @@ function CitizenDetail({
         </div>
         <div>
           <dt>발생 일자</dt>
-          <dd>{c.occurred_at}</dd>
+          <dd>{c.occurred_at||'미확인'}</dd>
         </div>
         <div>
           <dt>민원 내용</dt>
@@ -1031,6 +1031,7 @@ function CitizenDetail({
           <ClipboardCheck size={22} />
           처리 결과 및 답변
         </h2>
+        {c.source_data?<p>공개 데이터 검증 · <a href={c.source_data.url} target="_blank" rel="noreferrer">{c.source_data.provider} · {c.source_data.recordId}</a></p>:null}
         {c.published ? (
           <p><CitationText text={c.published} citations={c.published_citations||[]}/></p>
         ) : (

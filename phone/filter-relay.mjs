@@ -1,12 +1,15 @@
 // Active design: sanitized TEXT goes to the officer; a human ALWAYS answers.
 // A carrier/actual browser speaker is not wired into this lab core.
 import {DelayedAudio} from './delayed-audio.mjs';
+import {ReviewedAudio} from './reviewed-audio.mjs';
 export class FilterRelay {
-  constructor({ caller, officer, onCallerAudio, delayMs=0, onAudioError=()=>{}, now }) {
+  constructor({ caller, officer, onCallerAudio, reviewed=false, delayMs=0, onAudioError=()=>{}, now }) {
     this.caller = caller; this.officer = officer; this.onCallerAudio = onCallerAudio;
     this.mode = 'human'; this.epoch = 0; this.callId = null; this.events = [];
     this.revisions = new Map();
-    this.playback=new DelayedAudio({delayMs,now,onFrame:payload=>{if(this.mode==='human')this.officer({event:'media',payload,source:'original',epoch:this.epoch});},onOverflow:onAudioError});
+    this.reviewed=reviewed;
+    const onFrame=(payload,range)=>{if(this.mode==='human')this.officer({event:'media',payload,source:reviewed?'reviewed':'original',epoch:this.epoch,...(range?{range}:{})});};
+    this.playback=reviewed?new ReviewedAudio({onFrame,onError:onAudioError,now}):new DelayedAudio({delayMs,now,onFrame,onOverflow:onAudioError});
   }
   start(callId) {
     if (this.callId) throw new Error('Call already started');
@@ -14,9 +17,13 @@ export class FilterRelay {
   }
   fromCaller(payload,pcm) {
     if (!this.callId || this.mode === 'ended') return;
+    // Keep the timeline continuous through protection and resume. Clear queued audio below.
+    if(this.reviewed){this.playback.push(payload);if(this.mode!=='human')this.playback.clear();}
+    else if (this.mode === 'human') this.playback.push(payload);
     this.onCallerAudio(payload,pcm);
-    if (this.mode === 'human') this.playback.push(payload);
   }
+  audioBoundary(id,range){if(this.reviewed&&this.mode==='human')this.playback.declare(id,range);}
+  audioReviewed(id,allow){if(this.reviewed&&this.mode==='human')this.playback.settle(id,allow);}
   fromOfficer(payload) {
     // Incoming filtering must not mute the officer's microphone.
     if (this.callId && this.mode !== 'ended') this.caller({ event: 'media', media: { payload } });

@@ -17,7 +17,7 @@ if(!process.env.GEMINI_API_KEY)throw Error('Gemini_key_missing');
 const folder=resolve('../phone-licensed-check'),manifest=JSON.parse((await readFile(resolve(folder,'samples.json'),'utf8')).replace(/^\uFEFF/,''));
 if(!manifest.syntheticAudio||manifest.sourceTextModified!==false||manifest.commentsSource.license!=='MIT'||manifest.complaintsSource.license!=='이용허락범위 제한 없음')throw Error('Licensed_source_required');
 const textProvider=process.env.PHONE_TEXT_PROVIDER||'gemini';
-const report={startedAt:new Date().toISOString(),productionChanged:false,hardwareTested:false,syntheticAudio:true,textProvider,playbackDelayMs:2500,rows:[]},sockets=[];
+const report={startedAt:new Date().toISOString(),productionChanged:false,hardwareTested:false,syntheticAudio:true,textProvider,audioPolicy:'final_reviewed_ranges',rows:[]},sockets=[];
 let row,audioStarted;
 function timedPipeline(){
  const pipeline=new GeminiPipeline({apiKey:process.env.GEMINI_API_KEY,model:process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite'});
@@ -27,15 +27,15 @@ function timedPipeline(){
  }
  return pipeline;
 }
-const app=createPhoneServer({secret:'local-verification-only',analysisProvider:'gemini',key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,origins:['https://test.local'],playbackDelayMs:report.playbackDelayMs,
+const app=createPhoneServer({secret:'local-verification-only',analysisProvider:'gemini',key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,origins:['https://test.local'],
  analysisFactory:options=>new GeminiCallAnalysis({...options,textProvider,model:textProvider==='openai'?(process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'):(process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite'),geminiKey:process.env.GEMINI_API_KEY,
    ...(textProvider==='gemini'?{pipeline:timedPipeline()}:{}),
-   onText:event=>{if(row){row.firstTextMs??=Math.round(performance.now()-audioStarted);row.lastTextMs=Math.round(performance.now()-audioStarted);}options.onText(event);},
-   transcriberFactory:settings=>new GeminiTranscriber({...settings,onInterim:text=>{if(row){row.firstInterimMs??=Math.round(performance.now()-audioStarted);row.interims.push(text);}settings.onInterim(text);},onFinal:text=>{if(row){row.firstFinalMs??=Math.round(performance.now()-audioStarted);row.lastFinalMs=Math.round(performance.now()-audioStarted);row.finals.push(text);}settings.onFinal(text);}}),
+   onAudioBoundary:(id,range)=>{row.audioReviews??=[];row.audioReviews.push({id,range,allow:null});options.onAudioBoundary(id,range);},onAudioReviewed:(id,allow)=>{const review=row.audioReviews.find(r=>r.id===id);if(review)review.allow=allow;options.onAudioReviewed(id,allow);},onText:event=>{if(row){row.firstTextMs??=Math.round(performance.now()-audioStarted);row.lastTextMs=Math.round(performance.now()-audioStarted);}options.onText(event);},
+   transcriberFactory:settings=>new GeminiTranscriber({...settings,onInterim:(text,range)=>{if(row){row.firstInterimMs??=Math.round(performance.now()-audioStarted);row.interims.push({text,range});}settings.onInterim(text,range);},onFinal:(text,range)=>{if(row){row.firstFinalMs??=Math.round(performance.now()-audioStarted);row.lastFinalMs=Math.round(performance.now()-audioStarted);row.finals.push({text,range});}settings.onFinal(text,range);}}),
  })});
 await new Promise(resolve=>app.server.listen(0,'127.0.0.1',resolve));const address='ws://127.0.0.1:'+app.server.address().port+'/connect';
 async function until(fn,label,timeout=15000){const at=performance.now();while(!fn()){if(performance.now()-at>timeout)throw Error(label+'_timeout');await delay(10);}}
-async function connect(role){const ws=new Ws(address,{origin:'https://test.local'}),events=[],media=[];sockets.push(ws);ws.on('error',()=>{});ws.on('message',b=>{const e=JSON.parse(b.toString());if(e.event==='media')media.push({at:performance.now(),payload:e.payload||e.media?.payload});else{events.push({at:performance.now(),...e});if(row&&e.event==='analysis_error')row.errors.push(e.message);}});await until(()=>ws.readyState===1,'socket');ws.send(JSON.stringify({event:'auth',token:signTicket('local-verification-only',{role})}));return {ws,events,media,send:e=>ws.send(JSON.stringify(e))};}
+async function connect(role){const ws=new Ws(address,{origin:'https://test.local'}),events=[],media=[];sockets.push(ws);ws.on('error',()=>{});ws.on('message',b=>{const e=JSON.parse(b.toString());if(e.event==='media')media.push({at:performance.now(),payload:e.payload||e.media?.payload,range:e.range,source:e.source});else{events.push({at:performance.now(),...e});if(row&&e.event==='analysis_error')row.errors.push(e.message);}});await until(()=>ws.readyState===1,'socket');ws.send(JSON.stringify({event:'auth',token:signTicket('local-verification-only',{role})}));return {ws,events,media,send:e=>ws.send(JSON.stringify(e))};}
 async function play(peer,pcm,callId){const at=performance.now();for(let pos=0;pos<pcm.length+32000;pos+=640){await delay(Math.max(0,at+pos/32-performance.now()));const frame=Buffer.alloc(640);if(pos<pcm.length)pcm.copy(frame,0,pos,Math.min(pos+640,pcm.length));peer.send({event:'media',callId,format:'pcm16-16000',payload:frame.toString('base64')});}}
 const selected=process.argv.find(x=>x.startsWith('--sample='))?.slice(9)?.split(',')||['normal','attack','thirdparty'];
 try{
@@ -47,6 +47,7 @@ try{
   const callId=caller.events.find(e=>e.event==='waiting').callId;officer.send({event:'accept',callId});await until(()=>caller.events.some(e=>e.event==='active'),'active');audioStarted=performance.now();
   await play(caller,pcm,callId);await delay(3000);
   const call=app.calls.get(callId);await until(()=>!call.analysis.jobs.size&&!call.analysis.guard.running,'analysis',25000);
+  await until(()=>!call.relay.playback.out?.length,'reviewed_playback',30000);
   const events=officer.events.slice(eventBefore),shield=events.find(e=>e.event==='protection'&&e.enabled&&e.reason==='욕설·위협 표현 감지');
   row.shieldMs=shield?Math.round(shield.at-audioStarted):null;row.heardFrames=officer.media.length-before;
   row.firstMediaMs=officer.media[before]?Math.round(officer.media[before].at-audioStarted):null;
@@ -54,6 +55,9 @@ try{
   row.textAfterFinalMs=row.lastTextMs==null||row.lastFinalMs==null?null:row.lastTextMs-row.lastFinalMs;
   row.checks.correctProtection=source.name==='attack'?!!shield:!events.some(e=>e.event==='protection'&&e.enabled);
   row.checks.noAnalysisErrors=row.errors.length===0;
+  row.checks.allFramesReviewed=officer.media.slice(before).every(m=>m.source==='reviewed'&&m.range&&row.audioReviews.some(r=>r.allow&&r.range&&m.range.startMs>=r.range.startMs&&m.range.endMs<=r.range.endMs));
+  row.checks.normalAudioDelivered=source.name==='normal'?row.heardFrames>0:true;
+  row.checks.rejectedAudioNotDelivered=officer.media.slice(before).every(m=>!row.audioReviews.some(r=>r.allow===false&&r.range&&m.range.startMs<r.range.endMs&&m.range.endMs>r.range.startMs));
   row.checks.noFramesAfterShield=!shield||officer.media.slice(before).every(e=>e.at<=shield.at);
   row.checks.factsPreserved=source.required.every(word=>call.segments.some(s=>s.text.includes(word)));
   row.texts=call.segments;

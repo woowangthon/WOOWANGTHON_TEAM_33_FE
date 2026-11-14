@@ -39,15 +39,15 @@ export function createPhoneServer({secret,key,geminiKey,analysisProvider='gemini
       send(agent,{event:'accept_error',callId:c?.id,message:'이미 연결 중이거나 종료된 통화입니다. 상담 목록을 확인해 주세요.'});return;
     }
     c.accepted=true;c.agent=agent;clearTimeout(c.waitTimer);c.startedAt=new Date().toISOString();
-    c.relay=new FilterRelay({delayMs:playbackDelayMs,caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:(payload,pcm)=>{if(pcm&&c.analysis?.pushPcm)c.analysis.pushPcm(pcm);else c.analysis?.push(Buffer.from(payload,'base64'));},onAudioError:()=>protect(c,'음성 재생 버퍼 확인 필요',undefined,'','analysis_error')});c.relay.start(c.id);
+    c.relay=new FilterRelay({reviewed:analysisProvider==='gemini',delayMs:playbackDelayMs,caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:(payload,pcm)=>{if(pcm&&c.analysis?.pushPcm)c.analysis.pushPcm(pcm);else c.analysis?.push(Buffer.from(payload,'base64'));},onAudioError:()=>protect(c,'음성 재생 버퍼 확인 필요',undefined,'','analysis_error')});c.relay.start(c.id);
     send(agent,{event:'connecting',callId:c.id});list();
-    try{c.analysis=analysisFactory({key,model,onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>send(agent,{event:'processing',callId:c.id,turnId}),onSettled:turnId=>send(agent,{event:'processing_done',callId:c.id,turnId})});await c.analysis.start();if(c.ended){await c.analysis.stop();return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
+    try{c.analysis=analysisFactory({key,model,onAudioBoundary:(id,range)=>c.relay.audioBoundary(id,range),onAudioReviewed:(id,allow)=>c.relay.audioReviewed(id,allow),onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});c.segments.sort((a,b)=>(c.turnOrder.get(a.turnId)??0)-(c.turnOrder.get(b.turnId)??0));send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>{c.turnOrder.set(turnId,c.turnOrder.size);send(agent,{event:'processing',callId:c.id,turnId});},onSettled:turnId=>send(agent,{event:'processing_done',callId:c.id,turnId})});await c.analysis.start();if(c.ended){await c.analysis.stop();return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
     catch{await end(c,'음성 분석 서버에 연결하지 못했습니다.');}
   }
   function incoming(socket,source){
     resetDay();
     if(!available()||active().length>=2||dailySeconds>=maxDailySeconds){send(socket,{event:'ended',reason:dailySeconds>=maxDailySeconds?'오늘의 음성 상담 이용 한도에 도달했습니다.':'현재 연결 가능한 담당자가 없습니다.'});socket.close(1000);return null;}
-    const c={id:randomUUID(),source,socket,segments:[],accepted:false,ready:false,ended:null,startedAt:new Date().toISOString(),frames:0,windowAt:Date.now(),windowFrames:0};calls.set(c.id,c);socket.callId=c.id;
+    const c={id:randomUUID(),source,socket,segments:[],turnOrder:new Map(),accepted:false,ready:false,ended:null,startedAt:new Date().toISOString(),frames:0,windowAt:Date.now(),windowFrames:0};calls.set(c.id,c);socket.callId=c.id;
     c.waitTimer=setTimeout(()=>void end(c,'담당자 연결 대기 시간이 지났습니다.'),waitSeconds*1000);
     send(socket,{event:'waiting',callId:c.id});list();return c;
   }
@@ -64,7 +64,7 @@ export function createPhoneServer({secret,key,geminiKey,analysisProvider='gemini
   const server=http.createServer(async(req,res)=>{
     const url=new URL(req.url,'http://localhost');
     res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
-    if(url.pathname==='/health'&&req.method==='GET'){resetDay();res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({ready:true,transport:'web',officers:agents.size,active:active().length,acceptingCalls:available()&&active().length<2&&dailySeconds<maxDailySeconds}));}
+    if(url.pathname==='/health'&&req.method==='GET'){resetDay();res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({ready:true,audioPolicy:analysisProvider==='gemini'?'final_reviewed_ranges':'legacy_delay',transport:'web',officers:agents.size,active:active().length,acceptingCalls:available()&&active().length<2&&dailySeconds<maxDailySeconds}));}
     res.writeHead(404);res.end();
   });
   const wss=new Ws.WebSocketServer({noServer:true,maxPayload:18000,perMessageDeflate:false});
@@ -113,6 +113,6 @@ export function createPhoneServer({secret,key,geminiKey,analysisProvider='gemini
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   const origins=(process.env.PHONE_ALLOWED_ORIGINS||'https://shield-solve-staff.vercel.app,https://shield-and-solve.vercel.app,http://127.0.0.1:3100').split(',').map(s=>s.trim()).filter(Boolean);
   const app=createPhoneServer({secret:process.env.PHONE_BRIDGE_SECRET,key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,analysisProvider:process.env.PHONE_ANALYSIS_PROVIDER||'gemini',textProvider:process.env.PHONE_TEXT_PROVIDER||'gemini',geminiModel:process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite',transcriptionModel:process.env.PHONE_GEMINI_TRANSCRIPTION_MODEL||'gemini-3.5-transcribe-live',safetyIntervalMs:Number(process.env.PHONE_SAFETY_INTERVAL_MS||400),playbackDelayMs:Number(process.env.PHONE_AUDIO_DELAY_MS||2500),origins,model:process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'});
-  app.server.listen(Number(process.env.PHONE_PORT||4318),'127.0.0.1',()=>console.log('Phone bridge listening on 127.0.0.1:4318'));
+  app.server.listen(Number(process.env.PHONE_PORT||4318),'127.0.0.1',()=>console.log('Phone bridge listening on 127.0.0.1:'+app.server.address().port));
   for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>void app.close().then(()=>process.exit(0)));
 }

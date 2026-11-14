@@ -5,13 +5,13 @@ import {TargetPipeline} from './target-policy.mjs';
 import {LiveSafety} from './live-safety.mjs';
 import {pcm16k} from './clova-stream.mjs';
 export class GeminiCallAnalysis {
-  constructor({geminiKey,key,textProvider='gemini',onText,onShield,onError,onProcessing=()=>{},onSettled=()=>{},model,transcriptionModel='gemini-3.5-transcribe-live',safetyIntervalMs=400,pipeline,transcriberFactory=options=>new GeminiTranscriber(options)}){
+  constructor({geminiKey,key,textProvider='gemini',onText,onShield,onError,onProcessing=()=>{},onSettled=()=>{},onAudioBoundary=()=>{},onAudioReviewed=()=>{},model,transcriptionModel='gemini-3.5-transcribe-live',safetyIntervalMs=400,pipeline,transcriberFactory=options=>new GeminiTranscriber(options)}){
     if(!['openai','gemini'].includes(textProvider)||(!pipeline&&(textProvider==='openai'?!key:!geminiKey)))throw Error('Phone_text_configuration_missing');
-    Object.assign(this,{onText,onShield,onError,onProcessing,onSettled});this.pipeline=pipeline||(textProvider==='openai'?new TargetPipeline({apiKey:key,model:model||'gpt-6-luna'}):new GeminiPipeline({apiKey:geminiKey,model:model||'gemini-3.5-flash-lite'}));
+    Object.assign(this,{onText,onShield,onError,onProcessing,onSettled,onAudioBoundary,onAudioReviewed});this.pipeline=pipeline||(textProvider==='openai'?new TargetPipeline({apiKey:key,model:model||'gpt-6-luna'}):new GeminiPipeline({apiKey:geminiKey,model:model||'gemini-3.5-flash-lite'}));
     this.history=[];this.jobs=new Set();this.turn=null;this.ready=false;this.ended=false;this.stopping=false;this.healthy=true;
     this.guard=new LiveSafety({intervalMs:safetyIntervalMs,check:(text,options)=>this.pipeline.checkSafety(text,options),onResult:(turn,result)=>{this.healthy=true;this.protect(turn,result);},onError:error=>this.error(/insufficient_quota/.test(error?.message||'')?'OpenAI 크레딧을 확인해 주세요. 수신 음성을 보호하고 있습니다.':error?.status===429||error?.message==='Gemini_HTTP_429'?'AI 요청 한도에 도달해 수신 음성을 보호하고 있습니다.':'음성 보호 판정을 확인하지 못했습니다.')});
     this.turns=new Set();
-    this.transcriber=transcriberFactory({apiKey:geminiKey,model:transcriptionModel,onInterim:text=>this.interim(text),onFinal:text=>this.final(text),onError:()=>this.error('음성 인식 연결을 확인해 주세요.')});
+    this.transcriber=transcriberFactory({apiKey:geminiKey,model:transcriptionModel,onInterim:text=>this.interim(text),onFinal:(text,range)=>this.final(text,range),onError:()=>this.error('음성 인식 연결을 확인해 주세요.')});
   }
   makeTurn(){const turn={id:randomUUID(),prefix:this.history.slice(-3).join('\n'),currentText:'',partial:'',shielded:false,finalReview:false};this.turns.add(turn);return turn;}
   update(turn,text){turn.currentText=text;turn.partial=(turn.prefix?turn.prefix+'\n':'')+text;}
@@ -25,9 +25,10 @@ export class GeminiCallAnalysis {
   }
   canResume(){return this.ready&&this.healthy&&!this.ended&&!this.stopping;}
   error(message){if(!this.ended){this.healthy=false;this.onError(message);}}
-  final(text){
+  final(text,range){
     if(this.ended)return;const turn=this.turn||this.makeTurn();this.turn=null;this.update(turn,text);this.guard.finish(turn);
     this.history.push(text);if(this.history.length>3)this.history.shift();
+    if(!this.stopping)this.onAudioBoundary(turn.id,range);
     if(this.jobs.size>=3){this.error('일부 음성 내용을 다시 확인해야 합니다.');this.turns.delete(turn);return;}
     this.onProcessing(turn.id);
     const job=this.review(turn).catch(()=>this.error('일부 음성 내용을 정리하지 못했습니다.')).finally(()=>{this.onSettled(turn.id);this.turns.delete(turn);this.jobs.delete(job);});this.jobs.add(job);
@@ -35,7 +36,10 @@ export class GeminiCallAnalysis {
   async review(turn){
     const [summary,safety]=await Promise.allSettled([
       this.pipeline.neutralize(turn.currentText),
-      this.pipeline.checkSafety(turn.partial,{currentText:turn.currentText}).then(result=>{this.healthy=true;this.protect(turn,result);}),
+      this.pipeline.checkSafety(turn.partial,{currentText:turn.currentText}).then(result=>{
+        this.healthy=true;this.protect(turn,result);
+        if(!this.ended&&!this.stopping)this.onAudioReviewed(turn.id,!turn.shielded&&!result.directAbuse&&['normal','criticism','reported_speech'].includes(result.scope));
+      }),
     ]);
     if(safety.status==='rejected')this.error('음성 보호 판정을 확인하지 못했습니다.');
     if(summary.status==='rejected')throw summary.reason;

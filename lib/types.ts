@@ -14,6 +14,7 @@ export type CoverageReview = {version:1|2|3|4|5|6|7;draft:string;sourceSnapshot:
 export type Analysis = {
   expressionRepair?:{initialFindings:ExpressionFinding[];invalidIndexes:number[]};
   summaryHarness?:import('./summary-harness').SummaryAudit;
+  replyHarness?:import('./reply-harness').ReplyAudit;
   safeTitle?:string; expressionFindings?:ExpressionFinding[];
   summary:string; requests:string[]; questions:string[]; shieldLevel:'normal'|'caution'|'threat'; shieldReason:string;
   sensitiveQuotes:string[]; actions:string[]; draft:string; citationIds:string[]; citations:Citation[]; warnings:string[];
@@ -26,6 +27,7 @@ export type RequestTracking = {version:1;confirmedAt:string|null;items:TrackedRe
 export type AutoState = 'idle'|'queued'|'processing'|'blocked'|'completed'|'failed';
 export const autoStates:Record<AutoState,string>={idle:'분석 전',queued:'자동 분석 대기',processing:'자동 분석 중',blocked:'분석 대기',completed:'분석 완료',failed:'재시도 필요'};
 export type Complaint = { id:string; title:string; body:string; category:string; location:string; occurred_at:string;
+  source_data?:import('./public-data').PublicDataSource|null;
   request_tracking?:RequestTracking|null;
   display_title?:string;
   channel?:'web'|'phone';

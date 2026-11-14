@@ -4,6 +4,7 @@ import { inlineReferences } from "../../../lib/citations";
 import { supplementedComplaint } from "../../../lib/analysis-stages";
 import { semanticPlan,rerank } from "../../../lib/semantic-search";
 import { z } from "zod";
+import {publicDataSource} from '../../../lib/public-data';
 import { getCurrentUser } from "../../user";
 import { publicStaffInbox, officeForOwner, officeScope, publicComplaint } from "../../../lib/access";
 import {
@@ -36,14 +37,15 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 180;
 const createSchema = z.object({
   title: z.string().trim().min(3).max(120),
-  body: z.string().trim().min(10).max(6000),
+  body: z.string().trim().min(1).max(6000),
   category: z.enum(categories),
-  location: z.string().trim().min(2).max(200),
-  occurredAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  location: z.string().trim().max(200),
+  occurredAt: z.union([z.literal(''),z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]),
+  sourceRecordId:z.string().max(40).optional(),
   consent: z.literal(true),
   channel: z.enum(['web','phone']).optional(),
   sample: z.boolean().optional(),
-});
+}).refine(input=>!!input.sourceRecordId||input.body.length>=10,{message:'민원 내용을 10자 이상 입력해 주세요.',path:['body']});
 function json(value: unknown, status = 200) {
   return Response.json(value, {
     status,
@@ -70,10 +72,11 @@ async function addComplaint(
   const id =
     "SS-" + crypto.randomUUID().replaceAll("-", "").slice(0, 12).toUpperCase();
   const time = now();
+  const source=publicDataSource(input.sourceRecordId,input.body);
   await database().batch([
     database()
       .prepare(
-        "INSERT INTO complaints (id,owner,title,body,category,location,occurred_at,is_sample,created_at,updated_at,auto_state,channel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO complaints (id,owner,title,body,category,location,occurred_at,is_sample,created_at,updated_at,auto_state,channel,source_data) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       )
       .bind(
         id,
@@ -88,11 +91,12 @@ async function addComplaint(
         time,
         "queued",
         input.channel || 'web',
+        source?JSON.stringify(source):null,
       ),
     eventStatement(
       owner,
       id,
-      input.channel==='phone'?(sample?'가상 음성 민원 접수':'음성 민원 접수'):sample?'가상 시나리오 민원 등록':'홈페이지 민원 접수',
+      source?'공개 데이터 검증용 접수 · '+source.recordId:input.channel==='phone'?(sample?'가상 음성 민원 접수':'음성 민원 접수'):sample?'가상 시나리오 민원 등록':'홈페이지 민원 접수',
     ),
   ]);
   return id;
@@ -168,7 +172,7 @@ async function handler(
       if(staff&&input.channel!=="phone")return json({error:"담당자 직접 등록은 더 이상 제공하지 않습니다."},410);
       await rateLimit(owner, "create", 60);
       if(input.channel==='phone'&&!staff)throw new AppError('전화 민원은 담당자가 접수합니다.',403);
-      if (
+      if (input.occurredAt && (
         input.occurredAt >
           new Intl.DateTimeFormat("en-CA", {
             timeZone: "Asia/Seoul",
@@ -179,7 +183,7 @@ async function handler(
         Number.isNaN(Date.parse(input.occurredAt)) ||
         new Date(input.occurredAt).toISOString().slice(0, 10) !==
           input.occurredAt
-      )
+      ))
         throw new AppError("발생일을 확인해 주세요.");
       const count = await database()
         .prepare("SELECT count(*) AS n FROM complaints WHERE owner=? AND deleted_at IS NULL")

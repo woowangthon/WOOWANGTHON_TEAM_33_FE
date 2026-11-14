@@ -6,7 +6,7 @@ function harness({draft='',conflict=false,missing=false,unverified=false}={}){
  const row={owner:'guest:test',analysis_checkpoint:JSON.stringify({analysis,evidence:{citations:[],warnings:[]}})},writes=[];
  const stubs={
   './server':{database:()=>({prepare:sql=>({bind:(...values)=>({first:async()=>missing?null:row,run:async()=>{writes.push({sql,values});return {meta:{changes:conflict&&sql.includes('SET evidence=')?0:1}};}})})}),credentials:async()=>({provider:'openai',openai:'synthetic',law:'synthetic'}),decodeComplaint:()=>c,now:()=> 'now'},
-  './summary-harness':{sourceHash:()=> 'source:test'},'./harness-policy':{harnessPolicy:{version:2}},'./access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{}
+  './summary-harness':{sourceHash:()=> 'source:test'},'./harness-policy':{harnessPolicy:{version:2}},'./access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{},'./reply-harness':{replyIsVerified:()=>true}
  };
  const e={};new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/analysis-stages.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(n=>{assert.ok(n in stubs,'Unexpected dependency '+n);return stubs[n];},e);
  return {...e,writes,c,analysis,run:stage=>e.runAnalysisStage('test',1,stage)};
@@ -29,3 +29,9 @@ test('existing citizen corrections remain context when reanalyzing historical re
 });
 
 test('unverified summaries cannot be saved as completed results',async()=>{await assert.rejects(harness({unverified:true}).run('finish'),/Summary verification missing/);});
+
+test('credit failure preserves an actionable message without marking completion',async()=>{
+ const h=harness();await h.failAnalysis('test',1,true);
+ assert.match(h.writes[0].values[0],/OpenAI 크레딧/);assert.match(h.writes[0].sql,/auto_state='failed'/);
+ assert.match(h.writes[0].sql,/auto_state!='completed'/);
+});

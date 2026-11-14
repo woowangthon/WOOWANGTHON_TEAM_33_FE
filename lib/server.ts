@@ -13,6 +13,7 @@ export function decodeComplaint(row:Record<string,unknown>):Complaint {
   // Retired supplement waits return to the ordinary review flow without altering history.
   if(row.status==='waiting')result.status='reviewing';
   result.supplements=JSON.parse(String(row.supplements||'[]'));
+  result.source_data=row.source_data?JSON.parse(String(row.source_data)):null;
   result.coverage_review=row.coverage_review?JSON.parse(String(row.coverage_review)):null;
   result.request_tracking=row.request_tracking?JSON.parse(String(row.request_tracking)):null;
   result.published_citations=JSON.parse(String(row.published_citations||'[]'));
