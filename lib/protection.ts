@@ -20,6 +20,10 @@ export function protectedTitle(c: Pick<Complaint, 'title' | 'analysis' | 'displa
 // Do not repeat an attack in the work summary, even when it was paraphrased.
 const attackNarrative = /(?:담당자|공무원|직원|너|당신).{0,50}(?:이름|실명|신상|신원).{0,40}(?:공개|유포|올리|게시)|(?:찾아가|찾아와|찾아오).{0,30}(?:죽|때리|가만두|해치)|(?:죽이겠|죽여버|가만두지|해치겠|협박|위협|욕설|인신공격|성희롱)/u;
 export function businessSummary(c:Pick<Complaint,'title'|'body'|'analysis'|'display_title'>) {
+  // New results have already passed source/role-aware verification. Never delete or
+  // truncate their sentences at display time: that could erase a victim report.
+  if(c.analysis?.summaryHarness?.status==='verified')return c.analysis.summary;
+  // Read compatibility for old stored results, until explicitly reanalysed.
   const quotes=[...(c.analysis?.sensitiveQuotes||[]),...expressionFindings(c).filter(f=>f.kind!=='criticism').map(f=>f.quote)];
   const sentences=(c.analysis?.summary||'').match(/[^.!?\n]+(?:[.!?]+|$)/gu)||[];
   const safe=sentences.map(s=>s.trim()).filter(s=>s&&!maskText(s,quotes).includes('[보호된 표현]')&&!attackNarrative.test(s));
@@ -28,7 +32,7 @@ export function businessSummary(c:Pick<Complaint,'title'|'body'|'analysis'|'disp
     if((result+' '+sentence).trim().length>220)break;
     result+=(result?' ':'')+sentence;
   }
-  return result||protectedTitle(c);
+  return result;
 }
 export function expressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
   const findings = (c.analysis?.expressionFindings || []).filter(f => c[f.source].includes(f.quote));

@@ -1,3 +1,5 @@
+import { harnessPolicy } from './harness-policy';
+import type { SummaryFact } from './summary-harness';
 import { AppError } from './server';
 import { analysisInstruction, jsonSchema, validateAnalysis } from './gemini';
 import type { Analysis, Citation, Complaint } from './types';
@@ -8,12 +10,12 @@ type OpenAIResponse = {
   error?: { code?: string; type?: string };
 };
 
-export async function generateOpenAIAnalysis(key:string, model:string, c:Complaint, citations:Citation[], warnings:string[], mode:string):Promise<Analysis> {
+export async function generateOpenAIAnalysis(key:string, model:string, c:Complaint, citations:Citation[], warnings:string[], mode:string,facts:SummaryFact[]=[]):Promise<Analysis> {
   if (!key) throw new AppError('현재 AI 분석을 사용할 수 없습니다.', 503);
   const body=JSON.stringify({
     model,
     instructions:analysisInstruction,
-    input:JSON.stringify({complaint:{title:c.title,body:c.body,location:c.location,category:c.category,occurredAt:c.occurred_at},confirmedRequests:c.request_tracking?.confirmedAt?c.request_tracking.items.map(r=>({text:r.text,withdrawn:r.withdrawn})):null,retrievedArticles:citations}),
+    input:JSON.stringify({complaint:{title:c.title,body:c.body,location:c.location,category:c.category,occurredAt:c.occurred_at},confirmedRequests:c.request_tracking?.confirmedAt?c.request_tracking.items.map(r=>({text:r.text,withdrawn:r.withdrawn})):null,retrievedArticles:citations,groundedFacts:facts,summaryPolicy:harnessPolicy.summary}),
     reasoning:{effort:'low'},
     text:{format:{type:'json_schema',name:'complaint_analysis',strict:true,schema:jsonSchema}},
     max_output_tokens:8192,
@@ -37,12 +39,12 @@ export async function generateOpenAIAnalysis(key:string, model:string, c:Complai
   if (!response.ok) {
     if (response.status===429) {
       if (data?.error?.type==='insufficient_quota'||['insufficient_quota','credit_balance_exhausted'].includes(data?.error?.code||'')) {
-        throw new AppError('AI 분석 서비스의 이용 잔액 또는 사용 한도가 부족합니다. 접수 원문과 검색 근거는 보존됩니다.',503);
+        throw new AppError('AI 분석 서비스의 이용 잔액 또는 사용 한도가 부족합니다. 접수 원문과 검색 근거는 보존됩니다.',503,false);
       }
       throw new AppError('AI 분석 요청이 많습니다. 잠시 후 다시 시도해 주세요.',429);
     }
-    if ([401,403].includes(response.status)) throw new AppError('AI 분석 서비스의 인증 또는 모델 접근 권한을 확인해야 합니다.',503);
-    if (response.status===404) throw new AppError('현재 AI 분석 모델을 사용할 수 없습니다.',503);
+    if ([400,401,403].includes(response.status)) throw new AppError('AI 분석 서비스의 인증 또는 모델 접근 권한을 확인해야 합니다.',503,false);
+    if (response.status===404) throw new AppError('현재 AI 분석 모델을 사용할 수 없습니다.',503,false);
     throw new AppError('AI 분석 요청을 처리하지 못했습니다. 잠시 후 다시 시도해 주세요.',502);
   }
   const parts=data?.output?.filter(item=>item.type==='message').flatMap(item=>item.content||[])||[];

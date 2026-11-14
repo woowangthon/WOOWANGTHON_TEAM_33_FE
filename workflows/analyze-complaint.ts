@@ -1,10 +1,10 @@
-import { RetryableError } from 'workflow';
+import { RetryableError,FatalError } from 'workflow';
 import { runAnalysisStage,failAnalysis,type Stage } from '../lib/analysis-stages';
 
 export async function analyzeComplaint(id:string,generation:number) {
   'use workflow';
   try {
-    for(const stage of ['plan','evidence','analysis','finish'] as const) {
+    for(const stage of ['plan','evidence','analysis','summary','finish'] as const) {
       if(!await executeStage(id,generation,stage))return {cancelled:true};
     }
     return {completed:true};
@@ -13,7 +13,10 @@ export async function analyzeComplaint(id:string,generation:number) {
 async function executeStage(id:string,generation:number,stage:Stage) {
   'use step';
   try{return await runAnalysisStage(id,generation,stage);}
-  catch{throw new RetryableError('Analysis stage temporarily unavailable',{retryAfter:'15s'});}
+  catch(error){
+    if(error instanceof Error&&'retryable' in error&&error.retryable===false)throw new FatalError(error.message);
+    throw new RetryableError('Analysis stage temporarily unavailable',{retryAfter:'15s'});
+  }
 }
 executeStage.maxRetries=3;
 async function markFailed(id:string,generation:number) {

@@ -16,7 +16,7 @@ export class CallAnalysis {
       const timeout=setTimeout(()=>reject(new Error('STT_connection_timeout')),15000);
       this.socket.on('error',()=>{clearTimeout(timeout);reject(new Error('STT_connection_failed'));if(this.ready)this.onError('음성 인식 연결이 끊겼습니다.');});
       this.socket.on('close',()=>{clearTimeout(timeout);reject(new Error('STT_connection_closed'));if(!this.ended&&this.ready)this.onError('음성 인식 연결이 끊겼습니다.');this.ready=false;});
-      this.socket.on('open',()=>this.socket.send(JSON.stringify({type:'session.update',session:{type:'transcription',audio:{input:{format:{type:'audio/pcm',rate:24000},transcription:{model:'gpt-live-transcribe',languages:['ko'],delay:'low',prompt:transcriptionContext},turn_detection:null}}}})));
+      this.socket.on('open',()=>this.socket.send(JSON.stringify({type:'session.update',session:{type:'transcription',audio:{input:{format:{type:'audio/pcm',rate:24000},transcription:{model:process.env.PHONE_LIVE_TRANSCRIPTION_MODEL||'gpt-live-transcribe',languages:['ko'],delay:'low',prompt:transcriptionContext},turn_detection:null}}}})));
       this.socket.on('message',bytes=>{
         try{
           const e=JSON.parse(bytes.toString());

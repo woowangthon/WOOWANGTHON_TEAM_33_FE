@@ -12,6 +12,7 @@ export type RequirementAudit = {requirements:Omit<RequirementCheck,'responseStat
 export type CoverageRequestPlan={sourceSnapshot:string;items:{id:string;kind:string;quote:string}[]};
 export type CoverageReview = {version:1|2|3|4|5|6|7;draft:string;sourceSnapshot:string;analysisSnapshot:string;requirements:RequirementCheck[];noRequestReason:string;checkedAt:string;harness?:{version:1;decisions:{id:string;rule:string}[];plan?:CoverageRequestPlan;observations?:unknown[]};evidenceRetry?:{attemptedIds:string[];recoveredIds:string[]};repair?:{attempted:true;accepted:boolean;originalDraft:string;beforeMissing:number;afterMissing:number;rejection?:'invalid_proposal'}};
 export type Analysis = {
+  summaryHarness?:import('./summary-harness').SummaryAudit;
   safeTitle?:string; expressionFindings?:ExpressionFinding[];
   summary:string; requests:string[]; questions:string[]; shieldLevel:'normal'|'caution'|'threat'; shieldReason:string;
   sensitiveQuotes:string[]; actions:string[]; draft:string; citationIds:string[]; citations:Citation[]; warnings:string[];

@@ -6,7 +6,7 @@ import { readableCitations } from './citations';
 export const runtime = process.env;
 export { database };
 export const now = () => new Date().toISOString();
-export class AppError extends Error { constructor(message:string, public status=400) {super(message);} }
+export class AppError extends Error { constructor(message:string, public status=400,public retryable=true) {super(message);} }
 export function decodeComplaint(row:Record<string,unknown>):Complaint {
   const { owner: _owner, auto_token: _token, auto_started_at: _started, analysis_checkpoint:_checkpoint, analysis_generation:_generation, workflow_run:_run, ...safe }=row;
   const result={...safe, draft_review:row.draft_review?JSON.parse(String(row.draft_review)):null, evidence:row.evidence?JSON.parse(String(row.evidence)):null, analysis: row.analysis ? JSON.parse(String(row.analysis)):null, tasks:JSON.parse(String(row.tasks || '[]'))} as Complaint;

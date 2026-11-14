@@ -1,3 +1,5 @@
+import { semanticPlan } from './semantic-search';
+import { verifyBusinessSummary } from './summary-harness';
 import { OFFICE, officeForOwner, officeScope } from "./access";
 import {
   AppError,
@@ -17,7 +19,7 @@ export async function queueAnalysis(id: string) {
   const stale = new Date(Date.now() - 240000).toISOString();
   const result = await database()
     .prepare(
-      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN analysis_checkpoint ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state!='processing' OR auto_started_at<?)",
+      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state!='processing' OR auto_started_at<?)",
     )
     .bind(id, stale)
     .run();
@@ -62,14 +64,15 @@ export async function processComplaint(id: string) {
       return;
     }
     await rateLimit(office, "automatic", 60);
+    const plan=aiKey?await semanticPlan(keys,c):undefined;
     const notes = keys.law
-      ? await autoSync(office, keys.law, c.category, c)
+      ? await autoSync(office, keys.law, c.category, c,plan)
       : ["법령 API가 연결되지 않아 저장된 공식 자료만 검색했습니다."];
     const docs = await database()
       .prepare("SELECT * FROM documents WHERE owner=?")
       .bind(office)
       .all<StoredDoc>();
-    const search = retrieve(docs.results, c);
+    const search = retrieve(docs.results, c,plan);
     const evidence = {
       ...search,
       warnings: [...notes, ...search.warnings],
@@ -88,7 +91,7 @@ export async function processComplaint(id: string) {
       );
       return;
     }
-    const analysis = await generateAnalysis(
+    const generated = await generateAnalysis(
       aiKey,
       keys.model,
       c,
@@ -96,7 +99,10 @@ export async function processComplaint(id: string) {
       evidence.warnings,
       search.mode,
       keys.provider,
+      plan?.facts,
     );
+    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary);
+    const analysis={...generated,summary:verified.summary,summaryHarness:verified.audit};
     // Read the latest draft after the network calls; never overwrite staff edits or approvals.
     const current = await database()
       .prepare("SELECT * FROM complaints WHERE id=? AND auto_token=?")

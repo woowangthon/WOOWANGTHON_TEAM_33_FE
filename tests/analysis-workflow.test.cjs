@@ -1,11 +1,12 @@
 const fs=require('node:fs'),ts=require('typescript'),test=require('node:test'),assert=require('node:assert/strict');
-function harness({draft='',conflict=false,missing=false}={}){
- const analysis={summary:'합성 요약',requests:['기존 내부 분석'],draft:'합성 민원에 대한 답변 초안입니다.',actions:[]};
+function harness({draft='',conflict=false,missing=false,unverified=false}={}){
+ const analysis={summaryHarness:{status:'verified',version:2,sourceHash:'source:test'},summary:'합성 요약',requests:['기존 내부 분석'],draft:'합성 민원에 대한 답변 초안입니다.',actions:[]};
  const c={id:'test',revision:2,title:'합성 민원',body:'현장을 확인해 주세요.',supplements:[],tasks:[],draft,analysis:null,status:'reviewing',request_tracking:{confirmedAt:'old',items:[{text:'과거 수정 사항',withdrawn:false}]}};
+ if(unverified)delete analysis.summaryHarness;
  const row={owner:'guest:test',analysis_checkpoint:JSON.stringify({analysis,evidence:{citations:[],warnings:[]}})},writes=[];
  const stubs={
   './server':{database:()=>({prepare:sql=>({bind:(...values)=>({first:async()=>missing?null:row,run:async()=>{writes.push({sql,values});return {meta:{changes:conflict&&sql.includes('SET evidence=')?0:1}};}})})}),credentials:async()=>({provider:'openai',openai:'synthetic',law:'synthetic'}),decodeComplaint:()=>c,now:()=> 'now'},
-  './access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{}
+  './summary-harness':{sourceHash:()=> 'source:test'},'./harness-policy':{harnessPolicy:{version:2}},'./access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{}
  };
  const e={};new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/analysis-stages.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(n=>{assert.ok(n in stubs,'Unexpected dependency '+n);return stubs[n];},e);
  return {...e,writes,c,analysis,run:stage=>e.runAnalysisStage('test',1,stage)};
@@ -26,3 +27,5 @@ test('old workflows skip retired stages without external calls or database write
 test('existing citizen corrections remain context when reanalyzing historical records',()=>{
  const h=harness();assert.match(h.supplementedComplaint(h.c).body,/과거 수정 사항/);
 });
+
+test('unverified summaries cannot be saved as completed results',async()=>{await assert.rejects(harness({unverified:true}).run('finish'),/Summary verification missing/);});

@@ -1,3 +1,4 @@
+import { officeJurisdiction,harnessPolicy } from './harness-policy';
 import { AppError, database, now } from './server';
 import type { Citation, Complaint } from './types';
 import { maskText } from './protection';
@@ -93,7 +94,7 @@ export function parseOfficialDocument(json:unknown,kind:'law'|'ordin') {
     return [{number:label,title:field(o,'조문제목','조제목'),text,effectiveDate:isoDate(field(o,'조문시행일자'))||effective}];
   });
   if(!articles.length)throw new AppError('조문을 찾을 수 없습니다. 공식 원문을 확인해 주세요.',502);
-  return {title,effective,articles,jurisdiction:kind==='law'?'전국':field(meta,'지자체기관명','지자체명')||(title.includes('청주시')?'청주시':'관할 확인 필요')};
+  return {title,effective,articles,jurisdiction:kind==='law'?'전국':field(meta,'지자체기관명','지자체명')||(title.includes(officeJurisdiction)?officeJurisdiction:'관할 확인 필요')};
 }
 export async function testLawConnection(oc:string) {
   // Search and body permissions can differ. Check both national and local data
@@ -102,7 +103,7 @@ export async function testLawConnection(oc:string) {
     const query=automaticQueries['생활폐기물'][kind];
     const results=await searchOfficial(oc,query,kind);
     const found=chooseOfficial(results,query,kind);
-    if(!found)throw new AppError(`${kind==='law'?'법률':'청주시 자치법규'} 검색 응답을 확인하지 못했습니다. 법제처 이용 승인과 OC 인증값을 확인해 주세요.`,400);
+    if(!found)throw new AppError(`${kind==='law'?'법률':officeJurisdiction+' 자치법규'} 검색 응답을 확인하지 못했습니다. 법제처 이용 승인과 OC 인증값을 확인해 주세요.`,400);
     parseOfficialDocument(await official(oc,'lawService.do',{target:kind==='law'?'eflaw':'ordin',ID:found.id}),kind);
   }));
   return true;
@@ -111,7 +112,7 @@ export async function importDocument(owner:string,oc:string,id:string,kind:'law'
   const json=await official(oc,'lawService.do',{target:kind==='law'?'eflaw':'ordin',...(version?.mst?{MST:version.mst,...(kind==='law'?{efYd:version.effectiveDate.replaceAll('-','')}:{})}:{ID:id})});
   const doc=parseOfficialDocument(json,kind);
   // The initial workspace is Cheongju; avoid silently mixing other municipalities.
-  if(kind==='ordin'&&!doc.title.includes('청주시')&&!doc.jurisdiction.includes('청주시'))throw new AppError('현재 작업공간은 청주시 조례만 지원합니다. 청주시 자료를 선택해 주세요.');
+  if(kind==='ordin'&&!doc.title.includes(officeJurisdiction)&&!doc.jurisdiction.includes(officeJurisdiction))throw new AppError('현재 작업공간의 관할('+officeJurisdiction+')과 다른 조례입니다.');
   if(version&&doc.effective!==version.effectiveDate)throw new AppError('요청한 시행일과 다른 법령이 반환되어 근거 수집을 중단했습니다.',502);
   const sourceUrl=version?.mst?(kind==='law'?`https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=${version.mst}&efYd=${doc.effective.replaceAll('-','')}`:`https://www.law.go.kr/LSW/ordinInfoP.do?ordinSeq=${version.mst}`):`https://www.law.go.kr/${kind==='law'?'법령':'자치법규'}/${encodeURIComponent(doc.title)}`;
   const key=owner+':'+kind+':'+id+(version?.mst?':'+version.mst+':'+doc.effective:'');
@@ -124,44 +125,16 @@ export const automaticQueries:Record<string,{law:string;ordin:string}>={
   '도로·교통':{law:'도로법',ordin:'청주시 도로'},
   '기타':{law:'민원 처리에 관한 법률',ordin:'청주시 민원'},
 };
-type SearchProfile={id:string;category:string;match:RegExp;terms:string[];laws:string[];ordinances:string[]};
-const profiles:SearchProfile[]=[
-  {id:'waste',category:'생활폐기물',match:/쓰레기|폐기물|종량제|무단\s*투기/,terms:['생활폐기물','수거','배출','처리'],laws:['폐기물관리법'],ordinances:['청주시 폐기물관리에 관한 조례']},
-  {id:'noise',category:'소음·환경',match:/소음|시끄|진동|공사장|확성기/,terms:['생활소음','진동','특정공사','규제기준'],laws:['소음ㆍ진동관리법','소음ㆍ진동관리법 시행규칙'],ordinances:[]},
-  {id:'air',category:'소음·환경',match:/악취|냄새|매연|분진|미세먼지|굴뚝|연기|매캐|먼지|대기/,terms:['악취','생활악취','배출','비산먼지','대기오염물질'],laws:['악취방지법','대기환경보전법'],ordinances:[]},
-  {id:'road',category:'도로·교통',match:/포트홀|도로|보도|인도|보행|가로등|맨홀|점용/,terms:['도로','유지','보수','보행','점용'],laws:['도로법'],ordinances:['청주시 도로점용허가 및 점용료 등 징수 조례']},
-  {id:'parking',category:'도로·교통',match:/주차|정차|차량|차를|교통|횡단보도/,terms:['주차','정차','금지','보행자','주차장'],laws:['도로교통법','주차장법'],ordinances:['청주시 주차장 조례']},
-  {id:'floor',category:'건축·주거',match:/층간\s*소음|윗집|아랫집/,terms:['층간소음','관리주체','조정','방지'],laws:['공동주택관리법'],ordinances:['청주시 공동주택 층간소음 방지에 관한 조례']},
-  {id:'housing',category:'건축·주거',match:/공동주택|아파트|관리비|관리사무소|누수/,terms:['공동주택','관리주체','하자','관리비'],laws:['공동주택관리법'],ordinances:['청주시 공동주택 관리 조례']},
-  {id:'building',category:'건축·주거',match:/건축|건물|증축|불법\s*건축|건축허가/,terms:['건축','허가','위반','시정'],laws:['건축법'],ordinances:['청주시 건축 조례']},
-  {id:'animal',category:'동물·공원',match:/유기견|유기묘|반려|동물|목줄|맹견/,terms:['동물','유실','유기','보호','구조','관리'],laws:['동물보호법'],ordinances:['청주시 반려동물보호센터 설치 및 운영 조례']},
-  {id:'park',category:'동물·공원',match:/공원|녹지|놀이터|공원시설/,terms:['도시공원','공원시설','관리','금지행위'],laws:['도시공원 및 녹지 등에 관한 법률'],ordinances:['청주시 도시공원 및 녹지 등에 관한 조례']},
-  {id:'petition',category:'기타',match:/민원\s*처리|처리\s*기한|접수\s*거부/,terms:['민원','처리','접수','신청'],laws:['민원 처리에 관한 법률'],ordinances:[]},
-];
 const normalizeTitle=(value:string)=>value.replace(/[\sㆍ·]/g,'');
-export type SearchPlan={profiles:string[];terms:string[];sources:{kind:'law'|'ordin';query:string}[];meaning?:string};
-export function searchPlan(category:string,input?:{title:string;body:string}) {
-  const content=maskText((input?.title||'')+' '+(input?.body||'')).replaceAll('[보호된 표현]','');
-  let selected=profiles.filter(p=>p.match.test(content));
-  if(!selected.length)selected=profiles.filter(p=>p.category===category).slice(0,1);
-  if(!selected.length)selected=[profiles[profiles.length-1]];
-  // A floor-noise complaint uses its own national/local rules, not construction-noise rules.
-  if(selected.some(p=>p.id==='floor'))selected=selected.filter(p=>p.id!=='noise');
-  if(selected.some(p=>p.id==='floor')&&!/관리비|누수|하자/.test(content))selected=selected.filter(p=>p.id!=='housing');
-  if(selected.some(p=>p.id==='parking')&&!/포트홀|파손|보수|점용|가로등|맨홀/.test(content))selected=selected.filter(p=>p.id!=='road');
-  selected=selected.slice(0,3);
-  const sources=selected.flatMap(p=>{
-    const parkingStreet=p.id==='parking'&&!/주차장|주차\s*요금|공영|부설/.test(content);
-    const laws=parkingStreet?['도로교통법']:p.laws;
-    const ordinances=parkingStreet||(p.id==='road'&&!/점용|점용료|노점|적치/.test(content))?[]:p.ordinances;
-    return [...laws.map(query=>({kind:'law' as const,query})),...ordinances.map(query=>({kind:'ordin' as const,query}))];
-  });
-  return {profiles:selected.map(p=>p.id),terms:[...new Set(selected.flatMap(p=>p.terms))],sources:sources.filter((s,i)=>sources.findIndex(x=>x.kind===s.kind&&x.query===s.query)===i).slice(0,7)};
+export type SearchPlan={profiles:string[];terms:string[];sources:{kind:'law'|'ordin';query:string}[];meaning?:string;facts?:import('./summary-harness').SummaryFact[];sourceHash?:string;harnessVersion?:number};
+// Offline fallback only searches existing documents; no category-specific law suggestions.
+export function searchPlan(_category:string,input?:{title:string;body:string}):SearchPlan {
+  return {profiles:[],terms:[...tokens((input?.title||'')+' '+(input?.body||''))],sources:[]};
 }
 function chooseOfficial(results:Awaited<ReturnType<typeof searchOfficial>>,query:string,kind:'law'|'ordin') {
   const normalized=normalizeTitle;
   const exact=results.find(r=>normalized(r.title)===normalized(query));
-  return exact||(kind==='ordin'?results.find(r=>r.title.includes('청주시')&&normalized(r.title).includes(normalized(query))):undefined);
+  return exact||(kind==='ordin'?results.find(r=>r.title.includes(officeJurisdiction)&&normalized(r.title).includes(normalized(query))):undefined);
 }
 export async function autoSync(owner:string,oc:string,category:string,input?:{title:string;body:string;occurred_at?:string},selectedPlan?:SearchPlan) {
   const plan=selectedPlan||searchPlan(category,input),notes:string[]=[];
@@ -204,13 +177,12 @@ export function tokens(text:string) {
 }
 export function retrieve(docs:StoredDoc[],input:Pick<Complaint,'title'|'body'|'category'|'occurred_at'|'location'>,selectedPlan?:SearchPlan,limit=8) {
   // Complaint meaning should outrank repeated category labels and abusive language.
-  const content=maskText(input.title+' '+input.body).replaceAll('[보호된 표현]','');
-  const query=tokens(content);
   const plan=selectedPlan||searchPlan(input.category,input);
+  const content=maskText(plan.meaning||input.title+' '+input.body).replaceAll('[보호된 표현]','');
+  const query=tokens(content);
   const expectedTitles=new Set(plan.sources.map(s=>normalizeTitle(s.query)));
   const hasPlannedDocs=docs.some(d=>expectedTitles.has(normalizeTitle(d.title)));
-  const household=/쓰레기|생활\s*폐기물|종량제|무단\s*투기/.test(content)&&!/사업장|공장|의료폐기물|건설폐기물|공사장/.test(content);
-  const expanded=[...new Set([...plan.terms,...(household?['생활폐기물','폐기물','수거','수집','운반','처리','배출']:[])])];
+  const expanded=[...new Set(plan.terms)];
   const date=input.occurred_at||now().slice(0,10);
   const candidates:({score:number}&Citation)[]=[];
   const warnings:string[]=[];
@@ -221,7 +193,7 @@ export function retrieve(docs:StoredDoc[],input:Pick<Complaint,'title'|'body'|'c
   for(const doc of newest.values()){
     if(hasPlannedDocs&&!expectedTitles.has(normalizeTitle(doc.title)))continue;
     if(doc.effective_date>date){warnings.push(`${doc.title}: 발생일 이후 시행 자료이므로 제외했습니다.`);continue;}
-    if(doc.kind==='ordin'&&!doc.jurisdiction.includes('청주시'))continue;
+    if(doc.kind==='ordin'&&!doc.jurisdiction.includes(officeJurisdiction))continue;
     if(Date.now()-Date.parse(doc.imported_at)>7*86400000){warnings.push(`${doc.title}: 동기화한 지 7일이 지나 검색에서 제외했습니다. 자료실에서 새로 가져와 주세요.`);continue;}
     const articles=JSON.parse(doc.articles) as Article[];
     for(const a of articles){if(a.effectiveDate>date||a.text.length>24000)continue;
@@ -231,26 +203,8 @@ export function retrieve(docs:StoredDoc[],input:Pick<Complaint,'title'|'body'|'c
       const compactHeading=a.title.replace(/\s|[ㆍ·]/g,'');
       const compactText=a.text.replace(/\s|[ㆍ·]/g,'');
       for(const term of expanded){if(compactHeading.includes(term))headingScore+=2;if(compactText.includes(term))textScore+=0.5;}
-      let score=headingScore+textScore/(1+Math.log1p(a.text.length/300));
-      if(plan.profiles.includes('floor')&&/층간소음/.test(compactHeading))score+=18;
-      if(plan.profiles.includes('floor')&&compactHeading==='층간소음의방지등')score+=16;
-      if(plan.profiles.includes('floor')&&/소규모|실태조사/.test(compactHeading)&&!/소규모|실태/.test(content))score-=12;
-      if(plan.profiles.includes('noise')&&/생활소음|특정공사|규제기준/.test(compactHeading))score+=12;
-      if(plan.profiles.includes('road')&&/포트홀|보수|파손|보행/.test(content)&&/도로의유지|도로의보수|도로의관리|도로관리청/.test(compactHeading))score+=14;
-      if(plan.profiles.includes('parking')&&/불법|금지|횡단보도|인도|막|단속/.test(content)&&/정차및주차의금지|주차금지|주차위반에대한조치/.test(compactHeading))score+=16;
-      if(/고속도로|고속국도/.test(compactHeading)&&!/고속도로|고속국도/.test(content))score-=30;
-      if(plan.profiles.includes('animal')&&/유실|유기|구조|보호조치/.test(compactHeading))score+=12;
-      if(plan.profiles.includes('park')&&/공원시설|도시공원의관리|금지행위/.test(compactHeading))score+=10;
-      if(plan.profiles.includes('building')&&/위반건축물|건축허가$/.test(compactHeading))score+=16;
-      if(!/수수료|위탁|위원회|조직|운영|조사|비용/.test(content)&&/수수료|위탁|위원회|구성|실태조사|비용|전산처리/.test(compactHeading))score-=12;
-      if(household){
-        // For vague household complaints, prefer public duties and disposal rules.
-        // Operator sanctions/finance become relevant only when explicitly requested.
-        if(!/과징금|대행|안전기준|정산|허가|사업장/.test(content)&&/생활폐기물의?처리|폐기물의?배출방법|청결유지|투기금지/.test(compactHeading))score+=18;
-        for(const topic of ['대행','과징금','안전기준','정산','허가','보고','실적','사업장','기금','보험'])
-          if(compactHeading.includes(topic)&&!content.includes(topic))score-=12;
-      }
-      if(score<3)continue;
+      const score=headingScore+textScore/(1+Math.log1p(a.text.length/300));
+      if(score<harnessPolicy.retrieval.minimumScore)continue;
       const relation=[...a.text.matchAll(/「([^」]+)」/g)].map(m=>m[1]).filter(name=>docs.some(d=>d.kind==='law'&&d.title.replace(/\s/g,'')===name.replace(/\s/g,''))).join(', ');
       candidates.push({id:doc.kind+':'+doc.source_id+':'+a.number,score,title:doc.title,article:a.number+(a.title?' ('+a.title+')':''),text:a.text,sourceUrl:doc.source_url,effectiveDate:a.effectiveDate,jurisdiction:doc.jurisdiction,kind:doc.kind,relation:relation?`조문에서 직접 인용: ${relation}`:undefined});
     }

@@ -19,7 +19,7 @@ export function createPhoneServer({secret,key,origins=[],model='gpt-6-luna',anal
   const available=()=>[...agents].some(a=>a.readyState===Ws.OPEN);
   function resetDay(){const date=new Date().toISOString().slice(0,10);if(date!==dailyDate){dailyDate=date;dailySeconds=0;}}
   const list=()=>{const rows=[...calls.values()].filter(c=>!c.ended||Date.now()-c.ended<3600000).map(snapshot);for(const agent of agents)send(agent,{event:'calls',calls:rows});};
-  function protect(c,reason){if(!c.accepted||c.ended)return;c.relay.enableShield({category:'threat',protectiveTakeoverRecommended:true,evidence:'보호'},'보호');c.reason=reason;send(c.agent,{event:'protection',callId:c.id,enabled:true,reason});list();}
+  function protect(c,reason,decision,transcript='',source='manual'){if(!c.accepted||c.ended)return;const changed=source==='ai'?c.relay.enableShield({category:decision?.category,protectiveTakeoverRecommended:decision?.directAbuse===true&&decision?.scope==='direct_attack',evidence:decision?.evidence},transcript):c.relay.protectManually(source,reason);if(!changed)return;c.reason=reason;send(c.agent,{event:'protection',callId:c.id,enabled:true,reason});list();}
   async function end(c,reason='통화가 종료되었습니다.'){
     if(!c||c.ended)return;c.ended=Date.now();clearTimeout(c.timer);clearTimeout(c.waitTimer);c.reason=reason;
     send(c.socket,{event:'ended',callId:c.id,reason});send(c.agent,{event:'ended',callId:c.id,reason});
@@ -35,7 +35,7 @@ export function createPhoneServer({secret,key,origins=[],model='gpt-6-luna',anal
     c.accepted=true;c.agent=agent;clearTimeout(c.waitTimer);c.startedAt=new Date().toISOString();
     c.relay=new FilterRelay({caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:payload=>c.analysis?.push(Buffer.from(payload,'base64'))});c.relay.start(c.id);
     send(agent,{event:'connecting',callId:c.id});list();
-    try{c.analysis=analysisFactory({key,model,onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:()=>protect(c,'욕설·위협 표현 감지'),onError:message=>{protect(c,'분석 확인 필요');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>send(agent,{event:'processing',callId:c.id,turnId})});await c.analysis.start();if(c.ended){await c.analysis.stop();return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
+    try{c.analysis=analysisFactory({key,model,onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>send(agent,{event:'processing',callId:c.id,turnId})});await c.analysis.start();if(c.ended){await c.analysis.stop();return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
     catch{await end(c,'음성 분석 서버에 연결하지 못했습니다.');}
   }
   function incoming(socket,source){

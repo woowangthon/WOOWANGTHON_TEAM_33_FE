@@ -33,7 +33,13 @@ export class FilterRelay {
     if (!decision.evidence || !transcript.includes(decision.evidence)) return false;
     this.mode = 'shield'; this.epoch++;
     this.officer({ event: 'clear', epoch: this.epoch });
-    this.events.push({ type: 'automatic_filter_enabled', callId: this.callId, at: performance.now() });
+    this.events.push({ type: 'automatic_filter_enabled', source:'ai', category:decision.category,evidence:decision.evidence,callId: this.callId, at: performance.now() });
+    return true;
+  }
+  protectManually(source,reason) {
+    if(this.mode!=='human'||!['manual','analysis_error'].includes(source))return false;
+    this.mode='shield';this.epoch++;this.officer({event:'clear',epoch:this.epoch});
+    this.events.push({type:'protective_filter_enabled',source,reason,callId:this.callId,at:performance.now()});
     return true;
   }
   resume() {

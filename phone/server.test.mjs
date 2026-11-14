@@ -21,7 +21,7 @@ test('real WebSocket bridge enforces roles, keeps human audio, shields incoming 
   caller.send({event:'accept',callId:id});await delay(10);assert.equal(app.calls.get(id).accepted,false);
   staff.send({event:'accept',callId:id});await until(()=>caller.events.some(e=>e.event==='active'));
   const payload=Buffer.alloc(160,encodeMuLaw(2500)).toString('base64');caller.send({event:'media',payload});staff.send({event:'media',callId:id,payload});await until(()=>staff.events.some(e=>e.event==='media')&&caller.events.some(e=>e.event==='media'));
-  analysis.onShield();await until(()=>staff.events.some(e=>e.event==='clear'));const before=staff.events.filter(e=>e.event==='media').length;
+  analysis.onShield({directAbuse:true,scope:'direct_attack',category:'threat',evidence:'해치겠다'},'담당자를 해치겠다');await until(()=>staff.events.some(e=>e.event==='clear'));assert.equal(app.calls.get(id).relay.events[0].evidence,'해치겠다');const before=staff.events.filter(e=>e.event==='media').length;
   caller.send({event:'media',payload});staff.send({event:'media',callId:id,payload});await until(()=>caller.events.filter(e=>e.event==='media').length===2);assert.equal(staff.events.filter(e=>e.event==='media').length,before);
   analysis.onText({turnId:'turn',text:'위치: 집 앞\n요청: 쓰레기 수거',facts:[],status:'audio_rechecked'});await until(()=>staff.events.some(e=>e.event==='neutral_text'));assert.equal(caller.events.some(e=>e.event==='neutral_text'),false);
   staff.send({event:'resume',callId:id});await until(()=>!app.calls.get(id).relay.mode.includes('shield'));caller.send({event:'media',payload});await until(()=>staff.events.filter(e=>e.event==='media').length===before+1);

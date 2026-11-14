@@ -5,9 +5,11 @@ import { semanticPlan,rerank } from './semantic-search';
 import { generateAnalysis } from './ai';
 import { structuredAI } from './structured-ai';
 import type { Analysis,Complaint } from './types';
+import { verifyBusinessSummary,sourceHash,SummaryRejectedError,type SummaryProgress } from './summary-harness';
+import { harnessPolicy } from './harness-policy';
 
-export type Stage='plan'|'evidence'|'analysis'|'requirements'|'review'|'coverage'|'finish';
-type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string};
+export type Stage='plan'|'evidence'|'analysis'|'summary'|'requirements'|'review'|'coverage'|'finish';
+type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string;summary?:boolean;summaryFailure?:unknown;summaryProgress?:SummaryProgress};
 export function supplementedComplaint(c:Complaint,photoNotes=''):Complaint {
   const messages=(c.supplements||[]).map(s=>`${s.role==='staff'?'담당자 보완 질문':'민원인 보완 답변'}: ${s.text}`).join('\n');
   const confirmed=c.request_tracking?.confirmedAt?JSON.stringify(c.request_tracking.items.map(r=>({request:r.text,withdrawn:r.withdrawn}))):'';
@@ -19,10 +21,15 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
   const row=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(id,generation).first<Record<string,unknown>>();
   if(!row)return false;
   const office=officeForOwner(String(row.owner)),keys=await credentials(office),key=keys.provider==='openai'?keys.openai:keys.gemini;
-  if(!key||!keys.law)throw new AppError('분석 서비스 연결을 확인해 주세요.',503);
+  if(!key||!keys.law)throw new AppError('분석 서비스 연결을 확인해 주세요.',503,false);
   const cp:Checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}')),original=decodeComplaint(row);
-  if(stage!=='finish'&&cp[stage])return true;
-  const messages={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'민원 요약과 답변 초안을 정리하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
+  const source=supplementedComplaint(original,cp.photoNotes);
+  const currentPlan=cp.plan?.harnessVersion===harnessPolicy.version&&cp.plan.sourceHash===sourceHash(source)&&!!cp.plan.facts;
+  if(stage==='plan'&&currentPlan)return true;
+  if(stage==='plan'&&!currentPlan){delete cp.plan;delete cp.evidence;delete cp.analysis;delete cp.summary;delete cp.summaryFailure;delete cp.summaryProgress;}
+  if((stage==='evidence'||stage==='analysis')&&cp[stage]&&currentPlan)return true;
+  if(stage==='summary'&&cp.analysis?.summaryHarness?.status==='verified'&&cp.analysis.summaryHarness.version===harnessPolicy.version&&cp.analysis.summaryHarness.sourceHash===sourceHash(source))return true;
+  const messages={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'민원 요약과 답변 초안을 정리하고 있습니다.',summary:'요약의 원문 근거를 확인하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
   await database().prepare("UPDATE complaints SET auto_state='processing',auto_message=?,auto_started_at=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(messages[stage],now(),id,generation).run();
   if(stage==='plan') {
     await rateLimit(office,'automatic',100);
@@ -40,16 +47,38 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
     const notes=await autoSync(office,keys.law,c.category,c,cp.plan);
     if(notes.some(n=>/지연|연결|실패|거부|처리하지|형식/.test(n)))throw new AppError('공식 법령 조회가 지연되어 다시 시도합니다.',502);
     const docs=await database().prepare('SELECT * FROM documents WHERE owner=?').bind(office).all<StoredDoc>();
-    const result=retrieve(docs.results,c,cp.plan,24);
+    const result=retrieve(docs.results,c,cp.plan,harnessPolicy.retrieval.candidateLimit);
     const citations=await rerank(keys,c,result.citations);
     cp.evidence={citations,warnings:[...notes.filter(n=>!citations.length||!n.includes('공식 검색 결과를 확인하지 못했습니다.')),...result.warnings],mode:'민원 의미 분석 · 조문 재평가 · 발생일 기준 연혁',generatedAt:now()};
   }
   if(stage==='analysis') {
     if(!cp.evidence)throw new Error('Evidence missing');
-    cp.analysis=await generateAnalysis(key,keys.model,c,cp.evidence.citations,cp.evidence.warnings,cp.evidence.mode,keys.provider);
+    if(!cp.plan?.facts||cp.plan.sourceHash!==sourceHash(c))throw new Error('Grounded summary plan missing');
+    cp.analysis=await generateAnalysis(key,keys.model,c,cp.evidence.citations,cp.evidence.warnings,cp.evidence.mode,keys.provider,cp.plan.facts);
+  }
+  if(stage==='summary') {
+    if(!cp.analysis||!cp.plan?.facts||cp.plan.sourceHash!==sourceHash(c))throw new Error('Grounded summary checkpoint missing');
+    try {
+      const verified=await verifyBusinessSummary(keys,c,cp.plan.facts,cp.analysis.summary,{progress:cp.summaryProgress,onProgress:async progress=>{
+        cp.summaryProgress=progress;
+        await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
+      }});
+      cp.analysis={...cp.analysis,summary:verified.summary,summaryHarness:verified.audit};cp.summary=true;delete cp.summaryFailure;
+    } catch(error) {
+      if(error instanceof SummaryRejectedError){
+        cp.summaryFailure=error.audit;
+        console.warn('Summary verification rejected',{id,version:harnessPolicy.version,issues:error.audit.attempts.at(-1)?.issues||['업무 사실을 확인하지 못했습니다.']});
+        // A bad fact extraction must be rebuilt on an explicit retry, rather than
+        // repeatedly rewriting a summary around the same incorrect facts.
+        if(error.audit.attempts.some(a=>a.review.factErrors.length||a.review.omittedBusinessFacts.length))delete cp.plan;
+        await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
+      }
+      throw error;
+    }
   }
   if(stage==='finish') {
     if(!cp.analysis||!cp.evidence)throw new Error('Checkpoint incomplete');
+    if(cp.analysis.summaryHarness?.status!=='verified'||cp.analysis.summaryHarness.version!==harnessPolicy.version||cp.analysis.summaryHarness.sourceHash!==sourceHash(c))throw new Error('Summary verification missing or stale');
     // A retried finish must not overwrite a staff draft, approval, deletion, or a newer run.
     const latestRow=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(id,generation).first<Record<string,unknown>>();
     if(!latestRow)return false;

@@ -15,6 +15,8 @@ function load(file){file=path.resolve(file);if(cache.has(file))return cache.get(
    if(name==='./access')return {...load('lib/access.ts'),OFFICE:office,officeForOwner:()=>office};
    if(name==='./review')return {verifyDraft:async(_key,_model,_provider,draft)=>({draft,status:'checked',validatorVersion:2,sentences:[{id:'S1',text:draft,status:'not_legal',reason:'가상 검토',references:[]}],checkedAt:new Date().toISOString()})};
    if(name==='./server')return {...load('lib/server.ts'),credentials:async()=>keys};
+   if(name==='./semantic-search')return {semanticPlan:async()=>({profiles:[],terms:[],sources:[],facts:[]})};
+   if(name==='./summary-harness')return {verifyBusinessSummary:async(_keys,_c,_facts,summary)=>({summary,audit:{status:'verified',version:2}})};
    if(name==='./laws')return {autoSync:async()=>[],retrieve:()=>({citations:[citation],warnings:[],mode:'test'})};
    if(name==='./ai')return {generateAnalysis:async(...args)=>{lastGenerationArgs=args;calls++;if(hold)await hold;if(fail)throw new Error('mock provider failure');return {summary:'테스트 요약',requests:['현장 확인'],questions:[],shieldLevel:'normal',shieldReason:'',sensitiveQuotes:[],actions:['현장 확인 준비'],draft:generatedDraft,citationIds:[citation.id],citations:[citation],warnings:[],generatedAt:new Date().toISOString(),model:'test',retrievalMode:'test'};}};
   }
