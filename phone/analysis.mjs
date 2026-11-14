@@ -15,12 +15,12 @@ export class CallAnalysis {
     await new Promise((resolve,reject)=>{
       const timeout=setTimeout(()=>reject(new Error('STT_connection_timeout')),15000);
       this.socket.on('error',()=>{clearTimeout(timeout);reject(new Error('STT_connection_failed'));if(this.ready)this.onError('음성 인식 연결이 끊겼습니다.');});
-      this.socket.on('close',()=>{if(!this.ended&&this.ready)this.onError('음성 인식 연결이 끊겼습니다.');this.ready=false;});
+      this.socket.on('close',()=>{clearTimeout(timeout);reject(new Error('STT_connection_closed'));if(!this.ended&&this.ready)this.onError('음성 인식 연결이 끊겼습니다.');this.ready=false;});
       this.socket.on('open',()=>this.socket.send(JSON.stringify({type:'session.update',session:{type:'transcription',audio:{input:{format:{type:'audio/pcm',rate:24000},transcription:{model:'gpt-live-transcribe',languages:['ko'],delay:'low',prompt:transcriptionContext},turn_detection:null}}}})));
       this.socket.on('message',bytes=>{
         try{
           const e=JSON.parse(bytes.toString());
-          if(e.type==='session.updated'){clearTimeout(timeout);this.ready=true;resolve();}
+          if(e.type==='session.updated'){clearTimeout(timeout);if(this.ended){this.socket.terminate();reject(new Error('STT_session_ended'));return;}this.ready=true;resolve();}
           if(e.type==='error'){clearTimeout(timeout);reject(new Error('STT_request_failed'));this.onError('음성 인식 요청을 처리하지 못했습니다.');}
           if(e.type==='input_audio_buffer.committed'){
             const turn=this.pending.shift();if(turn)this.items.set(e.item_id,turn);
@@ -62,8 +62,9 @@ export class CallAnalysis {
   async stop(){
     if(this.ended)return;
     if(this.ready)this.segmenter.flush();this.ended=true;
-    await Promise.race([Promise.allSettled([...this.jobs]),new Promise(resolve=>setTimeout(resolve,20000))]);
+    let timeout;
+    try{await Promise.race([Promise.allSettled([...this.jobs]),new Promise(resolve=>{timeout=setTimeout(resolve,20000);})]);}finally{clearTimeout(timeout);}
     if(this.jobs.size)this.onError('일부 발화의 분석 시간이 초과되었습니다. 접수 전 내용을 확인해 주세요.');
-    this.ready=false;this.socket.terminate();
+    this.ready=false;this.socket?.terminate();
   }
 }

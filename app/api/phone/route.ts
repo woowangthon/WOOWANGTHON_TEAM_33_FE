@@ -7,9 +7,9 @@ import {NextResponse} from 'next/server';
 import {phoneEndpoint} from '../../../lib/phone-runtime';
 export const dynamic='force-dynamic';
 export async function GET(){
-  const url=await phoneEndpoint();let online=false;
-  if(url)try{ const r=await fetch(new URL('/health',url),{cache:'no-store',signal:AbortSignal.timeout(4500)});online=r.ok&&(await r.json()).ready===true;}catch{}
-  return Response.json({online,number:process.env.PHONE_NUMBER||null},{headers:{'Cache-Control':'no-store'}});
+  const url=await phoneEndpoint();let online=false,available=false;
+  if(url)try{ const r=await fetch(new URL('/health',url),{cache:'no-store',signal:AbortSignal.timeout(4500)});const data=await r.json();online=r.ok&&data.ready===true;available=online&&data.acceptingCalls===true;}catch{}
+  return Response.json({online,available,transport:'web'},{headers:{'Cache-Control':'no-store'}});
 }
 export async function POST(request:Request){
   try{

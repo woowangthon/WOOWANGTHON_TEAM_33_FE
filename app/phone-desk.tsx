@@ -1,18 +1,19 @@
 'use client';
+import './phone-caller.css';
 import {useEffect,useRef,useState} from 'react';
 import {Phone,PhoneOff,Mic,MicOff,ShieldCheck,Headphones,LoaderCircle,ChevronRight,Play,Square} from 'lucide-react';
 import {categories} from '../lib/types';
 
 type Segment={turnId:string;text:string;status:string;at:string;facts:{kind:string;value:string}[]};
-type Call={id:string;status:'waiting'|'active'|'ended';source:string;startedAt:string;shield:boolean;finalizing?:boolean;segments:Segment[];reason?:string};
-type Wire={event:string;callId?:string;message?:string;reason?:string;enabled?:boolean;payload?:string;media?:{payload:string};calls?:Call[]}&Partial<Segment>;
+type Call={id:string;status:'waiting'|'connecting'|'active'|'ended';source:string;startedAt:string;connectedAt?:string;shield:boolean;finalizing?:boolean;segments:Segment[];reason?:string};
+type Wire={event:string;callId?:string;connectedAt?:string;message?:string;reason?:string;enabled?:boolean;payload?:string;media?:{payload:string};calls?:Call[]}&Partial<Segment>;
 type Draft={title:string;body:string;location:string;category:string;receipt:string};
 type Session={context:AudioContext;node?:AudioWorkletNode;microphone?:MediaStream;socket?:WebSocket;player?:AudioBufferSourceNode;timer?:ReturnType<typeof setTimeout>;disposed:boolean};
 
 function release(session:Session){
   session.disposed=true;
   clearTimeout(session.timer);
-  session.player?.stop();
+  try{session.player?.stop();}catch{}
   session.socket?.close();
   session.microphone?.getTracks().forEach(track=>track.stop());
   session.node?.disconnect();
@@ -20,42 +21,58 @@ function release(session:Session){
 }
 
 export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean;demo?:boolean;onRegistered?:(id:string)=>void}){
-  const [online,setOnline]=useState(false),[number,setNumber]=useState<string|null>(null);
+  const [online,setOnline]=useState(false),[available,setAvailable]=useState(false);
   const [state,setState]=useState('offline'),[message,setMessage]=useState('');
   const [calls,setCalls]=useState<Call[]>([]),[selected,setSelected]=useState('');
   const [muted,setMuted]=useState(false),[consent,setConsent]=useState(false),[useMic,setUseMic]=useState(!demo);
   const [level,setLevel]=useState(0),[playing,setPlaying]=useState('');
+  const [connectedAt,setConnectedAt]=useState<number|null>(null),[elapsed,setElapsed]=useState(0),[audioPaused,setAudioPaused]=useState(false);
   const [pending,setPending]=useState<Record<string,string>>({});
   const [drafts,setDrafts]=useState<Record<string,Partial<Draft>>>({}),[saving,setSaving]=useState('');
-  const session=useRef<Session|null>(null),active=useRef(''),savingRef=useRef(''),sampleRef=useRef(false);
+  const session=useRef<Session|null>(null),active=useRef(''),currentCall=useRef(''),savingRef=useRef(''),sampleRef=useRef(false);
   const call=calls.find(c=>c.id===selected),segments=call?.segments||[];
   const draft:Draft={title:call?.source==='demo'?'[가상 사례] 음성 상담 민원':'음성 상담 민원',body:segments.map(s=>s.text).join('\n\n'),location:segments.flatMap(s=>s.facts).find(f=>f.kind==='location')?.value||'',category:'기타',receipt:'',...drafts[selected]};
   const processing=!!call?.finalizing||Object.values(pending).includes(selected);
   const connected=!['offline','ended'].includes(state);
+  const statusLabel=state==='active'?'상담 중':state==='waiting'?'담당자 연결 대기':state==='ready'?'수신 대기 중':state==='connecting'?'연결 중':state==='ended'?'상담 종료':'상담 연결';
+  const duration=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
   function changeDraft(patch:Partial<Draft>){setDrafts(previous=>({...previous,[selected]:{...previous[selected],...patch}}));}
   function send(value:unknown){const socket=session.current?.socket;if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(value));}
-  function stopSample(){session.current?.player?.stop();if(session.current)session.current.player=undefined;sampleRef.current=false;setPlaying('');}
+  function stopSample(){try{session.current?.player?.stop();}catch{}if(session.current)session.current.player=undefined;sampleRef.current=false;setPlaying('');}
   function disconnect(){
-    send({event:'hangup',callId:active.current});
+    send({event:'hangup',callId:currentCall.current});
     const current=session.current;session.current=null;if(current)release(current);
-    active.current='';sampleRef.current=false;setState('offline');setLevel(0);setPlaying('');setPending({});
+    active.current='';currentCall.current='';sampleRef.current=false;setConnectedAt(null);setAudioPaused(false);setState('offline');setLevel(0);setPlaying('');setPending({});
   }
   useEffect(()=>{
     let live=true;
-    async function status(){try{const response=await fetch('/api/phone',{cache:'no-store',signal:AbortSignal.timeout(7000)});const data=await response.json();if(live){setOnline(data.online===true);setNumber(data.number);}}catch{if(live)setOnline(false);}}
+    async function status(){try{const response=await fetch('/api/phone',{cache:'no-store',signal:AbortSignal.timeout(7000)});const data=await response.json();if(live){setOnline(response.ok&&data.online===true);setAvailable(response.ok&&data.available===true);}}catch{if(live){setOnline(false);setAvailable(false);}}}
     void status();const timer=setInterval(status,15000);
     return()=>{live=false;clearInterval(timer);const current=session.current;session.current=null;if(current)release(current);};
   },[]);
-  useEffect(()=>{const before=(event:BeforeUnloadEvent)=>{if(active.current){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',before);return()=>window.removeEventListener('beforeunload',before);},[]);
+  useEffect(()=>{const before=(event:BeforeUnloadEvent)=>{if(currentCall.current){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',before);return()=>window.removeEventListener('beforeunload',before);},[]);
+  useEffect(()=>{
+    if(connectedAt===null)return;
+    const tick=()=>setElapsed(Math.max(0,Math.floor((Date.now()-connectedAt)/1000)));
+    tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer);
+  },[connectedAt]);
+  useEffect(()=>{
+    if(state!=='active'||!('wakeLock' in navigator))return;
+    let live=true,lock:WakeLockSentinel|undefined;
+    const keepAwake=async()=>{if(document.visibilityState!=='visible'||lock&&!lock.released)return;try{const next=await navigator.wakeLock.request('screen');if(!live)await next.release();else lock=next;}catch{}};
+    void keepAwake();document.addEventListener('visibilitychange',keepAwake);
+    return()=>{live=false;document.removeEventListener('visibilitychange',keepAwake);void lock?.release().catch(()=>{});};
+  },[state]);
 
   async function connect(){
     if(session.current)return;
-    setState('connecting');setMessage('');setMuted(false);setLevel(0);
+    setState('connecting');setMessage('');setMuted(false);setLevel(0);setElapsed(0);setConnectedAt(null);setAudioPaused(false);
     let current:Session|undefined;
     try{
       current={context:new AudioContext(),disposed:false};session.current=current;
       const connection=current;
       const alive=()=>session.current===connection&&!connection.disposed;
+      connection.context.onstatechange=()=>{if(alive())setAudioPaused(connection.context.state!=='running');};
       connection.timer=setTimeout(()=>{if(alive()){disconnect();setMessage('연결 시간이 초과되었습니다. 마이크 권한과 네트워크를 확인해 주세요.');}},30000);
       await connection.context.resume();if(!alive())return;
       if(useMic){
@@ -83,10 +100,10 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
         if(['ready','waiting','active','ended'].includes(event.event))clearTimeout(connection.timer);
         if(event.event==='ready')setState('ready');
         if(event.event==='calls'&&event.calls){setCalls(event.calls);setSelected(previous=>previous||event.calls?.find(item=>item.status==='waiting')?.id||'');}
-        if(event.event==='waiting'){setState('waiting');setSelected(event.callId||'');}
-        if(event.event==='connecting')setState('connecting');
+        if(event.event==='waiting'){currentCall.current=event.callId||'';setState('waiting');setSelected(event.callId||'');}
+        if(event.event==='connecting'){currentCall.current=event.callId||'';setSelected(event.callId||'');setState('connecting');}
         if(event.event==='active'){
-          active.current=event.callId||'';setSelected(event.callId||'');setState('active');setMessage('');setMuted(false);node.port.postMessage({type:'muted',value:false});
+          active.current=event.callId||'';currentCall.current=active.current;setConnectedAt(Date.parse(event.connectedAt||'')||Date.now());setSelected(event.callId||'');setState('active');setMessage('');setMuted(false);node.port.postMessage({type:'muted',value:false});
         }
         if(event.event==='media'){
           const payload=event.payload||event.media?.payload;
@@ -101,13 +118,13 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
           setMessage(event.message||'내용을 확인해 주세요.');
         }
         if(event.event==='ended'){
-          active.current='';stopSample();node.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage(event.reason||'통화가 종료되었습니다.');
+          active.current='';currentCall.current='';setConnectedAt(null);stopSample();node.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage(event.reason||'통화가 종료되었습니다.');
           if(!staff){session.current=null;release(connection);setLevel(0);}
         }
-        if(event.event==='error')setMessage(event.message||'연결 오류');
+        if(event.event==='error'||event.event==='accept_error')setMessage(event.message||'연결 오류');
       };
       socket.onerror=()=>{if(alive())setMessage('통화 서버에 연결하지 못했습니다. 다시 연결해 주세요.');};
-      socket.onclose=()=>{if(alive()){session.current=null;release(connection);active.current='';sampleRef.current=false;setState('offline');setLevel(0);setPlaying('');setPending({});setMessage('연결이 종료되었습니다. 다시 연결해 주세요.');}};
+      socket.onclose=()=>{if(alive()){session.current=null;release(connection);active.current='';currentCall.current='';setConnectedAt(null);sampleRef.current=false;setState('offline');setLevel(0);setPlaying('');setPending({});setMessage('연결이 종료되었습니다. 다시 연결해 주세요.');}};
     }catch(error){
       if(current&&session.current!==current)return;
       session.current=null;if(current)release(current);setState('offline');
@@ -139,19 +156,36 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     }catch(error){setMessage(error instanceof Error?error.message:'접수하지 못했습니다.');}finally{savingRef.current='';setSaving('');}
   }
 
-  return <section className="phone-desk">
-    <div className="phone-heading"><div><span className="phone-eyebrow">민원 상담{demo?' · 가상 사례 시연':''}</span><h1>음성 상담</h1></div><span className={'phone-availability '+(online?'on':'')}>{online?'연결 가능':'연결 준비 중'}</span></div>
+  function toggleMuted(){const next=!muted;setMuted(next);session.current?.node?.port.postMessage({type:'muted',value:next});}
+  async function resumeAudio(){try{await session.current?.context.resume();}catch{setMessage('오디오를 켜지 못했습니다. 통화를 다시 연결해 주세요.');}}
+
+  return <section className={'phone-desk '+(staff?'phone-staff':'phone-caller')}>
+    <div className="phone-heading"><div><span className="phone-eyebrow">민원쉴드{demo?' · 가상 사례 시연':''}</span><h1>웹 음성 상담</h1></div><span className={'phone-availability '+(online?'on':'')}>{online?(staff||available?'연결 가능':'담당자 접속 대기'):'연결 준비 중'}</span></div>
     {message&&<div className="phone-notice" role="status">{message}</div>}
-    {!staff&&number&&<a className="phone-number" href={'tel:'+number}><Phone size={22}/>{number}</a>}
+    {state==='active'&&audioPaused&&<div className="phone-notice" role="status">기기에서 오디오가 일시 정지되었습니다. <button onClick={()=>void resumeAudio()}>오디오 다시 켜기</button></div>}
     {demo&&<div className="phone-demo"><strong>가상 사례 시연</strong><label><input type="checkbox" checked={useMic} disabled={connected} onChange={event=>setUseMic(event.target.checked)}/>마이크 사용</label>{!staff&&<div className="phone-actions"><button disabled={state!=='active'||!!playing||muted} onClick={()=>void playSample('normal')}><Play size={15}/>일반 민원</button><button disabled={state!=='active'||!!playing||muted} onClick={()=>void playSample('profanity')}><Play size={15}/>욕설 포함 민원</button>{playing&&<button onClick={stopSample}><Square size={15}/>전송 중지</button>}</div>}</div>}
-    <div className="phone-toolbar"><div><Headphones size={24}/><strong>{state==='active'?'상담 중':state==='waiting'?'담당자 연결 대기':state==='ready'?'수신 대기 중':state==='connecting'?'연결 중':'상담 연결'}</strong>{connected&&useMic&&<span className="phone-mic-level"><Mic size={14}/><meter min={0} max={1} value={muted?0:level} aria-label="마이크 입력 음량"/></span>}</div>
-      <div className="phone-actions">{!connected?<button className="primary" onClick={()=>void connect()} disabled={!online||(!staff&&!consent)}><Phone size={17}/>{staff?'수신 대기 시작':'상담 연결'}</button>:state!=='active'?<button onClick={disconnect}><PhoneOff size={17}/>{state==='connecting'?'연결 취소':staff?'수신 대기 종료':'연결 종료'}</button>:null}
-        {state==='active'&&<><button onClick={()=>{const next=!muted;setMuted(next);session.current?.node?.port.postMessage({type:'muted',value:next});}}>{muted?<MicOff size={17}/>:<Mic size={17}/>} {muted?'마이크 켜기':'마이크 끄기'}</button><button className="danger" onClick={()=>send({event:'hangup',callId:active.current})}><PhoneOff size={17}/>통화 종료</button></>}
+    {!staff&&<div className="phone-call-card">
+      <div className={'phone-avatar '+(state==='active'?'is-active':'')} aria-hidden="true">{state==='connecting'||state==='waiting'?<LoaderCircle size={36} className="spin"/>:<Headphones size={36}/>}</div>
+      <h2>민원 상담 담당자</h2><p className="phone-call-status" role="status">{statusLabel}</p>
+      <p className="phone-duration" aria-label={'통화 시간 '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초'}>{duration}</p>
+      {state==='active'?<p className="phone-call-help">편하게 말씀해 주세요.<br/>통화 중에는 이 화면을 열어 두세요.</p>:<p className="phone-call-help">브라우저에서 담당자와 음성으로 상담합니다.<br/>{connected?'연결될 때까지 잠시 기다려 주세요.':online&&!available?'담당자가 접속하면 연결할 수 있습니다.':'마이크 사용을 허용하고 상담을 시작하세요.'}</p>}
+      {!connected&&<label className="phone-consent"><input type="checkbox" checked={consent} onChange={event=>setConsent(event.target.checked)}/>상담 내용의 자동 분석 및 민원 접수 활용에 동의합니다.</label>}
+      <div className="phone-call-controls">
+        {!connected?<button className="primary phone-start" onClick={()=>void connect()} disabled={!online||!available||!consent}><Phone size={23}/>{state==='ended'?'다시 상담 연결':'상담 연결'}</button>:<>
+          {state==='active'&&useMic&&<button className={'phone-circle '+(muted?'is-muted':'')} aria-pressed={muted} onClick={toggleMuted}>{muted?<MicOff size={25}/>:<Mic size={25}/>}<span>{muted?'마이크 켜기':'마이크 끄기'}</span></button>}
+          <button className="phone-circle phone-hangup" onClick={()=>state==='active'?send({event:'hangup',callId:currentCall.current}):disconnect()}><PhoneOff size={25}/><span>{state==='active'?'통화 종료':'연결 취소'}</span></button>
+        </>}
       </div>
-    </div>
-    {!staff&&<label className="phone-consent"><input type="checkbox" checked={consent} onChange={event=>setConsent(event.target.checked)} disabled={connected}/>상담 내용의 자동 분석 및 민원 접수 활용에 동의합니다.</label>}
+      {state==='active'&&useMic&&<div className="phone-mic-level"><Mic size={14}/><meter min={0} max={1} value={muted?0:level} aria-label="마이크 입력 음량"/><span>{muted?'마이크 꺼짐':'내 마이크'}</span></div>}
+      <p className="phone-web-note">인터넷 연결 사용 · 최대 10분 상담</p>
+    </div>}
+    {staff&&<div className="phone-toolbar"><div><Headphones size={24}/><strong role="status">{statusLabel}</strong>{state==='active'&&<span className="phone-duration-small">{duration}</span>}{connected&&useMic&&<span className="phone-mic-level"><Mic size={14}/><meter min={0} max={1} value={muted?0:level} aria-label="마이크 입력 음량"/></span>}</div>
+      <div className="phone-actions">{!connected?<button className="primary" onClick={()=>void connect()} disabled={!online||(!staff&&!consent)}><Phone size={17}/>{staff?'수신 대기 시작':'상담 연결'}</button>:state!=='active'?<button onClick={disconnect}><PhoneOff size={17}/>{state==='connecting'?'연결 취소':staff?'수신 대기 종료':'연결 종료'}</button>:null}
+        {state==='active'&&<><button aria-pressed={muted} onClick={toggleMuted}>{muted?<MicOff size={17}/>:<Mic size={17}/>} {muted?'마이크 켜기':'마이크 끄기'}</button><button className="danger" onClick={()=>send({event:'hangup',callId:active.current})}><PhoneOff size={17}/>통화 종료</button></>}
+      </div>
+    </div>}
     {staff&&<div className="phone-grid">
-      <aside className="phone-panel phone-call-list"><h2>상담 목록 <span>{calls.length}</span></h2>{!calls.length?<p className="phone-empty">접수된 통화가 없습니다.</p>:calls.slice().reverse().map(item=><button className={selected===item.id?'selected':''} key={item.id} onClick={()=>setSelected(item.id)}><span><strong>{item.source==='demo'?'가상 사례':item.source==='phone'?'전화 수신':'인터넷 상담'}</strong><small>{new Date(item.startedAt).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'})}</small></span><b>{item.status==='waiting'?'대기':item.status==='active'?'통화 중':'종료'}</b></button>)}</aside>
+      <aside className="phone-panel phone-call-list"><h2>상담 목록 <span>{calls.length}</span></h2>{!calls.length?<p className="phone-empty">접수된 통화가 없습니다.</p>:calls.slice().reverse().map(item=><button className={selected===item.id?'selected':''} key={item.id} onClick={()=>setSelected(item.id)}><span><strong>{item.source==='demo'?'가상 사례':'웹 음성 상담'}</strong><small>{new Date(item.startedAt).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'})}</small></span><b>{item.status==='waiting'?'대기':item.status==='connecting'?'연결 중':item.status==='active'?'통화 중':'종료'}</b></button>)}</aside>
       <div className="phone-panel"><div className="phone-panel-title"><h2>상담 내용</h2>{call?.status==='waiting'&&state==='ready'&&<button className="primary" onClick={()=>send({event:'accept',callId:call.id})}><Phone size={16}/>전화 받기</button>}{call?.status==='active'&&active.current===call.id&&<button onClick={()=>send({event:call.shield?'resume':'shield',callId:call.id})}><ShieldCheck size={17}/>{call.shield?'원음 듣기':'수신 음성 가리기'}</button>}</div>
         {call?.shield&&<div className="phone-shield"><ShieldCheck size={18}/>수신 음성 보호 중 · 내 목소리는 전달됩니다.</div>}
         <div className="phone-transcript" aria-live="polite">{!segments.length?<p className="phone-empty">{call?.status==='active'?'민원 내용을 듣고 있습니다.':'통화를 선택해 주세요.'}</p>:segments.map((segment,index)=><article key={segment.turnId}><time>{String(index+1).padStart(2,'0')}</time><div><p>{segment.text}</p>{segment.status==='needs_review'&&<small>내용 확인 필요</small>}</div></article>)}{processing&&<p className="phone-processing"><LoaderCircle className="spin" size={15}/>내용 정리 중</p>}</div>

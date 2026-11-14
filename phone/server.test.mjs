@@ -28,6 +28,6 @@ test('real WebSocket bridge enforces roles, keeps human audio, shields incoming 
   staff.send({event:'hangup',callId:id});await until(()=>caller.events.some(e=>e.event==='ended'));assert.ok(app.calls.get(id).ended);
   await until(()=>app.calls.get(id).finalized);analysis.onText({turnId:'late',text:'must not change a finalized call'});assert.equal(app.calls.get(id).segments.length,1);
   const httpUrl=url.replace('ws:','http:').replace('/connect','/provider/voice');assert.equal((await fetch(httpUrl,{method:'POST'})).status,404);
-  const response=await fetch(httpUrl+'?token=provider',{method:'POST'});const xml=await response.text();assert.match(xml,/<Stream url="wss:/);assert.match(xml,/<Parameter name="token"/);
+  assert.equal((await fetch(httpUrl+'?token=provider',{method:'POST'})).status,404,'web-only mode must not issue carrier tokens');
  }finally{for(const s of connections)s.terminate();await app.close();}
 });

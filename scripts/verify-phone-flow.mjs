@@ -2,15 +2,18 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {setTimeout as delay} from 'node:timers/promises';
 import {telephoneAudio} from '../phone/audio.mjs';
+import {signTicket} from '../phone/token.mjs';
 
 const Ws=createRequire(import.meta.url)('next/dist/compiled/ws');
 const sockets=[],start=performance.now();
-const report={testedAt:new Date().toISOString(),synthetic:true,hardwareMicrophonesTested:false,actualTelephoneNetworkTested:false,transport:'production websites /api/phone → public WSS → real STT and AI',checks:{},timing:{},texts:[]};
+const direct=process.env.PHONE_TEST_BRIDGE_URL;
+const report={testedAt:new Date().toISOString(),synthetic:true,hardwareMicrophonesTested:false,actualTelephoneNetworkTested:false,transport:direct?'local signed test session → WebSocket → real STT and AI':'production websites /api/phone → public WSS → real STT and AI',checks:{},timing:{},texts:[]};
 const elapsed=()=>Math.round(performance.now()-start);
 async function until(check,label,timeout=45000){const at=Date.now();while(!check()){if(Date.now()-at>timeout)throw new Error(label+'_timeout');await delay(10);}}
 async function connect(role,origin){
-  const response=await fetch(origin+'/api/phone',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({demo:true}),signal:AbortSignal.timeout(15000)});
-  const settings=await response.json();if(!response.ok||settings.role!==role)throw new Error('website_ticket_'+response.status);
+  let settings;
+  if(direct){if(!process.env.PHONE_BRIDGE_SECRET)throw Error('Missing_test_secret');settings={url:new URL('/connect',direct).href.replace(/^http/,'ws'),token:signTicket(process.env.PHONE_BRIDGE_SECRET,{role,demo:true})};}
+  else{const response=await fetch(origin+'/api/phone',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({demo:true}),signal:AbortSignal.timeout(15000)});settings=await response.json();if(!response.ok||settings.role!==role)throw new Error('website_ticket_'+response.status);}
   const ws=new Ws(settings.url,{origin}),events=[];sockets.push(ws);ws.on('error',()=>{});
   ws.on('message',data=>events.push({...JSON.parse(data),receivedAtMs:elapsed()}));
   await until(()=>ws.readyState===Ws.OPEN,'websocket',15000);

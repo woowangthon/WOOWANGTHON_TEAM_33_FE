@@ -50,7 +50,7 @@ flowchart LR
 - RAG는 **공식 API 수집 + 조문 키워드 검색 + AI 검색 계획·재평가** 방식입니다. 벡터 DB/임베딩 검색을 구현했다고 주장하지 않습니다.
 - DB 체크포인트와 세대 번호로 단계별 재시도를 처리하고, 오래된 작업이 담당자 수정·승인·삭제를 덮어쓰지 않도록 검사합니다.
 - AI가 구조화한 답변·질문 근거를 코드의 요구/정보 판정표에 통과시킵니다. 인용·질문 범위·이미 제공한 정보·보완 횟수를 검사하며 요구별 적용 규칙을 기록합니다. [하네스 구조와 제한](docs/COVERAGE-HARNESS.md).
-- 웹 음성은 WebSocket/G.711 중계 및 AudioWorklet을 사용합니다. 070 번호 발급·실제 PSTN 통신 계약은 포함하지 않습니다.
+- 웹 음성은 별도 서버를 경유하는 WebSocket/G.711 중계 및 AudioWorklet을 사용합니다. 일반 전화망 연동은 비활성화되어 있으며 070 번호 발급·PSTN 연결을 구현·검증했다고 주장하지 않습니다.
 
 ## 실행
 
@@ -71,8 +71,12 @@ npm run dev
 - 일반 상담: 두 사이트의 `/phone`. 담당자 수신 대기 → 민원인 상담 연결 → 담당자 받기.
 - 합성 음원 시연: `/phone?demo=1`. 화면에 가상 사례임을 표시하며 녹음 버튼은 이 모드에만 나타납니다.
 - 웹사이트만 배포해서는 통화가 연결되지 않습니다. `phone/server.mjs`를 실행할 지속적인 Node 서버와 공개 HTTPS/WSS 주소가 추가로 필요합니다.
-- 로컬 시연: `.env.phone.example`을 `.env.phone.local`로 복사하고 두 사이트와 같은 `PHONE_BRIDGE_SECRET`을 설정합니다. `scripts/start-phone.mjs`는 로컬 `cloudflared`를 이용해 터널을 열고 DB에 주소를 등록합니다. 실행 파일은 저장소에 포함하지 않으며 Cloudflare 공식 배포본을 별도 설치합니다. `CLOUDFLARED_PATH`로 실행 경로를 지정할 수 있습니다.
+- 로컬 시연: `.env.phone.example`을 `.env.phone.local`로 복사하고 두 사이트와 같은 `PHONE_BRIDGE_SECRET`, `PHONE_STAFF_SITE_URL`을 설정합니다. `.env.local`에는 `OPENAI_API_KEY` 또는 `SERVICE_OPENAI_API_KEY`가 필요합니다. `node scripts/start-phone.mjs`가 중계 서버와 `cloudflared`를 실행하고 서명된 요청으로 `/api/phone/runtime`에 새 터널 주소를 등록합니다. 웹사이트에는 `008_phone_runtime.sql`의 테이블이 있어야 합니다. 로컬 PC에 운영 DB 비밀번호를 복사할 필요는 없습니다.
+- Cloudflare 공식 실행 파일을 설치하고 `CLOUDFLARED_PATH`로 지정합니다. 임시 터널은 재시작할 때 주소가 바뀌며 가동 시간을 보장하지 않습니다. 상시 운영에는 고정 주소의 중계 서버가 필요합니다.
 - API 호출 비용은 별도이며, 로컬 PC나 터널이 꺼지면 음성 상담은 중단됩니다.
+- 민원인 화면은 웹 통화임을 명시하고, 큰 통화/종료 버튼, 마이크 상태, 실제 연결 이후의 통화 시간을 표시합니다. 모바일 오디오가 중단되면 다시 켜기 버튼을 표시하고, 지원 브라우저에서는 통화 중 화면 잠금을 방지합니다.
+- 통화당 최대 10분, 중계 서버의 UTC 날짜 기준 민원인 음성 하루 30분 제한이 있습니다. 사용량 카운터는 메모리에 있어 서버 재시작 시 초기화됩니다. 금액 제한이 아니며 OpenAI 프로젝트의 월 예산은 알림 기준일 수 있으므로 결제 한도로 설명하지 않습니다.
+- [웹 통화 검증 결과와 시연 절차](docs/WEB-VOICE.md).
 
 ## 검증과 재현
 
