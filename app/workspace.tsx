@@ -246,6 +246,7 @@ export function ComplaintDetail({
         </div>
         <div className="detail-heading-actions"><Badge status={c.status} /><Button kind="outline small danger" disabled={!!busy} onClick={()=>{if(window.confirm('휴지통으로 이동하시겠습니까? 필요하면 다시 복구할 수 있습니다.'))onUpdate({action:'delete'});}}><Trash2 size={15}/>민원 삭제</Button></div>
       </div>
+      {c.source_data?<p className="data-source">공개 데이터 검증 · <a href={c.source_data.url} target="_blank" rel="noreferrer">{c.source_data.provider} · {c.source_data.recordId}</a></p>:null}
       <div className="detail-grid">
         <div className="detail-main">
           <ExpressionPanel complaint={c}/>
@@ -412,10 +413,6 @@ export function ComplaintDetail({
               <div>
                 <dt>접수일</dt>
                 <dd>{fmt(c.created_at, true)}</dd>
-              </div>
-              <div>
-                <dt>관할</dt>
-                <dd>청주시</dd>
               </div>
             </dl>
           </section>

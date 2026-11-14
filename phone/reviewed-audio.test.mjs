@@ -34,3 +34,11 @@ test('protection clears already approved playback; officer audio and analysis co
  relay.resume();relay.fromCaller(frame(4));relay.audioBoundary('b',{startMs:40,endMs:60});relay.audioReviewed('b',true);await delay(40);
  assert.deepEqual(officer.filter(e=>e.event==='media').map(e=>e.payload),[frame(4)]);
 });
+
+test('a final crossing resume releases only its reviewed post-resume frames',async t=>{
+ const heard=[],gate=new ReviewedAudio({onFrame:x=>heard.push(x)});t.after(()=>gate.close());
+ gate.push(frame(1));gate.push(frame(2));gate.clear();gate.push(frame(3));gate.push(frame(4));
+ gate.declare('late_old',{startMs:0,endMs:40});gate.settle('late_old',true);
+ gate.declare('new',{startMs:20,endMs:80});await delay(45);assert.deepEqual(heard,[]);
+ gate.settle('new',true);await delay(65);assert.deepEqual(heard,[frame(3),frame(4)]);
+});

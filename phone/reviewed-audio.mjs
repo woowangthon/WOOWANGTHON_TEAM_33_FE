@@ -20,12 +20,15 @@ export class ReviewedAudio {
   }
   declare(id,range){
     if(this.closed)return;
-    // Resuming mid-utterance must not replay its old prefix or immediately re-lock.
-    if(range&&range.startMs>=0&&range.startMs<this.floor)return;
-    if(!id||!range||!Number.isFinite(range.startMs)||!Number.isFinite(range.endMs)||range.startMs<this.boundary||range.startMs<this.floor||range.endMs<=range.startMs||range.endMs>this.position||this.turns.some(t=>t.id===id)){
+    if(!id||!range||!Number.isFinite(range.startMs)||!Number.isFinite(range.endMs)||range.startMs<0||range.endMs<=range.startMs||range.endMs>this.position||this.turns.some(t=>t.id===id)){
       this.clear();this.onError();return;
     }
-    this.boundary=range.endMs;this.turns.push({id,...range,verdict:null});
+    if(range.endMs<=this.floor)return;
+    // STT can include a silence prefix from before resume. Keep only frames after
+    // the cleared boundary, and still require the entire utterance's safe verdict.
+    const startMs=Math.max(range.startMs,this.floor);
+    if(startMs<this.boundary){this.clear();this.onError();return;}
+    this.boundary=range.endMs;this.turns.push({id,startMs,endMs:range.endMs,verdict:null});
   }
   settle(id,allow){
     const turn=this.turns.find(t=>t.id===id);if(this.closed||!turn||turn.verdict!==null)return;
