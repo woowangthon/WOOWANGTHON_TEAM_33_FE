@@ -22,3 +22,15 @@ test('compound insults are masked in full including suffixes and old titles',()=
  for(const text of ['씨발럼아','씨발놈들아','씨발새끼에게'])assert.equal(ex.maskText(text),'[보호된 표현]');
  assert.equal(ex.protectedTitle({title:'씨발럼아',analysis:null}),'민원 내용 확인');
 });
+
+test('business summaries drop paraphrased disclosure threats and keep the service issue',()=>{
+ const summary='골목에 대형 폐기물이 2주째 방치돼 있습니다. 이번 주 안에 수거되지 않으면 담당자 이름을 온라인에 공개하겠다고 밝혔습니다.';
+ const c={title:'폐기물 수거 일정 확인',body:'가상 원문',analysis:{summary,safeTitle:'폐기물 수거 일정 확인',sensitiveQuotes:[],expressionFindings:[]}};
+ assert.equal(ex.businessSummary(c),'골목에 대형 폐기물이 2주째 방치돼 있습니다.');assert.equal(c.analysis.summary,summary);
+});
+test('summary protection keeps reported safety issues but excludes insults and limits detail',()=>{
+ const c={title:'안전한 현장 확인 요청',body:'씨발',analysis:{summary:'씨발 답답하다. 시설물이 떨어질 위험이 있습니다. 현장 점검을 요청합니다. 부가 설명입니다.',safeTitle:'현장 확인 요청',sensitiveQuotes:['씨발'],expressionFindings:[]}};
+ assert.equal(ex.businessSummary(c),'시설물이 떨어질 위험이 있습니다. 현장 점검을 요청합니다.');
+ c.analysis.summary='담당자를 죽이겠다고 합니다.';assert.equal(ex.businessSummary(c),'현장 확인 요청');
+ c.analysis.summary='매우 긴 부가 설명 '.repeat(50);assert.ok(ex.businessSummary(c).length<=220);
+});

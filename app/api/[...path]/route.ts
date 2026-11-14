@@ -1,4 +1,5 @@
 import { startAnalysis } from "../../../lib/analysis-dispatch";
+import { taskChangeLabels } from "../../../lib/task-history";
 import { inlineReferences } from "../../../lib/citations";
 import { supplementedComplaint } from "../../../lib/analysis-stages";
 import { semanticPlan,rerank } from "../../../lib/semantic-search";
@@ -384,6 +385,24 @@ async function handler(
           await eventStatement(complaintOwner,c.id,'담당자 민원 삭제').run();
           return json({ok:true});
         }
+        if(input.action==='tasks') {
+          const submitted=input.tasks;
+          if(!submitted||submitted.length!==c.tasks.length||new Set(submitted.map(t=>t.id)).size!==c.tasks.length||submitted.some(t=>!c.tasks.some(old=>old.id===t.id)))
+            throw new AppError('후속 조치 항목이 변경되었습니다. 새로고침해 주세요.',409);
+          const tasks=c.tasks.map(task=>({...task,done:submitted.find(t=>t.id===task.id)!.done}));
+          const labels=taskChangeLabels(c.tasks,tasks);
+          if(!labels.length)return json({revision:c.revision,tasks});
+          const updatedAt=now(),event={id:crypto.randomUUID(),label:labels.join('\n'),created_at:updatedAt};
+          // Commit the checklist and its precise history together in one round trip.
+          const saved=await database().prepare(`WITH changed AS (
+            UPDATE complaints SET tasks=?,updated_at=?,revision=revision+1
+            WHERE id=? AND owner=? AND revision=? AND deleted_at IS NULL RETURNING id,owner,revision
+          ), logged AS (
+            INSERT INTO events(id,complaint_id,owner,label,created_at) SELECT ?,id,owner,?,? FROM changed
+          ) SELECT revision FROM changed`).bind(JSON.stringify(tasks),updatedAt,c.id,complaintOwner,c.revision,event.id,event.label,updatedAt).first<{revision:number}>();
+          if(!saved)throw new AppError('다른 창에서 후속 조치가 변경되었습니다.',409);
+          return json({revision:saved.revision,tasks,event,updatedAt});
+        }
         let status = c.status,
           draft = c.draft,
           published = c.published,
@@ -400,10 +419,6 @@ async function handler(
             throw new AppError("완료된 민원입니다.", 409);
           status = input.status || status;
           label = "처리 상태 변경: " + statuses[status];
-        }
-        if (input.action === "tasks") {
-          tasks = input.tasks || tasks;
-          label = "후속 조치 체크리스트 변경";
         }
         if (input.action === "approve") {
           if(c.auto_state==='processing'||c.auto_state==='queued')throw new AppError('진행 중인 분석이 끝난 후 답변을 검토해 주세요.',409);

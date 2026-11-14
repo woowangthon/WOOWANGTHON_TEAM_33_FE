@@ -17,7 +17,7 @@ test('browser requests cannot create, replace, or clear API credentials',async()
   if(name.endsWith('/access'))return {officeForOwner:owner=>owner,publicStaffInbox:()=>false};
   if(name.endsWith('/request-tracking'))return require('../evals/loader.cjs')()('lib/request-tracking.ts');
   if(name.endsWith('/request-tracking-store'))return {};
-  if(/\/(laws|samples|automatic|review|analysis-dispatch|supplements|citations|analysis-stages|semantic-search|coverage-ai|coverage|reports|report-core|protection)$/.test(name))return {};
+  if(/\/(task-history|laws|samples|automatic|review|analysis-dispatch|supplements|citations|analysis-stages|semantic-search|coverage-ai|coverage|reports|report-core|protection)$/.test(name))return {};
   throw new Error(name);
  },route);
  try {

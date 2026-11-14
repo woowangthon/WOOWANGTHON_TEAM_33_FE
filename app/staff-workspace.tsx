@@ -113,8 +113,11 @@ export default function StaffWorkspace({
     [page, setPage] = useState(1),
     [pageSize, setPageSize] = useState(10);
   const selectedId = useRef<string | null>(null),
+    selectedRevision = useRef(0),
+    tasksPending = useRef(false),
     generation = useRef(0),
     running = useRef(false);
+  const [savingTasks,setSavingTasks]=useState(false);
   const refresh = useCallback(async () => {
     const next = await api<Overview>("overview");
     setData(next);
@@ -143,7 +146,7 @@ export default function StaffWorkspace({
     let active = true,
       inFlight = false;
     const timer = setInterval(async () => {
-      if (document.hidden || inFlight || running.current) return;
+      if (document.hidden || inFlight || running.current || tasksPending.current) return;
       inFlight = true;
       try {
         // An open complaint only needs its own record; the full inbox is
@@ -156,7 +159,8 @@ export default function StaffWorkspace({
           const result = await api<{ complaint: Complaint; events: Event[] }>(
             "complaints/" + id + "?trash=1",
           );
-          if (active && selectedId.current === id) {
+          if (active && selectedId.current === id && result.complaint.revision>=selectedRevision.current) {
+            selectedRevision.current=result.complaint.revision;
             setSelected(result.complaint);
             setEvents(result.events);
           }
@@ -173,7 +177,7 @@ export default function StaffWorkspace({
     };
   }, [authenticated]);
   const run = async (label: string, action: () => Promise<void>) => {
-    if (running.current) return;
+    if (running.current || tasksPending.current) return;
     running.current = true;
     setBusy(label);
     setNotice(null);
@@ -192,6 +196,8 @@ export default function StaffWorkspace({
   function navigate(next: View) {
     generation.current++;
     selectedId.current = null;
+    selectedRevision.current=0;
+    tasksPending.current=false;setSavingTasks(false);
     setSelected(null);
     setView(next);
     setMenu(false);
@@ -200,7 +206,8 @@ export default function StaffWorkspace({
     const r = await api<{ complaint: Complaint; events: Event[] }>(
       "complaints/" + id + "?trash=1",
     );
-    if (selectedId.current === id) {
+    if (selectedId.current === id && r.complaint.revision>=selectedRevision.current) {
+      selectedRevision.current=r.complaint.revision;
       setSelected(r.complaint);
       setEvents(r.events);
     }
@@ -213,6 +220,7 @@ export default function StaffWorkspace({
       );
       if (token === generation.current) {
         selectedId.current = id;
+        selectedRevision.current=r.complaint.revision;
         setSelected(r.complaint);
         setEvents(r.events);
       }
@@ -439,11 +447,24 @@ export default function StaffWorkspace({
                             selected.auto_state || "",
                           )
                         ? "automatic"
-                        : busy
+                        : busy || (savingTasks ? "tasks" : "")
                   }
                   ready={data.settings.aiReady ?? data.settings.geminiReady}
                   lawReady={data.settings.lawReady}
                   onBack={() => navigate(selected.deleted_at?"trash":"inbox")}
+                  onTasksPending={pending=>{
+                    if(selectedId.current!==selected.id)return;
+                    tasksPending.current=pending;setSavingTasks(pending);
+                  }}
+                  onTasksError={message=>setNotice({message,error:true})}
+                  onTasksSaved={snapshot=>{
+                    const update=(c:Complaint)=>c.id===selected.id&&c.revision<=snapshot.revision?{...c,tasks:snapshot.tasks,revision:snapshot.revision,updated_at:snapshot.updatedAt||c.updated_at}:c;
+                    setData(previous=>({...previous,complaints:previous.complaints.map(update)}));
+                    if(selectedId.current!==selected.id || snapshot.revision<selectedRevision.current)return;
+                    selectedRevision.current=snapshot.revision;
+                    setSelected(previous=>previous?update(previous):previous);
+                    if(snapshot.event)setEvents(previous=>previous.some(e=>e.id===snapshot.event!.id)?previous:[snapshot.event!,...previous]);
+                  }}
                   onAnalyze={() =>
                     void run("analyze", async () => {
                       await api(

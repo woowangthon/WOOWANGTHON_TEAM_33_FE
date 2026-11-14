@@ -4,7 +4,8 @@ function harness(overrides={}){
  const c={id:'test',owner:'guest:test',revision:3,status:'reviewing',auto_state:'completed',draft:'',published:'',tasks:[],draft_review:null,coverage_review:null,...overrides},writes=[];
  const route={},stubs={
   'zod':require('zod'),'next/server':{},'../../user':{getCurrentUser:async()=>({userId:'guest:test',isStaff:true,isGuest:true})},
-  '../../../lib/server':{AppError,now:()=> 'now',decodeComplaint:()=>c,eventStatement:()=>({run:async()=>{}}),rateLimit:async()=>{},database:()=>({batch:async statements=>Promise.all(statements.map(s=>s.run())),prepare:sql=>({bind:(...values)=>({first:async()=>c,run:async()=>{writes.push({sql,values});return {meta:{changes:1}};}})})})},
+  '../../../lib/server':{AppError,now:()=> 'now',decodeComplaint:()=>c,eventStatement:()=>({run:async()=>{}}),rateLimit:async()=>{},database:()=>({batch:async statements=>Promise.all(statements.map(s=>s.run())),prepare:sql=>({bind:(...values)=>({first:async()=>{if(sql.includes('SET tasks=')){writes.push({sql,values});return overrides.taskConflict?null:{revision:c.revision+1};}return c;},run:async()=>{writes.push({sql,values});return {meta:{changes:1}};}})})})},
+  '../../../lib/task-history':require('../evals/loader.cjs')()('lib/task-history.ts'),
   '../../../lib/analysis-dispatch':{startAnalysis:async()=>{}},
   '../../../lib/access':{officeForOwner:()=> 'office:test',officeScope:()=> '1=1',publicStaffInbox:()=>true},'../../../lib/types':{categories:['기타'],statuses:{reviewing:'검토 중'}},'../../../lib/citations':{inlineReferences:()=>({ids:[]})}
  };
@@ -56,4 +57,18 @@ test('legacy waiting records remain reviewable with their original history prese
  },server);
  const history=[{id:'legacy',role:'citizen',text:'기존 추가 내용',attachments:[{id:'photo',name:'old.png'}]}],row={status:'waiting',title:'기존 민원',body:'기존 내용',supplements:JSON.stringify(history)};
  const c=server.decodeComplaint(row);assert.equal(c.status,'reviewing');assert.deepEqual(c.supplements,history);assert.equal(row.status,'waiting');
+});
+
+test('task updates return the saved state and exact history without rewriting the reply',async()=>{
+ process.env.SITE_MODE='staff';
+ const tasks=[{id:'a',label:'현장 위치 확인',done:false},{id:'b',label:'수거 일정 안내',done:true}],h=harness({tasks});
+ const r=await h.call('tasks',{tasks:[{...tasks[0],done:true,label:'클라이언트가 바꾼 문구'},{...tasks[1],done:false}]});
+ assert.equal(r.status,200);const result=await r.json();assert.equal(result.revision,4);assert.equal(result.event.label,'완료: 현장 위치 확인\n완료 취소: 수거 일정 안내');assert.equal(result.tasks[0].label,'현장 위치 확인');
+ assert.equal(h.writes.length,1);assert.match(h.writes[0].sql,/INSERT INTO events/);assert.doesNotMatch(h.writes[0].sql,/SET status=|draft=|published=/);
+});
+test('unchanged tasks do not add history, and concurrent or replaced checklists are rejected',async()=>{
+ process.env.SITE_MODE='staff';const tasks=[{id:'a',label:'현장 확인',done:false}],h=harness({tasks});
+ assert.equal((await h.call('tasks',{tasks})).status,200);assert.equal(h.writes.length,0);
+ assert.equal((await h.call('tasks',{tasks:[{...tasks[0],id:'unknown',done:true}]})).status,409);
+ const conflict=harness({tasks,taskConflict:true});assert.equal((await conflict.call('tasks',{tasks:[{...tasks[0],done:true}]})).status,409);
 });

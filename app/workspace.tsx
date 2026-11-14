@@ -5,16 +5,10 @@ import {
   CheckCheck,
   CheckCircle2,
   ChevronLeft,
-  CircleHelp,
-  Clock3,
-  Eye,
-  EyeOff,
-  FileText,
   Globe2,
   LoaderCircle,
   Phone,
   RefreshCw,
-  ShieldCheck,
   Sparkles,
   Trash2,
 } from "lucide-react";
@@ -38,6 +32,9 @@ import CitizenPortal from "./citizen-portal";
 import EvidencePanel from "./evidence-panel";
 import ExpressionPanel from './expression-panel';
 import RecordReportPanel from './record-report-panel';
+import TaskPanel from './task-panel';
+import type { TaskSnapshot } from '../lib/task-save-queue';
+import { summarizeHistory } from '../lib/task-history';
 
 type Overview = {
   complaints: Complaint[];
@@ -183,6 +180,9 @@ export function ComplaintDetail({
   onBack,
   onAnalyze,
   onUpdate,
+  onTasksSaved,
+  onTasksPending,
+  onTasksError,
 }: {
   c: Complaint;
   events: Event[];
@@ -194,6 +194,9 @@ export function ComplaintDetail({
   onBack: () => void;
   onAnalyze: () => void;
   onUpdate: (input: { action: string; [key: string]: unknown }) => void;
+  onTasksSaved:(snapshot:TaskSnapshot)=>void;
+  onTasksPending:(pending:boolean)=>void;
+  onTasksError:(message:string)=>void;
 }) {
   const [original, setOriginal] = useState(false),
     [draft, setDraft] = useState(c.draft),
@@ -213,6 +216,7 @@ export function ComplaintDetail({
     setTab("solve");
   }, [c.id]);
   const a = c.analysis;
+  const history=summarizeHistory(events);
   const analyzing=c.auto_state==='processing'||c.auto_state==='queued';
   if(c.deleted_at)return <><button className="back-link" onClick={onBack}>휴지통 목록</button><section className="card panel-padding"><h1>{protectedTitle(c)}</h1><p>{c.id} · 삭제일 {fmt(c.deleted_at,true)}</p><Button kind="primary" disabled={!!busy} onClick={()=>onUpdate({action:'restore'})}>민원 복구</Button></section></>;
   if (citizen)
@@ -256,22 +260,19 @@ export function ComplaintDetail({
                 className={tab === "solve" ? "active" : ""}
                 onClick={() => setTab("solve")}
               >
-                <Sparkles size={16} />
                 요약
               </button>
               <button
                 className={tab === "original" ? "active" : ""}
                 onClick={() => setTab("original")}
               >
-                <FileText size={16} />
                 원문
               </button>
               <button
                 className={tab === "history" ? "active" : ""}
                 onClick={() => setTab("history")}
               >
-                <Clock3 size={16} />
-                처리 이력 <span>{events.length}</span>
+                처리 이력 <span>{history.length}</span>
               </button>
               {a && tab === "solve" ? (
                 <Button
@@ -292,27 +293,20 @@ export function ComplaintDetail({
               <div className="panel-padding">
                 {original ? (
                   <div className="original-text"><h4>{c.title}</h4><p>{c.body}</p></div>
-                ) : (
-                  <div className="protected-placeholder">
-                    <ShieldCheck size={26} />
-                    <p>민원인의 원문은 기본으로 가려 둡니다.</p>
-                  </div>
-                )}
+                ) : null}
                 <Button
                   kind="outline small"
                   className="original-toggle"
                   onClick={() => setOriginal(!original)}
                 >
-                  {original ? <EyeOff size={15} /> : <Eye size={15} />}
                   {original ? "원문 가리기" : "원문 보기"}
                 </Button>
               </div>
             ) : tab === "history" ? (
               <div className="panel-padding timeline">
-                {events.map((e) => (
+                {history.map((e) => (
                   <div key={e.id}>
-                    <span className="timeline-dot" />
-                    <strong>{e.label}</strong>
+                    <strong className="preserve">{e.label}</strong>
                     <small>{fmt(e.created_at, true)}</small>
                   </div>
                 ))}
@@ -339,19 +333,6 @@ export function ComplaintDetail({
             ) : (
               <div className="panel-padding analysis-result">
                 <p className="summary-box">{a.summary}</p>
-                {a.questions.length ? (
-                  <div className="summary-questions">
-                    <h3>
-                      <CircleHelp size={15} />
-                      민원인에게 확인할 내용
-                    </h3>
-                    <ul className="question-list">
-                      {a.questions.map((s, i) => (
-                        <li key={i}>{s}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
                 {a.warnings.map((w, i) => (
                   <p className="warning-line" key={i}>
                     <AlertCircle size={14} />
@@ -365,7 +346,6 @@ export function ComplaintDetail({
             <div className="card-header">
               <div>
                 <h2>
-                  <FileText size={18} />
                   답변 작성
                 </h2>
               </div>
@@ -470,39 +450,7 @@ export function ComplaintDetail({
               </div>
             </dl>
           </section>
-          <section className="card task-panel">
-            <div className="section-heading">
-              <h3>후속 조치</h3>
-              <span>
-                {c.tasks.filter((t) => t.done).length}/{c.tasks.length}
-              </span>
-            </div>
-            {c.tasks.length ? (
-              c.tasks.map((t) => (
-                <label
-                  key={t.id}
-                  className={"task-item " + (t.done ? "done" : "")}
-                >
-                  <input
-                    type="checkbox"
-                    checked={t.done}
-                    disabled={!!busy}
-                    onChange={(e) =>
-                      onUpdate({
-                        action: "tasks",
-                        tasks: c.tasks.map((x) =>
-                          x.id === t.id ? { ...x, done: e.target.checked } : x,
-                        ),
-                      })
-                    }
-                  />
-                  <span>{t.label}</span>
-                </label>
-              ))
-            ) : (
-              <p className="muted-text">등록된 후속 조치가 없습니다.</p>
-            )}
-          </section>
+          <TaskPanel key={c.id} complaint={c} disabled={!!busy && busy!=="tasks"} onSaved={onTasksSaved} onPending={onTasksPending} onError={onTasksError}/>
           <RecordReportPanel key={c.id+':'+(c.analysis?.generatedAt||'')} complaint={c} busy={!!busy}/>
         </aside>
       </div>

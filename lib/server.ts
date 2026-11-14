@@ -1,6 +1,6 @@
 import { database } from './database';
 import type { Complaint } from './types';
-import { protectedTitle } from './protection';
+import { businessSummary, protectedTitle } from './protection';
 import { readableCitations } from './citations';
 
 export const runtime = process.env;
@@ -21,6 +21,7 @@ export function decodeComplaint(row:Record<string,unknown>):Complaint {
   if(result.analysis)result.analysis.draft=readableCitations(result.analysis.draft,citations);
   if(result.published&&!result.published_citations?.length)result.published_citations=result.analysis?.citations||[];
   result.published=readableCitations(result.published||'',result.published_citations||[]);
+  if(result.analysis)result.analysis.summary=businessSummary(result);
   return {...result,display_title:protectedTitle(result)};
 }
 export async function complaint(owner:string,id:string) {
