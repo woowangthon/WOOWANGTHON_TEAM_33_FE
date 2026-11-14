@@ -9,7 +9,7 @@ const protection={};new Function('exports',ts.transpileModule(fs.readFileSync('l
 const summaryMemo=require('../evals/loader.cjs')()('lib/summary-memo.ts');
 new Function('require','exports',js)(name=>name==='./summary-memo'?summaryMemo:name==='./citations'?citations:name==='./server'?{AppError,now:()=>new Date().toISOString()}:name==='./protection'?protection:require(name),moduleExports);
 const input={title:'가상 민원',body:'현장을 확인해 주세요. 가상의 공격 문구입니다.',location:'청주시 가상길',category:'생활폐기물',occurred_at:'2026-01-01'};
-const valid={safeTitle:'현장 확인 요청',expressionFindings:[],summary:'현장 확인 요청',requests:['확인 요청'],questions:['정확한 위치'],shieldLevel:'caution',shieldReason:'주의 표현 검토',sensitiveQuotes:['가상의 공격 문구','존재하지 않는 인용'],actions:['현장 확인 여부 검토'],draft:'가상의 공격 문구가 포함된 가상 테스트 초안입니다.',citationIds:[]};
+const valid={safeTitle:'현장 확인 요청',expressionFindings:[{kind:'insult',source:'body',quote:'가상의 공격 문구',reason:'테스트용 인용'}],summary:'현장 확인 요청',requests:['확인 요청'],questions:['정확한 위치'],shieldLevel:'caution',shieldReason:'주의 표현 검토',sensitiveQuotes:['가상의 공격 문구','존재하지 않는 인용'],actions:['현장 확인 여부 검토'],draft:'가상의 공격 문구가 포함된 가상 테스트 초안입니다.',citationIds:[]};
 const realFetch=global.fetch;
 
 test('blank questions and actions are removed while meaningful request conditions remain',()=>{
@@ -17,6 +17,24 @@ test('blank questions and actions are removed while meaningful request condition
  assert.deepEqual(out.requests,['수거가 불가능하면 사유 안내 요청']);
  assert.deepEqual(out.questions,['배출 장소 확인']);
  assert.deepEqual(out.actions,['현장 확인']);
+});
+
+test('context-normal model outputs keep ambiguous request targets and do not gain warnings',()=>{
+ for(const target of ['새끼 고양이','병신년']){
+  const c={...input,title:target+' 자료 문의',body:target+' 관련 자료를 안내해 주세요.'};
+  const out=moduleExports.validateAnalysis(JSON.stringify({...valid,safeTitle:c.title,summary:'대상: '+target,requests:[target+' 자료 안내 요청'],sensitiveQuotes:[],expressionFindings:[],shieldLevel:'normal'}),'test',c,[],[],'test');
+  assert.equal(out.shieldLevel,'normal');assert.deepEqual(out.expressionFindings,[]);
+  assert.ok(out.requests[0].includes(target));assert.ok(out.summary.includes(target));
+ }
+ const c={...input,title:'너 병신이냐',body:'점검 결과를 알려 주세요.'};
+ const out=moduleExports.validateAnalysis(JSON.stringify({...valid,sensitiveQuotes:[],expressionFindings:[{kind:'insult',source:'title',quote:c.title,reason:'상대 비하'}]}),'test',c,[],[],'test');
+ assert.equal(out.shieldLevel,'caution');assert.ok(out.sensitiveQuotes.includes(c.title));
+});
+
+test('unclassified free-floating sensitive words do not override normal model findings',()=>{
+ const c={...input,title:'새끼 고양이 구조',body:'새끼 고양이를 구조해 주세요.'};
+ const out=moduleExports.validateAnalysis(JSON.stringify({...valid,safeTitle:c.title,expressionFindings:[],sensitiveQuotes:['새끼'],shieldLevel:'caution'}),'test',c,[],[],'test');
+ assert.equal(out.shieldLevel,'normal');assert.deepEqual(out.sensitiveQuotes,[]);assert.equal(out.safeTitle,c.title);
 });
 test('API contract and output validation (mocked transport; no live key)',async()=>{
  try {
@@ -33,7 +51,7 @@ test('unretrieved citations are rejected (mocked transport)',async()=>{
 
 test('title abuse is included and invented threats cannot change the protection level',async()=>{
  try {
-  global.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'threat',source:'body',quote:'죽이겠다',reason:'없는 발언'}]})}]}}]});
+  global.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'profanity',source:'title',quote:'씨발',reason:'모델이 판단한 공격 표현'},{kind:'threat',source:'body',quote:'죽이겠다',reason:'없는 발언'}]})}]}}]});
   const out=await moduleExports.generateAnalysis('synthetic-test-key','test-model',{...input,title:'씨발 쓰레기',body:'현장 확인을 부탁합니다.'},[],[],'test');
   assert.equal(out.shieldLevel,'caution');assert.doesNotMatch(out.safeTitle,/씨발/);assert.ok(out.sensitiveQuotes.includes('씨발'));assert.deepEqual(out.expressionFindings.map(f=>[f.kind,f.source]),[['profanity','title']]);
  }finally{global.fetch=realFetch;}

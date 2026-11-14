@@ -8,7 +8,7 @@ const Ws=createRequire(import.meta.url)('next/dist/compiled/ws');
 export class CallAnalysis {
   constructor({key,model,onText,onShield,onError,onProcessing}){
     Object.assign(this,{key,onText,onShield,onError,onProcessing});this.pipeline=new TextPipeline({apiKey:key,model});this.jobs=new Set();this.pending=[];this.items=new Map();this.turn=null;this.ready=false;this.ended=false;
-    this.segmenter=new Segmenter({onStart:()=>{this.turn={id:randomUUID(),partial:'',calls:0,busy:false,latest:null,shielded:false,reported:false};},onFrame:frame=>this.socket.send(JSON.stringify({type:'input_audio_buffer.append',audio:pcm24k(frame).toString('base64')})),onEnd:(audio,voiced)=>this.commit(audio,voiced)});
+    this.segmenter=new Segmenter({onStart:()=>{this.turn={id:randomUUID(),partial:'',calls:0,busy:false,latest:null,shielded:false,reported:false,needsAudioReview:false};},onFrame:frame=>this.socket.send(JSON.stringify({type:'input_audio_buffer.append',audio:pcm24k(frame).toString('base64')})),onEnd:(audio,voiced)=>this.commit(audio,voiced)});
   }
   async start(){
     this.socket=new Ws('wss://api.openai.com/v1/realtime?intent=transcription',{headers:{Authorization:`Bearer ${this.key}`},handshakeTimeout:12000});
@@ -40,7 +40,7 @@ export class CallAnalysis {
   async guard(turn){
     if(turn.shielded||turn.calls>=3||this.ended)return;
     turn.latest=turn.partial;if(turn.busy)return;turn.busy=true;
-    try{while(turn.latest&&turn.calls<3&&!turn.shielded&&!this.ended){const text=turn.latest;turn.latest=null;turn.calls++;const r=await this.pipeline.checkSafety(text);turn.reported=r.scope==='reported_speech';if(r.directAbuse){turn.shielded=true;this.onShield(r,text);}}}catch{this.onError('보호 판정을 다시 확인해야 합니다.');}finally{turn.busy=false;}
+    try{while(turn.latest&&turn.calls<3&&!turn.shielded&&!this.ended){const text=turn.latest;turn.latest=null;turn.calls++;const r=await this.pipeline.checkSafety(text);turn.reported=r.scope==='reported_speech';turn.needsAudioReview=r.scope==='unclear';if(r.directAbuse){turn.shielded=true;this.onShield(r,text);}}}catch{this.onError('보호 판정을 다시 확인해야 합니다.');}finally{turn.busy=false;}
   }
   commit(audio,voiced){
     const turn=this.turn;this.turn=null;if(!turn)return;
@@ -52,7 +52,7 @@ export class CallAnalysis {
     const job=this.review(turn,audio).catch(()=>this.onError('일부 내용을 정리하지 못했습니다. 담당자가 다시 확인해 주세요.')).finally(()=>this.jobs.delete(job));this.jobs.add(job);
   }
   async review(turn,audio){
-    const fallback=needsSafetyCheck(turn.partial)&&!turn.shielded&&!turn.reported?reviewNativeAudio(audio,this.key).then(value=>({value}),()=>({error:true})):null;
+    const fallback=turn.needsAudioReview&&!turn.shielded&&!turn.reported?reviewNativeAudio(audio,this.key).then(value=>({value}),()=>({error:true})):null;
     let transcript=await this.pipeline.verifyAudio(audio),needsReview=false;
     if(fallback){const r=await fallback;if(r.value&&!r.value.uncertain){transcript=r.value.transcript;needsReview=!!r.value.protectionNeedsReview;if(r.value.directAbuse){turn.shielded=true;this.onShield(r.value,transcript);}}else needsReview=true;}
     const safety=this.pipeline.checkSafety(transcript).then(r=>{if(r.directAbuse){turn.shielded=true;this.onShield(r,transcript);}}).catch(()=>{needsReview=true;});

@@ -10,7 +10,7 @@ function load(file){file=path.resolve(file);if(modules.has(file))return modules.
 const {generateAnalysis}=load('lib/ai.ts');
 const complaint={title:'씨발 쓰레기 처리',body:'현장 확인을 요청합니다.',location:'청주시 가상길',category:'생활폐기물',occurred_at:'2026-10-01'};
 const citation={id:'law:test:제14조',title:'가상 근거',article:'제14조',text:'검증용 가상 조문'};
-const valid={safeTitle:'생활쓰레기 현장 확인 요청',expressionFindings:[],summary:'현장 확인 요청',requests:['현장 확인'],questions:[],shieldLevel:'normal',shieldReason:'',sensitiveQuotes:[],actions:[],draft:'현장 확인을 검토하겠습니다. [law:test:제14조]',citationIds:[citation.id]};
+const valid={safeTitle:'생활쓰레기 현장 확인 요청',expressionFindings:[{kind:'profanity',source:'title',quote:'씨발',reason:'모델이 판단한 공격 표현'}],summary:'현장 확인 요청',requests:['현장 확인'],questions:[],shieldLevel:'normal',shieldReason:'',sensitiveQuotes:[],actions:[],draft:'현장 확인을 검토하겠습니다. [law:test:제14조]',citationIds:[citation.id]};
 const realFetch=global.fetch;
 const invoke=()=>generateAnalysis('synthetic-openai-key','gpt-6-luna',complaint,[citation],[],'test','openai');
 const result=value=>Response.json({status:'completed',output:[{type:'reasoning',summary:[]},{type:'message',content:[{type:'output_text',text:JSON.stringify(value)}]}]});

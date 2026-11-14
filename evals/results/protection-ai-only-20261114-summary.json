@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-14",
+  "model": "gpt-6-luna",
+  "datasetHash": "6cb6fd72e4b6eba62b2aaffa521d2da6746c5f34d2ebab3cfc67ca2a5150c4ef",
+  "codeHashes": {
+    "lib/protection.ts": "ee81c08bcf8803b1e78e671972274a251b8cbfec69bf3edb2eb7cdc67a67d11a",
+    "lib/gemini.ts": "cebcc5ee01d7a97e6b50b78059fdb70cd4dfd5b0277a9c71f17bd5ed1e4b7ced"
+  },
+  "method": "Fresh production AI-only expression classification; no keyword override, law, audit, semantic judge, DB or site calls; labels never sent to the model",
+  "labelStatus": "assistant_authored_reference_draft_pending_independent_human_review",
+  "metrics": {
+    "total": 64,
+    "tp": 25,
+    "fp": 0,
+    "tn": 38,
+    "fn": 1,
+    "failed": 0,
+    "neutralTermsLost": 0
+  },
+  "groups": {
+    "real_public": {
+      "total": 24,
+      "tp": 0,
+      "fp": 0,
+      "tn": 24,
+      "fn": 0,
+      "failed": 0
+    },
+    "synthetic": {
+      "total": 40,
+      "tp": 25,
+      "fp": 0,
+      "tn": 14,
+      "fn": 1,
+      "failed": 0
+    }
+  },
+  "sourceRunSha256": "a149f5271a34c06a1f702573a2b82d5c6887b64e930358242b3112d9494f9208",
+  "falseNegativeCases": [
+    {
+      "id": "syn-10",
+      "origin": "synthetic"
+    }
+  ],
+  "contextEvaluation": {
+    "source": "evals/results/protection-ai-only-context-20261114-v1.json",
+    "metrics": {
+      "total": 24,
+      "tp": 12,
+      "fp": 0,
+      "tn": 12,
+      "fn": 0,
+      "failed": 0,
+      "neutralTermsLost": 0
+    }
+  },
+  "limitations": [
+    "AI-authored development labels; no independent human review",
+    "64-case expression classification rerun; request extraction quality not regraded",
+    "24 additional context cases are a separate development set",
+    "No live voice, law correctness, field outcome or human effort reduction measured",
+    "Historical comparison changes both prompt and postprocessing; not an isolated prompt experiment"
+  ]
+}

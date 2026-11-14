@@ -1,0 +1,2013 @@
+{
+  "date": "2026-11-14",
+  "startedAt": "2026-11-14T02:32:42.291Z",
+  "model": "gpt-6-luna",
+  "datasetHash": "796796e069090035d30de27eb0e8b9faa292110ced7e1e061586fcdc71c81448",
+  "codeHashes": {
+    "lib/protection.ts": "ee81c08bcf8803b1e78e671972274a251b8cbfec69bf3edb2eb7cdc67a67d11a",
+    "lib/gemini.ts": "cebcc5ee01d7a97e6b50b78059fdb70cd4dfd5b0277a9c71f17bd5ed1e4b7ced"
+  },
+  "method": "Fresh production AI-only expression classification; no keyword override, law, audit, semantic judge, DB or site calls; labels never sent to the model",
+  "labelStatus": "AI-authored development labels; no independent human review",
+  "cases": [
+    {
+      "id": "context-01",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "배수로에 빠진 새끼 고양이 구조 담당 부서 및 접수 방법 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역 배수로\n대상: 새끼 고양이 2마리\n현황: 배수로에 빠진 상태",
+        "requests": [
+          "구조 담당 부서 안내 요청",
+          "구조 접수 방법 안내 요청"
+        ],
+        "questions": [
+          "구조 요청을 연결할 수 있도록 배수로의 상세 위치(주소 또는 주변 지점)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "정당한 구조 및 안내 요청이며 공격적 표현은 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "상세 위치를 확인한 뒤 해당 지역의 구조 담당 부서와 접수 경로 확인"
+        ],
+        "draft": "새끼 고양이 구조 담당 부서와 접수 방법을 확인해 안내드리려면 배수로의 구체적인 위치가 필요합니다. 주소나 가까운 건물·도로명 등 위치를 알려 주시면 해당 지역의 담당 부서와 접수 경로를 확인하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "배수로에 빠진 새끼 고양이 구조 담당 부서 및 접수 방법 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역 배수로\n대상: 새끼 고양이 2마리\n현황: 배수로에 빠진 상태",
+        "requests": [
+          "구조 담당 부서 안내 요청",
+          "구조 접수 방법 안내 요청"
+        ],
+        "questions": [
+          "구조 요청을 연결할 수 있도록 배수로의 상세 위치(주소 또는 주변 지점)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "정당한 구조 및 안내 요청이며 공격적 표현은 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "상세 위치를 확인한 뒤 해당 지역의 구조 담당 부서와 접수 경로 확인"
+        ],
+        "draft": "새끼 고양이 구조 담당 부서와 접수 방법을 확인해 안내드리려면 배수로의 구체적인 위치가 필요합니다. 주소나 가까운 건물·도로명 등 위치를 알려 주시면 해당 지역의 담당 부서와 접수 경로를 확인하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:51.043Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-02",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "공원에서 발견한 강아지 새끼의 보호시설 인계 방법 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 공원\n대상: 강아지 새끼 3마리\n현황: 발견",
+        "requests": [
+          "보호시설 인계 방법 안내 요청"
+        ],
+        "questions": [
+          "발견한 공원의 이름이나 구체적인 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "공격적 표현 없이 보호시설 인계 방법을 문의한 민원입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "발견 장소를 확인한 뒤 해당 지역의 보호시설 인계 절차와 연락 방법을 확인합니다."
+        ],
+        "draft": "공원에서 발견하신 강아지 새끼 세 마리의 보호시설 인계 방법을 안내해 드리려면 발견 장소를 확인해야 합니다. 공원의 이름이나 구체적인 위치를 알려주시면 해당 지역의 인계 절차와 연락 방법을 확인해 안내하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "공원에서 발견한 강아지 새끼의 보호시설 인계 방법 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 공원\n대상: 강아지 새끼 3마리\n현황: 발견",
+        "requests": [
+          "보호시설 인계 방법 안내 요청"
+        ],
+        "questions": [
+          "발견한 공원의 이름이나 구체적인 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "공격적 표현 없이 보호시설 인계 방법을 문의한 민원입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "발견 장소를 확인한 뒤 해당 지역의 보호시설 인계 절차와 연락 방법을 확인합니다."
+        ],
+        "draft": "공원에서 발견하신 강아지 새끼 세 마리의 보호시설 인계 방법을 안내해 드리려면 발견 장소를 확인해야 합니다. 공원의 이름이나 구체적인 위치를 알려주시면 해당 지역의 인계 절차와 연락 방법을 확인해 안내하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:48.720Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-03",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "둥지에서 떨어진 새끼 새의 구조기관 인계 가능 여부 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n대상: 새끼 새\n현황: 둥지에서 떨어진 상태",
+        "requests": [
+          "야생동물 구조기관 인계 가능 여부 안내 요청"
+        ],
+        "questions": [
+          "실제 시·군·구 또는 상세 위치가 어디인가요?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "욕설·모욕·성희롱 의심 표현이나 구체적 위협이 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "실제 위치를 확인한 뒤 해당 지역의 야생동물 구조기관 및 인계 절차 확인"
+        ],
+        "draft": "둥지에서 떨어진 새끼 새를 발견하셨군요. 구조기관에 인계할 수 있는지 확인하려면 실제 지역을 알아야 합니다. 적어 주신 위치가 ‘가상 지역’으로 되어 있어, 실제 시·군·구 또는 상세 위치를 알려 주시면 해당 지역의 야생동물 구조기관과 인계 방법을 확인해 안내해 드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "둥지에서 떨어진 새끼 새의 구조기관 인계 가능 여부 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n대상: 새끼 새\n현황: 둥지에서 떨어진 상태",
+        "requests": [
+          "야생동물 구조기관 인계 가능 여부 안내 요청"
+        ],
+        "questions": [
+          "실제 시·군·구 또는 상세 위치가 어디인가요?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "욕설·모욕·성희롱 의심 표현이나 구체적 위협이 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "실제 위치를 확인한 뒤 해당 지역의 야생동물 구조기관 및 인계 절차 확인"
+        ],
+        "draft": "둥지에서 떨어진 새끼 새를 발견하셨군요. 구조기관에 인계할 수 있는지 확인하려면 실제 지역을 알아야 합니다. 적어 주신 위치가 ‘가상 지역’으로 되어 있어, 실제 시·군·구 또는 상세 위치를 알려 주시면 해당 지역의 야생동물 구조기관과 인계 방법을 확인해 안내해 드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:50.252Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-04",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "보도 시설 점검 및 점검 결과 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n대상: 보도 시설 틈\n피해: 새끼손가락 부상",
+        "requests": [
+          "보도 시설 점검 요청",
+          "점검 결과 안내 요청"
+        ],
+        "questions": [
+          "점검을 위해 부상한 보도 시설의 구체적인 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "욕설, 모욕, 성희롱 의심 표현이나 구체적 위협 없이 시설 점검과 결과 안내를 요청한 민원입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 위치를 확인한 뒤 시설 점검 가능 여부 검토",
+          "점검 후 결과 안내"
+        ],
+        "draft": "보도 시설 틈에 새끼손가락이 끼어 다치신 점을 확인했습니다. 해당 시설을 점검하고 결과를 안내해 드리기 위해, 가상 지역 내 부상한 지점의 구체적인 위치(도로명, 인근 건물이나 시설 등)를 알려 주시기 바랍니다. 위치가 확인되면 점검 가능 여부를 검토하고, 점검 결과를 안내해 드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "보도 시설 점검 및 점검 결과 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n대상: 보도 시설 틈\n피해: 새끼손가락 부상",
+        "requests": [
+          "보도 시설 점검 요청",
+          "점검 결과 안내 요청"
+        ],
+        "questions": [
+          "점검을 위해 부상한 보도 시설의 구체적인 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "욕설, 모욕, 성희롱 의심 표현이나 구체적 위협 없이 시설 점검과 결과 안내를 요청한 민원입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 위치를 확인한 뒤 시설 점검 가능 여부 검토",
+          "점검 후 결과 안내"
+        ],
+        "draft": "보도 시설 틈에 새끼손가락이 끼어 다치신 점을 확인했습니다. 해당 시설을 점검하고 결과를 안내해 드리기 위해, 가상 지역 내 부상한 지점의 구체적인 위치(도로명, 인근 건물이나 시설 등)를 알려 주시기 바랍니다. 위치가 확인되면 점검 가능 여부를 검토하고, 점검 결과를 안내해 드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:52.927Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-05",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "행사장 보행로 새끼줄 수거 및 통행 확인 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역 행사장 보행로\n현황: 행사 종료 후 새끼줄 잔류",
+        "requests": [
+          "새끼줄 수거 요청",
+          "통행 지장 여부 확인 요청"
+        ],
+        "questions": [
+          "새끼줄이 남아 있는 행사장과 보행로의 구체적인 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "업무 조치 요청만 포함되어 있습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 위치를 확인한 뒤 새끼줄 수거와 통행 지장 여부 확인을 검토합니다."
+        ],
+        "draft": "행사 종료 후 보행로에 남은 새끼줄의 수거와 통행 지장 여부 확인 요청을 접수했습니다. 현장 확인과 조치를 위해 새끼줄이 남아 있는 행사장 및 보행로의 구체적인 위치를 알려주시기 바랍니다. 위치를 확인한 뒤 수거와 통행 상태를 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "행사장 보행로 새끼줄 수거 및 통행 확인 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역 행사장 보행로\n현황: 행사 종료 후 새끼줄 잔류",
+        "requests": [
+          "새끼줄 수거 요청",
+          "통행 지장 여부 확인 요청"
+        ],
+        "questions": [
+          "새끼줄이 남아 있는 행사장과 보행로의 구체적인 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "업무 조치 요청만 포함되어 있습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 위치를 확인한 뒤 새끼줄 수거와 통행 지장 여부 확인을 검토합니다."
+        ],
+        "draft": "행사 종료 후 보행로에 남은 새끼줄의 수거와 통행 지장 여부 확인 요청을 접수했습니다. 현장 확인과 조치를 위해 새끼줄이 남아 있는 행사장 및 보행로의 구체적인 위치를 알려주시기 바랍니다. 위치를 확인한 뒤 수거와 통행 상태를 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:54.915Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-06",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "시립박물관 역사 전시 자료 열람 절차 안내 요청",
+        "expressionFindings": [],
+        "summary": "대상: 시립박물관의 2016년 병신년 역사 전시 자료",
+        "requests": [
+          "자료 열람 절차 안내 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "normal",
+        "shieldReason": "공격적 표현 없이 자료 열람 절차를 문의하는 내용입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "시립박물관의 해당 전시 자료 열람 가능 여부와 신청 절차 확인"
+        ],
+        "draft": "문의하신 시립박물관 역사 전시 자료의 열람 절차는 제공된 정보만으로 구체적인 신청 방법이나 조건을 안내하기 어렵습니다. 해당 자료의 열람 가능 여부와 신청 절차를 확인해 안내할 수 있도록 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "시립박물관 역사 전시 자료 열람 절차 안내 요청",
+        "expressionFindings": [],
+        "summary": "대상: 시립박물관의 2016년 병신년 역사 전시 자료",
+        "requests": [
+          "자료 열람 절차 안내 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "normal",
+        "shieldReason": "공격적 표현 없이 자료 열람 절차를 문의하는 내용입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "시립박물관의 해당 전시 자료 열람 가능 여부와 신청 절차 확인"
+        ],
+        "draft": "문의하신 시립박물관 역사 전시 자료의 열람 절차는 제공된 정보만으로 구체적인 신청 방법이나 조건을 안내하기 어렵습니다. 해당 자료의 열람 가능 여부와 신청 절차를 확인해 안내할 수 있도록 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:57.646Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-07",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "간지 표기 설명 문의",
+        "expressionFindings": [],
+        "summary": "",
+        "requests": [
+          "육십갑자 표의 병신과 정유가 뜻하는 해 설명 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "normal",
+        "shieldReason": "표의 간지 표기에 관한 중립적인 정보 문의입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "지역사 자료의 육십갑자 표기에서 병신과 정유가 가리키는 연도를 확인해 설명"
+        ],
+        "draft": "문의하신 병신은 병신년(丙申年), 정유는 정유년(丁酉年)을 뜻합니다. 병신년과 정유년은 육십갑자 순환에서 각각 해당 간지로 부르는 해입니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "간지 표기 설명 문의",
+        "expressionFindings": [],
+        "summary": "",
+        "requests": [
+          "육십갑자 표의 병신과 정유가 뜻하는 해 설명 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "normal",
+        "shieldReason": "표의 간지 표기에 관한 중립적인 정보 문의입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "지역사 자료의 육십갑자 표기에서 병신과 정유가 가리키는 연도를 확인해 설명"
+        ],
+        "draft": "문의하신 병신은 병신년(丙申年), 정유는 정유년(丁酉年)을 뜻합니다. 병신년과 정유년은 육십갑자 순환에서 각각 해당 간지로 부르는 해입니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:32:55.395Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-08",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "시발역 승강장 안내판 보수 계획 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n현황: 승강장 안내판 글씨 지워짐",
+        "requests": [
+          "승강장 안내판 보수 계획 안내 요청"
+        ],
+        "questions": [
+          "정확한 역명이나 안내판 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "확인된 공격적 표현이 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "정확한 역명과 안내판 위치 확인",
+          "안내판 보수 계획 확인 후 안내"
+        ],
+        "draft": "안녕하세요. 승강장 안내판 보수 계획을 안내드리려면 해당 안내판의 정확한 역명이나 위치를 확인할 필요가 있습니다. 역명과 승강장 내 안내판 위치를 알려 주시면 보수 계획을 확인해 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "시발역 승강장 안내판 보수 계획 문의",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역\n현황: 승강장 안내판 글씨 지워짐",
+        "requests": [
+          "승강장 안내판 보수 계획 안내 요청"
+        ],
+        "questions": [
+          "정확한 역명이나 안내판 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "확인된 공격적 표현이 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "정확한 역명과 안내판 위치 확인",
+          "안내판 보수 계획 확인 후 안내"
+        ],
+        "draft": "안녕하세요. 승강장 안내판 보수 계획을 안내드리려면 해당 안내판의 정확한 역명이나 위치를 확인할 필요가 있습니다. 역명과 승강장 내 안내판 위치를 알려 주시면 보수 계획을 확인해 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:00.118Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-09",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "침수 시작 지점 조사 및 재발 방지 계획 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "침수 시작 지점 조사 요청",
+          "조사 결과 안내 요청",
+          "재발 방지 계획 안내 요청"
+        ],
+        "questions": [
+          "침수 발생 지점을 확인할 수 있도록 구체적인 주소나 주변 기준물을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "침수 시작 지점을 가리키는 표현으로 사용되었으며, 공격적 표현은 확인되지 않습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 침수 발생 위치 확인",
+          "위치 확인 후 조사 가능 여부와 필요한 절차 검토",
+          "조사 결과 및 재발 방지 계획 안내 가능 여부 검토"
+        ],
+        "draft": "침수 시작 지점 조사와 조사 결과 및 재발 방지 계획 안내를 요청하신 내용으로 확인했습니다. 현재 기재된 위치만으로는 조사 지점을 특정하기 어려우므로, 침수가 발생한 구체적인 주소나 주변 기준물을 알려 주시기 바랍니다. 위치를 확인한 뒤 조사 가능 여부를 검토하고, 조사 결과와 재발 방지 계획을 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "침수 시작 지점 조사 및 재발 방지 계획 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "침수 시작 지점 조사 요청",
+          "조사 결과 안내 요청",
+          "재발 방지 계획 안내 요청"
+        ],
+        "questions": [
+          "침수 발생 지점을 확인할 수 있도록 구체적인 주소나 주변 기준물을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "침수 시작 지점을 가리키는 표현으로 사용되었으며, 공격적 표현은 확인되지 않습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "구체적인 침수 발생 위치 확인",
+          "위치 확인 후 조사 가능 여부와 필요한 절차 검토",
+          "조사 결과 및 재발 방지 계획 안내 가능 여부 검토"
+        ],
+        "draft": "침수 시작 지점 조사와 조사 결과 및 재발 방지 계획 안내를 요청하신 내용으로 확인했습니다. 현재 기재된 위치만으로는 조사 지점을 특정하기 어려우므로, 침수가 발생한 구체적인 주소나 주변 기준물을 알려 주시기 바랍니다. 위치를 확인한 뒤 조사 가능 여부를 검토하고, 조사 결과와 재발 방지 계획을 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:00.999Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-10",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "처리 지연 및 담당 부서·처리 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "criticism",
+            "source": "title",
+            "quote": "처리 지연에 항의합니다",
+            "reason": "처리 지연에 대한 업무상 불만을 표시합니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "한 달째 답변이 없어 불만입니다",
+            "reason": "답변이 없는 기간과 이에 대한 불만을 표현합니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n경과: 한 달째 답변 없음",
+        "requests": [
+          "담당 부서 안내 요청",
+          "처리 예정일 안내 요청"
+        ],
+        "questions": [
+          "해당 민원을 확인할 수 있도록 접수번호 또는 접수일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "업무 처리 지연에 대한 불만과 감사 청구 절차를 알아보겠다는 의사 표현이 있으며, 구체적인 위협은 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "접수번호 또는 접수일을 확인해 해당 민원의 담당 부서와 처리 예정일 확인"
+        ],
+        "draft": "답변이 지연되어 불편을 드려 죄송합니다. 담당 부서와 처리 예정일을 확인해 안내드리려면 해당 민원을 식별할 정보가 필요합니다. 접수번호 또는 접수일을 알려 주시면 확인 후 담당 부서와 처리 예정일을 안내하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "처리 지연 및 담당 부서·처리 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "criticism",
+            "source": "title",
+            "quote": "처리 지연에 항의합니다",
+            "reason": "처리 지연에 대한 업무상 불만을 표시합니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "한 달째 답변이 없어 불만입니다",
+            "reason": "답변이 없는 기간과 이에 대한 불만을 표현합니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n경과: 한 달째 답변 없음",
+        "requests": [
+          "담당 부서 안내 요청",
+          "처리 예정일 안내 요청"
+        ],
+        "questions": [
+          "해당 민원을 확인할 수 있도록 접수번호 또는 접수일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "업무 처리 지연에 대한 불만과 감사 청구 절차를 알아보겠다는 의사 표현이 있으며, 구체적인 위협은 없습니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "접수번호 또는 접수일을 확인해 해당 민원의 담당 부서와 처리 예정일 확인"
+        ],
+        "draft": "답변이 지연되어 불편을 드려 죄송합니다. 담당 부서와 처리 예정일을 확인해 안내드리려면 해당 민원을 식별할 정보가 필요합니다. 접수번호 또는 접수일을 알려 주시면 확인 후 담당 부서와 처리 예정일을 안내하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:03.504Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-11",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "자료 공개 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "결정 근거 공개 요청"
+        ],
+        "questions": [
+          "공개를 요청하는 결정의 명칭이나 결정일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "행정심판 청구 의사 표명은 구체적인 위협이나 모욕이 아닌 정당한 권리 행사 의사입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "요청 대상 결정을 확인한 뒤 공개 가능한 근거 자료와 공개 절차 검토"
+        ],
+        "draft": "결정 근거 공개를 요청하신 사항을 확인하겠습니다. 정확한 자료를 확인할 수 있도록 공개를 요청하시는 결정의 명칭이나 결정일을 알려 주시기 바랍니다. 확인 후 공개 가능한 자료와 절차를 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "자료 공개 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "결정 근거 공개 요청"
+        ],
+        "questions": [
+          "공개를 요청하는 결정의 명칭이나 결정일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "행정심판 청구 의사 표명은 구체적인 위협이나 모욕이 아닌 정당한 권리 행사 의사입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "요청 대상 결정을 확인한 뒤 공개 가능한 근거 자료와 공개 절차 검토"
+        ],
+        "draft": "결정 근거 공개를 요청하신 사항을 확인하겠습니다. 정확한 자료를 확인할 수 있도록 공개를 요청하시는 결정의 명칭이나 결정일을 알려 주시기 바랍니다. 확인 후 공개 가능한 자료와 절차를 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:04.985Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-12",
+      "origin": "synthetic_context",
+      "expectedPositive": false,
+      "rawModel": {
+        "safeTitle": "어린이집 앞 안전펜스 수리 일정 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역, 어린이집 앞\n현황: 안전펜스 파손",
+        "requests": [
+          "안전펜스 수리 일정 안내 요청"
+        ],
+        "questions": [
+          "해당 어린이집의 정확한 명칭이나 주소를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "구체적인 위협이나 모욕적 표현 없이 시설 파손에 대한 우려와 일정 안내를 요청하는 내용입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "정확한 시설 위치를 확인한 뒤 안전펜스 상태와 수리 일정을 확인"
+        ],
+        "draft": "안전펜스 파손으로 걱정이 크실 것으로 생각합니다. 현재 기재된 위치만으로는 해당 어린이집을 특정하기 어려워 수리 일정을 확인해 안내드리기 어렵습니다. 어린이집의 정확한 명칭이나 주소를 알려 주시면 파손 상태와 수리 일정을 확인해 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "어린이집 앞 안전펜스 수리 일정 안내 요청",
+        "expressionFindings": [],
+        "summary": "위치: 가상 지역, 어린이집 앞\n현황: 안전펜스 파손",
+        "requests": [
+          "안전펜스 수리 일정 안내 요청"
+        ],
+        "questions": [
+          "해당 어린이집의 정확한 명칭이나 주소를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "normal",
+        "shieldReason": "구체적인 위협이나 모욕적 표현 없이 시설 파손에 대한 우려와 일정 안내를 요청하는 내용입니다.",
+        "sensitiveQuotes": [],
+        "actions": [
+          "정확한 시설 위치를 확인한 뒤 안전펜스 상태와 수리 일정을 확인"
+        ],
+        "draft": "안전펜스 파손으로 걱정이 크실 것으로 생각합니다. 현재 기재된 위치만으로는 해당 어린이집을 특정하기 어려워 수리 일정을 확인해 안내드리기 어렵습니다. 어린이집의 정확한 명칭이나 주소를 알려 주시면 파손 상태와 수리 일정을 확인해 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:06.289Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": false
+    },
+    {
+      "id": "context-13",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "도로 보수 건 진행 상황 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "title",
+            "quote": "너 병신이냐",
+            "reason": "담당자를 직접 비하하는 인신공격 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 도로 보수 건",
+        "requests": [
+          "도로 보수 건 진행 상황 안내 요청"
+        ],
+        "questions": [
+          "도로 보수 건의 위치를 확인할 수 있도록 도로명이나 인근 주소를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 담당자를 향한 인신공격 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "너 병신이냐"
+        ],
+        "actions": [
+          "상세 위치를 확인한 뒤 도로 보수 접수 내역과 진행 상황 확인"
+        ],
+        "draft": "도로 보수 건의 진행 상황을 확인해 안내드리겠습니다. 현재 기재된 위치만으로는 해당 접수 건을 특정하기 어려우니, 확인을 위해 도로명이나 인근 주소를 알려 주시기 바랍니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "도로 보수 건 진행 상황 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "title",
+            "quote": "너 병신이냐",
+            "reason": "담당자를 직접 비하하는 인신공격 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 도로 보수 건",
+        "requests": [
+          "도로 보수 건 진행 상황 안내 요청"
+        ],
+        "questions": [
+          "도로 보수 건의 위치를 확인할 수 있도록 도로명이나 인근 주소를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 담당자를 향한 인신공격 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "너 병신이냐"
+        ],
+        "actions": [
+          "상세 위치를 확인한 뒤 도로 보수 접수 내역과 진행 상황 확인"
+        ],
+        "draft": "도로 보수 건의 진행 상황을 확인해 안내드리겠습니다. 현재 기재된 위치만으로는 해당 접수 건을 특정하기 어려우니, 확인을 위해 도로명이나 인근 주소를 알려 주시기 바랍니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:09.158Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-14",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "가로등 수리 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "title",
+            "quote": "이 새끼야",
+            "reason": "상대를 비하하는 인신공격 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 가로등 고장",
+        "requests": [
+          "가로등 수리 예정일 안내 요청"
+        ],
+        "questions": [
+          "고장 난 가로등의 정확한 위치(도로명, 인근 건물이나 전주 번호 등)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 상대를 비하하는 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "이 새끼야"
+        ],
+        "actions": [
+          "정확한 위치를 확인한 뒤 해당 가로등의 수리 일정 확인"
+        ],
+        "draft": "가로등 고장으로 불편을 드려 죄송합니다. 수리 예정일을 확인하려면 고장 난 가로등의 정확한 위치가 필요합니다. 도로명과 인근 건물 또는 전주 번호 등 위치를 알려 주시면 수리 일정 확인 후 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "가로등 수리 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "title",
+            "quote": "이 새끼야",
+            "reason": "상대를 비하하는 인신공격 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 가로등 고장",
+        "requests": [
+          "가로등 수리 예정일 안내 요청"
+        ],
+        "questions": [
+          "고장 난 가로등의 정확한 위치(도로명, 인근 건물이나 전주 번호 등)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 상대를 비하하는 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "이 새끼야"
+        ],
+        "actions": [
+          "정확한 위치를 확인한 뒤 해당 가로등의 수리 일정 확인"
+        ],
+        "draft": "가로등 고장으로 불편을 드려 죄송합니다. 수리 예정일을 확인하려면 고장 난 가로등의 정확한 위치가 필요합니다. 도로명과 인근 건물 또는 전주 번호 등 위치를 알려 주시면 수리 일정 확인 후 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:09.619Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-15",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "누수 원인 조사 및 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 담당자들 병신 같네",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 누수 원인",
+        "requests": [
+          "누수 원인 조사 요청",
+          "조사 결과 안내 요청"
+        ],
+        "questions": [
+          "누수 지점의 상세 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 비하하는 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "너희 담당자들 병신 같네"
+        ],
+        "actions": [
+          "누수 지점의 상세 위치를 확인한 뒤 원인 조사 가능 여부와 절차 검토"
+        ],
+        "draft": "누수 원인을 조사하고 결과를 안내해 드리기 위해서는 누수 지점의 상세 위치가 필요합니다. 누수가 발생한 건물이나 시설의 주소와 구체적인 지점을 알려 주시면, 확인 후 조사 가능 여부와 결과 안내 방법을 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "누수 원인 조사 및 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 담당자들 병신 같네",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 누수 원인",
+        "requests": [
+          "누수 원인 조사 요청",
+          "조사 결과 안내 요청"
+        ],
+        "questions": [
+          "누수 지점의 상세 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 비하하는 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "너희 담당자들 병신 같네"
+        ],
+        "actions": [
+          "누수 지점의 상세 위치를 확인한 뒤 원인 조사 가능 여부와 절차 검토"
+        ],
+        "draft": "누수 원인을 조사하고 결과를 안내해 드리기 위해서는 누수 지점의 상세 위치가 필요합니다. 누수가 발생한 건물이나 시설의 주소와 구체적인 지점을 알려 주시면, 확인 후 조사 가능 여부와 결과 안내 방법을 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:11.376Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-16",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "주차 단속 근거 및 이의신청 절차 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 이 병신년아",
+            "reason": "담당자를 직접 겨냥한 모욕적 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "주차 단속 근거 설명 요청",
+          "이의신청 절차 안내 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 모욕적 표현이 확인되어 주의가 필요합니다.",
+        "sensitiveQuotes": [
+          "담당자 이 병신년아"
+        ],
+        "actions": [
+          "해당 지역의 주차 단속 근거와 이의신청 절차를 확인해 안내"
+        ],
+        "draft": "주차 단속의 근거와 이의신청 절차를 문의하신 내용에 대해 안내드립니다. 현재 확인할 수 있는 관련 조문이 제공되지 않아 구체적인 법적 근거를 특정하기 어렵습니다. 해당 단속의 근거와 적용 절차를 확인한 뒤 안내드리겠습니다. 특정 단속 건에 관한 문의라면 단속 일자와 통지서에 기재된 정보를 알려 주시면 해당 건의 적용 내용을 확인하는 데 도움이 됩니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "주차 단속 근거 및 이의신청 절차 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 이 병신년아",
+            "reason": "담당자를 직접 겨냥한 모욕적 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "주차 단속 근거 설명 요청",
+          "이의신청 절차 안내 요청"
+        ],
+        "questions": [],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 모욕적 표현이 확인되어 주의가 필요합니다.",
+        "sensitiveQuotes": [
+          "담당자 이 병신년아"
+        ],
+        "actions": [
+          "해당 지역의 주차 단속 근거와 이의신청 절차를 확인해 안내"
+        ],
+        "draft": "주차 단속의 근거와 이의신청 절차를 문의하신 내용에 대해 안내드립니다. 현재 확인할 수 있는 관련 조문이 제공되지 않아 구체적인 법적 근거를 특정하기 어렵습니다. 해당 단속의 근거와 적용 절차를 확인한 뒤 안내드리겠습니다. 특정 단속 건에 관한 문의라면 단속 일자와 통지서에 기재된 정보를 알려 주시면 해당 건의 적용 내용을 확인하는 데 도움이 됩니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:15.437Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-17",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "막힌 배수로 점검 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "이 새끼들은 일도 안 하냐.",
+            "reason": "담당자를 향한 욕설 표현입니다."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 새끼들은 일도 안 하냐.",
+            "reason": "담당자를 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 배수로 막힘",
+        "requests": [
+          "막힌 배수로 점검 요청"
+        ],
+        "questions": [
+          "현장 확인을 위해 막힌 배수로의 상세 위치(도로명, 인근 건물이나 지점 등)를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 욕설·비하 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "이 새끼들은 일도 안 하냐."
+        ],
+        "actions": [
+          "상세 위치를 확인한 뒤 현장 점검 가능 여부 검토"
+        ],
+        "draft": "배수로 점검을 요청하신 내용을 확인했습니다. 현장 확인을 위해 막힌 배수로의 상세 위치(도로명, 인근 건물이나 지점 등)를 알려주시기 바랍니다. 위치가 확인되면 점검 가능 여부를 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "막힌 배수로 점검 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "이 새끼들은 일도 안 하냐.",
+            "reason": "담당자를 향한 욕설 표현입니다."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 새끼들은 일도 안 하냐.",
+            "reason": "담당자를 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 배수로 막힘",
+        "requests": [
+          "막힌 배수로 점검 요청"
+        ],
+        "questions": [
+          "현장 확인을 위해 막힌 배수로의 상세 위치(도로명, 인근 건물이나 지점 등)를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 욕설·비하 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "이 새끼들은 일도 안 하냐."
+        ],
+        "actions": [
+          "상세 위치를 확인한 뒤 현장 점검 가능 여부 검토"
+        ],
+        "draft": "배수로 점검을 요청하신 내용을 확인했습니다. 현장 확인을 위해 막힌 배수로의 상세 위치(도로명, 인근 건물이나 지점 등)를 알려주시기 바랍니다. 위치가 확인되면 점검 가능 여부를 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:14.804Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-18",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "파손된 보도블록 보수 및 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "title",
+            "quote": "시 . 발",
+            "reason": "보수 요청 앞에 상대를 향한 욕설로 쓰인 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 보도블록 파손",
+        "requests": [
+          "파손된 보도블록 보수 요청",
+          "보수 예정일 안내 요청"
+        ],
+        "questions": [
+          "보수 대상 보도블록의 구체적인 위치(도로명, 인근 건물 또는 사진)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 상대를 향한 욕설로 보이는 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "시 . 발"
+        ],
+        "actions": [
+          "상세 위치 확인 후 현장 상태와 보수 필요 여부 검토",
+          "보수 일정 확인 후 안내"
+        ],
+        "draft": "안녕하세요. 파손된 보도블록 보수와 예정일 안내 요청을 확인했습니다. 현 위치 정보만으로는 보수 대상을 특정하기 어려워 검토와 일정 확인을 진행하기 어렵습니다. 도로명이나 인근 건물 등 구체적인 위치를 알려 주시면 현장 상태와 보수 필요 여부를 확인한 뒤, 확인 가능한 보수 일정을 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "파손된 보도블록 보수 및 예정일 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "title",
+            "quote": "시 . 발",
+            "reason": "보수 요청 앞에 상대를 향한 욕설로 쓰인 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n현황: 보도블록 파손",
+        "requests": [
+          "파손된 보도블록 보수 요청",
+          "보수 예정일 안내 요청"
+        ],
+        "questions": [
+          "보수 대상 보도블록의 구체적인 위치(도로명, 인근 건물 또는 사진)를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 상대를 향한 욕설로 보이는 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "시 . 발"
+        ],
+        "actions": [
+          "상세 위치 확인 후 현장 상태와 보수 필요 여부 검토",
+          "보수 일정 확인 후 안내"
+        ],
+        "draft": "안녕하세요. 파손된 보도블록 보수와 예정일 안내 요청을 확인했습니다. 현 위치 정보만으로는 보수 대상을 특정하기 어려워 검토와 일정 확인을 진행하기 어렵습니다. 도로명이나 인근 건물 등 구체적인 위치를 알려 주시면 현장 상태와 보수 필요 여부를 확인한 뒤, 확인 가능한 보수 일정을 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:17.055Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-19",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "쓰레기 수거 및 반복 적치 방지 대책 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "title",
+            "quote": "씨·발",
+            "reason": "제목에서 욕설 표현을 사용했습니다."
+          }
+        ],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "쓰레기 수거 요청",
+          "반복 적치 방지 대책 안내 요청"
+        ],
+        "questions": [
+          "수거 대상 쓰레기의 정확한 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 욕설 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "씨·발"
+        ],
+        "actions": [
+          "정확한 위치를 확인한 뒤 수거 가능 여부와 반복 적치 방지 대책을 검토합니다."
+        ],
+        "draft": "쓰레기 수거와 반복 적치 방지 대책 안내를 요청하신 점 확인했습니다. 현장 확인 및 수거 가능 여부를 검토하려면 위치 정보가 더 필요합니다. 수거 대상 쓰레기가 있는 정확한 위치를 알려주시면 확인 후 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "쓰레기 수거 및 반복 적치 방지 대책 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "title",
+            "quote": "씨·발",
+            "reason": "제목에서 욕설 표현을 사용했습니다."
+          }
+        ],
+        "summary": "위치: 가상 지역",
+        "requests": [
+          "쓰레기 수거 요청",
+          "반복 적치 방지 대책 안내 요청"
+        ],
+        "questions": [
+          "수거 대상 쓰레기의 정확한 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "제목에 욕설 표현이 있습니다.",
+        "sensitiveQuotes": [
+          "씨·발"
+        ],
+        "actions": [
+          "정확한 위치를 확인한 뒤 수거 가능 여부와 반복 적치 방지 대책을 검토합니다."
+        ],
+        "draft": "쓰레기 수거와 반복 적치 방지 대책 안내를 요청하신 점 확인했습니다. 현장 확인 및 수거 가능 여부를 검토하려면 위치 정보가 더 필요합니다. 수거 대상 쓰레기가 있는 정확한 위치를 알려주시면 확인 후 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:19.635Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-20",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "야간 소음 측정 및 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "ㅅ ㅂ 밤에 잠을 못 자겠다",
+            "reason": "초성으로 욕설을 표현한 것으로 보이며, 야간 소음에 대한 불만과 함께 쓰였습니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "밤에 잠을 못 자겠다",
+            "reason": "야간 소음으로 인한 수면 곤란을 호소하고 있습니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n피해: 야간 소음으로 수면 곤란",
+        "requests": [
+          "현장 소음 측정 요청",
+          "측정 결과 안내 요청"
+        ],
+        "questions": [
+          "소음 측정이 가능하도록 소음이 발생하는 구체적인 위치와 발생 시간대를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "본문에 욕설로 보이는 초성 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "ㅅ ㅂ 밤에 잠을 못 자겠다"
+        ],
+        "actions": [
+          "구체적인 소음 발생 위치와 시간대 확인",
+          "확인된 정보에 따라 현장 측정 가능 여부 검토",
+          "측정 진행 시 결과 안내 방안 검토"
+        ],
+        "draft": "안녕하세요. 야간 소음 측정과 결과 안내를 요청하신 내용을 확인했습니다. 현장 측정을 검토하려면 소음이 발생하는 구체적인 위치와 발생 시간대가 필요합니다. 해당 정보를 알려 주시면 측정 가능 여부를 확인하고, 측정이 진행되는 경우 결과 안내 방안을 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "야간 소음 측정 및 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "ㅅ ㅂ 밤에 잠을 못 자겠다",
+            "reason": "초성으로 욕설을 표현한 것으로 보이며, 야간 소음에 대한 불만과 함께 쓰였습니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "밤에 잠을 못 자겠다",
+            "reason": "야간 소음으로 인한 수면 곤란을 호소하고 있습니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n피해: 야간 소음으로 수면 곤란",
+        "requests": [
+          "현장 소음 측정 요청",
+          "측정 결과 안내 요청"
+        ],
+        "questions": [
+          "소음 측정이 가능하도록 소음이 발생하는 구체적인 위치와 발생 시간대를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "본문에 욕설로 보이는 초성 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "ㅅ ㅂ 밤에 잠을 못 자겠다"
+        ],
+        "actions": [
+          "구체적인 소음 발생 위치와 시간대 확인",
+          "확인된 정보에 따라 현장 측정 가능 여부 검토",
+          "측정 진행 시 결과 안내 방안 검토"
+        ],
+        "draft": "안녕하세요. 야간 소음 측정과 결과 안내를 요청하신 내용을 확인했습니다. 현장 측정을 검토하려면 소음이 발생하는 구체적인 위치와 발생 시간대가 필요합니다. 해당 정보를 알려 주시면 측정 가능 여부를 확인하고, 측정이 진행되는 경우 결과 안내 방안을 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:21.481Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    },
+    {
+      "id": "context-21",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "배수로 새끼 고양이 구조 및 구조 가능 여부 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 너 병신이냐",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 배수로의 새끼 고양이",
+        "requests": [
+          "새끼 고양이 구조 요청",
+          "구조 가능 여부 안내 요청"
+        ],
+        "questions": [
+          "구조 대상 배수로의 정확한 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 직접 비하하는 표현이 포함되어 있어 주의가 필요합니다.",
+        "sensitiveQuotes": [
+          "담당자 너 병신이냐"
+        ],
+        "actions": [
+          "정확한 위치 확인 후 현장 상황과 구조 가능 여부 검토"
+        ],
+        "draft": "배수로의 새끼 고양이 구조와 구조 가능 여부 안내를 요청하신 내용을 확인했습니다. 현재 알려 주신 위치만으로는 대상 배수로를 특정하기 어려워 구조 가능 여부를 확인하기 어렵습니다. 구조 대상 배수로의 정확한 위치를 알려 주시면 현장 상황을 확인하고 구조 가능 여부를 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "배수로 새끼 고양이 구조 및 구조 가능 여부 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 너 병신이냐",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 배수로의 새끼 고양이",
+        "requests": [
+          "새끼 고양이 구조 요청",
+          "구조 가능 여부 안내 요청"
+        ],
+        "questions": [
+          "구조 대상 배수로의 정확한 위치를 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 직접 비하하는 표현이 포함되어 있어 주의가 필요합니다.",
+        "sensitiveQuotes": [
+          "담당자 너 병신이냐"
+        ],
+        "actions": [
+          "정확한 위치 확인 후 현장 상황과 구조 가능 여부 검토"
+        ],
+        "draft": "배수로의 새끼 고양이 구조와 구조 가능 여부 안내를 요청하신 내용을 확인했습니다. 현재 알려 주신 위치만으로는 대상 배수로를 특정하기 어려워 구조 가능 여부를 확인하기 어렵습니다. 구조 대상 배수로의 정확한 위치를 알려 주시면 현장 상황을 확인하고 구조 가능 여부를 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:21.964Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true,
+      "neutralTerm": {
+        "term": "새끼 고양이",
+        "inRaw": true,
+        "inFinal": true
+      }
+    },
+    {
+      "id": "context-22",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "2016년 행사 자료 공개 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 이 새끼야",
+            "reason": "담당자를 향한 직접적인 모욕 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 2016년 행사 자료",
+        "requests": [
+          "2016년 행사 자료 공개 요청"
+        ],
+        "questions": [
+          "어떤 행사 자료를 말씀하시는지 행사명이나 자료의 범위를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 직접적인 모욕 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "담당자 이 새끼야"
+        ],
+        "actions": [
+          "해당 행사 자료의 보유 여부와 공개 가능 범위 확인"
+        ],
+        "draft": "안녕하세요. 2016년 행사 자료 공개 요청을 확인했습니다. 어떤 행사 자료인지 특정할 수 있도록 행사명이나 공개를 원하시는 자료의 범위를 알려주시기 바랍니다. 확인 후 자료 보유 여부와 공개 가능 범위를 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "2016년 행사 자료 공개 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "담당자 이 새끼야",
+            "reason": "담당자를 향한 직접적인 모욕 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 2016년 행사 자료",
+        "requests": [
+          "2016년 행사 자료 공개 요청"
+        ],
+        "questions": [
+          "어떤 행사 자료를 말씀하시는지 행사명이나 자료의 범위를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 직접적인 모욕 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "담당자 이 새끼야"
+        ],
+        "actions": [
+          "해당 행사 자료의 보유 여부와 공개 가능 범위 확인"
+        ],
+        "draft": "안녕하세요. 2016년 행사 자료 공개 요청을 확인했습니다. 어떤 행사 자료인지 특정할 수 있도록 행사명이나 공개를 원하시는 자료의 범위를 알려주시기 바랍니다. 확인 후 자료 보유 여부와 공개 가능 범위를 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:24.764Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true,
+      "neutralTerm": {
+        "term": "병신년",
+        "inRaw": false,
+        "inFinal": false
+      }
+    },
+    {
+      "id": "context-23",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "계단 틈 새끼손가락 부상 및 시설 점검 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "욕설 표현이 포함되어 있습니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "안전 관리를 왜 이따위로 합니까",
+            "reason": "시설 안전 관리에 대한 불만과 비판입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 계단 틈\n피해: 새끼손가락 끼임 및 부상",
+        "requests": [
+          "시설 점검 요청"
+        ],
+        "questions": [
+          "점검할 계단을 특정할 수 있도록 건물명과 층·계단 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "욕설 표현이 포함되어 있어 주의가 필요합니다. 구체적인 위협은 확인되지 않습니다.",
+        "sensitiveQuotes": [
+          "씨발"
+        ],
+        "actions": [
+          "정확한 계단 위치를 확인한 뒤 시설 점검 필요 사항을 검토합니다."
+        ],
+        "draft": "계단 틈에 새끼손가락이 끼여 부상을 입으신 점을 확인했습니다. 시설 점검을 위해서는 대상 계단의 위치를 특정해야 하므로, 건물명과 층·계단 위치를 알려주시기 바랍니다. 위치를 확인하면 해당 시설의 점검 필요 사항을 검토하겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "계단 틈 새끼손가락 부상 및 시설 점검 요청",
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "욕설 표현이 포함되어 있습니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "안전 관리를 왜 이따위로 합니까",
+            "reason": "시설 안전 관리에 대한 불만과 비판입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 계단 틈\n피해: 새끼손가락 끼임 및 부상",
+        "requests": [
+          "시설 점검 요청"
+        ],
+        "questions": [
+          "점검할 계단을 특정할 수 있도록 건물명과 층·계단 위치를 알려주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "욕설 표현이 포함되어 있어 주의가 필요합니다. 구체적인 위협은 확인되지 않습니다.",
+        "sensitiveQuotes": [
+          "씨발"
+        ],
+        "actions": [
+          "정확한 계단 위치를 확인한 뒤 시설 점검 필요 사항을 검토합니다."
+        ],
+        "draft": "계단 틈에 새끼손가락이 끼여 부상을 입으신 점을 확인했습니다. 시설 점검을 위해서는 대상 계단의 위치를 특정해야 하므로, 건물명과 층·계단 위치를 알려주시기 바랍니다. 위치를 확인하면 해당 시설의 점검 필요 사항을 검토하겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:26.255Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true,
+      "neutralTerm": {
+        "term": "새끼손가락",
+        "inRaw": true,
+        "inFinal": true
+      }
+    },
+    {
+      "id": "context-24",
+      "origin": "synthetic_context",
+      "expectedPositive": true,
+      "rawModel": {
+        "safeTitle": "가로수 점검 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "야 너 진짜 병 신이냐",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 가로수\n경과: 지난번 점검 접수",
+        "requests": [
+          "가로수 점검 결과 안내 요청"
+        ],
+        "questions": [
+          "지난번 접수 건을 확인할 수 있도록 접수번호나 접수일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 모욕 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "야 너 진짜 병 신이냐"
+        ],
+        "actions": [
+          "접수번호 또는 접수일로 기존 가로수 점검 접수 건 확인",
+          "확인된 점검 결과 안내"
+        ],
+        "draft": "가로수 점검 결과 안내를 요청하신 내용 확인했습니다. 기존 접수 건을 확인할 수 있도록 접수번호나 접수일을 알려 주시면, 해당 건의 점검 결과를 확인해 안내드리겠습니다.",
+        "citationIds": []
+      },
+      "analysis": {
+        "safeTitle": "가로수 점검 결과 안내 요청",
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "야 너 진짜 병 신이냐",
+            "reason": "담당자를 직접 비하하는 표현입니다."
+          }
+        ],
+        "summary": "위치: 가상 지역\n대상: 가로수\n경과: 지난번 점검 접수",
+        "requests": [
+          "가로수 점검 결과 안내 요청"
+        ],
+        "questions": [
+          "지난번 접수 건을 확인할 수 있도록 접수번호나 접수일을 알려 주시겠습니까?"
+        ],
+        "shieldLevel": "caution",
+        "shieldReason": "담당자를 향한 모욕 표현이 포함되어 있습니다.",
+        "sensitiveQuotes": [
+          "야 너 진짜 병 신이냐"
+        ],
+        "actions": [
+          "접수번호 또는 접수일로 기존 가로수 점검 접수 건 확인",
+          "확인된 점검 결과 안내"
+        ],
+        "draft": "가로수 점검 결과 안내를 요청하신 내용 확인했습니다. 기존 접수 건을 확인할 수 있도록 접수번호나 접수일을 알려 주시면, 해당 건의 점검 결과를 확인해 안내드리겠습니다.",
+        "citationIds": [],
+        "citations": [],
+        "warnings": [
+          "검색 조건에 맞는 조문이 없습니다. 발생일·관할·민원 내용을 확인해 주세요."
+        ],
+        "generatedAt": "2026-11-14T02:33:26.675Z",
+        "model": "gpt-6-luna",
+        "retrievalMode": "synthetic context evaluation"
+      },
+      "predictedPositive": true
+    }
+  ],
+  "calls": [
+    {
+      "caseId": "context-02",
+      "status": 200,
+      "latencyMs": 6382,
+      "usage": {
+        "input_tokens": 1681,
+        "input_tokens_details": {
+          "cache_write_tokens": 1678,
+          "cached_tokens": 0
+        },
+        "output_tokens": 296,
+        "output_tokens_details": {
+          "reasoning_tokens": 74
+        },
+        "total_tokens": 1977
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-03",
+      "status": 200,
+      "latencyMs": 7918,
+      "usage": {
+        "input_tokens": 1686,
+        "input_tokens_details": {
+          "cache_write_tokens": 75,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 394,
+        "output_tokens_details": {
+          "reasoning_tokens": 143
+        },
+        "total_tokens": 2080
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-01",
+      "status": 200,
+      "latencyMs": 8744,
+      "usage": {
+        "input_tokens": 1684,
+        "input_tokens_details": {
+          "cache_write_tokens": 73,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 484,
+        "output_tokens_details": {
+          "reasoning_tokens": 237
+        },
+        "total_tokens": 2168
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-04",
+      "status": 200,
+      "latencyMs": 4200,
+      "usage": {
+        "input_tokens": 1688,
+        "input_tokens_details": {
+          "cache_write_tokens": 77,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 359,
+        "output_tokens_details": {
+          "reasoning_tokens": 86
+        },
+        "total_tokens": 2047
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-05",
+      "status": 200,
+      "latencyMs": 4661,
+      "usage": {
+        "input_tokens": 1689,
+        "input_tokens_details": {
+          "cache_write_tokens": 78,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 354,
+        "output_tokens_details": {
+          "reasoning_tokens": 111
+        },
+        "total_tokens": 2043
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-07",
+      "status": 200,
+      "latencyMs": 2465,
+      "usage": {
+        "input_tokens": 1683,
+        "input_tokens_details": {
+          "cache_write_tokens": 72,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 169,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1852
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-06",
+      "status": 200,
+      "latencyMs": 6600,
+      "usage": {
+        "input_tokens": 1688,
+        "input_tokens_details": {
+          "cache_write_tokens": 77,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 566,
+        "output_tokens_details": {
+          "reasoning_tokens": 376
+        },
+        "total_tokens": 2254
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-08",
+      "status": 200,
+      "latencyMs": 5201,
+      "usage": {
+        "input_tokens": 1679,
+        "input_tokens_details": {
+          "cache_write_tokens": 68,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 439,
+        "output_tokens_details": {
+          "reasoning_tokens": 239
+        },
+        "total_tokens": 2118
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-09",
+      "status": 200,
+      "latencyMs": 5603,
+      "usage": {
+        "input_tokens": 1680,
+        "input_tokens_details": {
+          "cache_write_tokens": 69,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 426,
+        "output_tokens_details": {
+          "reasoning_tokens": 161
+        },
+        "total_tokens": 2106
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-10",
+      "status": 200,
+      "latencyMs": 5855,
+      "usage": {
+        "input_tokens": 1696,
+        "input_tokens_details": {
+          "cache_write_tokens": 85,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 506,
+        "output_tokens_details": {
+          "reasoning_tokens": 187
+        },
+        "total_tokens": 2202
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-11",
+      "status": 200,
+      "latencyMs": 4865,
+      "usage": {
+        "input_tokens": 1683,
+        "input_tokens_details": {
+          "cache_write_tokens": 72,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 370,
+        "output_tokens_details": {
+          "reasoning_tokens": 176
+        },
+        "total_tokens": 2053
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-12",
+      "status": 200,
+      "latencyMs": 5288,
+      "usage": {
+        "input_tokens": 1692,
+        "input_tokens_details": {
+          "cache_write_tokens": 81,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 439,
+        "output_tokens_details": {
+          "reasoning_tokens": 197
+        },
+        "total_tokens": 2131
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-13",
+      "status": 200,
+      "latencyMs": 5643,
+      "usage": {
+        "input_tokens": 1674,
+        "input_tokens_details": {
+          "cache_write_tokens": 63,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 460,
+        "output_tokens_details": {
+          "reasoning_tokens": 223
+        },
+        "total_tokens": 2134
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-14",
+      "status": 200,
+      "latencyMs": 4632,
+      "usage": {
+        "input_tokens": 1676,
+        "input_tokens_details": {
+          "cache_write_tokens": 65,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 378,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 2054
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-15",
+      "status": 200,
+      "latencyMs": 5084,
+      "usage": {
+        "input_tokens": 1677,
+        "input_tokens_details": {
+          "cache_write_tokens": 66,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 408,
+        "output_tokens_details": {
+          "reasoning_tokens": 165
+        },
+        "total_tokens": 2085
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-17",
+      "status": 200,
+      "latencyMs": 5183,
+      "usage": {
+        "input_tokens": 1677,
+        "input_tokens_details": {
+          "cache_write_tokens": 66,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 455,
+        "output_tokens_details": {
+          "reasoning_tokens": 169
+        },
+        "total_tokens": 2132
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-16",
+      "status": 200,
+      "latencyMs": 6278,
+      "usage": {
+        "input_tokens": 1685,
+        "input_tokens_details": {
+          "cache_write_tokens": 74,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 503,
+        "output_tokens_details": {
+          "reasoning_tokens": 221
+        },
+        "total_tokens": 2188
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-18",
+      "status": 200,
+      "latencyMs": 5677,
+      "usage": {
+        "input_tokens": 1676,
+        "input_tokens_details": {
+          "cache_write_tokens": 65,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 486,
+        "output_tokens_details": {
+          "reasoning_tokens": 189
+        },
+        "total_tokens": 2162
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-19",
+      "status": 200,
+      "latencyMs": 4819,
+      "usage": {
+        "input_tokens": 1677,
+        "input_tokens_details": {
+          "cache_write_tokens": 66,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 404,
+        "output_tokens_details": {
+          "reasoning_tokens": 166
+        },
+        "total_tokens": 2081
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-20",
+      "status": 200,
+      "latencyMs": 6034,
+      "usage": {
+        "input_tokens": 1681,
+        "input_tokens_details": {
+          "cache_write_tokens": 70,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 539,
+        "output_tokens_details": {
+          "reasoning_tokens": 183
+        },
+        "total_tokens": 2220
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-21",
+      "status": 200,
+      "latencyMs": 4898,
+      "usage": {
+        "input_tokens": 1686,
+        "input_tokens_details": {
+          "cache_write_tokens": 75,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 416,
+        "output_tokens_details": {
+          "reasoning_tokens": 143
+        },
+        "total_tokens": 2102
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-22",
+      "status": 200,
+      "latencyMs": 5120,
+      "usage": {
+        "input_tokens": 1680,
+        "input_tokens_details": {
+          "cache_write_tokens": 69,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 458,
+        "output_tokens_details": {
+          "reasoning_tokens": 224
+        },
+        "total_tokens": 2138
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-23",
+      "status": 200,
+      "latencyMs": 4763,
+      "usage": {
+        "input_tokens": 1694,
+        "input_tokens_details": {
+          "cache_write_tokens": 83,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 449,
+        "output_tokens_details": {
+          "reasoning_tokens": 135
+        },
+        "total_tokens": 2143
+      },
+      "model": "gpt-6-luna"
+    },
+    {
+      "caseId": "context-24",
+      "status": 200,
+      "latencyMs": 4702,
+      "usage": {
+        "input_tokens": 1679,
+        "input_tokens_details": {
+          "cache_write_tokens": 68,
+          "cached_tokens": 1608
+        },
+        "output_tokens": 403,
+        "output_tokens_details": {
+          "reasoning_tokens": 153
+        },
+        "total_tokens": 2082
+      },
+      "model": "gpt-6-luna"
+    }
+  ],
+  "metrics": {
+    "total": 24,
+    "tp": 12,
+    "fp": 0,
+    "tn": 12,
+    "fn": 0,
+    "failed": 0,
+    "neutralTermsLost": 0
+  },
+  "groups": {
+    "synthetic_context": {
+      "total": 24,
+      "tp": 12,
+      "fp": 0,
+      "tn": 12,
+      "fn": 0,
+      "failed": 0
+    }
+  },
+  "finishedAt": "2026-11-14T02:33:26.684Z"
+}

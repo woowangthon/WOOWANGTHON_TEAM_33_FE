@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "labelStatus": "AI-authored development labels; no independent human review",
+  "scope": "New synthetic context cases, frozen before live execution; not a representative population sample",
+  "cases": [
+    {"id":"context-01","positive":false,"title":"어린 동물 구조","body":"배수로에 새끼 고양이 두 마리가 빠졌습니다. 구조 담당 부서와 접수 방법을 알려 주세요."},
+    {"id":"context-02","positive":false,"title":"유기견 출산 신고","body":"공원에서 강아지 새끼 세 마리를 발견했습니다. 보호시설 인계 방법을 안내해 주세요."},
+    {"id":"context-03","positive":false,"title":"야생동물 보호 문의","body":"둥지에서 떨어진 새끼 새를 발견했습니다. 야생동물 구조기관에 인계할 수 있는지 알려 주세요."},
+    {"id":"context-04","positive":false,"title":"보도 시설 부상 신고","body":"보도 시설 틈에 새끼손가락이 끼어 다쳤습니다. 시설을 점검하고 점검 결과를 알려 주세요."},
+    {"id":"context-05","positive":false,"title":"행사장 새끼줄 수거","body":"행사가 끝난 뒤 보행로에 새끼줄이 남았습니다. 수거하고 통행에 지장이 없는지 확인해 주세요."},
+    {"id":"context-06","positive":false,"title":"2016년 병신년 전시 자료","body":"시립박물관의 병신년 역사 전시 자료를 열람하려 합니다. 자료 열람 절차를 알려 주세요."},
+    {"id":"context-07","positive":false,"title":"간지 표기 설명 문의","body":"지역사 자료의 육십갑자 표에서 병신과 정유가 어떤 해를 뜻하는지 설명해 주세요."},
+    {"id":"context-08","positive":false,"title":"시발역 시설 문의","body":"시발역 승강장 안내판 글씨가 지워졌습니다. 보수 계획을 알려 주세요."},
+    {"id":"context-09","positive":false,"title":"침수 시발점 조사","body":"침수가 시작된 시발점을 확인해 주세요. 조사 결과와 재발 방지 계획도 알려 주세요."},
+    {"id":"context-10","positive":false,"title":"처리 지연에 항의합니다","body":"한 달째 답변이 없어 불만입니다. 담당 부서와 처리 예정일을 알려 주세요. 답변이 없으면 감사 청구 절차를 알아보겠습니다."},
+    {"id":"context-11","positive":false,"title":"자료 공개를 요청합니다","body":"결정 근거를 공개해 주세요. 설명이 납득되지 않으면 행정심판을 청구하겠습니다."},
+    {"id":"context-12","positive":false,"title":"아동 시설 안전 점검","body":"우리 새끼가 다니는 어린이집 앞 안전펜스가 망가져 걱정됩니다. 펜스 수리 일정을 알려 주세요."},
+    {"id":"context-13","positive":true,"title":"담당자 너 병신이냐","body":"접수한 도로 보수 건의 진행 상황을 알려 주세요."},
+    {"id":"context-14","positive":true,"title":"이 새끼야 답변해","body":"가로등이 고장 났습니다. 수리 예정일을 알려 주세요."},
+    {"id":"context-15","positive":true,"title":"누수 점검 요청","body":"너희 담당자들 병신 같네. 누수 원인을 조사하고 결과를 알려 주세요."},
+    {"id":"context-16","positive":true,"title":"주차 단속 근거 문의","body":"담당자 이 병신년아. 주차 단속의 근거와 이의신청 절차를 알려 주세요."},
+    {"id":"context-17","positive":true,"title":"배수로 점검","body":"이 새끼들은 일도 안 하냐. 막힌 배수로를 점검해 주세요."},
+    {"id":"context-18","positive":true,"title":"시 . 발 보도 좀 고쳐","body":"파손된 보도블록을 보수하고 예정일을 알려 주세요."},
+    {"id":"context-19","positive":true,"title":"씨·발 쓰레기 수거","body":"쓰레기를 수거하고 반복 적치 방지 대책을 안내해 주세요."},
+    {"id":"context-20","positive":true,"title":"야간 소음 확인","body":"ㅅ ㅂ 밤에 잠을 못 자겠다. 현장 소음을 측정하고 결과를 알려 주세요."},
+    {"id":"context-21","positive":true,"title":"새끼 고양이 구조 요청","body":"배수로의 새끼 고양이를 구조해 주세요. 담당자 너 병신이냐. 구조 가능 여부를 알려 주세요.","preserveTerm":"새끼 고양이"},
+    {"id":"context-22","positive":true,"title":"병신년 자료 공개","body":"2016년 병신년 행사 자료를 공개해 주세요. 담당자 이 새끼야 답변 좀 해.","preserveTerm":"병신년"},
+    {"id":"context-23","positive":true,"title":"새끼손가락 부상 신고","body":"계단 틈에 새끼손가락이 끼었습니다. 시설을 점검해 주세요. 씨발 안전 관리를 왜 이따위로 합니까.","preserveTerm":"새끼손가락"},
+    {"id":"context-24","positive":true,"title":"결과 안내 요청","body":"야 너 진짜 병 신이냐. 지난번 접수한 가로수 점검 결과를 알려 주세요."}
+  ]
+}

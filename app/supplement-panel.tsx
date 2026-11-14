@@ -1,7 +1,6 @@
 'use client';
 import { useState,type FormEvent } from 'react';
 import type { Complaint } from '../lib/types';
-import { maskText } from '../lib/protection';
 export default function SupplementPanel({complaint:c,staff,onChanged}:{complaint:Complaint;staff:boolean;onChanged:()=>void|Promise<void>}) {
   const [text,setText]=useState(''),[photos,setPhotos]=useState<File[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const editable=!c.deleted_at&&c.status!=='resolved'&&(staff||(c.status==='waiting'&&c.supplements?.at(-1)?.role==='staff'));
@@ -20,7 +19,7 @@ export default function SupplementPanel({complaint:c,staff,onChanged}:{complaint
     <h2>{staff?'보완 요청':'보완 요청 및 추가 답변'}</h2>
     {(c.supplements||[]).map(s=><article className={'supplement-message '+s.role} key={s.id}>
       <header><strong>{s.role==='staff'?'담당자':'민원인'}</strong><time>{new Date(s.createdAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</time></header>
-      <p className="preserve">{staff?maskText(s.text):s.text}</p>
+      {staff&&s.role!=='staff'?<details><summary>추가 답변 원문 보기</summary><p className="preserve">{s.text}</p></details>:<p className="preserve">{s.text}</p>}
       <div className="supplement-photos">{s.attachments.map(p=><a key={p.id} href={`/api/complaints/${c.id}/attachments/${p.id}`} target="_blank" rel="noreferrer"><img src={`/api/complaints/${c.id}/attachments/${p.id}`} alt={p.name} loading="lazy"/><span>{p.name}</span></a>)}</div>
     </article>)}
     {error?<p role="alert" className="warning-line">{error}</p>:null}
