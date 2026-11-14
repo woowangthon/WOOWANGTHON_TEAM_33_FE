@@ -19,6 +19,20 @@ test('verified reports preserve harm and protection even when the protection fac
  const h=harness(()=>review()),facts=h.groundFacts(factInput,source),out=await h.verifyBusinessSummary(keys,source,facts,good);
  assert.equal(out.summary,good);assert.equal(out.audit.status,'verified');assert.equal(out.audit.sourceHash,h.sourceHash(source));assert.equal(out.audit.attempts.length,1);assert.equal(h.calls.length,1);
 });
+
+test('a grounded summary longer than 220 characters and two sentences passes without a length-driven repair',async()=>{
+ const sentences=[
+  '가상 공원 동쪽 입구의 보도블록 여러 곳이 들떠 있어 유모차와 휠체어가 통행하기 어렵고 어두운 시간에는 걸려 넘어질 위험이 있으므로, 파손 구간 전체를 확인하고 보수 일정과 보행자를 위한 임시 안전조치를 안내해 달라고 요청합니다.',
+  '서쪽 출입구의 조명은 사흘째 켜지지 않아 야간 보행이 어려운 상태라고 신고했으며, 주변 조명의 고장 여부도 함께 점검하고 수리 전까지 이용자가 안전하게 통행할 수 있는 경로와 현장 안내 방법을 확인해 달라고 요청합니다.',
+  '공원 중앙의 배수구는 비가 온 뒤 물이 빠지지 않고 주변 산책로까지 고이는 상태라고 신고했으며, 배수구 막힘과 시설 상태를 점검하고 청소 또는 보수 등 필요한 조치와 확인 결과를 각각 안내해 달라고 요청합니다.',
+ ];
+ const summary=sentences.join(' '),c={...source,title:'가상 공원 시설 점검 요청',body:summary};
+ const facts=sentences.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true}));
+ const h=harness(()=>review(summary,[],{sentences:sentences.map((text,i)=>({text,factIds:['F'+(i+1)],supported:true,attackFree:true,reason:'원문에 명시된 시설별 점검 요청'}))}));
+ assert.ok(summary.length>220);assert.ok(sentences.length>2);
+ const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(facts,c),summary);
+ assert.equal(out.summary,summary);assert.equal(out.audit.status,'verified');assert.equal(h.calls.length,1);
+});
 test('code catches omitted protection despite a positive reviewer and repairs exactly once',async()=>{
  const bad='이웃의 협박 피해를 신고했습니다.';
  const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good}:count===1?review(bad,['F1']):review());

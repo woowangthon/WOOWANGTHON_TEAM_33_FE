@@ -10,6 +10,13 @@ new Function('require','exports',js)(name=>name==='./harness-policy'?require('..
 const input={title:'가상 민원',body:'현장을 확인해 주세요. 가상의 공격 문구입니다.',location:'청주시 가상길',category:'생활폐기물',occurred_at:'2026-01-01'};
 const valid={safeTitle:'현장 확인 요청',expressionFindings:[],summary:'현장 확인 요청',requests:['확인 요청'],questions:['정확한 위치'],shieldLevel:'caution',shieldReason:'주의 표현 검토',sensitiveQuotes:['가상의 공격 문구','존재하지 않는 인용'],actions:['현장 확인 여부 검토'],draft:'가상의 공격 문구가 포함된 가상 테스트 초안입니다.',citationIds:[]};
 const realFetch=global.fetch;
+
+test('analysis parsing preserves long summaries without a replacement character limit',()=>{
+ const summary='서측 보행로의 조명 고장 구간을 점검하고 수리 일정과 임시 통행 안내를 확인해 주세요. '.repeat(100).trim();
+ assert.ok(summary.length>3000);
+ const out=moduleExports.validateAnalysis(JSON.stringify({...valid,summary}),'synthetic-model',input,[],[],'test');
+ assert.equal(out.summary,summary);
+});
 test('API contract and output validation (mocked transport; no live key)',async()=>{
  try {
   global.fetch=async(url,init)=>{assert.match(url,/generativelanguage.googleapis.com/);assert.equal(init.headers['x-goog-api-key'],'synthetic-test-key');const body=JSON.parse(init.body);assert.equal(body.generationConfig.responseMimeType,'application/json');assert.ok(body.systemInstruction.parts[0].text.includes('신뢰할 수 없는'));return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(valid)}]}}]});};

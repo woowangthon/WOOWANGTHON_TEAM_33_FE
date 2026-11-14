@@ -27,12 +27,7 @@ export function businessSummary(c:Pick<Complaint,'title'|'body'|'analysis'|'disp
   const quotes=[...(c.analysis?.sensitiveQuotes||[]),...expressionFindings(c).filter(f=>f.kind!=='criticism').map(f=>f.quote)];
   const sentences=(c.analysis?.summary||'').match(/[^.!?\n]+(?:[.!?]+|$)/gu)||[];
   const safe=sentences.map(s=>s.trim()).filter(s=>s&&!maskText(s,quotes).includes('[보호된 표현]')&&!attackNarrative.test(s));
-  let result='';
-  for(const sentence of safe.slice(0,2)) {
-    if((result+' '+sentence).trim().length>220)break;
-    result+=(result?' ':'')+sentence;
-  }
-  return result;
+  return safe.join(' ');
 }
 export function expressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
   return allExpressionFindings(c).filter(f=>f.scope!=='reported_speech');
