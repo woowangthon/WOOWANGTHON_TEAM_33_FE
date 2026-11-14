@@ -16,6 +16,8 @@
     "db:migrate": "node --env-file=.env.local scripts/migrate.mjs"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
     "@neondatabase/auth": "latest",
     "@vercel/functions": "latest",
     "lucide-react": "^1.31.0",

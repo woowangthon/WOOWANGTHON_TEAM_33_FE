@@ -1,19 +1,21 @@
 // Active design: sanitized TEXT goes to the officer; a human ALWAYS answers.
 // A carrier/actual browser speaker is not wired into this lab core.
+import {DelayedAudio} from './delayed-audio.mjs';
 export class FilterRelay {
-  constructor({ caller, officer, onCallerAudio }) {
+  constructor({ caller, officer, onCallerAudio, delayMs=0, onAudioError=()=>{}, now }) {
     this.caller = caller; this.officer = officer; this.onCallerAudio = onCallerAudio;
     this.mode = 'human'; this.epoch = 0; this.callId = null; this.events = [];
     this.revisions = new Map();
+    this.playback=new DelayedAudio({delayMs,now,onFrame:payload=>{if(this.mode==='human')this.officer({event:'media',payload,source:'original',epoch:this.epoch});},onOverflow:onAudioError});
   }
   start(callId) {
     if (this.callId) throw new Error('Call already started');
     this.callId = callId;
   }
-  fromCaller(payload) {
+  fromCaller(payload,pcm) {
     if (!this.callId || this.mode === 'ended') return;
-    this.onCallerAudio(payload);
-    if (this.mode === 'human') this.officer({ event: 'media', payload, source: 'original', epoch: this.epoch });
+    this.onCallerAudio(payload,pcm);
+    if (this.mode === 'human') this.playback.push(payload);
   }
   fromOfficer(payload) {
     // Incoming filtering must not mute the officer's microphone.
@@ -31,23 +33,23 @@ export class FilterRelay {
   enableShield(decision, transcript) {
     if (this.mode !== 'human' || !decision.protectiveTakeoverRecommended || !['profanity', 'threat'].includes(decision.category)) return false;
     if (!decision.evidence || !transcript.includes(decision.evidence)) return false;
-    this.mode = 'shield'; this.epoch++;
+    this.playback.clear();this.mode = 'shield'; this.epoch++;
     this.officer({ event: 'clear', epoch: this.epoch });
     this.events.push({ type: 'automatic_filter_enabled', source:'ai', category:decision.category,evidence:decision.evidence,callId: this.callId, at: performance.now() });
     return true;
   }
   protectManually(source,reason) {
     if(this.mode!=='human'||!['manual','analysis_error'].includes(source))return false;
-    this.mode='shield';this.epoch++;this.officer({event:'clear',epoch:this.epoch});
+    this.playback.clear();this.mode='shield';this.epoch++;this.officer({event:'clear',epoch:this.epoch});
     this.events.push({type:'protective_filter_enabled',source,reason,callId:this.callId,at:performance.now()});
     return true;
   }
   resume() {
     if (this.mode !== 'shield') return false;
-    this.mode = 'human'; this.epoch++;
+    this.playback.clear();this.mode = 'human'; this.epoch++;
     this.officer({ event: 'clear', epoch: this.epoch });
     this.events.push({ type: 'original_audio_restored', callId: this.callId, at: performance.now() });
     return true;
   }
-  end() { this.mode = 'ended'; this.epoch++; }
+  end() { this.playback.close();this.mode = 'ended'; this.epoch++; }
 }

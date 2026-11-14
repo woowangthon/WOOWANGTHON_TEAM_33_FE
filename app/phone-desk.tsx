@@ -80,8 +80,9 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
         if(!alive()){microphone.getTracks().forEach(track=>track.stop());return;}
         connection.microphone=microphone;
       }
-      await connection.context.audioWorklet.addModule('/phone-audio.js');if(!alive())return;
+      await connection.context.audioWorklet.addModule('/phone-audio.js?v=2');if(!alive())return;
       const node=new AudioWorkletNode(connection.context,'phone-audio',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[1]});connection.node=node;
+      node.port.postMessage({type:'capture_format',format:'pcm16-16000'});
       if(connection.microphone)connection.context.createMediaStreamSource(connection.microphone).connect(node);
       node.connect(connection.context.destination);
       const response=await fetch('/api/phone',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({demo}),signal:AbortSignal.timeout(12000)});
@@ -91,7 +92,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
       node.port.onmessage=({data})=>{
         if(!alive())return;
         if(data.type==='level')setLevel(data.value);
-        if(data.type==='frame'&&active.current&&socket.readyState===WebSocket.OPEN&&socket.bufferedAmount<32000){const bytes=new Uint8Array(data.frame);socket.send(JSON.stringify({event:'media',callId:active.current,payload:btoa(String.fromCharCode(...bytes))}));}
+        if(data.type==='frame'&&active.current&&socket.readyState===WebSocket.OPEN&&socket.bufferedAmount<32000){const bytes=new Uint8Array(data.frame);socket.send(JSON.stringify({event:'media',callId:active.current,format:data.format,payload:btoa(String.fromCharCode(...bytes))}));}
       };
       socket.onopen=()=>{if(alive())socket.send(JSON.stringify({event:'auth',token:settings.token}));};
       socket.onmessage=({data})=>{
@@ -112,7 +113,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
         if(event.event==='clear')node.port.postMessage({type:'clear'});
         if(event.event==='protection')setMessage(event.enabled?(event.reason||'수신 음성 보호 중'):'수신 음성을 다시 연결했습니다.');
         if(event.event==='processing'&&event.turnId&&event.callId)setPending(previous=>({...previous,[event.turnId!]:event.callId!}));
-        if(event.event==='neutral_text'&&event.turnId)setPending(previous=>{const next={...previous};delete next[event.turnId!];return next;});
+        if(['neutral_text','processing_done'].includes(event.event)&&event.turnId)setPending(previous=>{const next={...previous};delete next[event.turnId!];return next;});
         if(event.event==='analysis_error'){
           setPending(previous=>Object.fromEntries(Object.entries(previous).filter(([,id])=>id!==event.callId)));
           setMessage(event.message||'내용을 확인해 주세요.');

@@ -9,11 +9,15 @@ const root=fileURLToPath(new URL('../',import.meta.url)),out=new URL('../outputs
 await mkdir(out,{recursive:true});
 const base=parseEnv(await readFile(new URL('../.env.local',import.meta.url),'utf8'));
 let config;try{config=parseEnv(await readFile(new URL('../.env.phone.local',import.meta.url),'utf8'));}catch{config={PHONE_BRIDGE_SECRET:randomBytes(32).toString('hex')};await writeFile(new URL('../.env.phone.local',import.meta.url),'PHONE_BRIDGE_SECRET='+config.PHONE_BRIDGE_SECRET+'\n');}
-if(!base.SERVICE_OPENAI_API_KEY&&!base.OPENAI_API_KEY)throw Error('Voice_API_key_missing');
+let phoneAI={};try{phoneAI=parseEnv(await readFile(new URL('../.env.phone-comparison.local',import.meta.url),'utf8'));}catch{}
+const provider=config.PHONE_ANALYSIS_PROVIDER||process.env.PHONE_ANALYSIS_PROVIDER||'gemini';
+if(provider==='gemini'?!phoneAI.GEMINI_API_KEY&&!process.env.GEMINI_API_KEY:!base.SERVICE_OPENAI_API_KEY&&!base.OPENAI_API_KEY)throw Error('Voice_API_key_missing');
+if((config.PHONE_TEXT_PROVIDER||process.env.PHONE_TEXT_PROVIDER||'gemini')==='openai'&&!base.SERVICE_OPENAI_API_KEY&&!base.OPENAI_API_KEY)throw Error('Voice_text_key_missing');
 if(!config.PHONE_BRIDGE_SECRET)throw Error('Phone_bridge_secret_missing');
 try{const response=await fetch('http://127.0.0.1:4318/health',{signal:AbortSignal.timeout(1500)});if(response.ok)throw Error('Phone_bridge_already_running');}catch(error){if(error.message==='Phone_bridge_already_running')throw error;}
 const log=await open(new URL('bridge.log',out),'a');
-const bridge=spawn(process.execPath,['phone/server.mjs'],{cwd:root,windowsHide:true,env:{...process.env,PHONE_PORT:'4318',PHONE_ALLOWED_ORIGINS:config.PHONE_ALLOWED_ORIGINS||'https://shield-solve-staff.vercel.app,https://shield-and-solve.vercel.app,http://127.0.0.1:3100',PHONE_BRIDGE_SECRET:config.PHONE_BRIDGE_SECRET,SERVICE_OPENAI_API_KEY:base.SERVICE_OPENAI_API_KEY||base.OPENAI_API_KEY,SERVICE_OPENAI_MODEL:base.SERVICE_OPENAI_MODEL||'gpt-6-luna'},stdio:['ignore',log.fd,log.fd]});
+const policy=Object.fromEntries(['PHONE_TEXT_PROVIDER','PHONE_LIVE_TRANSCRIPTION_MODEL','PHONE_TRANSCRIPTION_MODEL','PHONE_NATIVE_REVIEW_MODEL','PHONE_SAFETY_INTERVAL_MS','PHONE_AUDIO_DELAY_MS','PHONE_GEMINI_MODEL','PHONE_GEMINI_TRANSCRIPTION_MODEL'].map(name=>[name,config[name]||process.env[name]||base[name]]).filter(([,value])=>value));
+const bridge=spawn(process.execPath,['phone/server.mjs'],{cwd:root,windowsHide:true,env:{...process.env,...policy,PHONE_ANALYSIS_PROVIDER:provider,GEMINI_API_KEY:phoneAI.GEMINI_API_KEY||process.env.GEMINI_API_KEY||'',PHONE_PORT:'4318',PHONE_ALLOWED_ORIGINS:config.PHONE_ALLOWED_ORIGINS||'https://shield-solve-staff.vercel.app,https://shield-and-solve.vercel.app,http://127.0.0.1:3100',PHONE_BRIDGE_SECRET:config.PHONE_BRIDGE_SECRET,SERVICE_OPENAI_API_KEY:base.SERVICE_OPENAI_API_KEY||base.OPENAI_API_KEY||'',SERVICE_OPENAI_MODEL:base.SERVICE_OPENAI_MODEL||'gpt-6-luna'},stdio:['ignore',log.fd,log.fd]});
 await log.close();let tunnel,stopping=false;
 const stop=()=>{if(stopping)return;stopping=true;bridge.kill();tunnel?.kill();};
 process.on('SIGTERM',stop);process.on('SIGINT',stop);

@@ -1,14 +1,17 @@
 import { createRequire } from 'node:module';
 import {randomUUID} from 'node:crypto';
 import {pcm24k} from './audio.mjs';
-import {TextPipeline,needsSafetyCheck,transcriptionContext} from './text-pipeline.mjs';
+import {TextPipeline,transcriptionContext} from './text-pipeline.mjs';
+import {LiveSafety} from './live-safety.mjs';
 import {reviewNativeAudio} from './native-review.mjs';
 import {Segmenter} from './segmenter.mjs';
 const Ws=createRequire(import.meta.url)('next/dist/compiled/ws');
 export class CallAnalysis {
-  constructor({key,model,onText,onShield,onError,onProcessing}){
+  constructor({key,model,onText,onShield,onError,onProcessing,safetyIntervalMs=Number(process.env.PHONE_SAFETY_INTERVAL_MS||1200),nativeReview=reviewNativeAudio}){
     Object.assign(this,{key,onText,onShield,onError,onProcessing});this.pipeline=new TextPipeline({apiKey:key,model});this.jobs=new Set();this.pending=[];this.items=new Map();this.turn=null;this.ready=false;this.ended=false;
-    this.segmenter=new Segmenter({onStart:()=>{this.turn={id:randomUUID(),partial:'',calls:0,busy:false,latest:null,shielded:false,reported:false};},onFrame:frame=>this.socket.send(JSON.stringify({type:'input_audio_buffer.append',audio:pcm24k(frame).toString('base64')})),onEnd:(audio,voiced)=>this.commit(audio,voiced)});
+    this.nativeReview=nativeReview;
+    this.liveSafety=new LiveSafety({intervalMs:safetyIntervalMs,check:(text,options)=>this.pipeline.checkSafety(text,options),onResult:(turn,result,text)=>this.protect(turn,result,text),onError:()=>this.onError('보호 판정을 다시 확인해야 합니다.')});
+    this.segmenter=new Segmenter({onStart:()=>{this.turn={id:randomUUID(),partial:'',shielded:false,finalReview:false};},onFrame:frame=>this.socket.send(JSON.stringify({type:'input_audio_buffer.append',audio:pcm24k(frame).toString('base64')})),onEnd:(audio,voiced)=>this.commit(audio,voiced)});
   }
   async start(){
     this.socket=new Ws('wss://api.openai.com/v1/realtime?intent=transcription',{headers:{Authorization:`Bearer ${this.key}`},handshakeTimeout:12000});
@@ -28,7 +31,7 @@ export class CallAnalysis {
           if(e.type==='conversation.item.input_audio_transcription.delta'){
             let turn=this.items.get(e.item_id);
             if(!turn){turn=this.pending[0]||this.turn;if(turn)this.items.set(e.item_id,turn);}
-            if(turn){turn.partial+=e.delta||'';if(needsSafetyCheck(turn.partial))this.guard(turn);}
+            if(turn&&!this.ended){turn.partial+=e.delta||'';this.guard(turn);}
           }
           if(e.type==='conversation.item.input_audio_transcription.completed')this.items.delete(e.item_id);
           if(e.type==='conversation.item.input_audio_transcription.failed')this.onError('일부 발화를 인식하지 못했습니다. 내용을 확인해 주세요.');
@@ -37,31 +40,46 @@ export class CallAnalysis {
     }).catch(error=>{this.ended=true;this.socket.terminate();throw error;});
   }
   push(frame){if(this.ready&&!this.ended)this.segmenter.push(frame);}
-  async guard(turn){
-    if(turn.shielded||turn.calls>=3||this.ended)return;
-    turn.latest=turn.partial;if(turn.busy)return;turn.busy=true;
-    try{while(turn.latest&&turn.calls<3&&!turn.shielded&&!this.ended){const text=turn.latest;turn.latest=null;turn.calls++;const r=await this.pipeline.checkSafety(text);turn.reported=r.scope==='reported_speech';if(r.directAbuse){turn.shielded=true;this.onShield(r,text);}}}catch{this.onError('보호 판정을 다시 확인해야 합니다.');}finally{turn.busy=false;}
+  guard(turn){if(!this.ended)this.liveSafety.enqueue(turn);}
+  protect(turn,result,text){
+    if(!this.ended&&!turn.shielded&&result.directAbuse){turn.shielded=true;this.onShield(result,text);}
   }
   commit(audio,voiced){
     const turn=this.turn;this.turn=null;if(!turn)return;
     // Even short buffers are cleared, never accidentally joined to a later speaker turn.
-    if(!voiced||audio.length<1600){this.socket.send(JSON.stringify({type:'input_audio_buffer.clear'}));return;}
+    if(!voiced||audio.length<1600){this.liveSafety.finish(turn);this.socket.send(JSON.stringify({type:'input_audio_buffer.clear'}));return;}
     this.pending.push(turn);this.socket.send(JSON.stringify({type:'input_audio_buffer.commit'}));
-    if(this.jobs.size>=3){this.onError('분석이 밀리고 있습니다. 잠시 나누어 말씀해 주세요.');return;}
+    if(this.jobs.size>=3){this.liveSafety.finish(turn);this.onError('분석이 밀리고 있습니다. 잠시 나누어 말씀해 주세요.');return;}
     this.onProcessing(turn.id);
-    const job=this.review(turn,audio).catch(()=>this.onError('일부 내용을 정리하지 못했습니다. 담당자가 다시 확인해 주세요.')).finally(()=>this.jobs.delete(job));this.jobs.add(job);
+    const job=this.review(turn,audio).catch(()=>this.onError('일부 내용을 정리하지 못했습니다. 담당자가 다시 확인해 주세요.')).finally(()=>{this.liveSafety.finish(turn);this.jobs.delete(job);});this.jobs.add(job);
   }
   async review(turn,audio){
-    const fallback=needsSafetyCheck(turn.partial)&&!turn.shielded&&!turn.reported?reviewNativeAudio(audio,this.key).then(value=>({value}),()=>({error:true})):null;
-    let transcript=await this.pipeline.verifyAudio(audio),needsReview=false;
-    if(fallback){const r=await fallback;if(r.value&&!r.value.uncertain){transcript=r.value.transcript;needsReview=!!r.value.protectionNeedsReview;if(r.value.directAbuse){turn.shielded=true;this.onShield(r.value,transcript);}}else needsReview=true;}
-    const safety=this.pipeline.checkSafety(transcript).then(r=>{if(r.directAbuse){turn.shielded=true;this.onShield(r,transcript);}}).catch(()=>{needsReview=true;});
-    const result=await this.pipeline.neutralize(transcript);await safety;
-    this.onText({turnId:turn.id,revision:1,text:result.text,facts:result.facts.map(({kind,value})=>({kind,value})),status:needsReview?'needs_review':'audio_rechecked'});
+    const transcript=await this.pipeline.verifyAudio(audio);
+    this.liveSafety.finish(turn);
+    // Final safety and fact extraction start together. Neither waits for a native-audio fallback.
+    const [textResult,safetyResult]=await Promise.allSettled([this.pipeline.neutralize(transcript),this.reviewSafety(turn,transcript,audio)]);
+    if(textResult.status==='rejected')throw textResult.reason;
+    if(safetyResult.status==='rejected')throw safetyResult.reason;
+    const checked=safetyResult.value;
+    const result=checked.transcript===transcript?textResult.value:await this.pipeline.neutralize(checked.transcript);
+    this.onText({turnId:turn.id,revision:1,text:result.text,facts:result.facts.map(({kind,value})=>({kind,value})),status:checked.needsReview?'needs_review':'audio_rechecked'});
+  }
+  async reviewSafety(turn,transcript,audio){
+    try{
+      const result=await this.pipeline.checkSafety(transcript);
+      this.protect(turn,result,transcript);
+      if(result.scope!=='unclear'||turn.shielded)return {transcript,needsReview:false};
+    }catch{ /* Uncertain/failed contextual classification gets an original-audio recheck. */ }
+    try{
+      const result=await this.nativeReview(audio,this.key);
+      if(result.uncertain)return {transcript,needsReview:true};
+      this.protect(turn,result,result.transcript);
+      return {transcript:result.transcript,needsReview:!!result.protectionNeedsReview};
+    }catch{return {transcript,needsReview:true};}
   }
   async stop(){
     if(this.ended)return;
-    if(this.ready)this.segmenter.flush();this.ended=true;
+    if(this.ready)this.segmenter.flush();this.ended=true;this.liveSafety.close();
     let timeout;
     try{await Promise.race([Promise.allSettled([...this.jobs]),new Promise(resolve=>{timeout=setTimeout(resolve,20000);})]);}finally{clearTimeout(timeout);}
     if(this.jobs.size)this.onError('일부 발화의 분석 시간이 초과되었습니다. 접수 전 내용을 확인해 주세요.');
