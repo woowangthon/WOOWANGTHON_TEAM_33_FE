@@ -47,10 +47,10 @@ type Overview = {
   user: { name: string };
 };
 const settings: AppSettings = {
-  geminiReady: false,
+  aiReady: false,
   lawReady: false,
   encryptionReady: false,
-  model: "gemini-2.5-flash-lite",
+  model: "gpt-6-luna",
 };
 const views = {
   phone: "전화 상담",

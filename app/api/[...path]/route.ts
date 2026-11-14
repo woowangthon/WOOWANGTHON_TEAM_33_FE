@@ -141,7 +141,7 @@ async function handler(
       ).all<Record<string, unknown>>();
       const keys = staff
         ? await credentials(office)
-        : { gemini: "", openai: "", provider: "", law: "", model: "" };
+        : { openai: "", law: "", model: "" };
       // The staff library is retired; retain the citizen site's read-only law guide.
       const docs = !staff && user.isGuest && url.searchParams.get("poll") !== "1"
         ? await database().prepare("SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC").bind(office).all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
@@ -152,9 +152,8 @@ async function handler(
           staff ? decodeComplaint(row) : publicComplaint(decodeComplaint(row)),
         ),
         settings: {
-          geminiReady: !!keys.gemini,
-          aiReady: !!(keys.provider === 'openai' ? keys.openai : keys.gemini),
-          aiProviderLabel: runtime.SERVICE_AI_PROVIDER === 'openai' ? 'OpenAI' : 'Google Gemini',
+          aiReady: !!keys.openai,
+          aiProviderLabel: 'OpenAI',
           publicInbox: publicStaffInbox(),
           lawReady: !!keys.law,
           encryptionReady: staff && !!runtime.APP_SECRET,

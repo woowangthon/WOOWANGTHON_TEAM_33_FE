@@ -36,4 +36,4 @@ export type Complaint = { id:string; title:string; body:string; category:string;
 };
 export type Event = {id:string; label:string; created_at:string};
 export type LawDocument = {id:string; source_id:string; title:string; kind:string; jurisdiction:string; effective_date:string; source_url:string; articleCount:number; imported_at:string};
-export type AppSettings = { geminiReady:boolean; aiReady?:boolean; aiProviderLabel?:string; publicInbox?:boolean; lawReady:boolean; encryptionReady:boolean; model:string };
+export type AppSettings = { aiReady:boolean; aiProviderLabel?:string; publicInbox?:boolean; lawReady:boolean; encryptionReady:boolean; model:string };

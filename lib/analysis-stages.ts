@@ -21,7 +21,7 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
   if(stage==='requirements'||stage==='review'||stage==='coverage')return true;
   const row=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(id,generation).first<Record<string,unknown>>();
   if(!row)return false;
-  const office=officeForOwner(String(row.owner)),keys=await credentials(office),key=keys.provider==='openai'?keys.openai:keys.gemini;
+  const office=officeForOwner(String(row.owner)),keys=await credentials(office),key=keys.openai;
   if(!key||!keys.law)throw new AppError('분석 서비스 연결을 확인해 주세요.',503,false);
   const cp:Checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}')),original=decodeComplaint(row);
   const source=supplementedComplaint(original,cp.photoNotes);

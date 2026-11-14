@@ -16,8 +16,8 @@ const guest=load('lib/guest.ts'),route=load('app/api/[...path]/route.ts'),server
 const db=new Pool({connectionString:process.env.DATABASE_URL.replace('sslmode=require','sslmode=verify-full')});
 async function request(p,method='GET',input){const r=await route[method](new Request('https://test.invalid/api/'+p,{method,headers:{'Content-Type':'application/json',origin:'https://test.invalid'},...(input?{body:JSON.stringify(input)}:{})}),{params:Promise.resolve({path:p.split('/')})});return {status:r.status,data:await r.json()};}
 const idFor=owner=>({userId:owner,isGuest:true,isStaff:true,email:'',fullName:'작업공간'});
-const oldMode=process.env.SITE_MODE,oldGemini=process.env.GEMINI_API_KEY,oldLaw=process.env.LAW_API_OC;
-const managedNames=['PUBLIC_STAFF_INBOX','SERVICE_GEMINI_API_KEY','SERVICE_OPENAI_API_KEY','SERVICE_LAW_API_OC'];
+const oldMode=process.env.SITE_MODE,oldOpenai=process.env.OPENAI_API_KEY,oldLaw=process.env.LAW_API_OC;
+const managedNames=['PUBLIC_STAFF_INBOX','SERVICE_OPENAI_API_KEY','SERVICE_LAW_API_OC'];
 const managedPrevious=Object.fromEntries(managedNames.map(k=>[k,process.env[k]]));
 for(const key of managedNames)delete process.env[key];
 (async()=>{try{
@@ -29,13 +29,13 @@ for(const key of managedNames)delete process.env[key];
  assert.equal(await guest.consumeTransfer(code,'https://citizen.test','https://staff.test'),null,'transfer codes cannot replay');
  const expired=await guest.createTransfer(owners[0],'https://citizen.test','https://staff.test');await db.query('UPDATE guest_transfers SET expires_at=NOW()-INTERVAL \'1 minute\' WHERE owner=$1',[owners[0]]);
  assert.equal(await guest.consumeTransfer(expired,'https://citizen.test','https://staff.test'),null);
- process.env.GEMINI_API_KEY='synthetic-private-default';process.env.LAW_API_OC='synthetic-private-default';
- assert.equal((await server.credentials(owners[0])).gemini,'');assert.equal((await server.credentials(owners[0])).law,'','guest workspaces do not inherit private API credentials');
+ process.env.OPENAI_API_KEY='synthetic-private-default';process.env.LAW_API_OC='synthetic-private-default';
+ assert.equal((await server.credentials(owners[0])).openai,'');assert.equal((await server.credentials(owners[0])).law,'','guest workspaces do not inherit private API credentials');
  process.env.SITE_MODE='citizen';user=idFor(owners[0]);
  const r=await request('complaints','POST',{title:'[자동 검증] 비회원 민원',body:'개인정보 없는 테스트 민원입니다. 가상 현장 확인을 요청합니다.',category:'생활폐기물',location:'청주시 테스트 장소',occurredAt:'2026-01-01',consent:true});assert.equal(r.status,201);const id=r.data.id;
  assert.equal((await request('complaints/'+id,'PATCH',{action:'status',status:'waiting',revision:0})).status,403);
  process.env.SITE_MODE='staff';user=idFor(owners[1]);assert.equal((await request('complaints/'+id)).status,404);assert.equal((await request('overview')).data.complaints.length,0);
- user=idFor(owners[0]);let overview=await request('overview');assert.deepEqual(overview.data.complaints.map(c=>c.id),[id]);assert.equal(overview.data.settings.geminiReady,false);
+ user=idFor(owners[0]);let overview=await request('overview');assert.deepEqual(overview.data.complaints.map(c=>c.id),[id]);assert.equal(overview.data.settings.aiReady,false);assert.equal(overview.data.settings.aiProviderLabel,'OpenAI');
  assert.ok((await request('complaints/'+id)).data.events.some(event=>event.label==='홈페이지 민원 접수'));
  await jobs.processComplaint(id);assert.equal((await request('complaints/'+id)).data.complaint.auto_state,'blocked');
  const saved=await request('complaints/'+id,'PATCH',{action:'save',draft:'비회원 담당자 화면에서 작성한 가상 답변입니다.',revision:0});assert.equal(saved.status,200);
@@ -46,7 +46,7 @@ for(const key of managedNames)delete process.env[key];
  console.log('PASS: guest session, invalid/expired/replayed transfer rejection, workspace separation, private key isolation, citizen submission → staff reply → citizen result with no account.');
  }finally{
   for(const owner of owners){await db.query('DELETE FROM complaints WHERE owner=$1',[owner]);await db.query('DELETE FROM limits WHERE id LIKE $1',[owner+'%']);await db.query('DELETE FROM guest_sessions WHERE owner=$1',[owner]);await db.query('DELETE FROM guest_transfers WHERE owner=$1',[owner]);}
-  for(const [key,value] of [['SITE_MODE',oldMode],['GEMINI_API_KEY',oldGemini],['LAW_API_OC',oldLaw]]){if(value===undefined)delete process.env[key];else process.env[key]=value;}
+  for(const [key,value] of [['SITE_MODE',oldMode],['OPENAI_API_KEY',oldOpenai],['LAW_API_OC',oldLaw]]){if(value===undefined)delete process.env[key];else process.env[key]=value;}
   for(const [key,value] of Object.entries(managedPrevious)){if(value===undefined)delete process.env[key];else process.env[key]=value;}
   await db.end();
  }

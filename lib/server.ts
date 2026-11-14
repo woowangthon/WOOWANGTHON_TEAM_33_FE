@@ -46,23 +46,22 @@ export async function credentials(owner:string) {
   // These credentials are deliberately provisioned for the public service.
   // Legacy account credentials below remain isolated from guest workspaces.
   const service = {
-    provider: runtime.SERVICE_AI_PROVIDER === 'openai' ? 'openai' : 'gemini',
+    provider: 'openai' as const,
     openai: runtime.SERVICE_OPENAI_API_KEY || '',
-    gemini: runtime.SERVICE_GEMINI_API_KEY || '',
     law: runtime.SERVICE_LAW_API_OC || '',
-    model: runtime.SERVICE_AI_PROVIDER === 'openai' ? runtime.SERVICE_OPENAI_MODEL || 'gpt-6-luna' : runtime.SERVICE_GEMINI_MODEL || 'gemini-2.5-flash-lite',
+    model: runtime.SERVICE_OPENAI_MODEL || 'gpt-6-luna',
   };
   if(owner==='office:cheongju:public')return service;
-  if ((service.provider==='openai' ? service.openai : service.gemini) && service.law) return service;
-  const row=await database().prepare('SELECT encrypted,model FROM settings WHERE owner=?').bind(owner).first<{encrypted:string;model:string}>();
-  let keys:{gemini?:string;law?:string}={};
+  if (service.openai && service.law) return service;
+  const row=await database().prepare('SELECT encrypted FROM settings WHERE owner=?').bind(owner).first<{encrypted:string}>();
+  let keys:{law?:string}={};
   if(row) {
     try { const [iv,data]=row.encrypted.split('.'); const bytes=(s:string)=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
       const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes(iv),additionalData:new TextEncoder().encode(owner)},await cipherKey(),bytes(data));
       keys=JSON.parse(new TextDecoder().decode(plain));
     } catch {throw new AppError('저장된 연결 정보를 읽을 수 없습니다. 서버 암호화 설정을 확인해 주세요.',503);}
   }
-  return {...service,gemini:service.gemini || keys.gemini || (!owner.startsWith('guest:') && runtime.GEMINI_API_KEY) || '',law:service.law || keys.law || (!owner.startsWith('guest:') && runtime.LAW_API_OC) || '',model:service.provider==='openai'||service.gemini ? service.model : row?.model || service.model};
+  return {...service,law:service.law || keys.law || (!owner.startsWith('guest:') && runtime.LAW_API_OC) || ''};
 }
 export async function rateLimit(owner:string,action:string,max:number) {
   const bucket=now().slice(0,13);

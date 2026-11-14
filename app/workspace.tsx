@@ -41,10 +41,10 @@ type Overview = {
   user: { name: string };
 };
 const defaultSettings: AppSettings = {
-  geminiReady: false,
+  aiReady: false,
   lawReady: false,
   encryptionReady: false,
-  model: "gemini-2.5-flash-lite",
+  model: "gpt-6-luna",
 };
 async function api<T>(
   path: string,

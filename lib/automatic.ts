@@ -55,7 +55,7 @@ export async function processComplaint(id: string) {
   };
   try {
     const keys = await credentials(office);
-    const aiKey = keys.provider === 'openai' ? keys.openai : keys.gemini;
+    const aiKey = keys.openai;
     if (!aiKey && !keys.law) {
       await finish(
         "blocked",
@@ -175,7 +175,7 @@ export async function processComplaint(id: string) {
 
 export async function drainAnalysisQueue(office = OFFICE) {
   const keys = await credentials(office);
-  if ((keys.provider==='openai' ? keys.openai : keys.gemini) && keys.law) await resumeAfterConfiguration(office);
+  if (keys.openai && keys.law) await resumeAfterConfiguration(office);
   const guest = office.startsWith("guest:");
   const stale = new Date(Date.now() - 240000).toISOString();
   const pending = await database()

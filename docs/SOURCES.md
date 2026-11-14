@@ -8,7 +8,6 @@
 
 - [국가법령정보센터](https://www.law.go.kr/) / [법제처 OPEN API](https://open.law.go.kr/LSO/openApi/openApiManual.do): 공식 법령·청주시 자치법규를 서버에서 조회한다. 승인된 OC와 등록 서비스 주소가 필요하다. 원문 출처·조문·시행일을 표시하며 AI가 위법 여부를 자동 확정하지 않는다.
 - [OpenAI API](https://platform.openai.com/docs): 민원 분석·검색어 생성·조문 재평가·검증 및 음성 인식/분류에 사용한다. 모델 ID는 실행 설정/코드에 기록되어 있다. 외부 API 사용료·계정별 접근권한은 별도다.
-- [Gemini API](https://ai.google.dev/gemini-api/docs): 선택 가능한 텍스트 분석 공급자. OpenAI 장애 시 자동으로 다른 공급자를 사용하는 구조가 아니다.
 - `lib/samples.ts`, `evals/complaints-40.json`: 팀 개발 과정에서 작성한 가상/합성 민원. 실제 시민의 민원 자료를 수집한 데이터셋이 아니다. 정답 후보 작성과 채점에 AI를 사용했고 사람 독립 검수는 아직 필요하다.
 - `public/demo-audio/*.wav`: 합성 한국어 음원. 생성 모델/음성 및 대본은 같은 폴더의 `README.txt`에 기록했다. 실제 민원인 녹취가 아니며 입력을 전송한 이후의 STT·분류·정제는 실시간 API 처리다.
 

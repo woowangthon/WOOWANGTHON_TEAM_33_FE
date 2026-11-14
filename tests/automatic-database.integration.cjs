@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),ts=require('typescript');
 const {Pool}=require('pg');const prefix='automatic-test-'+crypto.randomUUID();const office=prefix+'-office';
 let user={userId:prefix,email:'synthetic@example.invalid',isStaff:false};
-let keys={gemini:'synthetic',law:'synthetic',model:'test'},calls=0,fail=false,hold=null;
+let keys={provider:'openai',openai:'synthetic',law:'synthetic',model:'test'},calls=0,fail=false,hold=null;
 let generatedDraft='자동 생성된 가상 답변 초안입니다.', lastGenerationArgs=[];
 const callbacks=[];const cache=new Map();
 const citation={id:'law:test:제1조',title:'검증용 가상 법령',article:'제1조',text:'테스트 전용 근거',sourceUrl:'https://www.law.go.kr',effectiveDate:'2020-01-01',jurisdiction:'전국',kind:'law'};
@@ -16,7 +16,7 @@ function load(file){file=path.resolve(file);if(cache.has(file))return cache.get(
    if(name==='./review')return {verifyDraft:async(_key,_model,_provider,draft)=>({draft,status:'checked',validatorVersion:2,sentences:[{id:'S1',text:draft,status:'not_legal',reason:'가상 검토',references:[]}],checkedAt:new Date().toISOString()})};
    if(name==='./server')return {...load('lib/server.ts'),credentials:async()=>keys};
    if(name==='./semantic-search')return {semanticPlan:async()=>({profiles:[],terms:[],sources:[],facts:[]})};
-   if(name==='./summary-harness')return {verifyBusinessSummary:async(_keys,_c,_facts,summary)=>({summary,audit:{status:'verified',version:2}})};
+   if(name==='./summary-harness')return {verifyBusinessSummary:async(_keys,_c,_facts,summary,options)=>({summary,requests:options.requests,audit:{status:'verified',version:3}})};
    if(name==='./laws')return {autoSync:async()=>[],retrieve:()=>({citations:[citation],warnings:[],mode:'test'})};
    if(name==='./ai')return {generateAnalysis:async(...args)=>{lastGenerationArgs=args;calls++;if(hold)await hold;if(fail)throw new Error('mock provider failure');return {summary:'테스트 요약',requests:['현장 확인'],questions:[],shieldLevel:'normal',shieldReason:'',sensitiveQuotes:[],actions:['현장 확인 준비'],draft:generatedDraft,citationIds:[citation.id],citations:[citation],warnings:[],generatedAt:new Date().toISOString(),model:'test',retrievalMode:'test'};}};
   }
@@ -33,13 +33,13 @@ async function submit(){process.env.SITE_MODE='citizen';const r=await request('c
  await Promise.all([callbacks.shift()(),jobs.processComplaint(id)]);let row=await get(id);
  assert.equal(calls,1,'concurrent jobs are deduplicated');assert.equal(row.auto_state,'completed');assert.equal(row.status,'reviewing');assert.equal(row.published,'');assert.ok(row.evidence);assert.ok(row.analysis);assert.equal(row.draft_review,null);
  generatedDraft='새 근거가 반영된 가상 답변 초안입니다.';await jobs.queueAnalysis(id);await jobs.processComplaint(id);assert.equal((await get(id)).draft,generatedDraft,'untouched AI drafts update after reanalysis');
- keys={provider:'openai',openai:'synthetic-openai',gemini:'',law:'synthetic',model:'gpt-6-luna'};
+ keys={provider:'openai',openai:'synthetic-openai',law:'synthetic',model:'gpt-6-luna'};
  await jobs.queueAnalysis(id);await jobs.processComplaint(id);assert.equal((await get(id)).auto_state,'completed');assert.equal(lastGenerationArgs[0],'synthetic-openai');assert.equal(lastGenerationArgs[1],'gpt-6-luna');assert.equal(lastGenerationArgs[6],'openai');
- keys={gemini:'synthetic',law:'synthetic',model:'test'};
+ keys={provider:'openai',openai:'synthetic',law:'synthetic',model:'test'};
  let publicResult=await request('complaints/'+id);assert.equal(publicResult.data.complaint.draft,'');assert.equal(publicResult.data.complaint.auto_state,undefined);assert.equal(publicResult.data.complaint.auto_token,undefined);
- keys={...keys,gemini:'',law:''};const blocked=await submit();await callbacks.shift()();assert.equal((await get(blocked)).auto_state,'blocked');assert.equal((await get(blocked)).analysis,null);
+ keys={...keys,openai:'',law:''};const blocked=await submit();await callbacks.shift()();assert.equal((await get(blocked)).auto_state,'blocked');assert.equal((await get(blocked)).analysis,null);
  // Scope the resume query to these synthetic records; do not change other workspace rows.
- await db.query("UPDATE complaints SET auto_state='queued' WHERE id=$1 AND auto_state='blocked'",[blocked]);keys={...keys,gemini:'synthetic',law:'synthetic'};
+ await db.query("UPDATE complaints SET auto_state='queued' WHERE id=$1 AND auto_state='blocked'",[blocked]);keys={...keys,openai:'synthetic',law:'synthetic'};
  fail=true;await jobs.processComplaint(blocked);row=await get(blocked);assert.equal(row.auto_state,'failed');assert.ok(row.evidence,'evidence survives model failure');assert.equal(row.analysis,null);
  fail=false;await jobs.queueAnalysis(blocked);await jobs.processComplaint(blocked);assert.equal((await get(blocked)).auto_state,'completed');
  const edited=await submit();let release;hold=new Promise(resolve=>release=resolve);const currentCalls=calls;const job=callbacks.shift()();

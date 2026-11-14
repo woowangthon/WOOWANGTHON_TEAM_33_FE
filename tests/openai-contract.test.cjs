@@ -1,7 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),ts=require('typescript');
-class AppError extends Error{constructor(message,status){super(message);this.status=status;}}
+class AppError extends Error{constructor(message,status,retryable=true){super(message);this.status=status;this.retryable=retryable;}}
 const modules=new Map();
 function load(file){file=path.resolve(file);if(modules.has(file))return modules.get(file);const exports={};modules.set(file,exports);
  const js=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
@@ -28,16 +28,15 @@ test('OpenAI uses strict Responses output and the shared grounded protection/cit
  } finally {global.fetch=realFetch;}
 });
 
-test('OpenAI and Gemini receive the same extracted facts through the shared generator',async()=>{
+test('OpenAI receives extracted facts and prior validation through the shared generator',async()=>{
  const facts=[{id:'F1',kind:'requested_action',source:'body',quote:'현장 확인을 요청합니다.',value:'현장 확인 요청',essential:true}],seen=[],previousValidation=[{summary:'현장 확인',issues:['내부 요청 누락'],review:{requests:[]}}];
  try {
   global.fetch=async(url,init)=>{
-   const body=JSON.parse(init.body),openai=url.includes('api.openai.com');
-   seen.push(openai?JSON.parse(body.input):JSON.parse(body.contents[0].parts[0].text));
-   return openai?result(valid):Response.json({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(valid)}]}}]});
+   assert.equal(url,'https://api.openai.com/v1/responses');
+   seen.push(JSON.parse(JSON.parse(init.body).input));return result(valid);
   };
-  for(const provider of ['openai','gemini'])await generateAnalysis('synthetic-key','synthetic-model',complaint,[citation],[],'test',provider,facts,previousValidation);
-  assert.deepEqual(seen[0].groundedFacts,facts);assert.deepEqual(seen[1].groundedFacts,facts);assert.deepEqual(seen[0].previousValidation,previousValidation);assert.deepEqual(seen[0],seen[1]);
+  await generateAnalysis('synthetic-key','synthetic-model',complaint,[citation],[],'test','openai',facts,previousValidation);
+  assert.equal(seen.length,1);assert.deepEqual(seen[0].groundedFacts,facts);assert.deepEqual(seen[0].previousValidation,previousValidation);
  }finally{global.fetch=realFetch;}
 });
 
@@ -51,11 +50,31 @@ test('OpenAI refuses incomplete, refused and invalid responses without storing a
  } finally {global.fetch=realFetch;}
 });
 
-test('exhausted OpenAI credits differ from rate limits and never retry or fall back to Gemini',async()=>{
+test('exhausted OpenAI credits differ from rate limits without retrying or using another provider',async()=>{
  try {
   let calls=0;
   global.fetch=async()=>{calls++;return Response.json({error:{code:'credit_balance_exhausted',type:'insufficient_quota'}},{status:429});};
   await assert.rejects(invoke(),e=>e.status===503&&/잔액/.test(e.message));assert.equal(calls,1);
   global.fetch=async()=>Response.json({error:{code:'rate_limit_exceeded'}},{status:429});await assert.rejects(invoke(),e=>e.status===429);
  } finally {global.fetch=realFetch;}
+});
+
+test('transient OpenAI failures retry once with the same request and timeout',async()=>{
+ const calls=[];
+ try {
+  global.fetch=async(url,init)=>{calls.push({url,...init});return calls.length===1?new Response('',{status:503}):result(valid);};
+  assert.equal((await invoke()).summary,valid.summary);assert.equal(calls.length,2);assert.equal(calls[0].body,calls[1].body);assert.equal(calls[0].signal,calls[1].signal);
+  assert.ok(calls.every(c=>c.url==='https://api.openai.com/v1/responses'));
+ }finally{global.fetch=realFetch;}
+});
+
+test('invalid credentials and model access fail without provider substitution',async()=>{
+ try {
+  for(const status of [400,401,403,404]){
+   let calls=0;global.fetch=async()=>{calls++;return Response.json({error:{}},{status});};
+   await assert.rejects(invoke(),e=>e.status===503&&e.retryable===false);assert.equal(calls,1);
+  }
+  global.fetch=async()=>assert.fail('unsupported provider must fail before any request');
+  assert.throws(()=>generateAnalysis('synthetic','test',complaint,[],[],'test','unsupported'),/OpenAI/);
+ }finally{global.fetch=realFetch;}
 });

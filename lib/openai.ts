@@ -1,7 +1,7 @@
 import { harnessPolicy } from './harness-policy';
 import type { SummaryFact,SummaryAudit } from './summary-harness';
 import { AppError } from './server';
-import { analysisInstruction, jsonSchema, validateAnalysis } from './gemini';
+import { analysisInstruction, jsonSchema, validateAnalysis } from './analysis-contract';
 import type { Analysis, Citation, Complaint } from './types';
 
 type OpenAIResponse = {
