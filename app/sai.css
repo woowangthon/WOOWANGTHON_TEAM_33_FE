@@ -51,6 +51,7 @@ body.site-staff .staff-app {
 }
 body.site-staff .admin-header { height: 88px; padding: 0 32px; background: var(--sai-surface); border-bottom: 1px solid var(--sai-line); }
 body.site-staff .admin-brand { color: var(--sai-ink); gap: 20px; }
+body.site-staff .admin-brand > svg { color: var(--sai-accent); }
 body.site-staff .admin-brand > strong { font-size: 27px; font-weight: 600; letter-spacing: -.075em; }
 body.site-staff .admin-brand > strong span { color: var(--sai-accent); }
 body.site-staff .admin-brand b { color: var(--sai-muted); font-size: 12px; font-weight: 400; }
@@ -207,6 +208,7 @@ body.site-staff .auth-home, body.site-staff .admin-auth .auth-home { color: var(
 @media (max-width: 720px) {
   body.site-staff .admin-header { height: 72px; padding: 0 18px; }
   body.site-staff .admin-brand > strong { font-size: 24px; }
+  body.site-staff .admin-brand { gap: 8px; }
   body.site-staff .admin-mobile { color: var(--sai-accent); min-width: 36px; min-height: 44px; }
   body.site-staff .admin-nav { display: flex; height: 56px; padding: 6px 16px; gap: 8px; background: var(--sai-surface); border-bottom: 1px solid var(--sai-line); }
   body.site-staff .admin-nav button { padding: 0 18px; font-size: 13px; color: var(--sai-muted); border-radius: 10px; }

@@ -1,6 +1,7 @@
 "use client";
 import { protectedTitle } from '../lib/protection';
 import CitationText from './citation-text';
+import SaiMark from './sai-mark';
 
 import {
   ArrowRight,
@@ -20,7 +21,6 @@ import {
   Menu,
   MonitorCheck,
   Search,
-  ShieldCheck,
   Sparkles,
   TrafficCone,
   Trash2,
@@ -98,7 +98,7 @@ function Brand() {
   return (
     <>
       <span className="cp-brand-symbol">
-        <ShieldCheck size={38} strokeWidth={1.8} />
+        <SaiMark size={38}/>
       </span>
       <span>
         <strong>
@@ -274,7 +274,7 @@ export default function CitizenPortal({
           ))}
           <a href="/phone" style={{display:'flex',alignItems:'center',padding:'0 20px',fontWeight:600}}>음성 상담</a>
           <button className="cp-staff-nav" onClick={onStaff}>
-            <ShieldCheck size={19} />
+            <ClipboardCheck size={19} />
             담당자 업무
             <ArrowUpRight size={16} />
           </button>
@@ -630,7 +630,7 @@ function ApplicationForm({
       {step === 0 ? (
         <>
           <div className="cp-guide-box">
-            <ShieldCheck size={33} />
+            <FilePenLine size={33} />
             <div>
               <h2>민원 신청</h2>
             </div>

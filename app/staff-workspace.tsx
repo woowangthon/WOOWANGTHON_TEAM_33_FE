@@ -33,6 +33,7 @@ import {
   type Event,
 } from "../lib/types";
 import PhoneDesk from './phone-desk';
+import SaiMark from './sai-mark';
 import {
   ComplaintDetail,
 } from "./workspace";
@@ -295,6 +296,7 @@ export default function StaffWorkspace({
           <Menu size={22} />
         </button>
         <button className="admin-brand" onClick={() => navigate("inbox")}>
+          <SaiMark size={32}/>
           <strong>민원<span>사이</span></strong>
           <i />
           <b>담당자 업무</b>
