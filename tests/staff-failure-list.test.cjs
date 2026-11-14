@@ -8,7 +8,7 @@ function render(selected=false){
  const stubs={
   'react':{...React,useState:initial=>{const i=state++;return React.useState(i===0?{complaints:[failed,pending],settings:{},user:{name:''}}:i===2&&selected?failed:i===4?false:initial);}},
   '../lib/protection':load('lib/protection.ts'),'../lib/complaint-notifications':load('lib/complaint-notifications.ts'),'../lib/types':load('lib/types.ts'),
-  './phone-desk':{default:()=>null},'./workspace':{ComplaintDetail:()=>React.createElement('p',null,'원문 탭 제공')}
+  './phone-desk':{default:()=>null},'./sai-mark':{default:()=>null},'./workspace':{ComplaintDetail:()=>React.createElement('p',null,'원문 탭 제공')}
  };
  new Function('require','exports',ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(name=>name in stubs?stubs[name]:require(name),out);
  return renderToStaticMarkup(React.createElement(out.default,{authenticated:true,otherSiteUrl:'https://example.invalid'}));
