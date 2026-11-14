@@ -1,24 +1,24 @@
-/* 민원사이 — warm styling is restricted to the staff site. */
+/* 민원사이 — the original blue palette, scoped to the staff site. */
 body.site-staff {
   color-scheme: light;
-  --sai-page: #f5f0e7;
+  --sai-page: #f5f7fa;
   --sai-surface: #ffffff;
-  --sai-soft: #f1eee7;
-  --sai-ink: #342f2b;
-  --sai-muted: #716d65;
-  --sai-line: #e5dfd4;
-  --sai-input-line: #93988a;
-  --sai-accent: #52694c;
-  --sai-accent-hover: #40553b;
-  --sai-accent-soft: #eaf0e5;
-  --sai-accent-line: #c8d3bf;
+  --sai-soft: #f1f4f8;
+  --sai-ink: #243146;
+  --sai-muted: #657387;
+  --sai-line: #d8dfe8;
+  --sai-input-line: #8293ac;
+  --sai-accent: #2458a6;
+  --sai-accent-hover: #173f78;
+  --sai-accent-soft: #eef3fa;
+  --sai-accent-line: #c6d0df;
   --sai-warning: #865b29;
   --sai-warning-soft: #fbf2e4;
   --sai-warning-line: #e2cfb0;
   --sai-danger: #a13e38;
   --sai-danger-soft: #fcf0ed;
   --sai-danger-line: #e4c3bb;
-  --sai-shadow: 0 4px 22px rgb(54 64 44 / 4%);
+  --sai-shadow: 0 4px 22px rgb(36 49 70 / 4%);
   --bg: var(--sai-page);
   --ink: var(--sai-ink);
   --muted: var(--sai-muted);
@@ -42,7 +42,7 @@ body.site-staff .button.primary { background: var(--sai-accent); border-color: v
 body.site-staff .button.primary:hover:not(:disabled) { background: var(--sai-accent-hover); }
 body.site-staff .card { background: var(--sai-surface); border-radius: 16px; box-shadow: var(--sai-shadow); }
 
-/* Staff workspace: ivory canvas, independent cards, and a quiet sage accent. */
+/* Staff workspace: original blue colors with the current layout. */
 body.site-staff .staff-app {
   --green: var(--sai-accent); --green-dark: var(--sai-accent-hover);
   --green-light: var(--sai-accent-soft); --text: var(--sai-ink);
@@ -85,7 +85,7 @@ body.site-staff .admin-counters > button > span { font-size: 13px; }
 body.site-staff .admin-counters strong { font-size: 32px; color: var(--sai-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
 body.site-staff .admin-counters small { font-size: 12px; margin-left: 8px; }
 body.site-staff .admin-counters button.active strong, body.site-staff .admin-counters > button.active > span { color: var(--sai-accent-hover); }
-body.site-staff .admin-filter { padding: 22px 24px 12px; border: 0; border-radius: 18px; background: #e4eadc; margin-bottom: 28px; }
+body.site-staff .admin-filter { padding: 22px 24px 12px; border: 0; border-radius: 18px; background: #eaf0f8; margin-bottom: 28px; }
 body.site-staff .admin-search-row { display: flex; align-items: center; gap: 10px; }
 body.site-staff .admin-search-label { flex: 1; min-width: 0; }
 body.site-staff .admin-search-label > span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -115,7 +115,7 @@ body.site-staff .admin-list-toolbar h2 span { font-size: 12px; }
 body.site-staff .admin-list-toolbar select { height: 38px; }
 body.site-staff .admin-table { border-collapse: separate; border-spacing: 0 10px; }
 body.site-staff .admin-table th { border: 0; background: transparent; color: var(--sai-muted); font-size: 11px; font-weight: 400; padding-top: 8px; padding-bottom: 4px; }
-body.site-staff .admin-table td { border: 0; background: #f7f5ef; font-size: 12px; padding: 20px 12px; height: 104px; color: var(--sai-muted); }
+body.site-staff .admin-table td { border: 0; background: #f7f9fc; font-size: 12px; padding: 20px 12px; height: 104px; color: var(--sai-muted); }
 body.site-staff .admin-table td:first-child { border-radius: 12px 0 0 12px; }
 body.site-staff .admin-table td:last-child { border-radius: 0 12px 12px 0; }
 body.site-staff .admin-table tbody tr:hover { background: transparent; }
@@ -126,8 +126,8 @@ body.site-staff .admin-complaint-title strong { color: var(--sai-ink); font-size
 body.site-staff .admin-complaint-title > span { font-size: 11px; }
 body.site-staff .admin-complaint-title:hover strong { color: var(--sai-accent-hover); }
 body.site-staff .admin-status, body.site-staff .staff-app .badge { border-radius: 20px; font-size: 11px; padding: 5px 10px; }
-body.site-staff .admin-status.reviewing { background: #f3ead9; color: #775d36; border-color: #e5d8be; }
-body.site-staff .admin-status.resolved { background: var(--sai-accent-soft); color: var(--sai-accent-hover); border-color: var(--sai-accent-line); }
+body.site-staff .admin-status.reviewing { background: #edf3ff; color: #345dae; border-color: #d5e1f8; }
+body.site-staff .admin-status.resolved { background: #eef6f1; color: #488266; border-color: #d6e9de; }
 body.site-staff .admin-table-footer { border: 0; padding: 16px 0 24px; }
 body.site-staff .admin-pagination button { border-radius: 9px; min-width: 36px; height: 36px; font-size: 12px; }
 body.site-staff .admin-pagination button.active { background: var(--sai-accent); border-color: var(--sai-accent); }
@@ -246,5 +246,5 @@ body.site-staff .auth-home, body.site-staff .admin-auth .auth-home { color: var(
   body.site-staff *, body.site-staff *::before, body.site-staff *::after { scroll-behavior: auto !important; }
 }
 @media (prefers-contrast: more) {
-  body.site-staff { --sai-muted: #465044; --sai-line: #93988a; --sai-accent-line: #93988a; }
+  body.site-staff { --sai-muted: #34465e; --sai-line: #8293ac; --sai-accent-line: #8293ac; }
 }

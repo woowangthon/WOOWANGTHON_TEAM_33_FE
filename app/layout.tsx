@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: process.env.SITE_MODE==='staff'?"민원사이 · 담당자 업무": "민원사이 · 민원 신청과 상담",
   description: "민원 신청, 접수 내역 조회 및 민원 업무 관리",
   icons: {
-    icon: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg?v=3" : "/favicon.svg?v=3",
-    shortcut: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg?v=3" : "/favicon.svg?v=3",
+    icon: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg?v=4" : "/favicon.svg?v=3",
+    shortcut: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg?v=4" : "/favicon.svg?v=3",
   },
 };
 
