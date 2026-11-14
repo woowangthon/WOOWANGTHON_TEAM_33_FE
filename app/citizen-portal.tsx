@@ -97,12 +97,9 @@ function StatusTag({ status }: { status: Status }) {
 function Brand() {
   return (
     <>
-      <span className="cp-brand-symbol">
-        <ShieldCheck size={38} strokeWidth={1.8} />
-      </span>
       <span>
         <strong>
-          민원<span>쉴드</span>
+          민원<span>사이</span>
         </strong>
       </span>
     </>
@@ -206,7 +203,7 @@ export default function CitizenPortal({
           <button
             className="cp-brand"
             onClick={() => go("home")}
-            aria-label="민원 쉴드 홈"
+            aria-label="민원사이 홈"
           >
             <Brand />
           </button>
@@ -272,7 +269,7 @@ export default function CitizenPortal({
               <ChevronDown size={16} />
             </button>
           ))}
-          <a href="/phone" style={{display:'flex',alignItems:'center',padding:'0 20px',fontWeight:600}}>음성 상담</a>
+          <a href="/phone" className="cp-phone-nav">음성 상담</a>
           <button className="cp-staff-nav" onClick={onStaff}>
             <ShieldCheck size={19} />
             담당자 업무
@@ -286,7 +283,7 @@ export default function CitizenPortal({
             <section className="cp-hero">
               <div className="cp-container cp-hero-inner">
                 <div className="cp-hero-copy">
-                  <h1>민원 신청·조회</h1>
+                  <h1>생활 속 불편,<br />편하게 들려주세요.</h1>
                   <form className="cp-hero-search" onSubmit={search}>
                     <label htmlFor="hero-search">나의 민원검색</label>
                     <input
@@ -532,12 +529,12 @@ export default function CitizenPortal({
             <button
               className="cp-brand"
               onClick={() => go("home")}
-              aria-label="민원 쉴드 홈"
+              aria-label="민원사이 홈"
             >
               <Brand />
             </button>
             <div>
-              <strong>민원 쉴드 · Shield & Solve</strong>
+              <strong>민원사이</strong>
             </div>
             <button
               className="cp-to-top"
@@ -1077,7 +1074,7 @@ function Guide({ onApply }: { onApply: () => void }) {
       <div className="cp-guide-box">
         <BookOpen size={37} />
         <div>
-          <h2>민원 쉴드, 이렇게 이용하세요</h2>
+          <h2>민원사이, 이렇게 이용하세요</h2>
         </div>
       </div>
       <h2 className="cp-faq-heading">민원 처리 절차</h2>

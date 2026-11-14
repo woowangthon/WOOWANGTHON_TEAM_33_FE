@@ -44,7 +44,7 @@ async function transferPage(owner: string) {
   const nonce = randomBytes(16).toString("base64");
   // no-referrer makes Origin null on browser form POSTs. Send only the origin
   // so the receiving site can retain its strict cross-site request check.
-  const html = `<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="referrer" content="strict-origin"><title>민원쉴드</title><form id="transfer" method="post" action="${other}/api/guest/receive"><input type="hidden" name="code" value="${code}"><noscript><button type="submit">사이트로 이동</button></noscript></form><script nonce="${nonce}">document.getElementById('transfer').submit()</script></html>`;
+  const html = `<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="referrer" content="strict-origin"><title>민원사이</title><form id="transfer" method="post" action="${other}/api/guest/receive"><input type="hidden" name="code" value="${code}"><noscript><button type="submit">사이트로 이동</button></noscript></form><script nonce="${nonce}">document.getElementById('transfer').submit()</script></html>`;
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",

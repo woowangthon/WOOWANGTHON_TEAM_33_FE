@@ -160,7 +160,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   async function resumeAudio(){try{await session.current?.context.resume();}catch{setMessage('오디오를 켜지 못했습니다. 통화를 다시 연결해 주세요.');}}
 
   return <section className={'phone-desk '+(staff?'phone-staff':'phone-caller')}>
-    <div className="phone-heading"><div><span className="phone-eyebrow">민원쉴드{demo?' · 가상 사례 시연':''}</span><h1>웹 음성 상담</h1></div><span className={'phone-availability '+(online?'on':'')}>{online?(staff||available?'연결 가능':'담당자 접속 대기'):'연결 준비 중'}</span></div>
+    <div className="phone-heading"><div><span className="phone-eyebrow">민원사이{demo?' · 가상 사례 시연':''}</span><h1>웹 음성 상담</h1></div><span className={'phone-availability '+(online?'on':'')}>{online?(staff||available?'연결 가능':'담당자 접속 대기'):'연결 준비 중'}</span></div>
     {message&&<div className="phone-notice" role="status">{message}</div>}
     {state==='active'&&audioPaused&&<div className="phone-notice" role="status">기기에서 오디오가 일시 정지되었습니다. <button onClick={()=>void resumeAudio()}>오디오 다시 켜기</button></div>}
     {demo&&<div className="phone-demo"><strong>가상 사례 시연</strong><label><input type="checkbox" checked={useMic} disabled={connected} onChange={event=>setUseMic(event.target.checked)}/>마이크 사용</label>{!staff&&<div className="phone-actions"><button disabled={state!=='active'||!!playing||muted} onClick={()=>void playSample('normal')}><Play size={15}/>일반 민원</button><button disabled={state!=='active'||!!playing||muted} onClick={()=>void playSample('profanity')}><Play size={15}/>욕설 포함 민원</button>{playing&&<button onClick={stopSample}><Square size={15}/>전송 중지</button>}</div>}</div>}

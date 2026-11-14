@@ -12,9 +12,9 @@ import {
   Inbox,
   LoaderCircle,
   Menu,
+  Phone,
   RefreshCw,
   Search,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import {
@@ -298,12 +298,9 @@ export default function StaffWorkspace({
           <Menu size={22} />
         </button>
         <button className="admin-brand" onClick={() => navigate("inbox")}>
-          <span>
-            <ShieldCheck size={30} />
-          </span>
-          <strong>민원쉴드</strong>
+          <strong>민원<span>사이</span></strong>
           <i />
-          <b>민원업무관리시스템</b>
+          <b>담당자 업무</b>
         </button>
         <div className="admin-user">
           <a href={otherSiteUrl}>
@@ -313,7 +310,7 @@ export default function StaffWorkspace({
         </div>
       </header>
       <nav className="admin-nav" aria-label="주 메뉴">
-        <button onClick={()=>navigate('phone')} className={view==='phone'?'active':''}><ShieldCheck size={18}/>전화 상담</button>
+        <button onClick={()=>navigate('phone')} className={view==='phone'?'active':''}><Phone size={18}/>전화 상담</button>
         <button
           onClick={() => navigate("inbox")}
           className={view === "inbox" ? "active" : ""}
@@ -353,7 +350,7 @@ export default function StaffWorkspace({
           </div>
           <button className={"admin-side-main "+(view==="trash"?"active":"")} onClick={()=>{navigate("trash");setFilter(initialFilter);setApplied(initialFilter);setPage(1);}}>휴지통 <b>{data.trashComplaints?.length||0}</b></button>
           <div className="admin-side-divider" />
-          <button className={'admin-side-main '+(view==='phone'?'active':'')} onClick={()=>navigate('phone')}><ShieldCheck size={18}/>전화 상담</button>
+          <button className={'admin-side-main '+(view==='phone'?'active':'')} onClick={()=>navigate('phone')}><Phone size={18}/>전화 상담</button>
         </aside>
         {menu ? (
           <button
@@ -767,7 +764,7 @@ export default function StaffWorkspace({
           ) : null}
           <footer className="admin-footer">
             <strong>
-              민원쉴드 <span>Shield & Solve</span>
+              민원사이
             </strong>
           </footer>
         </main>
