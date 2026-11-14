@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-11-15",
+  "sources": [
+    {
+      "id": "koen-environment-20220914",
+      "name": "한국남동발전㈜_환경관련 민원사항 현황_20220914",
+      "provider": "한국남동발전㈜ / 공공데이터포털",
+      "url": "https://www.data.go.kr/data/15093026/fileData.do",
+      "license": "이용허락범위 제한 없음",
+      "licenseUrl": "https://www.data.go.kr/ugs/selectPortalPolicyView.do",
+      "format": "CSV / EUC-KR",
+      "records": 13,
+      "use": "요약·요청 보존 검사. 입력은 민원내용만 사용하고 처리내용은 분리한다.",
+      "limitations": "기관이 정리한 짧은 민원 내용이며 시민의 전체 원문이나 실제 통화 녹음이 아니다. 욕설 탐지 성능을 증명하지 않는다."
+    },
+    {
+      "id": "2runo-curse-detection-data",
+      "name": "욕설 감지 데이터셋",
+      "provider": "2runo",
+      "url": "https://github.com/2runo/Curse-detection-data",
+      "version": "ff241621e103b6f220d30de324d0d07987887308",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/2runo/Curse-detection-data/blob/ff241621e103b6f220d30de324d0d07987887308/LICENSE",
+      "copyright": "Copyright (c) 2020 2runo",
+      "records": 5825,
+      "use": "수정하지 않은 커뮤니티 문장의 표현·대상 문맥 검사. 원본 라이선스 전문을 함께 보관한다.",
+      "limitations": "실제 민원이나 통화 녹음이 아니다. 원본의 0/1은 광범위한 욕설 분류이고 담당자 직접 공격 여부와 같지 않다."
+    }
+  ],
+  "excludedFromReleaseDataset": "이용허락이 확인되지 않은 지자체 게시판 3건은 과거 비공개 검토 기록으로만 보관한다. 공개 페이지라는 이유로 자유 이용 자료로 표시하지 않는다."
+}
