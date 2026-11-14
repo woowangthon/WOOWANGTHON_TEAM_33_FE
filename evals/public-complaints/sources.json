@@ -1,0 +1,18 @@
+{
+  "provider": "국민권익위원회",
+  "apiCatalog": "https://www.data.go.kr/data/15102383/openapi.do",
+  "apiCatalogLicense": "이용허락범위 제한 없음 (API 제공 데이터에 대한 표시)",
+  "acquisition": "공식 웹사이트의 공개 결정례에서 신청원인 구간만 발췌. API 인증키가 없어 API로 받은 데이터로 표시하지 않음.",
+  "webLicensePolicy": "https://www.acrc.go.kr/menu.es?mid=a10704000000",
+  "redistribution": "웹 원문별 이용조건 확인 전 원문 재배포·운영 데이터 등록 금지. 이번 실행은 비공개 로컬 기능 평가.",
+  "cases": [
+    {"id":"ACRC-35945","listNo":35945,"category":"소음·환경","section":"신청원인"},
+    {"id":"ACRC-35931","listNo":35931,"category":"소음·환경","section":"신청원인"},
+    {"id":"ACRC-35973","listNo":35973,"category":"생활폐기물","section":"신청원인"},
+    {"id":"ACRC-36944","listNo":36944,"category":"교통·도로","section":"신청원인"},
+    {"id":"ACRC-36920","listNo":36920,"category":"교통·도로","section":"신청원인"},
+    {"id":"ACRC-36797","listNo":36797,"category":"폭언 피해 신고","section":"신청원인"},
+    {"id":"ACRC-36494","listNo":36494,"category":"경찰업무·폭언 피해 신고","section":"신청원인"},
+    {"id":"ACRC-36672","listNo":36672,"category":"경찰업무","section":"신청원인"}
+  ]
+}
