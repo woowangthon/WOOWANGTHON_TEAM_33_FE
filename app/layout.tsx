@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: process.env.SITE_MODE==='staff'?"민원사이 · 담당자 업무": "민원사이 · 민원 신청과 상담",
   description: "민원 신청, 접수 내역 조회 및 민원 업무 관리",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg" : "/favicon.svg",
+    shortcut: process.env.SITE_MODE === "staff" ? "/favicon-sai.svg" : "/favicon.svg",
   },
 };
 
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="antialiased">{children}</body>
+      <body className={"antialiased site-" + (process.env.SITE_MODE === "staff" ? "staff" : "citizen")}>{children}</body>
     </html>
   );
 }

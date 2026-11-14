@@ -97,6 +97,9 @@ function StatusTag({ status }: { status: Status }) {
 function Brand() {
   return (
     <>
+      <span className="cp-brand-symbol">
+        <ShieldCheck size={38} strokeWidth={1.8} />
+      </span>
       <span>
         <strong>
           민원<span>사이</span>
@@ -269,7 +272,7 @@ export default function CitizenPortal({
               <ChevronDown size={16} />
             </button>
           ))}
-          <a href="/phone" className="cp-phone-nav">음성 상담</a>
+          <a href="/phone" style={{display:'flex',alignItems:'center',padding:'0 20px',fontWeight:600}}>음성 상담</a>
           <button className="cp-staff-nav" onClick={onStaff}>
             <ShieldCheck size={19} />
             담당자 업무
@@ -283,7 +286,7 @@ export default function CitizenPortal({
             <section className="cp-hero">
               <div className="cp-container cp-hero-inner">
                 <div className="cp-hero-copy">
-                  <h1>생활 속 불편,<br />편하게 들려주세요.</h1>
+                  <h1>민원 신청·조회</h1>
                   <form className="cp-hero-search" onSubmit={search}>
                     <label htmlFor="hero-search">나의 민원검색</label>
                     <input
