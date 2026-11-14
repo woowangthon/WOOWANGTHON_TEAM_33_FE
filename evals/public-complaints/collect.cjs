@@ -2,7 +2,6 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const manifest=require('./sources.json');
 const destination=path.resolve(process.argv[2]||'../acrc-evaluation');
-fs.mkdirSync(path.join(destination,'originals'),{recursive:true});
 function text(html){return html.replace(/<br\s*\/?\s*>/gi,'\n').replace(/<[^>]+>/g,'').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(+n)).replace(/&#x([0-9a-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16))).replace(/&nbsp;/g,' ').replace(/&quot;/g,'"').replace(/&apos;|&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/\r/g,'').trim();}
 function extract(html,section){
  const heading=new RegExp('<h4[^>]*>\\s*'+section+'\\s*</h4>','g'),match=heading.exec(html);
@@ -13,6 +12,7 @@ function extract(html,section){
 }
 module.exports={text,extract};
 async function collect(){
+ fs.mkdirSync(path.join(destination,'originals'),{recursive:true});
  const records=[];
  for(const entry of manifest.cases){
   const url=`https://www.acrc.go.kr/board.es?act=view&bid=1011&list_no=${entry.listNo}&mid=a10504010000`;

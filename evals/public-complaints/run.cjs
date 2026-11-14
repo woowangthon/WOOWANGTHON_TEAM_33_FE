@@ -1,7 +1,7 @@
 // Calls the current production modules in isolation. It cannot access the DB.
 // Execute deliberately: node --env-file=.env.local evals/public-complaints/run.cjs --live
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),ts=require('typescript');
-const root=path.resolve(__dirname,'../..'),folder=path.resolve(root,'../acrc-evaluation');
+const root=path.resolve(__dirname,'../..'),folder=path.resolve(process.env.PUBLIC_COMPLAINT_EVAL_DIR||path.resolve(root,'../acrc-evaluation'));
 const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
 class AppError extends Error{constructor(message,status=400,retryable=true){super(message);this.status=status;this.retryable=retryable;}}
 const cache=new Map();

@@ -15,9 +15,13 @@ export const factJsonSchema = {
   },required:['kind','source','quote','value','essential']},
 };
 export const sourceHash = (c:SummarySource) => createHash('sha256').update(JSON.stringify(factSources.map(key=>c[key]))).digest('hex');
+export class FactSourceMismatchError extends Error {
+  constructor(public invalidFactIndexes:number[]) {super('Summary fact has no exact source evidence');this.name='FactSourceMismatchError';}
+}
 export function groundFacts(value:unknown,c:SummarySource):SummaryFact[] {
   const facts=z.array(factSchema).max(harnessPolicy.summary.maxFacts).parse(value);
-  if(facts.some(f=>!c[f.source].includes(f.quote)))throw new Error('Summary fact has no exact source evidence');
+  const invalid=facts.flatMap((f,index)=>c[f.source].includes(f.quote)?[]:[index]);
+  if(invalid.length)throw new FactSourceMismatchError(invalid);
   if(facts.length&&!facts.some(f=>f.essential))throw new Error('Summary facts must identify the core business content');
   return facts.map((fact,index)=>({...fact,id:'F'+(index+1)}));
 }
