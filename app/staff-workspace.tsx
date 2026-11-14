@@ -25,6 +25,7 @@ import {
   type FormEvent,
 } from "react";
 import { expressionFindings,protectedTitle } from '../lib/protection';
+import {createSignalRefresh,visibleComplaint,type ComplaintNotification} from '../lib/complaint-notifications';
 import {
   autoStates,
   categories,
@@ -118,6 +119,8 @@ export default function StaffWorkspace({
     generation = useRef(0),
     running = useRef(false);
   const [savingTasks,setSavingTasks]=useState(false);
+  const [connectionLost,setConnectionLost]=useState(false);
+  const syncSignals=useRef<ReturnType<typeof createSignalRefresh>|null>(null);
   const refresh = useCallback(async () => {
     const next = await api<Overview>("overview");
     setData(next);
@@ -140,40 +143,41 @@ export default function StaffWorkspace({
       active = false;
     };
   }, [authenticated]);
-  // Poll the shared inbox, so submissions from the citizen site appear without a reload.
+  // Database completion signals drive refreshes. No timer checks for analysis results.
   useEffect(() => {
     if (!authenticated) return;
-    let active = true,
-      inFlight = false;
-    const timer = setInterval(async () => {
-      if (document.hidden || inFlight || running.current || tasksPending.current) return;
-      inFlight = true;
-      try {
-        // An open complaint only needs its own record; the full inbox is
-        // refreshed while browsing the list. Keeps database egress small.
-        const id = selectedId.current;
-        if (!id) {
-          const d = await api<Overview>("overview?poll=1");
-          if (active) setData((prev) => ({ ...prev, ...d }));
-        } else {
-          const result = await api<{ complaint: Complaint; events: Event[] }>(
-            "complaints/" + id + "?trash=1",
-          );
-          if (active && selectedId.current === id && result.complaint.revision>=selectedRevision.current) {
-            selectedRevision.current=result.complaint.revision;
-            setSelected(result.complaint);
-            setEvents(result.events);
-          }
-        }
-      } catch {
-        /* Explicit refresh surfaces errors; transient background failures do not dismiss the editor. */
-      } finally {
-        inFlight = false;
+    let active=true,expectedReconnect=false;
+    const sync=createSignalRefresh(async()=>{
+      const id=selectedId.current;
+      const [overview,result]=await Promise.all([
+        api<Overview>('overview'),
+        id?api<{complaint:Complaint;events:Event[]}>('complaints/'+id+'?trash=1'):Promise.resolve(null)
+      ]);
+      if(!active)return;
+      setData(overview);
+      if(running.current||tasksPending.current){sync.signal();return;}
+      if(result&&selectedId.current===id&&result.complaint.revision>=selectedRevision.current){
+        selectedRevision.current=result.complaint.revision;
+        setSelected(result.complaint);setEvents(result.events);
       }
-    }, 15000);
+    },()=>running.current||tasksPending.current,()=>{
+      if(active)setNotice({message:'변경된 결과를 불러오지 못했습니다. 새로고침해 주세요.',error:true});
+    });
+    syncSignals.current=sync;
+    const source=new EventSource('/api/complaint-events');
+    source.addEventListener('ready',()=>{if(active){expectedReconnect=false;setConnectionLost(false);sync.signal();}});
+    source.addEventListener('reconnect',()=>{expectedReconnect=true;});
+    source.addEventListener('complaint',event=>{
+      if(!active)return;
+      const change=JSON.parse((event as MessageEvent).data) as ComplaintNotification;
+      if(change.kind==='completed')setNotice({message:'새 민원의 요약·분석이 완료되었습니다.'});
+      if(change.kind==='failed')setNotice({message:'민원 자동 분석을 완료하지 못했습니다.',error:true});
+      sync.signal();
+    });
+    source.onerror=()=>{if(active&&!expectedReconnect)setConnectionLost(true);};
     return () => {
-      active = false;
-      clearInterval(timer);
+      active=false;source.close();sync.stop();
+      if(syncSignals.current===sync)syncSignals.current=null;
     };
   }, [authenticated]);
   const run = async (label: string, action: () => Promise<void>) => {
@@ -191,6 +195,7 @@ export default function StaffWorkspace({
     } finally {
       running.current = false;
       setBusy("");
+      void syncSignals.current?.flush();
     }
   };
   function navigate(next: View) {
@@ -238,7 +243,9 @@ export default function StaffWorkspace({
     setApplied(filter);
     setPage(1);
   }
-  const filtered = (view==="trash"?(data.trashComplaints||[]):data.complaints).filter(
+  const readyComplaints=data.complaints.filter(visibleComplaint);
+  const failedComplaints=data.complaints.filter(c=>c.auto_state==='failed'&&!visibleComplaint(c));
+  const filtered = (view==="trash"?(data.trashComplaints||[]):readyComplaints).filter(
     (c) =>
       (applied.status === "all" || c.status === applied.status) &&
       (applied.category === "all" || c.category === applied.category) &&
@@ -252,8 +259,8 @@ export default function StaffWorkspace({
     currentPage = Math.min(page, pages);
   const count = (status: string) =>
     status === "all"
-      ? data.complaints.length
-      : data.complaints.filter((c) => c.status === status).length;
+      ? readyComplaints.length
+      : readyComplaints.filter((c) => c.status === status).length;
   const heading = selected ? "민원 상세 검토" : views[view];
   function exportCsv() {
     const cell = (s: string) =>
@@ -384,6 +391,14 @@ export default function StaffWorkspace({
               </button>
             </div>
           ) : null}
+          {connectionLost?<div className="admin-alert error" role="status">실시간 연결이 끊겼습니다. 다시 연결 중입니다.</div>:null}
+          {failedComplaints.length>0&&view==='inbox'&&!selected?<div className="admin-alert error" role="alert">
+            <span>{failedComplaints.length}건의 자동 분석을 완료하지 못했습니다.</span>
+            <button className="button outline small" disabled={!!busy} onClick={()=>void run('retry',async()=>{
+              await Promise.all(failedComplaints.map(c=>api('complaints/'+c.id+'/analyze','POST',{})));
+              await refresh();
+            })}>재시도</button>
+          </div>:null}
           <div hidden={view!=='phone'||!!selected}><PhoneDesk staff={true} onRegistered={()=>void refresh()}/></div>
           {view==='phone'&&!selected?null:loading ? (
             <div className="admin-loading">
@@ -392,8 +407,7 @@ export default function StaffWorkspace({
             </div>
           ) : selected ? (
             <>
-              {selected.auto_state === "completed" &&
-              !selected.deleted_at ? null : (
+              {selected.auto_state === "completed" || selected.deleted_at ? null : (
               <div
                 className={
                   "admin-processing " + (selected.auto_state || "idle")
@@ -414,7 +428,7 @@ export default function StaffWorkspace({
                   <p>{selected.auto_message || ""}</p>
                 </div>
                 {authenticated &&
-                !["queued", "processing"].includes(selected.auto_state || "") &&
+                selected.auto_state === "failed" &&
                 selected.status !== "resolved" && !selected.deleted_at ? (
                   <button
                     className="button outline small"
@@ -430,7 +444,7 @@ export default function StaffWorkspace({
                       })
                     }
                   >
-                    자동 분석 재시도
+                    재시도
                   </button>
                 ) : null}
               </div>
@@ -449,12 +463,12 @@ export default function StaffWorkspace({
                         ? "automatic"
                         : busy || (savingTasks ? "tasks" : "")
                   }
-                  ready={data.settings.aiReady ?? data.settings.geminiReady}
                   lawReady={data.settings.lawReady}
                   onBack={() => navigate(selected.deleted_at?"trash":"inbox")}
                   onTasksPending={pending=>{
                     if(selectedId.current!==selected.id)return;
                     tasksPending.current=pending;setSavingTasks(pending);
+                    if(!pending)void syncSignals.current?.flush();
                   }}
                   onTasksError={message=>setNotice({message,error:true})}
                   onTasksSaved={snapshot=>{
@@ -465,16 +479,6 @@ export default function StaffWorkspace({
                     setSelected(previous=>previous?update(previous):previous);
                     if(snapshot.event)setEvents(previous=>previous.some(e=>e.id===snapshot.event!.id)?previous:[snapshot.event!,...previous]);
                   }}
-                  onAnalyze={() =>
-                    void run("analyze", async () => {
-                      await api(
-                        "complaints/" + selected.id + "/analyze",
-                        "POST",
-                        {},
-                      );
-                      await detail(selected.id);
-                    })
-                  }
                   onEvidence={() =>
                     void run("evidence", async () => {
                       await api(
@@ -722,14 +726,13 @@ export default function StaffWorkspace({
                 </div>
                 {!filtered.length ? (
                   <div className="admin-empty">
-                    <Inbox size={34} />
                     <h3>
-                      {data.complaints.length
+                      {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length
                         ? "조회 조건에 맞는 민원이 없습니다."
-                        : "접수된 민원이 없습니다."}
+                        : view==='trash'?'휴지통이 비어 있습니다.':'분석이 완료된 민원이 없습니다.'}
                     </h3>
                     <p>
-                      {data.complaints.length
+                      {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length
                         ? "검색 조건을 변경하여 다시 조회해 주세요."
                         : ""}
                     </p>

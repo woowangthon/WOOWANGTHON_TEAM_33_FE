@@ -65,5 +65,5 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
   return true;
 }
 export async function failAnalysis(id:string,generation:number) {
-  await database().prepare("UPDATE complaints SET auto_state='failed',auto_message='자동 재시도 후에도 완료하지 못했습니다. 다시 분석하면 저장한 단계부터 이어집니다.' WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(id,generation).run();
+  await database().prepare("UPDATE complaints SET auto_state='failed',auto_message='자동 재시도 후에도 완료하지 못했습니다. 재시도하면 저장한 단계부터 이어집니다.' WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(id,generation).run();
 }

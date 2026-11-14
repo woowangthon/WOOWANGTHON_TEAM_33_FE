@@ -8,8 +8,6 @@ import {
   Globe2,
   LoaderCircle,
   Phone,
-  RefreshCw,
-  Sparkles,
   Trash2,
 } from "lucide-react";
 import {
@@ -174,11 +172,9 @@ export function ComplaintDetail({
   events,
   citizen,
   busy,
-  ready,
   lawReady,
   onEvidence,
   onBack,
-  onAnalyze,
   onUpdate,
   onTasksSaved,
   onTasksPending,
@@ -188,11 +184,9 @@ export function ComplaintDetail({
   events: Event[];
   citizen: boolean;
   busy: string;
-  ready: boolean;
   lawReady: boolean;
   onEvidence: () => void;
   onBack: () => void;
-  onAnalyze: () => void;
   onUpdate: (input: { action: string; [key: string]: unknown }) => void;
   onTasksSaved:(snapshot:TaskSnapshot)=>void;
   onTasksPending:(pending:boolean)=>void;
@@ -274,20 +268,6 @@ export function ComplaintDetail({
               >
                 처리 이력 <span>{history.length}</span>
               </button>
-              {a && tab === "solve" ? (
-                <Button
-                  kind="quiet small"
-                  className="tab-action"
-                  onClick={onAnalyze}
-                  disabled={!!busy || c.status === "resolved"}
-                >
-                  <RefreshCw
-                    size={14}
-                    className={busy === "analyze" ? "spin" : ""}
-                  />
-                  다시 분석
-                </Button>
-              ) : null}
             </div>
             {tab === "original" ? (
               <div className="panel-padding">
@@ -312,23 +292,11 @@ export function ComplaintDetail({
                 ))}
               </div>
             ) : !a ? (
-              <div className="analysis-empty">
-                <span className="analysis-orb">
-                  <Sparkles size={28} />
-                </span>
-                <h2>아직 분석 결과가 없습니다</h2>
-                <Button
-                  kind="primary"
-                  onClick={onAnalyze}
-                  disabled={!ready || !!busy || c.status === "resolved"}
-                >
-                  {busy === "analyze" ? (
-                    <LoaderCircle className="spin" size={17} />
-                  ) : (
-                    <Sparkles size={17} />
-                  )}{" "}
-                  {busy === "analyze" ? "분석 중…" : "분석 시작"}
-                </Button>
+              <div className="panel-padding" role="status" aria-live="polite">
+                {c.auto_state === 'failed' ? '요약을 생성하지 못했습니다.' :
+                  c.status === 'resolved' || c.auto_state === 'completed' ? '저장된 요약이 없습니다.' :
+                  c.auto_state === 'blocked' ? '분석 서비스 연결을 확인해 주세요.' :
+                  '요약을 자동으로 생성하고 있습니다.'}
               </div>
             ) : (
               <div className="panel-padding analysis-result">

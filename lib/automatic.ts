@@ -174,12 +174,12 @@ export async function drainAnalysisQueue(office = OFFICE) {
   const stale = new Date(Date.now() - 240000).toISOString();
   const pending = await database()
     .prepare(
-      `SELECT id FROM complaints WHERE ${officeScope(office)} AND deleted_at IS NULL AND status!='resolved' AND workflow_run IS NULL AND (auto_state='queued' OR (auto_state='processing' AND auto_started_at<?)) ORDER BY created_at LIMIT 2`,
+      `SELECT id FROM complaints WHERE ${officeScope(office)} AND deleted_at IS NULL AND status!='resolved' AND workflow_run IS NULL AND (auto_state='queued' OR (auto_state='idle' AND analysis IS NULL) OR (auto_state='processing' AND auto_started_at<?)) ORDER BY created_at LIMIT 2`,
     )
     .bind(...(guest ? [office, stale] : [stale]))
     .all<{ id: string }>();
   const {startAnalysis}=await import('./analysis-dispatch');
-  await Promise.all(pending.results.map((c) => startAnalysis(c.id)));
+  await Promise.allSettled(pending.results.map((c) => startAnalysis(c.id)));
 }
 
 export async function resumeAfterConfiguration(office = OFFICE) {

@@ -29,7 +29,6 @@ import {renderReport,type RecordReport} from '../../../lib/report-core';
 import {expressionFindings,maskText} from '../../../lib/protection';
 import {
   queueAnalysis,
-  processComplaint,
   drainAnalysisQueue,
 } from "../../../lib/automatic";
 
@@ -237,6 +236,10 @@ async function handler(
       if(c.deleted_at&&!(staff&&(url.searchParams.get("trash")==="1"||method==="PATCH")))throw new AppError("민원을 찾을 수 없습니다.",404);
       const complaintOwner = String(row.owner);
       if (path.length === 2 && method === "GET") {
+        if (staff && !c.deleted_at && c.status !== 'resolved' &&
+          (c.auto_state === 'queued' || (c.auto_state === 'idle' && !c.analysis))) {
+          after(() => startAnalysis(c.id).catch(() => undefined));
+        }
         const events = await database()
           .prepare(
             "SELECT id,label,created_at FROM events WHERE complaint_id=? AND owner=? ORDER BY created_at DESC",
@@ -373,9 +376,10 @@ async function handler(
             409,
           );
         if(input.action==='restore') {
-          const result=await database().prepare("UPDATE complaints SET deleted_at=NULL,updated_at=?,revision=revision+1,auto_state=CASE WHEN analysis IS NULL THEN 'idle' ELSE 'completed' END,auto_message='',workflow_run=NULL,analysis_checkpoint=NULL WHERE id=? AND owner=? AND revision=? AND deleted_at IS NOT NULL").bind(now(),c.id,complaintOwner,c.revision).run();
+          const result=await database().prepare("UPDATE complaints SET deleted_at=NULL,updated_at=?,revision=revision+1,auto_state=CASE WHEN analysis IS NULL AND status!='resolved' THEN 'queued' ELSE 'completed' END,auto_message='',workflow_run=NULL,analysis_checkpoint=NULL WHERE id=? AND owner=? AND revision=? AND deleted_at IS NOT NULL").bind(now(),c.id,complaintOwner,c.revision).run();
           if(!result.meta.changes)throw new AppError('복구할 민원을 찾을 수 없거나 변경되었습니다.',409);
           await eventStatement(complaintOwner,c.id,'담당자 민원 복구').run();
+          if (!c.analysis && c.status !== 'resolved') after(() => startAnalysis(c.id).catch(() => undefined));
           return json({ok:true});
         }
         if(c.deleted_at)throw new AppError('휴지통에서 복구한 후 사용할 수 있습니다.',409);
