@@ -29,7 +29,7 @@ async function submit(){process.env.SITE_MODE='citizen';const r=await request('c
 (async()=>{try{
  const id=await submit();assert.equal((await get(id)).auto_state,'queued');assert.equal(callbacks.length,1,'submission schedules server-side work');
  await Promise.all([callbacks.shift()(),jobs.processComplaint(id)]);let row=await get(id);
- assert.equal(calls,1,'concurrent jobs are deduplicated');assert.equal(row.auto_state,'completed');assert.equal(row.status,'reviewing');assert.equal(row.published,'');assert.ok(row.evidence);assert.ok(row.analysis);assert.equal(JSON.parse(row.draft_review).status,'checked');
+ assert.equal(calls,1,'concurrent jobs are deduplicated');assert.equal(row.auto_state,'completed');assert.equal(row.status,'reviewing');assert.equal(row.published,'');assert.ok(row.evidence);assert.ok(row.analysis);assert.equal(row.draft_review,null);
  generatedDraft='새 근거가 반영된 가상 답변 초안입니다.';await jobs.queueAnalysis(id);await jobs.processComplaint(id);assert.equal((await get(id)).draft,generatedDraft,'untouched AI drafts update after reanalysis');
  keys={provider:'openai',openai:'synthetic-openai',gemini:'',law:'synthetic',model:'gpt-6-luna'};
  await jobs.queueAnalysis(id);await jobs.processComplaint(id);assert.equal((await get(id)).auto_state,'completed');assert.equal(lastGenerationArgs[0],'synthetic-openai');assert.equal(lastGenerationArgs[1],'gpt-6-luna');assert.equal(lastGenerationArgs[6],'openai');

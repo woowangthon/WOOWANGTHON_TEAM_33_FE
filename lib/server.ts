@@ -2,7 +2,6 @@ import { database } from './database';
 import type { Complaint } from './types';
 import { protectedTitle } from './protection';
 import { readableCitations } from './citations';
-import {seedTracking} from './request-tracking';
 
 export const runtime = process.env;
 export { database };
@@ -14,7 +13,6 @@ export function decodeComplaint(row:Record<string,unknown>):Complaint {
   result.supplements=JSON.parse(String(row.supplements||'[]'));
   result.coverage_review=row.coverage_review?JSON.parse(String(row.coverage_review)):null;
   result.request_tracking=row.request_tracking?JSON.parse(String(row.request_tracking)):null;
-  result.request_tracking=seedTracking(result);
   result.published_citations=JSON.parse(String(row.published_citations||'[]'));
   const citations=result.evidence?.citations||result.analysis?.citations||[];
   result.draft=readableCitations(result.draft||'',citations);

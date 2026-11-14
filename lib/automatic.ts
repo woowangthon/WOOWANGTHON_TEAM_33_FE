@@ -10,8 +10,6 @@ import {
 } from "./server";
 import { autoSync, retrieve, type StoredDoc } from "./laws";
 import { generateAnalysis } from "./ai";
-import { verifyDraft } from './review';
-import type { DraftReview } from './types';
 
 // A persisted queue and atomic lease make repeated after() callbacks safe.
 // Interrupted leases are retried when the authenticated workspace is next opened.
@@ -99,9 +97,6 @@ export async function processComplaint(id: string) {
       search.mode,
       keys.provider,
     );
-    let draftReview:DraftReview;
-    try {draftReview=await verifyDraft(aiKey,keys.model,keys.provider,analysis.draft,search.citations);}
-    catch {draftReview={draft:analysis.draft,status:'unavailable',sentences:[],checkedAt:now()};}
     // Read the latest draft after the network calls; never overwrite staff edits or approvals.
     const current = await database()
       .prepare("SELECT * FROM complaints WHERE id=? AND auto_token=?")
@@ -126,12 +121,11 @@ export async function processComplaint(id: string) {
     const replaceDraft=!latest.draft||latest.draft===latest.analysis?.draft;
     const updated = await database()
       .prepare(
-        "UPDATE complaints SET analysis=?,draft=?,draft_review=?,tasks=?,status=?,updated_at=?,revision=revision+1 WHERE id=? AND auto_token=? AND revision=? AND status!='resolved'",
+        "UPDATE complaints SET analysis=?,draft=?,draft_review=NULL,coverage_review=NULL,tasks=?,status=?,updated_at=?,revision=revision+1 WHERE id=? AND auto_token=? AND revision=? AND status!='resolved'",
       )
       .bind(
         JSON.stringify(analysis),
         replaceDraft ? analysis.draft : latest.draft,
-        replaceDraft ? JSON.stringify(draftReview) : latest.draft_review ? JSON.stringify(latest.draft_review) : null,
         JSON.stringify(tasks),
         latest.status === "received" ? "reviewing" : latest.status,
         now(),
@@ -158,9 +152,6 @@ export async function processComplaint(id: string) {
         "분석은 저장했지만 일부 법령 수집에 실패했습니다. 근거 경고를 확인하고 재시도해 주세요.",
       );
       return;
-    }
-    if(draftReview.status==='unavailable') {
-      await finish('failed','분석과 초안은 저장했습니다. 답변의 문장별 근거 검증을 다시 실행해 주세요.');return;
     }
     await finish(
       "completed",

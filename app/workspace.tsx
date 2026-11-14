@@ -59,11 +59,7 @@ import EvidencePanel from "./evidence-panel";
 import ExpressionPanel from './expression-panel';
 import SupplementPanel from './supplement-panel';
 import CitationText from './citation-text';
-import DraftReviewPanel from './draft-review-panel';
-import CoveragePanel from './coverage-panel';
-import RequestTrackingPanel from './request-tracking-panel';
 import RecordReportPanel from './record-report-panel';
-import {coverageAllowsPublication} from '../lib/coverage';
 import { protectedTitle } from '../lib/protection';
 
 type Overview = {
@@ -232,7 +228,6 @@ export function ComplaintDetail({
   onBack,
   onAnalyze,
   onUpdate,
-  onVerify,
   onRefresh,
 }: {
   c: Complaint;
@@ -245,7 +240,6 @@ export function ComplaintDetail({
   onBack: () => void;
   onAnalyze: () => void;
   onUpdate: (input: { action: string; [key: string]: unknown }) => void;
-  onVerify: (draft:string)=>void;
   onRefresh: ()=>void|Promise<void>;
 }) {
   const [original, setOriginal] = useState(false),
@@ -266,7 +260,7 @@ export function ComplaintDetail({
     setTab("solve");
   }, [c.id]);
   const a = c.analysis;
-  const verified=c.auto_state!=='processing'&&c.auto_state!=='queued'&&c.draft_review?.validatorVersion===2&&c.draft_review?.status==='checked'&&c.draft_review.draft===draft.trim()&&c.draft_review.sentences.length>0&&c.draft_review.sentences.every(s=>s.status!=='needs_review')&&coverageAllowsPublication(c.coverage_review,c,draft);
+  const analyzing=c.auto_state==='processing'||c.auto_state==='queued';
   if(c.deleted_at)return <><button className="back-link" onClick={onBack}>휴지통 목록</button><section className="card panel-padding"><h1>{protectedTitle(c)}</h1><p>{c.id} · 삭제일 {fmt(c.deleted_at,true)}</p><Button kind="primary" disabled={!!busy} onClick={()=>onUpdate({action:'restore'})}>민원 복구</Button></section></>;
   if (citizen)
     return (
@@ -414,7 +408,6 @@ export function ComplaintDetail({
               </div>
             )}
           </section>
-          <RequestTrackingPanel key={'requests:'+c.id} complaint={c} staff onChanged={onRefresh}/>
           <section className="card response-editor">
             <div className="card-header">
               <div>
@@ -440,7 +433,6 @@ export function ComplaintDetail({
                   setReviewed(false);
                 }}
               />
-              <DraftReviewPanel review={c.draft_review} draft={draft} citations={c.evidence?.citations||c.analysis?.citations||[]} busy={!!busy} completed={c.status==='resolved'} onVerify={()=>onVerify(draft)}/>
               {c.status === "resolved" ? (
                 <div className="approved-banner">
                   <CheckCircle2 size={19} />
@@ -467,7 +459,7 @@ export function ComplaintDetail({
                     </Button>
                     <Button
                       kind="primary"
-                      disabled={!!busy || !reviewed || !verified || draft.trim().length < 10}
+                      disabled={!!busy || !reviewed || analyzing || draft.trim().length < 10}
                       onClick={() =>
                         onUpdate({ action: "approve", draft, reviewed })
                       }
@@ -480,7 +472,6 @@ export function ComplaintDetail({
               )}
             </div>
           </section>
-          <CoveragePanel key={c.id} complaint={c} draft={draft} busy={!!busy} onVerify={()=>onVerify(draft)} onChanged={onRefresh}/>
           <EvidencePanel
             evidence={c.evidence}
             cited={a?.citations || []}

@@ -523,10 +523,6 @@ export default function StaffWorkspace({
                       });
                     })
                   }
-                  onVerify={(draft)=>void run('verify',async()=>{
-                    await api('complaints/'+selected.id+'/verify-draft','POST',{draft,revision:selected.revision});
-                    await detail(selected.id);
-                  })}
                 />
               </div>
             </>

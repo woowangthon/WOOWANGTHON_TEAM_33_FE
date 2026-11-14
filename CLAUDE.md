@@ -14,13 +14,17 @@
 
 - `app/citizen-portal.tsx`: 시민 접수·조회.
 - `app/workspace.tsx`: 담당자 화면.
-- `app/request-tracking-panel.tsx`, `lib/request-tracking*.ts`: 시민 요구 확인·수정·철회와 요구별 처리.
+- 요청사항 목록·자동 검사는 2026-11-14에 운영 흐름에서 제거했다. `lib/request-tracking*.ts`, `lib/coverage*.ts`, `lib/review.ts`는 과거 평가·자료 호환을 위해 남긴다.
 - `lib/analysis-stages.ts`, `workflows/`: 자동 분석과 재시도.
-- `lib/coverage*.ts`: 요구 누락 검사·규칙 하네스.
+- 답변 등록은 담당자 직접 확인, 초안 길이, 버전 충돌 검사와 권한 확인을 거친다.
 - `lib/laws.ts`, `lib/semantic-search.ts`: 법령 수집·검색.
 - `phone/`: 별도로 실행하는 웹 음성 중계 서버.
 
-## 2026-11-08 인계 상태
+## 2026-11-14 화면 단순화
+
+요청사항·요청 누락 검사·답변 검사 UI와 관련 API를 종료했다. 자동 분석은 검색 계획 → 근거 검색 → 요약·초안 → 저장이다. 기존 검사 실패 기록이 답변 등록을 막지 않는다.
+
+## 2026-11-08 과거 인계 기록 (아래 UI 정리 지침은 현재 변경 이전 기록)
 
 - 시민 요구 확인·수정 및 요구별 상태 기능은 두 운영 사이트에 배포하고 실연결 검증을 마쳤다. `docs/REQUEST-TRACKING-RESULTS.md` 참조.
 - 이후 화면의 반복 설명을 줄이는 수정이 소스에 포함돼 있다. 답변 누락 검사 접기, 정상 문장 검사 내역 접기, 표현 감지 요약, 개별 상태 변경 입력칸 접기다. 이 UI 수정은 아직 운영 배포·브라우저 검증 전이다.

@@ -1,6 +1,5 @@
 "use client";
 import SupplementPanel from './supplement-panel';
-import RequestTrackingPanel from './request-tracking-panel';
 import CitationText from './citation-text';
 import { protectedTitle } from '../lib/protection';
 
@@ -1037,7 +1036,6 @@ function CitizenDetail({
           <dd>{c.body}</dd>
         </div>
       </dl>
-      <RequestTrackingPanel key={c.id} complaint={c} staff={false} onChanged={onRefresh}/>
       <SupplementPanel complaint={c} staff={false} onChanged={onRefresh}/>
       <section className="cp-citizen-reply">
         <h2>

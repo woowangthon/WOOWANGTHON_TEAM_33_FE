@@ -1,6 +1,4 @@
 import { startAnalysis } from "../../../lib/analysis-dispatch";
-import {confirmRequests,updateProgress,replyToRequest,seedTracking,TrackingError} from '../../../lib/request-tracking';
-import {saveTracking} from '../../../lib/request-tracking-store';
 import { addSupplement } from "../../../lib/supplements";
 import { inlineReferences } from "../../../lib/citations";
 import { supplementedComplaint } from "../../../lib/analysis-stages";
@@ -28,9 +26,6 @@ import {
 import { categories, statuses } from "../../../lib/types";
 import { samples } from "../../../lib/samples";
 import { after } from "next/server";
-import { verifyDraft, reviewAllowsPublication } from '../../../lib/review';
-import {auditRequirements,checkAnswerCoverage} from '../../../lib/coverage-ai';
-import {coverageIsCurrent,coverageAllowsPublication,analysisSnapshot} from '../../../lib/coverage';
 import {createRecordReport} from '../../../lib/reports';
 import {renderReport,type RecordReport} from '../../../lib/report-core';
 import {expressionFindings,maskText} from '../../../lib/protection';
@@ -288,67 +283,11 @@ async function handler(
         if(!staff)await startAnalysis(c.id).catch(()=>undefined);
         return json({ok:true},201);
       }
-      if(path[2]==='requirements'&&method==='POST') {
-        if(c.deleted_at)throw new AppError('삭제된 민원은 변경할 수 없습니다.',409);
-        await rateLimit(owner,'requirements',40);
-        const input=z.discriminatedUnion('action',[
-          z.object({action:z.literal('confirm'),revision:z.number().int(),items:z.array(z.object({id:z.string().max(60).optional(),text:z.string().trim().min(2).max(600),withdrawn:z.boolean()})).max(30)}),
-          z.object({action:z.literal('progress'),revision:z.number().int(),id:z.string().max(60),state:z.enum(['received','waiting','in_progress','completed','unavailable']),note:z.string().trim().min(5).max(2000)}),
-          z.object({action:z.literal('reply'),revision:z.number().int(),id:z.string().max(60),text:z.string().trim().min(2).max(2000)})
-        ]).parse(await body(request));
-        if(input.revision!==c.revision)throw new AppError('민원이 변경되었습니다. 새로고침 후 다시 저장해 주세요.',409);
-        const previous=seedTracking(c),time=now();
-        if(input.action==='progress'){
-          if(!staff)throw new AppError('담당자만 처리 상태를 변경할 수 있습니다.',403);
-          await saveTracking(c,complaintOwner,updateProgress(previous,input.id,input.state,input.note,time),'요구별 처리 상태 변경',false);
-        }else{
-          if(staff)throw new AppError('시민의 요구 확인과 보완은 민원인 화면에서 할 수 있습니다.',403);
-          if(input.action==='confirm'){
-            const next=confirmRequests(previous,input.items,time);
-            const changed=!previous.confirmedAt||JSON.stringify(previous.items.map(r=>[r.id,r.text,r.withdrawn]))!==JSON.stringify(next.items.map(r=>[r.id,r.text,r.withdrawn]));
-            await saveTracking(c,complaintOwner,next,'민원인 요구사항 확인·수정',changed);
-            if(changed)await startAnalysis(c.id).catch(()=>undefined);
-          }else{
-            const item=previous.items.find(r=>r.id===input.id);
-            const next=replyToRequest(previous,input.id,input.text,time);
-            await saveTracking(c,complaintOwner,next,'민원인 요구별 추가 정보 접수',true,{id:crypto.randomUUID(),role:'citizen',text:`[요구사항: ${item!.text}]\n담당자 확인 요청: ${item!.note}\n추가 정보: ${input.text}`,createdAt:time,attachments:[]});
-            await startAnalysis(c.id).catch(()=>undefined);
-          }
-        }
-        return json({ok:true});
+      if(['requirements','verify-draft','coverage-decision'].includes(path[2])&&method==='POST') {
+        return json({error:'더 이상 제공하지 않는 기능입니다.'},410);
       }
       if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
       if(c.deleted_at&&method!=='PATCH')throw new AppError('휴지통에서 복구한 후 사용할 수 있습니다.',409);
-      if(path[2]==='verify-draft'&&method==='POST') {
-        if(c.status==='resolved'||c.auto_state==='processing'||c.auto_state==='queued')throw new AppError('진행 중인 분석이 끝난 후 초안을 검증해 주세요.',409);
-        const input=z.object({draft:z.string().trim().min(10).max(10000),revision:z.number().int()}).parse(await body(request));
-        if(input.revision!==c.revision)throw new AppError('내용이 변경되었습니다. 새로고침 후 다시 검증해 주세요.',409);
-        await rateLimit(owner,'verify',20);
-        const keys=await credentials(office);
-        const [review,audit]=await Promise.all([verifyDraft(keys.provider==='openai'?keys.openai:keys.gemini,keys.model,keys.provider,input.draft,c.evidence?.citations||c.analysis?.citations||[]),auditRequirements(keys,c)]);
-        const coverage=await checkAnswerCoverage(keys,c,audit,input.draft);
-        const result=await database().prepare("UPDATE complaints SET draft_review=?,coverage_review=?,revision=revision+1 WHERE id=? AND owner=? AND revision=? AND status!='resolved' AND deleted_at IS NULL AND auto_state NOT IN ('processing','queued')").bind(JSON.stringify(review),JSON.stringify(coverage),c.id,complaintOwner,c.revision).run();
-        if(!result.meta.changes)throw new AppError('검증 중 초안이 변경되었습니다. 다시 검증해 주세요.',409);
-        await eventStatement(complaintOwner,c.id,'요구사항 누락 및 답변 문장별 근거 검증').run();
-        return json({review,coverage});
-      }
-      if(path[2]==='coverage-decision'&&method==='POST') {
-        if(c.status==='resolved'||['queued','processing'].includes(c.auto_state||''))throw new AppError('분석 완료 후 검토할 수 있습니다.',409);
-        const input=z.object({revision:z.number().int(),draft:z.string().trim().max(10000),requestId:z.string().max(60),decision:z.enum(['include','exclude','answered','refused','clarification','missing']),reason:z.string().trim().min(5).max(1000)}).parse(await body(request));
-        if(c.revision!==input.revision||!coverageIsCurrent(c.coverage_review,c,input.draft))throw new AppError('현재 내용으로 다시 검사한 후 판정을 수정해 주세요.',409);
-        const coverage=c.coverage_review!,item=coverage.requirements.find(r=>r.id===input.requestId);
-        if(!item)throw new AppError('요구사항을 찾을 수 없습니다.',404);
-        if(input.decision==='include') {
-          if(!c.analysis)throw new AppError('분석 결과가 없습니다.',409);
-          if(!c.analysis.requests.includes(item.text))c.analysis.requests.push(item.text);
-          item.summaryStatus='preserved';item.summaryReason='담당자가 원문 요구를 요구사항 목록에 반영했습니다.';
-          coverage.analysisSnapshot=analysisSnapshot(c);
-        } else item.override={responseStatus:input.decision==='exclude'?item.responseStatus:input.decision,excluded:input.decision==='exclude',reason:maskText(input.reason,c.analysis?.sensitiveQuotes),at:now()};
-        const result=await database().prepare("UPDATE complaints SET analysis=?,coverage_review=?,updated_at=?,revision=revision+1 WHERE id=? AND owner=? AND revision=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(c.analysis),JSON.stringify(coverage),now(),c.id,complaintOwner,c.revision).run();
-        if(!result.meta.changes)throw new AppError('다른 창에서 내용이 변경되었습니다.',409);
-        await eventStatement(complaintOwner,c.id,input.decision==='include'?'누락된 요구사항을 목록에 반영':'요구사항 대응 판정 담당자 수정').run();
-        return json({ok:true});
-      }
       if(path[2]==='reports'&&method==='POST') {
         const input=z.object({revision:z.number().int(),note:z.string().trim().max(2000),confirmed:z.array(z.string().regex(/^F\d+$/)).max(40)}).parse(await body(request));
         if(c.revision!==input.revision)throw new AppError('민원이 변경되었습니다. 새로고침해 주세요.',409);
@@ -500,8 +439,6 @@ async function handler(
               "답변을 작성하고 근거·사실 검토에 체크해 주세요.",
             );
           draft = input.draft.trim();
-          if(!reviewAllowsPublication(c.draft_review,draft))throw new AppError('현재 답변의 문장별 근거를 검증하고 확인이 필요한 문장을 수정해 주세요.',409);
-          if(!coverageAllowsPublication(c.coverage_review,c,draft))throw new AppError('요약과 답변에 누락된 요구사항을 확인해 주세요. 현재 답변으로 요구사항 검사를 완료해야 합니다.',409);
           published = draft;
           status = "resolved";
           label = "담당자 검토·승인 후 홈페이지 답변 등록";
@@ -561,7 +498,6 @@ async function handler(
   } catch (error) {
     if (error instanceof z.ZodError)
       return json({ error: "입력 항목의 길이와 형식을 확인해 주세요." }, 400);
-    if(error instanceof TrackingError)return json({error:error.message},400);
     if (error instanceof AppError)
       return json({ error: error.message }, error.status);
     // Never log request bodies, credentials, or external error bodies.

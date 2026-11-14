@@ -3,7 +3,6 @@ import "./globals.css";
 import "./citizen.css";
 import "./staff.css";
 import "./phone.css";
-import "./request-tracking.css";
 
 export const metadata: Metadata = {
   title: process.env.SITE_MODE==='staff'?"민원 쉴드 · 공무원 업무": "민원 쉴드 · Shield & Solve",

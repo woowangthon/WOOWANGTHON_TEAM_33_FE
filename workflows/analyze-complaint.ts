@@ -4,7 +4,7 @@ import { runAnalysisStage,failAnalysis,type Stage } from '../lib/analysis-stages
 export async function analyzeComplaint(id:string,generation:number) {
   'use workflow';
   try {
-    for(const stage of ['plan','evidence','analysis','requirements','review','coverage','finish'] as const) {
+    for(const stage of ['plan','evidence','analysis','finish'] as const) {
       if(!await executeStage(id,generation,stage))return {cancelled:true};
     }
     return {completed:true};

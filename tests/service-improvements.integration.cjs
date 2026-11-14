@@ -35,7 +35,7 @@ const get=async(id,trash=false)=>(await req('complaints/'+id+(trash?'?trash=1':'
  await stages.runAnalysisStage(id,gen,'plan');await stages.runAnalysisStage(id,gen,'evidence');await stages.runAnalysisStage(id,gen,'analysis');await stages.runAnalysisStage(id,gen,'review');
  await stages.runAnalysisStage(id,gen,'requirements');await stages.runAnalysisStage(id,gen,'coverage');
  await db.query('UPDATE complaints SET draft=$1,revision=revision+1 WHERE id=$2',['담당자가 직접 수정한 초안을 보존합니다.',id]);
- await stages.runAnalysisStage(id,gen,'finish');c=await get(id);assert.equal(c.auto_state,'completed');assert.equal(c.draft,'담당자가 직접 수정한 초안을 보존합니다.');assert.equal(c.draft_review,null);assert.deepEqual(calls,{plan:1,evidence:1,analysis:2,review:1});
+ await stages.runAnalysisStage(id,gen,'finish');c=await get(id);assert.equal(c.auto_state,'completed');assert.equal(c.draft,'담당자가 직접 수정한 초안을 보존합니다.');assert.equal(c.draft_review,null);assert.deepEqual(calls,{plan:1,evidence:1,analysis:2,review:0});
  assert.equal((await req('complaints/'+id,'PATCH',{action:'delete',revision:c.revision})).status,200);assert.equal(await stages.runAnalysisStage(id,gen,'finish'),false);assert.equal((await req('complaints/'+id)).status,404);
  c=await get(id,true);assert.ok(c.deleted_at);assert.ok((await req('overview')).data.trashComplaints.some(c=>c.id===id));
  assert.equal((await req('complaints/'+id,'PATCH',{action:'restore',revision:c.revision})).status,200);c=await get(id);assert.equal(c.deleted_at,null);assert.equal(c.supplements.length,2);assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);

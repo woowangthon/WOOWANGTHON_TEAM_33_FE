@@ -3,32 +3,26 @@ import { officeForOwner } from './access';
 import { autoSync,retrieve,type StoredDoc,type SearchPlan } from './laws';
 import { semanticPlan,rerank } from './semantic-search';
 import { generateAnalysis } from './ai';
-import { verifyDraft } from './review';
 import { structuredAI } from './structured-ai';
-import {auditRequirements,checkAnswerCoverage} from './coverage-ai';
-import {repairAnswerCoverage} from './coverage-repair';
-import {inlineReferences} from './citations';
-import {sourceSnapshot,analysisSnapshot,coverageIsCurrent} from './coverage';
-import {seedTracking} from './request-tracking';
-import type { Analysis,Complaint,DraftReview,RequirementAudit,CoverageReview } from './types';
+import type { Analysis,Complaint } from './types';
 
 export type Stage='plan'|'evidence'|'analysis'|'requirements'|'review'|'coverage'|'finish';
-type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;requirements?:RequirementAudit;review?:DraftReview;coverage?:CoverageReview;photoNotes?:string};
+type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string};
 export function supplementedComplaint(c:Complaint,photoNotes=''):Complaint {
   const messages=(c.supplements||[]).map(s=>`${s.role==='staff'?'담당자 보완 질문':'민원인 보완 답변'}: ${s.text}`).join('\n');
   const confirmed=c.request_tracking?.confirmedAt?JSON.stringify(c.request_tracking.items.map(r=>({request:r.text,withdrawn:r.withdrawn}))):'';
   return {...c,body:[c.body,messages&&'\n[보완 이력]\n'+messages,confirmed&&'\n[시민이 확인·수정한 최신 요구 목록 — 요청 철회 항목은 처리 요구에서 제외하고 원문은 사실관계 참고로 보존]\n'+confirmed,photoNotes&&'\n[첨부사진 관찰 — 촬영 시점·장소는 미확인]\n'+photoNotes].filter(Boolean).join('\n')};
 }
 export async function runAnalysisStage(id:string,generation:number,stage:Stage) {
+  // Older persisted workflows may resume these retired stages. Skip without AI calls.
+  if(stage==='requirements'||stage==='review'||stage==='coverage')return true;
   const row=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(id,generation).first<Record<string,unknown>>();
   if(!row)return false;
   const office=officeForOwner(String(row.owner)),keys=await credentials(office),key=keys.provider==='openai'?keys.openai:keys.gemini;
   if(!key||!keys.law)throw new AppError('분석 서비스 연결을 확인해 주세요.',503);
   const cp:Checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}')),original=decodeComplaint(row);
-  const checkpointSource={...original,analysis:cp.analysis||original.analysis};
-  const auditCurrent=cp.requirements?.sourceSnapshot===sourceSnapshot(checkpointSource)&&cp.requirements?.analysisSnapshot===analysisSnapshot(checkpointSource);
-  if(stage!=='finish'&&cp[stage]&&(stage!=='requirements'||auditCurrent)&&(stage!=='coverage'||coverageIsCurrent(cp.coverage,checkpointSource,cp.analysis?.draft||'')))return true;
-  const messages:Record<Stage,string>={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'요구사항과 답변 초안을 정리하고 있습니다.',requirements:'원문 요구가 요약에 빠짐없이 반영됐는지 확인하고 있습니다.',review:'답변의 문장별 근거를 대조하고 있습니다.',coverage:'요구사항마다 답변이 있는지 확인하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
+  if(stage!=='finish'&&cp[stage])return true;
+  const messages={plan:'민원 내용을 확인하고 있습니다.',evidence:'발생일에 맞는 법령·조례를 검색하고 있습니다.',analysis:'민원 요약과 답변 초안을 정리하고 있습니다.',finish:'분석 결과를 저장하고 있습니다.'};
   await database().prepare("UPDATE complaints SET auto_state='processing',auto_message=?,auto_started_at=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(messages[stage],now(),id,generation).run();
   if(stage==='plan') {
     await rateLimit(office,'automatic',100);
@@ -54,38 +48,15 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
     if(!cp.evidence)throw new Error('Evidence missing');
     cp.analysis=await generateAnalysis(key,keys.model,c,cp.evidence.citations,cp.evidence.warnings,cp.evidence.mode,keys.provider);
   }
-  if(stage==='review') {
-    if(!cp.analysis||!cp.evidence)throw new Error('Analysis missing');
-    cp.review=await verifyDraft(key,keys.model,keys.provider,cp.analysis.draft,cp.evidence.citations);
-  }
-  if(stage==='requirements') {
-    if(!cp.analysis)throw new Error('Analysis missing');
-    cp.requirements=await auditRequirements(keys,{...original,analysis:cp.analysis});
-  }
-  if(stage==='coverage') {
-    if(!cp.analysis||!cp.requirements||!cp.evidence)throw new Error('Requirement audit missing');
-    const source={...original,analysis:cp.analysis};
-    if(!auditCurrent)cp.requirements=await auditRequirements(keys,source);
-    const initial=await checkAnswerCoverage(keys,source,cp.requirements,cp.analysis.draft);
-    cp.coverage=await repairAnswerCoverage(keys,source,cp.requirements,initial,cp.evidence.citations);
-    if(cp.coverage.repair?.accepted){
-      cp.analysis={...cp.analysis,draft:cp.coverage.draft};
-      cp.analysis.citationIds=inlineReferences(cp.analysis.draft,cp.evidence.citations).ids;
-      cp.analysis.citations=cp.evidence.citations.filter(x=>cp.analysis!.citationIds.includes(x.id));
-      // The previous sentence review cannot authorize changed text.
-      cp.review=await verifyDraft(key,keys.model,keys.provider,cp.analysis.draft,cp.evidence.citations);
-    }
-  }
   if(stage==='finish') {
-    if(!cp.analysis||!cp.review||!cp.evidence||!cp.coverage)throw new Error('Checkpoint incomplete');
+    if(!cp.analysis||!cp.evidence)throw new Error('Checkpoint incomplete');
     // A retried finish must not overwrite a staff draft, approval, deletion, or a newer run.
     const latestRow=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(id,generation).first<Record<string,unknown>>();
     if(!latestRow)return false;
     const latest=decodeComplaint(latestRow),replace=!latest.draft||latest.draft===latest.analysis?.draft;
     const tasks=latest.tasks.length?latest.tasks:cp.analysis.actions.map(label=>({id:crypto.randomUUID(),label,done:false}));
-    const tracking=seedTracking(latest,cp.requirements);
-    const result=await database().prepare("UPDATE complaints SET evidence=?,analysis=?,draft=?,draft_review=?,coverage_review=?,tasks=?,request_tracking=?,status=?,auto_state='completed',auto_message='법령 검색·분석을 완료했습니다.',auto_token=NULL,updated_at=?,revision=revision+1 WHERE id=? AND analysis_generation=? AND revision=? AND deleted_at IS NULL AND status!='resolved'")
-      .bind(JSON.stringify(cp.evidence),JSON.stringify(cp.analysis),replace?cp.analysis.draft:latest.draft,replace?JSON.stringify(cp.review):null,replace?JSON.stringify(cp.coverage):null,JSON.stringify(tasks),JSON.stringify(tracking),latest.status==='received'?'reviewing':latest.status,now(),id,generation,latest.revision).run();
+    const result=await database().prepare("UPDATE complaints SET evidence=?,analysis=?,draft=?,draft_review=NULL,coverage_review=NULL,tasks=?,status=?,auto_state='completed',auto_message='법령 검색·분석을 완료했습니다.',auto_token=NULL,updated_at=?,revision=revision+1 WHERE id=? AND analysis_generation=? AND revision=? AND deleted_at IS NULL AND status!='resolved'")
+      .bind(JSON.stringify(cp.evidence),JSON.stringify(cp.analysis),replace?cp.analysis.draft:latest.draft,JSON.stringify(tasks),latest.status==='received'?'reviewing':latest.status,now(),id,generation,latest.revision).run();
     if(!result.meta.changes)throw new Error('Concurrent staff edit; retry final save');
     await database().prepare("UPDATE complaints SET auto_message='법령 검색·분석을 완료했습니다.' WHERE id=? AND analysis_generation=? AND auto_state='completed'").bind(id,generation).run();
     return true;
