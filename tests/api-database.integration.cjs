@@ -15,7 +15,7 @@ async function request(p,method='GET',body){const response=await route[method](n
  process.env.SITE_MODE='staff';assert.equal((await request('overview')).status,403);
  user=officer;assert.equal((await request('complaints/'+id)).status,200);
  r=await request('complaints/'+id,'PATCH',{revision:0,action:'save',draft:'담당자가 확인 중인 비공개 초안입니다.'});assert.equal(r.status,200);
- assert.equal((await request('complaints/'+id,'PATCH',{revision:0,action:'status',status:'waiting'})).status,409);
+ assert.equal((await request('complaints/'+id,'PATCH',{revision:0,action:'status',status:'reviewing'})).status,409);
  process.env.SITE_MODE='citizen';user=citizen;r=await request('complaints/'+id);assert.equal(r.data.complaint.draft,'');assert.equal(r.data.complaint.published,'');
  process.env.SITE_MODE='staff';user=officer;
  const reviewedDraft='가상 검증 결과입니다. 확인 후 안내드립니다.';

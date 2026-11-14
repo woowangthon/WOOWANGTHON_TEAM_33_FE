@@ -1,13 +1,10 @@
 "use client";
-import SupplementPanel from './supplement-panel';
-import CitationText from './citation-text';
 import { protectedTitle } from '../lib/protection';
+import CitationText from './citation-text';
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Bell,
   BookOpen,
   Check,
   CheckCircle2,
@@ -17,16 +14,11 @@ import {
   ClipboardCheck,
   FilePenLine,
   FileText,
-  HelpCircle,
   Home,
   Leaf,
   LoaderCircle,
-  LogIn,
-  MapPin,
   Menu,
   MonitorCheck,
-  Pause,
-  Play,
   Search,
   ShieldCheck,
   Sparkles,
@@ -36,6 +28,7 @@ import {
   Volume2,
   X,
 } from "lucide-react";
+import { useEffect,useRef,useState,type FormEvent } from "react";
 import {
   categories,
   statuses,
@@ -82,7 +75,7 @@ const guides = [
   },
   {
     q: "접수한 민원은 어디에서 확인하나요?",
-    a: "이 브라우저에서 접수한 민원은 나의 민원에서 확인할 수 있습니다. 접수번호나 제목으로 검색하고 접수·검토 중·보완 요청·답변 완료 상태별로 조회할 수 있습니다.",
+    a: "이 브라우저에서 접수한 민원은 나의 민원에서 확인할 수 있습니다. 접수번호나 제목으로 검색하고 접수·검토 중·답변 완료 상태별로 조회할 수 있습니다.",
   },
   {
     q: "법령과 조례의 근거는 어떻게 확인하나요?",
@@ -467,7 +460,6 @@ export default function CitizenPortal({
                     </div>
                   ) : detail ? (
                     <CitizenDetail
-                      onRefresh={()=>open(detail.id)}
                       complaint={detail}
                       events={events}
                       onBack={() => setDetail(null)}
@@ -1002,12 +994,10 @@ function CitizenDetail({
   complaint: c,
   events,
   onBack,
-  onRefresh,
 }: {
   complaint: Complaint;
   events: Event[];
   onBack: () => void;
-  onRefresh:()=>void|Promise<void>;
 }) {
   return (
     <>
@@ -1036,7 +1026,6 @@ function CitizenDetail({
           <dd>{c.body}</dd>
         </div>
       </dl>
-      <SupplementPanel complaint={c} staff={false} onChanged={onRefresh}/>
       <section className="cp-citizen-reply">
         <h2>
           <ClipboardCheck size={22} />

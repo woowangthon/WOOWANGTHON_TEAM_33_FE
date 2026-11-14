@@ -10,6 +10,8 @@ export class AppError extends Error { constructor(message:string, public status=
 export function decodeComplaint(row:Record<string,unknown>):Complaint {
   const { owner: _owner, auto_token: _token, auto_started_at: _started, analysis_checkpoint:_checkpoint, analysis_generation:_generation, workflow_run:_run, ...safe }=row;
   const result={...safe, draft_review:row.draft_review?JSON.parse(String(row.draft_review)):null, evidence:row.evidence?JSON.parse(String(row.evidence)):null, analysis: row.analysis ? JSON.parse(String(row.analysis)):null, tasks:JSON.parse(String(row.tasks || '[]'))} as Complaint;
+  // Retired supplement waits return to the ordinary review flow without altering history.
+  if(row.status==='waiting')result.status='reviewing';
   result.supplements=JSON.parse(String(row.supplements||'[]'));
   result.coverage_review=row.coverage_review?JSON.parse(String(row.coverage_review)):null;
   result.request_tracking=row.request_tracking?JSON.parse(String(row.request_tracking)):null;

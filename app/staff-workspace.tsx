@@ -1,57 +1,48 @@
 "use client";
 
 import {
+  AlertCircle,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  Download,
+  ExternalLink,
+  House,
+  Inbox,
+  LoaderCircle,
+  Menu,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  X,
+} from "lucide-react";
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
   type FormEvent,
 } from "react";
-import {
-  ShieldCheck,
-  Inbox,
-  BookOpen,
-  ChevronRight,
-  ChevronLeft,
-  RefreshCw,
-  Search,
-  Plus,
-  Download,
-  ExternalLink,
-  UserRound,
-  LogIn,
-  CheckCircle2,
-  AlertCircle,
-  LoaderCircle,
-  Menu,
-  X,
-  House,
-  ClipboardList,
-} from "lucide-react";
+import { expressionFindings,protectedTitle } from '../lib/protection';
 import {
   autoStates,
   categories,
   statuses,
+  type AppSettings,
   type Complaint,
   type Event,
-  type AppSettings,
-  type LawDocument,
-  type Status,
 } from "../lib/types";
+import PhoneDesk from './phone-desk';
 import {
   ComplaintDetail,
-  Portal,
-  LibraryView,
 } from "./workspace";
-import { protectedTitle, expressionFindings } from '../lib/protection';
-import PhoneDesk from './phone-desk';
 
-type View = "inbox" | "intake" | "library" | "trash" | "phone";
+type View = "inbox" | "trash" | "phone";
 type Overview = {
   complaints: Complaint[];
   trashComplaints?:Complaint[];
   settings: AppSettings;
-  documents: LawDocument[];
   user: { name: string };
 };
 const settings: AppSettings = {
@@ -64,8 +55,6 @@ const views = {
   phone: "전화 상담",
   inbox: "민원 접수·처리",
   trash:"휴지통",
-  intake: "민원 직접 등록",
-  library: "법령·조례 자료실",
 };
 const initialFilter = {
   status: "all",
@@ -108,7 +97,6 @@ export default function StaffWorkspace({
   const [data, setData] = useState<Overview>({
     complaints: [],
     settings,
-    documents: [],
     user: { name: "" },
   });
   const [view, setView] = useState<View>("inbox"),
@@ -265,13 +253,12 @@ export default function StaffWorkspace({
     const csv =
       "\uFEFF" +
       [
-        ["접수번호", "제목", "분야", "처리상태", "자동분석", "접수일"],
+        ["접수번호", "제목", "분야", "처리상태", "접수일"],
         ...filtered.map((c) => [
           c.id,
           protectedTitle(c),
           c.category,
           statuses[c.status],
-          autoStates[c.auto_state || "idle"],
           date(c.created_at),
         ]),
       ]
@@ -318,17 +305,10 @@ export default function StaffWorkspace({
         <button onClick={()=>navigate('phone')} className={view==='phone'?'active':''}><ShieldCheck size={18}/>전화 상담</button>
         <button
           onClick={() => navigate("inbox")}
-          className={view === "inbox" || view === "intake" ? "active" : ""}
+          className={view === "inbox" ? "active" : ""}
         >
           <Inbox size={18} />
           민원 관리
-        </button>
-        <button
-          onClick={() => navigate("library")}
-          className={view === "library" ? "active" : ""}
-        >
-          <BookOpen size={18} />
-          법령·조례
         </button>
       </nav>
       <div className="admin-layout">
@@ -361,23 +341,9 @@ export default function StaffWorkspace({
               ),
             )}
           </div>
-          <button
-            className="admin-side-main"
-            onClick={() => navigate("intake")}
-          >
-            <ClipboardList size={18} />
-            직접 등록
-          </button>
           <button className={"admin-side-main "+(view==="trash"?"active":"")} onClick={()=>{navigate("trash");setFilter(initialFilter);setApplied(initialFilter);setPage(1);}}>휴지통 <b>{data.trashComplaints?.length||0}</b></button>
           <div className="admin-side-divider" />
           <button className={'admin-side-main '+(view==='phone'?'active':'')} onClick={()=>navigate('phone')}><ShieldCheck size={18}/>전화 상담</button>
-          <button
-            className="admin-side-main"
-            onClick={() => navigate("library")}
-          >
-            <BookOpen size={18} />
-            법령·조례 자료실
-          </button>
         </aside>
         {menu ? (
           <button
@@ -420,7 +386,6 @@ export default function StaffWorkspace({
           ) : selected ? (
             <>
               {selected.auto_state === "completed" &&
-              selected.status !== "waiting" &&
               !selected.deleted_at ? null : (
               <div
                 className={
@@ -438,12 +403,12 @@ export default function StaffWorkspace({
                   )}
                 </span>
                 <div>
-                  <strong>{selected.deleted_at?"휴지통":selected.status==="waiting"?"보완 답변 대기":autoStates[selected.auto_state || "idle"]}</strong>
+                  <strong>{selected.deleted_at?"휴지통":autoStates[selected.auto_state || "idle"]}</strong>
                   <p>{selected.auto_message || ""}</p>
                 </div>
                 {authenticated &&
                 !["queued", "processing"].includes(selected.auto_state || "") &&
-                selected.status !== "resolved" && !selected.deleted_at && selected.status!=="waiting" ? (
+                selected.status !== "resolved" && !selected.deleted_at ? (
                   <button
                     className="button outline small"
                     disabled={!!busy}
@@ -480,7 +445,6 @@ export default function StaffWorkspace({
                   ready={data.settings.aiReady ?? data.settings.geminiReady}
                   lawReady={data.settings.lawReady}
                   onBack={() => navigate(selected.deleted_at?"trash":"inbox")}
-                  onRefresh={async()=>{await Promise.all([detail(selected.id),refresh()]);}}
                   onAnalyze={() =>
                     void run("analyze", async () => {
                       await api(
@@ -548,13 +512,6 @@ export default function StaffWorkspace({
                     />
                     새로고침
                   </button>
-                  <button
-                    className="button primary"
-                    onClick={() => navigate("intake")}
-                  >
-                    <Plus size={16} />
-                    직접 등록
-                  </button>
                 </div>
               </div>
               <section className="admin-counters" aria-label="민원 처리 현황" hidden={view==="trash"}>
@@ -562,7 +519,6 @@ export default function StaffWorkspace({
                   ["all", "전체 민원"],
                   ["received", "접수 대기"],
                   ["reviewing", "검토 중"],
-                  ["waiting", "보완 요청"],
                   ["resolved", "답변 완료"],
                 ].map(([s, label]) => (
                   <button
@@ -701,8 +657,6 @@ export default function StaffWorkspace({
                         <th>민원 분야</th>
                         <th>접수일</th>
                         <th>처리 상태</th>
-                        <th>자동 분석</th>
-                        <th>근거</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -740,34 +694,6 @@ export default function StaffWorkspace({
                               <span className={"admin-status " + c.status}>
                                 {statuses[c.status]}
                               </span>
-                            </td>
-                            <td>
-                              <span
-                                className={
-                                  "admin-auto-status " +
-                                  (c.auto_state || "idle")
-                                }
-                              >
-                                {["queued", "processing"].includes(
-                                  c.auto_state || "",
-                                ) ? (
-                                  <LoaderCircle className="spin" size={12} />
-                                ) : null}
-                                {autoStates[c.auto_state || "idle"]}
-                              </span>
-                            </td>
-                            <td>
-                              {c.evidence ? (
-                                <button
-                                  className="admin-evidence-link"
-                                  onClick={() => open(c.id)}
-                                >
-                                  {c.evidence.citations.length}건
-                                  <ChevronRight size={13} />
-                                </button>
-                              ) : (
-                                <span className="admin-dash">—</span>
-                              )}
                             </td>
                           </tr>
                         ))}
@@ -825,42 +751,7 @@ export default function StaffWorkspace({
                 </div>
               </section>
             </>
-          ) : view === "intake" ? (
-            <Portal
-              complaints={data.complaints}
-              busy={busy}
-              onSelect={open}
-              onSubmit={(input) =>
-                void run("submit", async () => {
-                  const r = await api<{ id: string }>(
-                    "complaints",
-                    "POST",
-                    input,
-                  );
-                  selectedId.current = r.id;
-                  await Promise.all([refresh(), detail(r.id)]);
-                  setNotice({
-                    message:
-                      "민원을 접수했습니다. 법령 검색과 분석이 자동으로 시작됩니다.",
-                  });
-                })
-              }
-            />
-          ) : (
-            <LibraryView
-              docs={data.documents}
-              ready={data.settings.lawReady}
-              busy={busy}
-              onSearch={(input) => api("laws/search", "POST", input)}
-              onImport={(input) =>
-                void run("import", async () => {
-                  await api("laws/import", "POST", input);
-                  await refresh();
-                  setNotice({ message: "공식 법령 자료를 저장했습니다." });
-                })
-              }
-            />
-          )}
+          ) : null}
           <footer className="admin-footer">
             <strong>
               민원쉴드 <span>Shield & Solve</span>

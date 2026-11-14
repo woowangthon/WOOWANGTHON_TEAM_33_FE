@@ -1,5 +1,4 @@
 import { startAnalysis } from "../../../lib/analysis-dispatch";
-import { addSupplement } from "../../../lib/supplements";
 import { inlineReferences } from "../../../lib/citations";
 import { supplementedComplaint } from "../../../lib/analysis-stages";
 import { semanticPlan,rerank } from "../../../lib/semantic-search";
@@ -18,9 +17,7 @@ import {
 } from "../../../lib/server";
 import {
   autoSync,
-  importDocument,
   retrieve,
-  searchOfficial,
   type StoredDoc,
 } from "../../../lib/laws";
 import { categories, statuses } from "../../../lib/types";
@@ -145,19 +142,10 @@ async function handler(
       const keys = staff
         ? await credentials(office)
         : { gemini: "", openai: "", provider: "", law: "", model: "" };
-      // Background polls skip the law library; it only changes on explicit import.
-      const poll = url.searchParams.get("poll") === "1";
-      // Count articles in SQL so the full article text never leaves the database.
-      const docs = poll
-        ? null
-        : staff || user.isGuest
-          ? await database()
-              .prepare(
-                "SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC",
-              )
-              .bind(office)
-              .all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
-          : { results: [] };
+      // The staff library is retired; retain the citizen site's read-only law guide.
+      const docs = !staff && user.isGuest && url.searchParams.get("poll") !== "1"
+        ? await database().prepare("SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC").bind(office).all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
+        : null;
       return json({
         trashComplaints:staff?rows.results.filter(r=>r.deleted_at).map(decodeComplaint):[],
         complaints: rows.results.filter(r=>trash?!!r.deleted_at:!r.deleted_at).map((row) =>
@@ -172,20 +160,14 @@ async function handler(
           encryptionReady: staff && !!runtime.APP_SECRET,
           model: keys.model,
         },
-        ...(docs
-          ? {
-              documents: docs.results.map(({ article_count, ...d }) => ({
-                ...d,
-                articleCount: Number(article_count),
-              })),
-            }
-          : {}),
+        ...(docs ? {documents:docs.results.map(({article_count,...d})=>({...d,articleCount:Number(article_count)}))} : {}),
         user: { name: user.fullName || user.email },
       });
     }
     if (route === "complaints" && method === "POST") {
-      await rateLimit(owner, "create", 60);
       const input = createSchema.parse(await body(request));
+      if(staff&&input.channel!=="phone")return json({error:"담당자 직접 등록은 더 이상 제공하지 않습니다."},410);
+      await rateLimit(owner, "create", 60);
       if(input.channel==='phone'&&!staff)throw new AppError('전화 민원은 담당자가 접수합니다.',403);
       if (
         input.occurredAt >
@@ -277,13 +259,7 @@ async function handler(
         if(!photo)throw new AppError('사진을 찾을 수 없습니다.',404);
         return new Response(new Uint8Array(photo.bytes),{headers:{'Content-Type':photo.mime,'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Content-Disposition':'inline'}});
       }
-      if(path[2]==='supplements'&&method==='POST') {
-        await rateLimit(owner,'supplement',30);
-        await addSupplement(request,c,complaintOwner,staff);
-        if(!staff)await startAnalysis(c.id).catch(()=>undefined);
-        return json({ok:true},201);
-      }
-      if(['requirements','verify-draft','coverage-decision'].includes(path[2])&&method==='POST') {
+      if(['requirements','verify-draft','coverage-decision','supplements'].includes(path[2])&&method==='POST') {
         return json({error:'더 이상 제공하지 않는 기능입니다.'},410);
       }
       if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
@@ -376,7 +352,7 @@ async function handler(
             revision: z.number().int(),
             action: z.enum(["save", "approve", "status", "tasks", "delete", "restore"]),
             draft: z.string().max(10000).optional(),
-            status: z.enum(["received", "reviewing", "waiting"]).optional(),
+            status: z.enum(["received", "reviewing"]).optional(),
             reviewed: z.boolean().optional(),
             tasks: z
               .array(
@@ -422,7 +398,6 @@ async function handler(
         if (input.action === "status") {
           if (c.status === "resolved")
             throw new AppError("완료된 민원입니다.", 409);
-          if(input.status==='waiting')throw new AppError('보완 요청란에 확인할 내용을 작성해 주세요.');
           status = input.status || status;
           label = "처리 상태 변경: " + statuses[status];
         }
@@ -468,31 +443,9 @@ async function handler(
         return json({ ok: true });
       }
     }
-    if (route === "laws/search" && method === "POST") {
+    if (["laws/search", "laws/import"].includes(route) && method === "POST") {
       if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
-      await rateLimit(owner, "law", 50);
-      const input = z
-        .object({
-          query: z.string().trim().min(2).max(100),
-          kind: z.enum(["law", "ordin"]),
-        })
-        .parse(await body(request));
-      const keys = await credentials(office);
-      return json({
-        results: await searchOfficial(keys.law, input.query, input.kind),
-      });
-    }
-    if (route === "laws/import" && method === "POST") {
-      if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
-      await rateLimit(owner, "law", 50);
-      const input = z
-        .object({
-          id: z.string().regex(/^\d{1,15}$/),
-          kind: z.enum(["law", "ordin"]),
-        })
-        .parse(await body(request));
-      const keys = await credentials(office);
-      return json(await importDocument(office, keys.law, input.id, input.kind));
+      return json({error:"더 이상 제공하지 않는 기능입니다."},410);
     }
     throw new AppError("요청한 기능을 찾을 수 없습니다.", 404);
   } catch (error) {

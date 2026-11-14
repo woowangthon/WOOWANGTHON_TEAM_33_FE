@@ -1,5 +1,5 @@
-export type Status = 'received' | 'reviewing' | 'waiting' | 'resolved';
-export const statuses: Record<Status, string> = { received:'접수', reviewing:'검토 중', waiting:'보완 요청', resolved:'답변 완료' };
+export type Status = 'received' | 'reviewing' | 'resolved';
+export const statuses: Record<Status, string> = { received:'접수', reviewing:'검토 중', resolved:'답변 완료' };
 export const categories = ['생활폐기물', '소음·환경', '도로·교통', '건축·주거', '동물·공원', '기타'] as const;
 export type SentenceCheck = {id:string;text:string;status:'supported'|'needs_review'|'not_legal';reason:string;references:{citationId:string;quote:string}[]};
 export type DraftReview = {draft:string;status:'checked'|'unavailable';sentences:SentenceCheck[];checkedAt:string;validatorVersion?:number};
