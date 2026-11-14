@@ -170,7 +170,6 @@ export default function StaffWorkspace({
     source.addEventListener('complaint',event=>{
       if(!active)return;
       const change=JSON.parse((event as MessageEvent).data) as ComplaintNotification;
-      if(change.kind==='completed')setNotice({message:'새 민원의 요약·분석이 완료되었습니다.'});
       if(change.kind==='failed')setNotice({message:'민원 자동 분석을 완료하지 못했습니다.',error:true});
       sync.signal();
     });
