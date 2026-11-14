@@ -5,13 +5,14 @@ export type SentenceCheck = {id:string;text:string;status:'supported'|'needs_rev
 export type DraftReview = {draft:string;status:'checked'|'unavailable';sentences:SentenceCheck[];checkedAt:string;validatorVersion?:number};
 export type Supplement = {id:string;role:'staff'|'citizen';text:string;createdAt:string;attachments:{id:string;name:string;mime:string;size:number}[]};
 export type Citation = { id:string; title:string; article:string; text:string; sourceUrl:string; effectiveDate:string; jurisdiction:string; kind:string; relation?:string };
-export type ExpressionFinding = {kind:'profanity'|'insult'|'threat'|'sexual_harassment'|'criticism';source:'title'|'body';quote:string;reason:string;scope?:'direct_attack'|'reported_speech'|'criticism'|'unclear'};
+export type ExpressionFinding = {kind:'profanity'|'insult'|'threat'|'sexual_harassment'|'criticism';source:'title'|'body';quote:string;reason:string;scope?:'direct_attack'|'reported_speech'|'criticism'|'unclear'|'third_party_attack'|'non_attack';speaker?:'complainant'|'third_party'|'unclear';target?:'staff'|'third_party'|'animal'|'unclear';concreteThreat?:boolean;contextQuote?:string;evidenceRepairs?:{proposedQuote:string;proposedContext:string;method:'unique_whitespace_alignment'}};
 export type RequestStatus = 'answered'|'refused'|'clarification'|'missing';
 export type RequirementCheck = {id:string;text:string;source:string;quote:string;summaryStatus:'preserved'|'missing'|'distorted';summaryReason:string;responseStatus:RequestStatus;responseReason:string;sentenceIds:string[];override?:{responseStatus:RequestStatus;excluded:boolean;reason:string;at:string}};
 export type RequirementAudit = {requirements:Omit<RequirementCheck,'responseStatus'|'responseReason'|'sentenceIds'>[];noRequestReason:string;sourceSnapshot:string;analysisSnapshot:string;checkedAt:string};
 export type CoverageRequestPlan={sourceSnapshot:string;items:{id:string;kind:string;quote:string}[]};
 export type CoverageReview = {version:1|2|3|4|5|6|7;draft:string;sourceSnapshot:string;analysisSnapshot:string;requirements:RequirementCheck[];noRequestReason:string;checkedAt:string;harness?:{version:1;decisions:{id:string;rule:string}[];plan?:CoverageRequestPlan;observations?:unknown[]};evidenceRetry?:{attemptedIds:string[];recoveredIds:string[]};repair?:{attempted:true;accepted:boolean;originalDraft:string;beforeMissing:number;afterMissing:number;rejection?:'invalid_proposal'}};
 export type Analysis = {
+  expressionRepair?:{initialFindings:ExpressionFinding[];invalidIndexes:number[]};
   summaryHarness?:import('./summary-harness').SummaryAudit;
   safeTitle?:string; expressionFindings?:ExpressionFinding[];
   summary:string; requests:string[]; questions:string[]; shieldLevel:'normal'|'caution'|'threat'; shieldReason:string;

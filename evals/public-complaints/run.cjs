@@ -16,7 +16,7 @@ async function main(){
  if(dataset.cases.some(c=>c.synthetic!==false))throw Error('Only real published sources are allowed');
  for(const c of dataset.cases){const r=reference.cases.find(r=>r.id===c.id);if(!r||r.requests.some(x=>!c.complaint.body.includes(x.quote)))throw Error('Reference quote mismatch: '+c.id);}
  const {semanticPlan}=load('lib/semantic-search.ts'),{generateAnalysis}=load('lib/ai.ts'),{verifyBusinessSummary,SummaryRejectedError}=load('lib/summary-harness.ts'),{harnessPolicy}=load('lib/harness-policy.ts');
- const files=['lib/semantic-search.ts','lib/ai.ts','lib/openai.ts','lib/analysis-contract.ts','lib/structured-ai.ts','lib/summary-harness.ts','lib/harness-policy.ts','lib/protection.ts','lib/citations.ts'];
+ const files=['lib/semantic-search.ts','lib/ai.ts','lib/openai.ts','lib/analysis-contract.ts','lib/structured-ai.ts','lib/summary-harness.ts','lib/harness-policy.ts','lib/protection.ts','lib/citations.ts','lib/source-evidence.ts'];
  const codeHash=hash(files.map(f=>f+'\n'+fs.readFileSync(path.join(root,f),'utf8')).join('\n'));
  const datasetHash=hash(JSON.stringify(dataset.cases.map(c=>({id:c.id,complaint:c.complaint}))));
  const reportPath=path.join(folder,'results.json');let report=fs.existsSync(reportPath)?JSON.parse(fs.readFileSync(reportPath,'utf8')):null;

@@ -30,7 +30,20 @@ export function businessSummary(c:Pick<Complaint,'title'|'body'|'analysis'|'disp
   return safe.join(' ');
 }
 export function expressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
-  return allExpressionFindings(c).filter(f=>f.scope!=='reported_speech');
+  return allExpressionFindings(c).filter(f=>!['reported_speech','third_party_attack','non_attack'].includes(f.scope||''));
+}
+export function contextualFinding(f:ExpressionFinding):ExpressionFinding {
+  // Old saved findings remain readable. New AI responses always include context.
+  if(!f.speaker||!f.target)return f;
+  const scope:ExpressionFinding['scope']=f.kind==='criticism'?'criticism':f.target==='animal'&&f.kind!=='threat'?'non_attack':
+    f.speaker==='third_party'?'reported_speech':f.speaker==='complainant'&&(f.target==='third_party'||f.target==='animal')?'third_party_attack':
+    f.speaker==='complainant'&&f.target==='staff'?'direct_attack':'unclear';
+  return {...f,scope};
+}
+export function protectionLevel(findings:ExpressionFinding[]):'normal'|'caution'|'threat' {
+  const direct=findings.filter(f=>f.scope==='direct_attack');
+  if(direct.some(f=>f.kind==='threat'&&f.concreteThreat===true))return 'threat';
+  return direct.some(f=>f.kind!=='criticism')?'caution':'normal';
 }
 export function allExpressionFindings(c: Pick<Complaint, 'title' | 'body' | 'analysis'>): ExpressionFinding[] {
   const findings = (c.analysis?.expressionFindings || []).filter(f => c[f.source].includes(f.quote));

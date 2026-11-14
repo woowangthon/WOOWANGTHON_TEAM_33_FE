@@ -13,10 +13,10 @@ test('source protection and citation checks remain intact after removing the alt
  assert.throws(()=>contract.validateAnalysis('{}','synthetic',input,[],[],'test'),/응답 형식/);
 });
 test('grounded title abuse is preserved while invented threats cannot change the protection level',()=>{
- const out=validate({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'profanity',scope:'direct_attack',source:'title',quote:'씨발',reason:'직접적인 공격 표현'},{kind:'threat',source:'body',quote:'죽이겠다',reason:'없는 발언'}]},{...input,title:'씨발 쓰레기',body:'현장 확인을 부탁합니다.'});
+ const out=validate({...valid,safeTitle:'씨발 쓰레기 처리 요청',shieldLevel:'threat',sensitiveQuotes:['씨발'],expressionFindings:[{kind:'profanity',scope:'direct_attack',source:'title',quote:'씨발',reason:'직접적인 공격 표현',speaker:'complainant',target:'staff',concreteThreat:false,contextQuote:'씨발 쓰레기'},{kind:'threat',scope:'direct_attack',source:'body',quote:'죽이겠다',reason:'없는 발언',speaker:'complainant',target:'staff',concreteThreat:true,contextQuote:'죽이겠다'}]},{...input,title:'씨발 쓰레기',body:'현장 확인을 부탁합니다.'});
  assert.equal(out.shieldLevel,'caution');assert.doesNotMatch(out.safeTitle,/씨발/);assert.deepEqual(out.expressionFindings.map(f=>[f.kind,f.source]),[['profanity','title']]);
 });
 test('third-party attack reports are masked without labelling the reporter as abusive',()=>{
- const quote='저에게 모욕적인 말을 했습니다',out=validate({...valid,sensitiveQuotes:[],expressionFindings:[{kind:'insult',scope:'reported_speech',source:'body',quote,reason:'제3자의 폭언 피해 신고'}]},{...input,body:quote+' 보호조치를 요청합니다.'});
+ const quote='저에게 모욕적인 말을 했습니다',out=validate({...valid,sensitiveQuotes:[],expressionFindings:[{kind:'insult',scope:'reported_speech',source:'body',quote,reason:'제3자의 폭언 피해 신고',speaker:'third_party',target:'third_party',concreteThreat:false,contextQuote:quote}]},{...input,body:quote+' 보호조치를 요청합니다.'});
  assert.equal(out.shieldLevel,'normal');assert.equal(out.expressionFindings[0].scope,'reported_speech');assert.ok(out.sensitiveQuotes.includes(quote));
 });

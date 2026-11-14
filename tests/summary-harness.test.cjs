@@ -2,14 +2,14 @@ const fs=require('node:fs'),ts=require('typescript'),test=require('node:test'),a
 const policy=require('../evals/loader.cjs')()('lib/harness-policy.ts');
 function harness(answer){
  const calls=[],out={};
- const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});const value=answer(name,input,calls.length);return name==='business_summary_repair'&&value?{...value,facts:value.facts??input.facts,requests:value.requests??input.requests}:value;}},'./harness-policy':policy};
+ const stubs={'./structured-ai':{structuredAI:async(_keys,name,_instructions,input)=>{calls.push({name,input});let value=answer(name,input,calls.length);if(name==='business_summary_review'&&value&&!('sourceCoverage' in value))value={...value,sourceCoverage:input.sourceRequests.map((f,i)=>({requestId:f.id,requestIndices:input.requests.length?[Math.min(i,input.requests.length-1)]:[],intent:f.requestIntent,subjectPreserved:true,conditionsPreserved:true}))};return name==='business_summary_repair'&&value?{...value,facts:value.facts??input.facts,requests:value.requests??input.requests}:value;}},'./harness-policy':policy,'./source-evidence':require('../evals/loader.cjs')()('lib/source-evidence.ts')};
  new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/summary-harness.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(name=>name in stubs?stubs[name]:require(name),out);
  return {...out,calls,verifyBusinessSummary:(keys,c,facts,candidate,options={})=>out.verifyBusinessSummary(keys,c,facts,candidate,{requests:['보호조치를 요청합니다.'],...options})};
 }
 const keys={provider:'openai',model:'synthetic-model'},source={title:'합성 피해 신고',body:'이웃이 저를 협박했습니다. 보호조치를 요청합니다.',location:'가상 장소',occurred_at:'2026-11-01'};
-const factInput=[{kind:'reported_harm',source:'body',quote:'이웃이 저를 협박했습니다',value:'이웃으로부터 협박 피해를 입었다고 신고함',essential:true},{kind:'protection_request',source:'body',quote:'보호조치를 요청합니다',value:'보호조치 요청',essential:false}];
+const factInput=[{kind:'reported_harm',source:'body',quote:'이웃이 저를 협박했습니다',value:'이웃으로부터 협박 피해를 입었다고 신고함',essential:true},{kind:'protection_request',source:'body',quote:'보호조치를 요청합니다',value:'보호조치 요청',essential:false,requestIntent:'protection',conditions:[]}];
 const good='이웃의 협박 피해를 신고하고 보호조치를 요청합니다.';
-const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],requests:[{index:0,text:'보호조치를 요청합니다.',factIds:['F2'],supported:true,attackFree:true,reason:''}],missingFactIds:[],omissions:[],factErrors:[],...extra});
+const review=(text=good,ids=['F1','F2'],extra={})=>({sentences:[{text,factIds:ids,supported:true,attackFree:true,reason:''}],requests:[{index:0,text:'보호조치를 요청합니다.',factIds:['F2'],meanings:[{factId:'F2',intent:'protection',subjectPreserved:true,conditionsPreserved:true}],supported:true,attackFree:true,reason:''}],missingFactIds:[],omissions:[],factErrors:[],...extra});
 test('facts require exact evidence in the declared source; source content determines IDs',()=>{
  const h=harness(()=>assert.fail());assert.equal(h.groundFacts(factInput,source)[1].id,'F2');
  assert.throws(()=>h.groundFacts([{...factInput[0],quote:'없는 원문'}],source),/exact source evidence/);
@@ -27,8 +27,8 @@ test('a grounded summary longer than 220 characters and two sentences passes wit
   '공원 중앙의 배수구는 비가 온 뒤 물이 빠지지 않고 주변 산책로까지 고이는 상태라고 신고했으며, 배수구 막힘과 시설 상태를 점검하고 청소 또는 보수 등 필요한 조치와 확인 결과를 각각 안내해 달라고 요청합니다.',
  ];
  const summary=sentences.join(' '),c={...source,title:'가상 공원 시설 점검 요청',body:summary};
- const facts=sentences.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true}));
- const h=harness(()=>review(summary,[],{sentences:sentences.map((text,i)=>({text,factIds:['F'+(i+1)],supported:true,attackFree:true,reason:'원문에 명시된 시설별 점검 요청'})),requests:sentences.map((text,index)=>({index,text,factIds:['F'+(index+1)],supported:true,attackFree:true,reason:''}))}));
+ const facts=sentences.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true,requestIntent:'action',conditions:[]}));
+ const h=harness(()=>review(summary,[],{sentences:sentences.map((text,i)=>({text,factIds:['F'+(i+1)],supported:true,attackFree:true,reason:'원문에 명시된 시설별 점검 요청'})),requests:sentences.map((text,index)=>({index,text,factIds:['F'+(index+1)],meanings:[{factId:'F'+(index+1),intent:'action',subjectPreserved:true,conditionsPreserved:true}],supported:true,attackFree:true,reason:''}))}));
  assert.ok(summary.length>220);assert.ok(sentences.length>2);
  const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(facts,c),summary,{requests:sentences});
  assert.equal(out.summary,summary);assert.equal(out.audit.status,'verified');assert.equal(h.calls.length,1);
@@ -104,8 +104,8 @@ test('omission observations themselves require literal source evidence',()=>{
 test('all requests are preserved internally without repeating each one in the summary',async()=>{
  const summary='보도 파손으로 통행이 어렵습니다.',requests=['보도를 보수해 주세요.','보수 일정을 알려 주세요.'];
  const c={...source,body:[summary,...requests].join(' ')};
- const raw=[{kind:'problem',source:'body',quote:summary,value:summary,essential:true},...requests.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true}))];
- const h=harness((name,input)=>name==='business_summary_repair'?{summary,facts:raw,requests}:review(summary,['F1'],{missingFactIds:['F2','F3'],requests:input.requests.map((text,index)=>({index,text,factIds:['F'+(index+2)],supported:true,attackFree:true,reason:''}))}));
+ const raw=[{kind:'problem',source:'body',quote:summary,value:summary,essential:true},...requests.map(quote=>({kind:'requested_action',source:'body',quote,value:quote,essential:true,requestIntent:'action',conditions:[]}))];
+ const h=harness((name,input)=>name==='business_summary_repair'?{summary,facts:raw,requests}:review(summary,['F1'],{missingFactIds:['F2','F3'],requests:input.requests.map((text,index)=>({index,text,factIds:['F'+(index+2)],meanings:[{factId:'F'+(index+2),intent:'action',subjectPreserved:true,conditionsPreserved:true}],supported:true,attackFree:true,reason:''}))}));
  const out=await h.verifyBusinessSummary(keys,c,h.groundFacts(raw,c),summary,{requests:requests.slice(0,1)});
  assert.equal(out.summary,summary);assert.deepEqual(out.requests,requests);
  assert.match(out.audit.attempts[0].issues.join(' '),/요청이 내부 목록에서 빠졌/);assert.equal(h.calls.length,3);
@@ -119,4 +119,42 @@ test('request checks reject invented IDs, changed text, duplicate indices and un
  for(const change of cases){const r=review();Object.assign(r.requests[0],change);assert.ok(h.requestIssues(requests,facts,r).length);}
  const duplicate=review();duplicate.requests.push({...duplicate.requests[0]});assert.ok(h.requestIssues(requests,facts,duplicate).length);
  assert.ok(h.requestIssues(requests,facts,{...review(),requests:[]}).length);
+});
+test('a linked request still fails when a legal basis question is read back as a yes-no confirmation',()=>{
+ const h=harness(()=>assert.fail()),quote='허가를 제한하는 규정의 근거를 알려 주세요.',c={...source,body:quote};
+ const facts=h.groundFacts([{kind:'requested_action',source:'body',quote,value:quote,essential:true,requestIntent:'rule_basis',conditions:[]}],c);
+ const requests=['허가가 가능한지 알려 주세요.'],r=review(good,[],{requests:[{index:0,text:requests[0],factIds:['F1'],meanings:[{factId:'F1',intent:'confirmation',subjectPreserved:true,conditionsPreserved:true}],supported:true,attackFree:true,reason:''}]});
+ assert.match(h.requestIssues(requests,facts,r).join(' '),/질문 유형/);
+});
+test('a positive linked request cannot discard its target or conditions or omit its semantic readback',()=>{
+ const h=harness(()=>assert.fail()),facts=h.groundFacts(factInput,source),requests=['보호조치를 요청합니다.'];
+ for(const field of ['subjectPreserved','conditionsPreserved']){const r=review();r.requests[0].meanings[0][field]=false;assert.ok(h.requestIssues(requests,facts,r).length);}
+ const missing=review();delete missing.requests[0].meanings;assert.match(h.requestIssues(requests,facts,missing).join(' '),/의도의 항목별 검증/);
+});
+test('supported but unnecessary background triggers repair instead of being saved',async()=>{
+ const h=harness((name,_input,count)=>name==='business_summary_repair'?{summary:good}:count===1?review(good,['F1','F2'],{sentences:[{text:good,factIds:['F1','F2'],supported:true,attackFree:true,necessary:false,reason:'업무와 무관한 배경 포함'}]}):review());
+ const out=await h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good);
+ assert.equal(out.audit.attempts.length,2);assert.match(out.audit.attempts[0].issues.join(' '),/불필요한 배경/);
+});
+test('request facts without a declared intent or conditions cannot enter generation',()=>{
+ const h=harness(()=>assert.fail()),raw={...factInput[1]};delete raw.requestIntent;
+ assert.throws(()=>h.groundFacts([raw],source),/intent and conditions/);
+});
+test('whitespace alignment refuses ambiguous occurrences and never supplies missing words',()=>{
+ const h=harness(()=>assert.fail()),raw={...factInput[0],quote:'가 나'};
+ assert.equal(h.alignFactQuotes([raw],{...source,body:'가\n나 그리고 가\t나'}).repairs.length,0);
+ assert.equal(h.alignFactQuotes([{...raw,quote:'가나다'}],{...source,body:'가 다'}).repairs.length,0);
+});
+test('rewriting facts cannot silently erase a source request not rejected as a fact error',async()=>{
+ const h=harness(name=>name==='business_summary_repair'?{summary:good,facts:factInput.slice(0,1),requests:[]}:review(good,['F1','F2'],{requests:[]}));
+ await assert.rejects(h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good),e=>e.audit.sourceRequests.some(f=>f.kind==='protection_request')&&e.audit.attempts.at(-1).issues.some(s=>s.includes('원문')));
+});
+test('nonessential background is optional but a requested action cannot be dismissed by a relevance flag',()=>{
+ const h=harness(()=>assert.fail()),r=review(),f=h.groundFacts(factInput,source);
+ r.omissions=[{source:'body',quote:'이웃이 저를 협박했습니다',role:'business',required:false,reason:'부차 경위'}];assert.deepEqual(h.summaryIssues(good,f,r,source),[]);
+ r.omissions[0]={source:'body',quote:'보호조치를 요청합니다',role:'protection_request',required:false,reason:'잘못된 제외 판단'};assert.ok(h.summaryIssues(good,f,r,source).length);
+});
+test('fixed source request coverage is checked even when all current fact IDs receive a positive review',async()=>{
+ const h=harness(name=>name==='business_summary_repair'?{summary:good}:review(good,['F1','F2'],{sourceCoverage:[]}));
+ await assert.rejects(h.verifyBusinessSummary(keys,source,h.groundFacts(factInput,source),good),e=>e.audit.attempts.every(a=>a.issues.some(s=>s.includes('고정 ID'))));
 });

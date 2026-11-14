@@ -126,7 +126,7 @@ export const automaticQueries:Record<string,{law:string;ordin:string}>={
   '기타':{law:'민원 처리에 관한 법률',ordin:'청주시 민원'},
 };
 const normalizeTitle=(value:string)=>value.replace(/[\sㆍ·]/g,'');
-export type SearchPlan={profiles:string[];terms:string[];sources:{kind:'law'|'ordin';query:string}[];meaning?:string;facts?:import('./summary-harness').SummaryFact[];sourceHash?:string;harnessVersion?:number};
+export type SearchPlan={profiles:string[];terms:string[];sources:{kind:'law'|'ordin';query:string}[];meaning?:string;facts?:import('./summary-harness').SummaryFact[];requestCandidates?:import('./summary-harness').SummaryFact[];requestDecisions?:{index:number;decision:'represented'|'duplicate'|'not_request';requestIndices:number[];reason:string}[];quoteRepairs?:import('./summary-harness').QuoteRepair[];sourceHash?:string;harnessVersion?:number};
 // Offline fallback only searches existing documents; no category-specific law suggestions.
 export function searchPlan(_category:string,input?:{title:string;body:string}):SearchPlan {
   return {profiles:[],terms:[...tokens((input?.title||'')+' '+(input?.body||''))],sources:[]};
