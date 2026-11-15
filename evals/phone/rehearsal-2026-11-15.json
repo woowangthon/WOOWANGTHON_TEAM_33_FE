@@ -1,0 +1,65 @@
+{
+  "title": "운영 음성 서버 실제 API 리허설",
+  "sourceFile": "민원사이-운영서버-리허설.json",
+  "sourceFileSha256": "99ea679fb4874e00b45f19628e5f748f335270c351bdec8e93d8a0d60720a5c5",
+  "scope": "합성 대본 음원으로 진행한 1통화, 5발화의 서버/API 기능 검사. 물리 마이크 및 웹 수락 버튼은 이 실행에 포함하지 않음.",
+  "startedAt": "2026-11-15T07:08:35.796Z",
+  "syntheticRecordedInput": true,
+  "realModelCalls": true,
+  "productionServer": true,
+  "physicalMicrophoneTested": false,
+  "websiteAcceptButtonTested": false,
+  "checks": {
+    "startNotice": true,
+    "callerTransitionNotice": true,
+    "callerVoiceBlocked": true,
+    "staffVoiceContinues": true,
+    "bothSpeakers": true,
+    "abuseHidden": true,
+    "bothClientsReceive": true,
+    "followupPreserved": true,
+    "nicknamePreserved": true,
+    "noErrors": true
+  },
+  "timing": [
+    {
+      "name": "caller-request",
+      "voiceStartMs": 6186.83,
+      "audioSeconds": 7.55,
+      "resultSeconds": 11.5456138,
+      "transcriptDelayAfterAudioSeconds": 3.972956699999997
+    },
+    {
+      "name": "staff-question",
+      "voiceStartMs": 20798.094100000002,
+      "audioSeconds": 3.2,
+      "resultSeconds": 5.122439299999998,
+      "transcriptDelayAfterAudioSeconds": 1.8972149999999965
+    },
+    {
+      "name": "caller-abuse",
+      "voiceStartMs": 29089.334199999998,
+      "audioSeconds": 8.45,
+      "resultSeconds": 12.099780700000004,
+      "transcriptDelayAfterAudioSeconds": 3.6492894000000016
+    },
+    {
+      "name": "staff-reply",
+      "voiceStartMs": 44312.021799999995,
+      "audioSeconds": 5.9,
+      "resultSeconds": 8.838049600000005,
+      "transcriptDelayAfterAudioSeconds": 2.920869300000006
+    },
+    {
+      "name": "caller-followup",
+      "voiceStartMs": 56236.6575,
+      "audioSeconds": 4.15,
+      "resultSeconds": 7.2798698,
+      "transcriptDelayAfterAudioSeconds": 3.1013462999999972
+    }
+  ],
+  "errors": [],
+  "dialogueSeconds": 63.518283,
+  "passed": true,
+  "totalSeconds": 109.8979743
+}

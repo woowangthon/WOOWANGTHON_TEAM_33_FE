@@ -12,6 +12,8 @@
 
 ## 포함된 데이터·음원
 
+- `evals/text-100/`: [국민권익위원회_민원정책 질의응답조회서비스](https://www.data.go.kr/data/15074671/openapi.do)의 공개 질의 50건과 팀에서 AI로 공격 표현을 추가한 합성 변형 50건. 포털 이용허락범위는 제한 없음(2026-11-15 확인)이며 원문과 합성본을 구분합니다. 건별 출처·수집 본문·해시는 [데이터 설명](../evals/text-100/README.md)에 연결되어 있습니다.
+- `evals/text-100/results-v6.json`, `evals/phone/rehearsal-2026-11-15.json`: 팀의 실제 API 검증 기록에서 최종 출력·기능 검사·측정값을 발췌한 결과. [검증 범위와 산식](VALIDATION.md)을 함께 제공합니다.
 - `lib/samples.ts`, `tests/fixtures/`: 팀 제작 합성 민원 및 단위 테스트 입력.
 - `lib/public-complaints.json`: [한국남동발전 환경관련 민원사항 현황](https://www.data.go.kr/data/15093026/fileData.do)의 13건. 공개 자료 출처를 대조하는 기능에 포함되어 있으며, 포털 이용허락범위는 제한 없음입니다. 원문 URL·접수일·파일 해시는 JSON에 보존합니다.
 - `public/demo-audio/`: 합성 시연·안내 음원. 파일 설명과 대본은 같은 폴더의 README 및 JSON에 기록합니다.

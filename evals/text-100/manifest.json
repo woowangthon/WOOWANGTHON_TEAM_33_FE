@@ -47,8 +47,8 @@
       "bytes": 1231
     },
     "README.md": {
-      "sha256": "d6aa09963fbd30f9e92938747f39d0fe8c3c0acb40505b981f8f79b5e8d4954e",
-      "bytes": 2779
+      "sha256": "23ae38ceab2492a9df0147fccbe7e4db7a6a4e3d81ce9689981de7b65b2cf2db",
+      "bytes": 3572
     },
     "sources.json": {
       "sha256": "9e58c0803d0b2bb8c600a47185b135e4ccda5dfdee13ab133f9fb76f30c58543",
@@ -57,6 +57,15 @@
     "synthetic-50.json": {
       "sha256": "a0290a385fdc5369fbef1b4f74c3d0a1ae140646ff201c2e8451ff0101e60818",
       "bytes": 89805
+    },
+    "results-v6.json": {
+      "sha256": "6ecc110733082e0dc3b61e421c70b3abfc3af2d51e83ade13248725c9a8e4c35",
+      "bytes": 225542
+    },
+    "verify-results.mjs": {
+      "sha256": "2b912d76fa7c8d19aa9270c575408ce6af20a620914740594a3b7800de69dbed",
+      "bytes": 2975
     }
-  }
+  },
+  "resultsPublishedDate": "2026-11-15"
 }

@@ -12,6 +12,8 @@
 | [prompts.json](prompts.json) | 합성 작성·검토 지시 요약 |
 | [preparation.json](preparation.json) | 작성·검토 과정과 표본 교체 기록 |
 | [manifest.json](manifest.json) | 파일별 SHA-256과 구성 확인 결과 |
+| [results-v6.json](results-v6.json) | 하네스 v6 실제 API 실행의 건별 최종 출력·감지 결과·처리 시간 |
+| [verify-results.mjs](verify-results.mjs) | 입력 해시 대조 및 공개 지표 재계산 도구, API 호출 없음 |
 
 ## 출처와 이용 조건
 
@@ -29,4 +31,10 @@
 
 욕설·직접 공격 감지와 업무 사실·요청 보존을 검토하기 위한 데이터입니다. 50개 원문과 50개 변형은 서로 짝을 이루므로 독립된 실제 민원 100건으로 해석하지 않습니다. 학습/검증으로 나눌 경우 같은 `pairId`를 한 묶음으로 분리해야 합니다.
 
-서비스 입력에는 `title`과 `body`만 사용합니다. `expectedDirectAttack`, `referenceFacts`, `attackSpans`는 평가용 AI 잠정 주석이므로 서비스 입력에 넣지 않습니다. 주석은 사람이 확정한 정답이 아닙니다. 이번 폴더에는 평가 점수나 서비스 실행 결과를 포함하지 않습니다.
+서비스 입력에는 `title`과 `body`만 사용합니다. `expectedDirectAttack`, `referenceFacts`, `attackSpans`는 평가용 AI 잠정 주석이므로 서비스 입력에 넣지 않습니다. 주석은 사람이 확정한 정답이 아닙니다.
+
+## 실제 실행 결과
+
+2026-11-15 실행한 하네스 v6의 최종 출력과 측정값을 추가 공개했습니다. 100건 모두 결과를 생성했고, 직접 공격 감지는 잠정 주석과 97건 일치했습니다(TP 47, TN 50, FP 0, FN 3). 생성 완료는 내용 정확도와 구분합니다. 이 실행에는 별도 품질 채점·법령 검색·답변 검증·통화가 포함되지 않았습니다.
+
+`node evals/text-100/verify-results.mjs`로 저장된 입력·출력의 해시를 대조하고 지표를 재계산할 수 있습니다. [검증 상세](../../docs/VALIDATION.md)에 산식과 범위를 정리했습니다.

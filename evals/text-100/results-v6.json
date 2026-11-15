@@ -1,0 +1,5576 @@
+{
+  "title": "민원사이 텍스트 하네스 v6 실제 API 실행 결과",
+  "publishedDate": "2026-11-15",
+  "startedAt": "2026-11-15T02:35:28.865Z",
+  "finishedAt": "2026-11-15T02:46:07.426Z",
+  "serviceModel": "gpt-6-luna",
+  "harnessVersion": 6,
+  "datasetVersion": "acrc-natural-agent-v3",
+  "datasetHash": "9f9d42aae4eedc8c960f2f43b57c876a77c39d55a40b4cc15e1d145af62be059",
+  "labelStatus": "AI-authored and independently AI-reviewed provisional references. Not human-validated or official ground truth.",
+  "scope": "semanticPlan + generateAnalysis + verifyBusinessSummary; no judge, scores, database writes, law retrieval or reply verification",
+  "provenance": {
+    "sourceFile": "harness-v6-results.json",
+    "sourceFileSha256": "bb21dbd4cf893c5aac5048947e9cd99768ae98c47dc41211edaef4f50a6b8224",
+    "projection": "기존 실행의 입력 ID·입력 해시·실측 시간·감지 판정·최종 출력을 발췌했습니다. 새 모델 호출이나 재채점은 하지 않았습니다.",
+    "modules": [
+      {
+        "file": "lib/semantic-search.ts",
+        "sha256": "94b669c95cd8a70b2112c9dc648dd857c999474f2c9070322e49ea2307d45f16"
+      },
+      {
+        "file": "lib/summary-harness.ts",
+        "sha256": "cf83a5c6c5d9817c1196c8cfc262fb9a9afcd1d6bb98476fbf4875298cb268e3"
+      },
+      {
+        "file": "lib/ai.ts",
+        "sha256": "30f17e5ea8bfe949cbbeb9515c13c3a2b7a50fb10cae8745b60faa698d15607f"
+      },
+      {
+        "file": "lib/openai.ts",
+        "sha256": "911226a633758166e466eb8d0ab109ff646031e73409781bec89374e3db96cf4"
+      },
+      {
+        "file": "lib/analysis-contract.ts",
+        "sha256": "e85490886c478909fc194a878d739e0559dac82fbd298d381f38ed110493e3cc"
+      },
+      {
+        "file": "lib/protection.ts",
+        "sha256": "b977197101496b2c969bdf42c9bffc5f472dba6857ffb4cfbb5580ef755bb820"
+      },
+      {
+        "file": "lib/structured-ai.ts",
+        "sha256": "2e6269f30c1695d1a5b2fc2497154911aaa28f33caf37e61b005c5068c05aa4f"
+      },
+      {
+        "file": "lib/harness-policy.ts",
+        "sha256": "c3b119b044ff9c02abdc01c12fdfac7969810b15b29f6e1960dcf9e2eaab9abd"
+      },
+      {
+        "file": "lib/source-evidence.ts",
+        "sha256": "9e2835bac2344db5d529fbfad5cd80d2c98fc9d37b25aba2d3b5ab7aa0a78062"
+      },
+      {
+        "file": "evals/acrc/generate-results.cjs",
+        "sha256": "1cc19c3fef8b269bbbc66d2501e65bac3ac8c92cc0e1728257a44baa1a42807c"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "ACRC-6916203-A",
+      "pairId": "ACRC-6916203",
+      "inputHash": "ef156de3687c403347cf15ad0fd3e12a6f6479585b66c2ca6b68147172b44563",
+      "startedAt": "2026-11-15T02:35:28.873Z",
+      "finishedAt": "2026-11-15T02:35:52.746Z",
+      "pipelineElapsedMs": 23873,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "내용연수가 지난 폐소화기 폐기방법은 어떻게 되나요?",
+            "value": "내용연수가 지난 폐소화기의 폐기 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "내용연수가 지난 폐소화기 폐기방법은 어떻게 되나요?",
+            "value": "내용연수가 지난 폐소화기를 버리는 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "내용연수가 지난 폐소화기의 폐기 방법을 문의했습니다.",
+        "requests": [
+          "내용연수가 지난 폐소화기를 버리는 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "그 썩은 대가리 좀 굴려서",
+            "reason": "담당자의 지적 능력을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "내용연수가 지난 폐소화기를 어떻게 버려야 하는지 그 썩은 대가리 좀 굴려서 알려줘요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917271-A",
+      "pairId": "ACRC-6917271",
+      "inputHash": "bd134714d921cfb3606d854097ef2c582f29835c21654e1574dce734f0a0c8c6",
+      "startedAt": "2026-11-15T02:35:28.902Z",
+      "finishedAt": "2026-11-15T02:35:56.444Z",
+      "pipelineElapsedMs": 27542,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "인감증명서 발급 금지",
+            "value": "다른 사람이 본인의 인감증명서를 발급받는 것을 막는 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "막을 방법이 있는지",
+            "value": "다른 사람이 본인의 인감증명서를 발급받지 못하게 막을 방법이 있는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "다른 사람이 본인의 인감증명서를 발급받지 못하게 막을 방법이 있는지 확인을 요청했습니다.",
+        "requests": [
+          "다른 사람이 본인의 인감증명서를 발급받지 못하게 막을 방법이 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "네 그 돌대가리로",
+            "reason": "담당자를 지칭해 지능을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "막을 방법이 있는지 네 그 돌대가리로 생각해서 알려줘."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917254-A",
+      "pairId": "ACRC-6917254",
+      "inputHash": "624b10c22c5d90043f86f28173ce725e39ec79bf244568f37ba1df2fe1c85533",
+      "startedAt": "2026-11-15T02:35:28.903Z",
+      "finishedAt": "2026-11-15T02:36:07.321Z",
+      "pipelineElapsedMs": 38418,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "해외이주비 자금출처 확인서 관련 문의",
+            "value": "해외이주비 송금 관련 자금출처 확인서 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "통장 사본과 해당 예금·적금의 자금원천을 확인하는 서류는 통장 잔고가 표시된 자료를 내면 되는 건가요?",
+            "value": "통장 사본과 예금·적금의 자금원천 확인 서류로 잔고 표시 자료를 제출하면 되는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "가족이나 지인에게 받은 경우에는 어떻게 증명해야 합니까?",
+            "value": "가족이나 지인에게 받은 자금을 어떻게 증명해야 하는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "자금을 가족이나 지인에게 받은 경우"
+            ],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "국내 대리인을 신청할 수도 있는지",
+            "value": "국내 대리인을 통해 신청할 수 있는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이 꼴통 같은 부서에서 이 내용들 답변 좀 해보세요.",
+            "value": "앞서 문의한 내용들에 답변해 달라는 요청",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F5"
+          }
+        ],
+        "summary": "해외이주비 송금 관련 자금출처 확인서 문의로, 통장 잔고 표시 자료가 제출 서류로 충분한지, 가족이나 지인에게 받은 자금의 증빙 방법, 국내 대리인을 통한 신청 가능 여부에 대한 답변을 요청합니다.",
+        "requests": [
+          "통장 사본과 예금·적금의 자금원천 확인 서류로 잔고 표시 자료를 제출하면 되는지 확인해 달라는 요청",
+          "가족이나 지인에게 받은 자금을 어떻게 증명해야 하는지 설명해 달라는 요청 (자금을 가족이나 지인에게 받은 경우)",
+          "국내 대리인을 통해 신청할 수 있는지 확인해 달라는 요청",
+          "앞서 문의한 내용들에 답변해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 꼴통 같은 부서",
+            "reason": "부서 구성원을 비하하는 표현으로 담당자에 대한 인신공격에 해당합니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "국내 대리인을 신청할 수도 있는지, 이 꼴통 같은 부서에서 이 내용들 답변 좀 해보세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6913908-A",
+      "pairId": "ACRC-6913908",
+      "inputHash": "bb5dfd9a1b1ac0cbce53f75a1badf48fa42160a89702b955021bc4073daf706a",
+      "startedAt": "2026-11-15T02:35:28.904Z",
+      "finishedAt": "2026-11-15T02:35:48.518Z",
+      "pipelineElapsedMs": 19614,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "빗물받이 설치 기준",
+            "value": "빗물받이 설치 기준",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          }
+        ],
+        "summary": "빗물받이 설치 기준에 관한 글입니다.",
+        "requests": [],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "무식한 새끼",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "빗물받이 설치 기준 관련 글인데, 받는 당신부터가 무식한 새끼라 참 답답하네요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916133-N",
+      "pairId": "ACRC-6916133",
+      "inputHash": "41f1e2fa960da9558ca56f10998c8298e770298c68c64349fe443ae461e2127b",
+      "startedAt": "2026-11-15T02:36:27.096Z",
+      "finishedAt": "2026-11-15T02:36:45.171Z",
+      "pipelineElapsedMs": 18073,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "자동차 배기음이 순정 차량보다 큰 경우",
+            "value": "순정 차량보다 큰 자동차 배기음의 자동차관리법 위반 해당 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인가요?",
+            "value": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "순정 차량보다 큰 자동차 배기음이 자동차관리법 위반에 해당하는지 확인을 요청했습니다.",
+        "requests": [
+          "순정 차량보다 큰 자동차 배기음이 자동차관리법 위반에 해당하는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916133-A",
+      "pairId": "ACRC-6916133",
+      "inputHash": "29554dbf362bd3e8c70d0898e504c54172ebe8ea6dc07436967ff98e2335c548",
+      "startedAt": "2026-11-15T02:36:27.123Z",
+      "finishedAt": "2026-11-15T02:36:53.563Z",
+      "pipelineElapsedMs": 26440,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "자동차 배기음이 순정 차량보다 큰 경우",
+            "value": "순정 차량보다 배기음이 큰 자동차의 자동차관리법 위반 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "자동차관리법 위반사항인가요?",
+            "value": "순정 차량보다 배기음이 큰 자동차가 자동차관리법 위반인지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "설명 좀 해봐요.",
+            "value": "순정 차량보다 배기음이 큰 자동차가 자동차관리법 위반인지 설명",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "순정 차량보다 배기음이 큰 자동차가 자동차관리법 위반에 해당하는지 확인하고 설명해 달라는 문의입니다.",
+        "requests": [
+          "순정 차량보다 배기음이 큰 자동차가 자동차관리법 위반인지 확인해 달라는 요청 (confirmation)",
+          "해당 여부를 설명해 달라는 요청 (explanation)"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "대가리가 있으면",
+            "reason": "담당자의 지적 능력을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "답변 맡은 당신은 대가리가 있으면 설명 좀 해봐요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915922-N",
+      "pairId": "ACRC-6915922",
+      "inputHash": "acb86d8f9733d4aa27555009ab0fd3f7b310b3c9256c0033ca649cc2159c6e77",
+      "startedAt": "2026-11-15T02:36:27.124Z",
+      "finishedAt": "2026-11-15T02:36:39.475Z",
+      "pipelineElapsedMs": 12351,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도서관 노트북 사용공간 문의",
+            "value": "도서관의 노트북 사용 공간에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도서관에 노트북을 이용하여 학습할 수 있는 공간이 있나요?",
+            "value": "도서관에 노트북을 이용해 학습할 수 있는 공간이 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "도서관에서 노트북을 이용해 학습할 수 있는 공간이 있는지 문의했습니다.",
+        "requests": [
+          "도서관에 노트북을 이용해 학습할 수 있는 공간이 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915922-A",
+      "pairId": "ACRC-6915922",
+      "inputHash": "87726aa124ba6dd11faa093c728a55fe42d04c19f905bce38c5d2997d9b1af4b",
+      "startedAt": "2026-11-15T02:36:27.125Z",
+      "finishedAt": "2026-11-15T02:36:51.066Z",
+      "pipelineElapsedMs": 23941,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도서관 노트북 사용공간 문의",
+            "value": "도서관 노트북 사용공간에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도서관에 노트북으로 공부할 수 있는 공간이 있는지는",
+            "value": "도서관에 노트북으로 공부할 수 있는 공간이 있는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "도서관에서 노트북으로 공부할 수 있는 공간이 있는지 문의했습니다.",
+        "requests": [
+          "도서관에서 노트북으로 공부할 수 있는 공간이 있는지 확인해 주세요."
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신 같은 등신도",
+            "reason": "민원 응대자를 낮춰 부르는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "도서관에 노트북으로 공부할 수 있는 공간이 있는지는 당신 같은 등신도 알 거 아니에요?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915738-N",
+      "pairId": "ACRC-6915738",
+      "inputHash": "65fc90c82cf5c775b2b99852256e135cf70cf0a1371645c36d854e61d63cf19f",
+      "startedAt": "2026-11-15T02:36:39.480Z",
+      "finishedAt": "2026-11-15T02:36:57.642Z",
+      "pipelineElapsedMs": 18162,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "응답소 현장민원의 처리기한은 어떻게 되나요?",
+            "value": "응답소 현장민원의 처리기한",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "응답소 현장민원의 처리기한은 어떻게 되나요?",
+            "value": "응답소 현장민원의 처리기한이 어떻게 되는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "응답소 현장민원의 처리기한을 문의했습니다.",
+        "requests": [
+          "응답소 현장민원의 처리기한을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915738-A",
+      "pairId": "ACRC-6915738",
+      "inputHash": "146b70dcaf3ea520d45030f07de3883cd6b0f3cc0ef4e98442ea5f0933339f97",
+      "startedAt": "2026-11-15T02:36:45.176Z",
+      "finishedAt": "2026-11-15T02:37:05.333Z",
+      "pipelineElapsedMs": 20157,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "응답소 현장민원 처리기한",
+            "value": "응답소 현장민원 처리기한",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "응답소 현장민원 처리기한이 대체 어떻게 되는지",
+            "value": "응답소 현장민원의 처리기한이 어떻게 되는지 설명을 요청함",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "응답소 현장민원의 처리기한 기준을 설명해 달라는 요청입니다.",
+        "requests": [
+          "응답소 현장민원의 처리기한이 어떻게 되는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "무능한 인간들은",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "응답소 현장민원 처리기한이 대체 어떻게 되는지, 여기 무능한 인간들은 입이 있으면 말 좀 해봐요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915848-N",
+      "pairId": "ACRC-6915848",
+      "inputHash": "6c0649cafa27adb26b35a330df80986326b6224e6b8ec899878e9a22e84decde",
+      "startedAt": "2026-11-15T02:36:51.071Z",
+      "finishedAt": "2026-11-15T02:37:08.912Z",
+      "pipelineElapsedMs": 17841,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "개 짖는 소리 때문에 저녁에 잠을 잘 수가 없는데",
+            "value": "개 짖는 소리로 저녁에 잠을 자기 어려움",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "body",
+            "quote": "○○○○ 번지",
+            "value": "○○○○ 번지",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "time",
+            "source": "body",
+            "quote": "저녁에",
+            "value": "저녁",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "조치 요청드립니다.",
+            "value": "개 짖는 소리에 대해 조치해 달라고 요청함",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F4"
+          }
+        ],
+        "summary": "○○○○ 번지에서 개 짖는 소리로 저녁에 잠을 자기 어렵다는 민원으로, 소음에 대한 조치를 요청했습니다.",
+        "requests": [
+          "개 짖는 소리에 대해 조치해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915848-A",
+      "pairId": "ACRC-6915848",
+      "inputHash": "86fea5ce79d12fae2019304dab0b7d3688a6c29f08baf3f11a0d9025aeedb87c",
+      "startedAt": "2026-11-15T02:36:53.568Z",
+      "finishedAt": "2026-11-15T02:37:17.052Z",
+      "pipelineElapsedMs": 23484,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "반려동물 울음 소리",
+            "value": "반려동물 울음 소음",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "개 짖는 소리 때문에 저녁에 잠을 못 자요.",
+            "value": "개 짖는 소리로 저녁에 잠을 자기 어려움",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "잠 좀 자게 조치해 달라는",
+            "value": "잠을 잘 수 있도록 조치해 달라고 요청함",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "반려동물의 개 짖는 소리로 저녁에 잠을 자기 어렵다고 합니다. 잠을 잘 수 있도록 조치를 요청했습니다.",
+        "requests": [
+          "개 짖는 소음으로 잠을 잘 수 있도록 조치해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신네 한심한 새끼들",
+            "reason": "민원인이 담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "잠 좀 자게 조치해 달라는 말을 당신네 한심한 새끼들한테 하고 있다는 게 속 터집니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915155-N",
+      "pairId": "ACRC-6915155",
+      "inputHash": "32482b992a378516eaebe7d39ee9c1f509b6663da5d7dd0ee70da174461f0cf6",
+      "startedAt": "2026-11-15T02:36:57.647Z",
+      "finishedAt": "2026-11-15T02:37:13.536Z",
+      "pipelineElapsedMs": 15889,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "사업장(공사장, 확성기) 소음 단속",
+            "value": "사업장(공사장·확성기 등) 소음 단속",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "사업장(공사장, 확성기) 소음 단속",
+            "value": "사업장(공사장, 확성기) 소음 단속",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "사업장·공사장 등의 확성기 소음에 대한 단속을 요청했습니다.",
+        "requests": [
+          "사업장·공사장 등의 확성기 소음을 단속해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915155-A",
+      "pairId": "ACRC-6915155",
+      "inputHash": "a512678b2f5b0eb58014beffe93de136674e3b5201eb79b7bfc5ff95cd5497ac",
+      "startedAt": "2026-11-15T02:37:05.339Z",
+      "finishedAt": "2026-11-15T02:37:20.896Z",
+      "pipelineElapsedMs": 15557,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "사업장(공사장, 확성기) 소음 단속",
+            "value": "사업장·공사장·확성기 소음 단속 관련 주제",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          }
+        ],
+        "summary": "사업장·공사장·확성기 소음 단속 관련 문의입니다.",
+        "requests": [],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이딴 머저리 같은 기관",
+            "reason": "기관을 비하하는 표현입니다.",
+            "scope": "third_party_attack",
+            "speaker": "complainant",
+            "target": "third_party",
+            "concreteThreat": false,
+            "contextQuote": "공사장, 확성기 같은 소음 단속 얘긴데, 이딴 머저리 같은 기관에 글을 쓰려니 참 속 터집니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916908-N",
+      "pairId": "ACRC-6916908",
+      "inputHash": "1bd45c2e2a3075461f67b4a0c5975ee74d43e52e1fecca2bf920a082688a56a9",
+      "startedAt": "2026-11-15T02:37:08.917Z",
+      "finishedAt": "2026-11-15T02:37:26.790Z",
+      "pipelineElapsedMs": 17873,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상 문의",
+            "value": "중고자동차 구입과 관련한 부가가치세 폐자원매입세액 공제",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상 문의",
+            "value": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상인지 확인해 달라는 문의",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "중고자동차 구입과 관련하여 부가가치세 폐자원매입세액 공제 대상인지 확인을 요청했습니다.",
+        "requests": [
+          "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상인지 확인해 달라는 문의"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916908-A",
+      "pairId": "ACRC-6916908",
+      "inputHash": "0df1734100942cd3a05377d6f0e10ff4e883f467edbf461612feef967434c1a8",
+      "startedAt": "2026-11-15T02:37:13.543Z",
+      "finishedAt": "2026-11-15T02:37:34.632Z",
+      "pipelineElapsedMs": 21089,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제",
+            "value": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상이 어떻게 되는지",
+            "value": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상이 어떻게 되는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "중고자동차 구입 시 부가가치세 폐자원매입세액 공제 대상이 어떻게 되는지 설명을 요청했습니다.",
+        "requests": [
+          "중고자동차 구입 시 부가가치세 폐자원매입세액 공제 대상이 어떻게 되는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신네 같은 등신들이라도",
+            "reason": "담당자를 낮춰 부르는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상이 어떻게 되는지, 당신네 같은 등신들이라도 설명 좀 해보세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916651-N",
+      "pairId": "ACRC-6916651",
+      "inputHash": "f9976795a9c40b9a27cf558e9775d10173d13a32bc0b6b81d9c5d59560cd9136",
+      "startedAt": "2026-11-15T02:37:17.058Z",
+      "finishedAt": "2026-11-15T02:37:32.307Z",
+      "pipelineElapsedMs": 15249,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "대형폐기물은 어떻게 버리나요?",
+            "value": "대형폐기물 배출 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "대형폐기물 배출 절차가 궁금합니다.",
+            "value": "대형폐기물 배출 절차를 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "대형폐기물 배출 방법과 절차를 문의했습니다.",
+        "requests": [
+          "대형폐기물 배출 절차를 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916651-A",
+      "pairId": "ACRC-6916651",
+      "inputHash": "4fc5d6ee9f779b4f78425c831c17026b73c9621a01135ea4c6ba2f0125fdb074",
+      "startedAt": "2026-11-15T02:37:20.902Z",
+      "finishedAt": "2026-11-15T02:37:39.076Z",
+      "pipelineElapsedMs": 18174,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "대형폐기물은 어떻게 버리나요?",
+            "value": "대형폐기물 배출 절차",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "배출 절차가 뭔지",
+            "value": "대형폐기물 배출 절차를 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "대형폐기물 배출 절차 안내를 요청했습니다.",
+        "requests": [
+          "대형폐기물 배출 절차를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 멍청한 담당자",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "배출 절차가 뭔지 이 멍청한 담당자 입에서 좀 들어봅시다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916203-N",
+      "pairId": "ACRC-6916203",
+      "inputHash": "7d1283b817c6d7987bad13c47385d6072c269f91a98c189005e868843228f12b",
+      "startedAt": "2026-11-15T02:37:26.796Z",
+      "finishedAt": "2026-11-15T02:37:44.226Z",
+      "pipelineElapsedMs": 17430,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "내용연수가 지난 폐소화기",
+            "value": "내용연수가 지난 폐소화기의 폐기",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "폐기방법은 어떻게 되나요?",
+            "value": "내용연수가 지난 폐소화기의 폐기 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "내용연수가 지난 폐소화기를 어떻게 폐기해야 하는지 안내를 요청했습니다.",
+        "requests": [
+          "내용연수가 지난 폐소화기의 폐기 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915827-N",
+      "pairId": "ACRC-6915827",
+      "inputHash": "0467142f4fea58701e810fbdcf6b8fa90d0b5609c771f2c2de7f5d011be53b62",
+      "startedAt": "2026-11-15T02:37:32.312Z",
+      "finishedAt": "2026-11-15T02:37:46.544Z",
+      "pipelineElapsedMs": 14232,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "각종 쓰레기(가구, 대형폐기물 등) 처리 방법 문의 드립니다.",
+            "value": "가구 등 각종 쓰레기와 대형폐기물의 처리 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "각종 쓰레기(가구, 대형폐기물 등) 처리 방법 문의 드립니다.",
+            "value": "가구·대형폐기물 등 각종 쓰레기의 처리 방법을 알려 달라는 문의",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "가구와 대형폐기물 등 각종 쓰레기의 처리 방법을 문의했습니다.",
+        "requests": [
+          "가구·대형폐기물 등 각종 쓰레기의 처리 방법 안내 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915827-A",
+      "pairId": "ACRC-6915827",
+      "inputHash": "7088581c4c3ae409782a9db137bcd8c0a0d67fcdaf362cfaaff8f736c96f35ad",
+      "startedAt": "2026-11-15T02:37:34.638Z",
+      "finishedAt": "2026-11-15T02:37:54.913Z",
+      "pipelineElapsedMs": 20275,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "쓰레기 배출 요령 알려 드립니다.",
+            "value": "쓰레기 배출 요령에 관한 주제",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "가구며 대형폐기물이며 각종 쓰레기를 어떻게 처리하고 배출해야 하는지",
+            "value": "가구·대형폐기물 등 각종 쓰레기의 처리 및 배출 방법을 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "가구·대형폐기물 등 각종 쓰레기의 처리 및 배출 방법을 문의했습니다.",
+        "requests": [
+          "가구·대형폐기물 등 각종 쓰레기의 처리 및 배출 방법을 알려 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개같은",
+            "reason": "부서를 향한 비속어 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "가구며 대형폐기물이며 각종 쓰레기를 어떻게 처리하고 배출해야 하는지, 이 개같은 부서에다 물어봅니다."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 개같은 부서",
+            "reason": "부서를 비하하는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "가구며 대형폐기물이며 각종 쓰레기를 어떻게 처리하고 배출해야 하는지, 이 개같은 부서에다 물어봅니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915148-N",
+      "pairId": "ACRC-6915148",
+      "inputHash": "86ad39bde3b75d1eddabd69109af092e20b427c4bdcaaf3dd5ac75379c46f968",
+      "startedAt": "2026-11-15T02:37:39.082Z",
+      "finishedAt": "2026-11-15T02:37:54.852Z",
+      "pipelineElapsedMs": 15770,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "담배꽁초 무단투기를 신고하고 싶습니다.",
+            "value": "담배꽁초 무단투기 신고",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "담배꽁초 무단투기를 신고하고 싶습니다.",
+            "value": "담배꽁초 무단투기를 신고하고 싶음",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "담배꽁초 무단투기를 신고하고자 합니다.",
+        "requests": [
+          "담배꽁초 무단투기 신고"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915148-A",
+      "pairId": "ACRC-6915148",
+      "inputHash": "5a27affe87e198050a5d00d4b22732089e7a93ff90ea2f704df11d0820ab60fb",
+      "startedAt": "2026-11-15T02:37:44.233Z",
+      "finishedAt": "2026-11-15T02:38:00.855Z",
+      "pipelineElapsedMs": 16622,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "담배꽁초 무단투기를",
+            "value": "담배꽁초 무단투기 신고 관련",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "담배꽁초 무단투기를 신고하고 싶습니다",
+            "value": "담배꽁초 무단투기를 신고하고자 함",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "담배꽁초 무단투기를 신고하고자 합니다.",
+        "requests": [
+          "담배꽁초 무단투기를 신고하고자 함"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "빌어먹을",
+            "reason": "기관을 지칭하며 욕설을 사용했습니다.",
+            "scope": "unclear",
+            "speaker": "complainant",
+            "target": "unclear",
+            "concreteThreat": false,
+            "contextQuote": "이 빌어먹을 기관에 담배꽁초 무단투기를 신고하고 싶습니다"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917218-N",
+      "pairId": "ACRC-6917218",
+      "inputHash": "14ef2df1c472eb4f6b554136860b71279686e9d1110a00aeedd01323d7b8d62c",
+      "startedAt": "2026-11-15T02:37:46.550Z",
+      "finishedAt": "2026-11-15T02:38:04.810Z",
+      "pipelineElapsedMs": 18260,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "광한루원 주차요금",
+            "value": "광한루원 주차요금",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "title",
+            "quote": "광한루원",
+            "value": "광한루원",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "광한루원 주차는 유료인가요",
+            "value": "광한루원 주차가 유료인지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "광한루원 주차가 유료인지 확인을 요청했습니다.",
+        "requests": [
+          "광한루원 주차가 유료인지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917218-A",
+      "pairId": "ACRC-6917218",
+      "inputHash": "ff7a3a76e1ed51c37fd3afc2c0c8f3fda2bcd06473348a6d9ba5c59b9631c0f2",
+      "startedAt": "2026-11-15T02:37:54.859Z",
+      "finishedAt": "2026-11-15T02:38:15.897Z",
+      "pipelineElapsedMs": 21038,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "광한루원 주차요금이 있나요",
+            "value": "광한루원 주차요금 및 유료 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "광한루원 주차요금이 있나요",
+            "value": "광한루원 주차요금이 있는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "광한루원 주차요금이 있는지와 유료 여부를 문의했습니다.",
+        "requests": [
+          "광한루원 주차요금이 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "돌대가리",
+            "reason": "담당자를 지칭하는 인신공격성 비하 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "광한루원 주차가 유료인지 당신 같은 돌대가리한테 물어보려니 답답하네요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916759-N",
+      "pairId": "ACRC-6916759",
+      "inputHash": "b7e5225eaabd222633b9dbb0d9c0eb3235731f43bae68305c502c366f1ec6e2a",
+      "startedAt": "2026-11-15T02:37:54.920Z",
+      "finishedAt": "2026-11-15T02:38:18.771Z",
+      "pipelineElapsedMs": 23851,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+            "value": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "quantity",
+            "source": "body",
+            "quote": "연면적이 1,000㎡ 이상인",
+            "value": "연면적 1,000㎡ 이상",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "1층은 농산물 판매시설로 사용하고 있으며",
+            "value": "1층을 농산물 판매시설로 사용함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "2층은 음식점으로 운영하고 있습니다.",
+            "value": "2층을 음식점으로 운영함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "2층 음식점과 계단으로 연결된 카페도 있는 경우",
+            "value": "2층 음식점과 계단으로 연결된 카페가 있음",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F5"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는 건가요?",
+            "value": "건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "연면적이 1,000㎡ 이상인 복합용도 건축물이고, 1층은 농산물 판매시설, 2층은 음식점으로 사용하며 2층 음식점과 계단으로 연결된 카페가 있는 경우"
+            ],
+            "id": "F6"
+          }
+        ],
+        "summary": "연면적 1,000㎡ 이상인 복합용도 건축물에서 1층은 농산물 판매시설, 2층은 음식점으로 사용하고 2층 음식점과 계단으로 연결된 카페가 있는 경우, 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 문의했습니다.",
+        "requests": [
+          "연면적 1,000㎡ 이상인 복합용도 건축물에서 1층은 농산물 판매시설, 2층은 음식점으로 사용하고 2층 음식점과 계단으로 연결된 카페가 있는 경우 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916759-A",
+      "pairId": "ACRC-6916759",
+      "inputHash": "dc28650b7721a51a74953950f35ded9d2bf83242bac9850eb85c66eec9f0307b",
+      "startedAt": "2026-11-15T02:38:00.861Z",
+      "finishedAt": "2026-11-15T02:38:27.338Z",
+      "pipelineElapsedMs": 26477,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+            "value": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "quantity",
+            "source": "body",
+            "quote": "연면적이 1,000㎡ 이상인",
+            "value": "연면적 1,000㎡ 이상",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "1층은 농산물 판매시설이고 2층은 음식점으로 운영 중이에요. 여기에 2층 음식점과 계단으로 연결된 카페도 있는 경우 말입니다.",
+            "value": "1층은 농산물 판매시설, 2층은 음식점이며 2층 음식점과 계단으로 연결된 카페가 있음",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이때 건축물 전체를 음식점으로 봐서 금연구역으로 지정해야 하는 겁니까?",
+            "value": "건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "연면적이 1,000㎡ 이상인 복합용도 건축물",
+              "1층은 농산물 판매시설이고 2층은 음식점으로 운영 중",
+              "2층 음식점과 계단으로 연결된 카페가 있음"
+            ],
+            "id": "F4"
+          }
+        ],
+        "summary": "연면적 1,000㎡ 이상인 복합용도 건축물에서 1층은 농산물 판매시설, 2층은 음식점이며 음식점과 계단으로 연결된 카페도 있는 경우, 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 확인을 요청했습니다.",
+        "requests": [
+          "연면적 1,000㎡ 이상인 복합용도 건축물에서 1층은 농산물 판매시설, 2층은 음식점이고 2층 음식점과 계단으로 연결된 카페가 있는 경우, 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신네 같은 멍청이들",
+            "reason": "담당자를 지칭해 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "당신네 같은 멍청이들한테 설명하려니 속 터지는데, 이때 건축물 전체를 음식점으로 봐서 금연구역으로 지정해야 하는 겁니까?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-184869-N",
+      "pairId": "ACRC-184869",
+      "inputHash": "cc5ea44a02b1b46d6d1fad518da773b814ef647a07318d719738f8e361b4b990",
+      "startedAt": "2026-11-15T02:38:04.817Z",
+      "finishedAt": "2026-11-15T02:38:25.797Z",
+      "pipelineElapsedMs": 20980,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "도로점용허가를 받았는데, 도로점용허가의 허가기간은 어떻게 되나요?",
+            "value": "도로점용허가의 허가기간",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도로점용허가의 허가기간은 어떻게 되나요?",
+            "value": "도로점용허가의 허가기간을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "만일 허가기간이 만료되었을 때에는 어떻게 해야 하나요?",
+            "value": "허가기간이 만료되었을 때 어떻게 해야 하는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "허가기간이 만료되었을 때"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "도로점용허가의 허가기간과 기간 만료 시 필요한 절차에 대한 설명을 요청했습니다.",
+        "requests": [
+          "도로점용허가의 허가기간을 설명해 달라는 요청",
+          "허가기간이 만료되었을 때 어떻게 해야 하는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-184869-A",
+      "pairId": "ACRC-184869",
+      "inputHash": "407c527a0662865499100478e205aa3b71fedc31c71ff8a5c3ef1336494cad17",
+      "startedAt": "2026-11-15T02:38:15.904Z",
+      "finishedAt": "2026-11-15T02:38:41.079Z",
+      "pipelineElapsedMs": 25175,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도로점용의 허가기간",
+            "value": "도로점용허가의 허가기간",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도로점용허가를 받았는데 허가기간은 어떻게 돼요?",
+            "value": "도로점용허가의 허가기간이 어떻게 되는지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "만일 허가기간이 끝나면 어떻게 해야 하는 겁니까?",
+            "value": "허가기간이 끝나면 어떻게 해야 하는지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "허가기간이 끝나는 경우"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "도로점용허가의 허가기간과 허가기간이 끝난 경우의 절차에 대한 설명을 요청했습니다.",
+        "requests": [
+          "도로점용허가의 허가기간이 어떻게 되는지 설명해 달라는 요청",
+          "허가기간이 끝나면 어떻게 해야 하는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "담당자에게 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "그리고, 씨발 당신 같은 머저리한테 이것까지 묻자니 짜증 나지만, 만일 허가기간이 끝나면 어떻게 해야 하는 겁니까?"
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신 같은 머저리",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "그리고, 씨발 당신 같은 머저리한테 이것까지 묻자니 짜증 나지만, 만일 허가기간이 끝나면 어떻게 해야 하는 겁니까?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-367689-N",
+      "pairId": "ACRC-367689",
+      "inputHash": "4054db0cf56ef472fa392630596124ea1dc1387f95949e4cd30962542a965e47",
+      "startedAt": "2026-11-15T02:38:18.778Z",
+      "finishedAt": "2026-11-15T02:38:33.850Z",
+      "pipelineElapsedMs": 15072,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우",
+            "value": "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 해결해야 하는지에 대해 문의합니다.",
+            "value": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우 이를 어떻게 해결해야 하는지 설명을 요청함",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "도로점용(연결)허가 신청 시 연결로가 중첩될 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우의 해결 방법을 문의했습니다.",
+        "requests": [
+          "연결로가 중첩되는 경우 해결 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-367689-A",
+      "pairId": "ACRC-367689",
+      "inputHash": "b584112e1104c26d6225a75ec8d603bf89c332683bc60add21c8d818b6cfc8d8",
+      "startedAt": "2026-11-15T02:38:25.803Z",
+      "finishedAt": "2026-11-15T02:38:45.024Z",
+      "pipelineElapsedMs": 19221,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우",
+            "value": "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이걸 어떻게 해결해야 하는지",
+            "value": "연결로가 중첩되는 경우 어떻게 해결해야 하는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우의 해결 방법을 설명해 달라는 요청입니다.",
+        "requests": [
+          "도로점용(연결)허가 신청 시 연결로가 중첩되는 경우 어떻게 해결해야 하는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "그 빈 대가리로",
+            "reason": "담당자를 비하하는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이걸 어떻게 해결해야 하는지, 그 빈 대가리로 설명 좀 해보시죠."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916948-N",
+      "pairId": "ACRC-6916948",
+      "inputHash": "d42eef4e9ce58731f21dc85643f4b3bc15785f877c789da091472362f88976f9",
+      "startedAt": "2026-11-15T02:38:27.345Z",
+      "finishedAt": "2026-11-15T02:38:57.274Z",
+      "pipelineElapsedMs": 29929,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "모범납세자에게 어떤 혜택이 있나요?",
+            "value": "모범납세자 선정에 따른 혜택을 문의함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "모범납세자에 선정되면 어떤 혜택이 있나요?",
+            "value": "모범납세자로 선정되면 받을 수 있는 혜택이 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "모범납세자에 선정되는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "모범납세자로 선정되면 받을 수 있는 혜택이 무엇인지 문의했습니다.",
+        "requests": [
+          "모범납세자로 선정되는 경우 받을 수 있는 혜택을 설명해 달라는 요청."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916948-A",
+      "pairId": "ACRC-6916948",
+      "inputHash": "700f62884834ed35d28d8954e1a421fa9da783c9a32c520949b48ec27f6763ce",
+      "startedAt": "2026-11-15T02:38:33.856Z",
+      "finishedAt": "2026-11-15T02:39:05.228Z",
+      "pipelineElapsedMs": 31372,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "모범납세자에게 어떤 혜택이 있나요?",
+            "value": "모범납세자 선정에 따른 혜택을 문의함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "모범납세자에 선정되면 어떤 혜택이 있는지",
+            "value": "모범납세자로 선정될 경우 받을 수 있는 혜택을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "모범납세자에 선정되는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "모범납세자로 선정될 경우 받을 수 있는 혜택을 설명해 달라고 요청했습니다.",
+        "requests": [
+          "모범납세자로 선정될 경우 받을 수 있는 혜택을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "빌어먹을",
+            "reason": "담당 부서를 지칭하는 문맥에서 사용된 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이 빌어먹을 담당 부서에서도 설명은 할 수 있겠죠?"
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "담당 부서에서도 설명은 할 수 있겠죠?",
+            "reason": "담당 부서의 설명 능력에 대한 비판을 담은 표현입니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이 빌어먹을 담당 부서에서도 설명은 할 수 있겠죠?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917251-N",
+      "pairId": "ACRC-6917251",
+      "inputHash": "6de98d7978087733a5aa587fad7cf5c1c91c11af9a6395f67494392d01aba9aa",
+      "startedAt": "2026-11-15T02:38:41.086Z",
+      "finishedAt": "2026-11-15T02:38:56.563Z",
+      "pipelineElapsedMs": 15477,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "1사단 신병교육대대 관련 도로표지판 제거 요청",
+            "value": "1사단 신병교육대대 관련 도로표지판 제거",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "body",
+            "quote": "문산 사거리 인근",
+            "value": "문산 사거리 인근",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "혼동방지를 위해 표지판을 제거해주시기 바랍니다.",
+            "value": "문산 사거리 인근에 남아 있는 신병교육대대 표지판을 제거",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [
+              "혼동방지를 위해"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "문산 사거리 인근에 신병교육대대 표지판이 남아 있어 혼동을 막기 위해 제거해 달라는 요청입니다.",
+        "requests": [
+          "혼동 방지를 위해 문산 사거리 인근에 남아 있는 신병교육대대 표지판을 제거해 주시기 바랍니다."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917251-A",
+      "pairId": "ACRC-6917251",
+      "inputHash": "5996d4a4ebd1e2ebf4504fe02a5b60ef8d143742f6f84821ce956652da3baa80",
+      "startedAt": "2026-11-15T02:38:45.031Z",
+      "finishedAt": "2026-11-15T02:39:04.875Z",
+      "pipelineElapsedMs": 19844,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "문산 사거리 인근에는 신병교육대대 표지판이 남아 있네요.",
+            "value": "문산 사거리 인근에 신병교육대대 표지판이 남아 있음",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "body",
+            "quote": "문산 사거리 인근",
+            "value": "문산 사거리 인근",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그 표지판 좀 제거하세요.",
+            "value": "문산 사거리 인근에 남아 있는 신병교육대대 표지판을 제거",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "문산 사거리 인근에 신병교육대대 표지판이 남아 있어 제거를 요청했습니다.",
+        "requests": [
+          "문산 사거리 인근에 남아 있는 신병교육대대 표지판 제거"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 병신 같은 담당 부서",
+            "reason": "담당 부서를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이 병신 같은 담당 부서에서 혼동 생기지 않게 그 표지판 좀 제거하세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-360044-N",
+      "pairId": "ACRC-360044",
+      "inputHash": "d46872e11a64b3542dc48d1c2f971fc81b89c5c6fd3b4eb83a190a6f27fe99df",
+      "startedAt": "2026-11-15T02:38:56.570Z",
+      "finishedAt": "2026-11-15T02:39:13.859Z",
+      "pipelineElapsedMs": 17289,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "국토관리사무소의 업무는 무엇인가요?",
+            "value": "국토관리사무소의 업무 범위",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "국토관리사무소의 업무는 무엇인가요?",
+            "value": "국토관리사무소의 업무가 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "국토관리사무소의 업무 범위에 대한 설명을 요청했습니다.",
+        "requests": [
+          "국토관리사무소의 업무가 무엇인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-360044-A",
+      "pairId": "ACRC-360044",
+      "inputHash": "a3f7c113f2997d841a8b99328777affedf2f555f23ac1963ad7d56fc72541f60",
+      "startedAt": "2026-11-15T02:38:57.281Z",
+      "finishedAt": "2026-11-15T02:39:18.143Z",
+      "pipelineElapsedMs": 20862,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "국토관리사무소의 업무",
+            "value": "국토관리사무소의 업무",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "국토관리사무소가 무슨 업무를 하는 곳인지",
+            "value": "국토관리사무소가 하는 업무를 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "국토관리사무소의 업무에 대한 안내를 요청했습니다.",
+        "requests": [
+          "국토관리사무소가 하는 업무를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 같은 얼간이들도",
+            "reason": "담당자를 낮춰 부르는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "국토관리사무소가 무슨 업무를 하는 곳인지, 너희 같은 얼간이들도 설명은 할 수 있겠지?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-360045-N",
+      "pairId": "ACRC-360045",
+      "inputHash": "7c51b739b71e086f5d2208c87efd405a7bdf8bd4a02b75115e091004470f13ce",
+      "startedAt": "2026-11-15T02:39:04.882Z",
+      "finishedAt": "2026-11-15T02:39:22.539Z",
+      "pipelineElapsedMs": 17657,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+            "value": "예산국토관리사무소의 조직 구성 및 담당 업무",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+            "value": "예산국토관리사무소의 조직 구성 및 담당 업무가 무엇인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "예산국토관리사무소의 조직 구성과 담당 업무에 대한 설명을 요청했습니다.",
+        "requests": [
+          "예산국토관리사무소의 조직 구성 및 담당 업무를 설명해 주시기 바랍니다."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-360045-A",
+      "pairId": "ACRC-360045",
+      "inputHash": "f5b8e251b3c7b7c20165a2c73c51278372ce8275de28b92188e4cb06b513ff7d",
+      "startedAt": "2026-11-15T02:39:05.235Z",
+      "finishedAt": "2026-11-15T02:39:25.467Z",
+      "pipelineElapsedMs": 20232,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+            "value": "예산국토관리사무소의 조직 구성과 담당 업무",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "조직은 어떻게 구성되어 있고 담당업무는 무엇인지",
+            "value": "예산국토관리사무소의 조직 구성과 담당 업무에 대한 설명",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "예산국토관리사무소의 조직 구성과 담당 업무에 대한 설명을 요청했습니다.",
+        "requests": [
+          "예산국토관리사무소의 조직 구성과 담당 업무를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 한심한 것들도",
+            "reason": "담당자를 낮춰 부르는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "예산국토관리사무소의 조직은 어떻게 구성되어 있고 담당업무는 무엇인지, 너희 한심한 것들도 설명은 할 수 있겠죠?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917177-N",
+      "pairId": "ACRC-6917177",
+      "inputHash": "299330547a987a6205853777f68bc758cb5f47584d3a12aaf8b9f63c11ec421e",
+      "startedAt": "2026-11-15T02:39:13.866Z",
+      "finishedAt": "2026-11-15T02:39:31.247Z",
+      "pipelineElapsedMs": 17381,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "나대지 등 건축물이 없는 곳의 전입신고 신청 처리 가능여부",
+            "value": "건축물이 없는 곳을 주소로 한 전입신고의 처리 가능 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "나대지나 도로 등에 전입신고 시에도 신고주의 원칙에 의하여 전입신고 처리 가능 한지 여부",
+            "value": "신고주의 원칙에 따라 나대지나 도로 등에 전입신고 처리가 가능한지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "나대지나 도로 등에 전입신고하는 경우",
+              "신고주의 원칙에 의한 처리"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "나대지나 도로 등 건축물이 없는 곳을 주소로 전입신고할 때, 신고주의 원칙에 따라 처리가 가능한지 확인을 요청했습니다.",
+        "requests": [
+          "신고주의 원칙에 따라 나대지나 도로 등에 전입신고 처리가 가능한지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917177-A",
+      "pairId": "ACRC-6917177",
+      "inputHash": "3c7ecc608318d271920e6af60bad3552e85cfa07fc9653d51d9586093eac0919",
+      "startedAt": "2026-11-15T02:39:18.150Z",
+      "finishedAt": "2026-11-15T02:39:41.486Z",
+      "pipelineElapsedMs": 23336,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "나대지 등 건축물이 없는 곳의 전입신고 신청 처리 가능여부",
+            "value": "건축물이 없는 곳의 전입신고 처리 가능 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "건축물 없는 나대지나 도로",
+            "value": "건축물이 없는 나대지나 도로의 전입신고",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신고주의 원칙에 따라 전입신고 처리가 가능한 건지",
+            "value": "건축물이 없는 나대지나 도로 등에 신고주의 원칙에 따라 전입신고 처리가 가능한지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "건축물이 없는 나대지나 도로 등에 신고주의 원칙에 따라 전입신고 처리가 가능한지 확인을 요청했습니다.",
+        "requests": [
+          "건축물이 없는 나대지나 도로 등에 신고주의 원칙에 따라 전입신고 처리가 가능한지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "꼴통 같은 기관",
+            "reason": "기관을 비하하는 표현입니다.",
+            "scope": "unclear",
+            "speaker": "complainant",
+            "target": "unclear",
+            "concreteThreat": false,
+            "contextQuote": "신고주의 원칙에 따라 전입신고 처리가 가능한 건지, 이 꼴통 같은 기관에 묻습니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-307909-N",
+      "pairId": "ACRC-307909",
+      "inputHash": "327cc1a48329228c74d6fff3c868038e66ccfa7cec37d45049123872655d0f6a",
+      "startedAt": "2026-11-15T02:39:22.546Z",
+      "finishedAt": "2026-11-15T02:39:50.776Z",
+      "pipelineElapsedMs": 28230,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "주유소 진출입로로 도로점용허가를 받아서 쓰고있습니다.\n예전에는 부가가치세라고 따로 낸 적이 없었던것 같은데,\n언젠가부터 고지서에 부가가치세라고 10%정도 떼더라구요.",
+            "value": "주유소 진출입로 도로점용허가에 관한 고지서에 언젠가부터 약 10%의 부가가치세가 표시되어 부과됨.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "body",
+            "quote": "보은국토관리사무소에서",
+            "value": "보은국토관리사무소",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "time",
+            "source": "body",
+            "quote": "98년도부터",
+            "value": "도로점용허가를 1998년부터 받음.",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "quantity",
+            "source": "body",
+            "quote": "10%정도",
+            "value": "고지서에 부가가치세가 약 10%로 표시됨.",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "왜 그런거죠?",
+            "value": "도로점용허가 관련 고지서에 부가가치세가 부과되는 이유를 설명해 달라고 요청함.",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F5"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부가세신고하면 돌려받을 수 있다던데 제가 따로 신고해야하는 건가요??",
+            "value": "부가가치세를 환급받기 위해 본인이 별도로 신고해야 하는지 확인해 달라고 요청함.",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F6"
+          }
+        ],
+        "summary": "주유소 진출입로 도로점용허가 관련 고지서에 언젠가부터 약 10%의 부가가치세가 표시되어 부과되고 있다고 합니다. 부가가치세가 부과되는 이유와 환급을 위해 별도 신고가 필요한지 문의했습니다.",
+        "requests": [
+          "도로점용허가 관련 고지서에 부가가치세가 부과되는 이유를 설명해 달라는 요청",
+          "부가가치세를 환급받기 위해 본인이 별도로 신고해야 하는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-307909-A",
+      "pairId": "ACRC-307909",
+      "inputHash": "e71b0ad522a52cf4a926ccc695cc6acaa48f30f5b9773a5b2cc7dcf9c93448e4",
+      "startedAt": "2026-11-15T02:39:25.475Z",
+      "finishedAt": "2026-11-15T02:40:12.282Z",
+      "pipelineElapsedMs": 46807,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "주유소 진출입로로 도로점용허가를 받아 쓰고 있습니다.",
+            "value": "주유소 진출입로에 도로점용허가를 받아 이용 중",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "언젠가부터 고지서에 부가가치세로 10% 정도가 붙더라고요.",
+            "value": "도로점용 관련 고지서에 부가가치세 약 10%가 부과됨",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이게 왜 붙는 건지",
+            "value": "고지서에 부가가치세가 붙는 이유를 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부가세 신고하면 돌려받을 수 있다는 말도 들었는데, 제가 따로 신고해야 하는 겁니까?",
+            "value": "부가가치세 신고로 돌려받을 수 있다는 말을 들은 상황에서 본인이 별도로 신고해야 하는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "부가가치세 신고로 돌려받을 수 있다는 말을 들은 상황"
+            ],
+            "id": "F4"
+          }
+        ],
+        "summary": "주유소 진출입로 도로점용허가와 관련해 고지서에 부가가치세 약 10%가 부과되고 있습니다. 부가가치세가 부과되는 이유와 본인이 별도로 신고해야 하는지 설명·확인을 요청합니다.",
+        "requests": [
+          "고지서에 부가가치세가 붙는 이유를 설명해 달라는 요청",
+          "부가가치세 신고로 돌려받을 수 있다는 말을 들은 상황에서 본인이 별도로 신고해야 하는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "담당자에게 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "씨발, 이게 왜 붙는 건지 여기 무능한 인간들 입으로 설명 좀 해보라고요."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "무능한 인간들",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "씨발, 이게 왜 붙는 건지 여기 무능한 인간들 입으로 설명 좀 해보라고요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-308853-N",
+      "pairId": "ACRC-308853",
+      "inputHash": "d62cfc529dcdcf603fd94d1c0b21d6415e9cc86ed2c0ea6cf77df9a9e9589bfb",
+      "startedAt": "2026-11-15T02:39:31.254Z",
+      "finishedAt": "2026-11-15T02:39:47.348Z",
+      "pipelineElapsedMs": 16094,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "점용료를 안내도 되는 경우가 있나요?",
+            "value": "점용료 납부 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "점용료를 안내도 되는 경우가 있나요?",
+            "value": "점용료를 납부하지 않아도 되는 경우가 있는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "점용료를 납부하지 않아도 되는 경우가 있는지 확인을 요청했습니다.",
+        "requests": [
+          "점용료를 납부하지 않아도 되는 경우가 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-308853-A",
+      "pairId": "ACRC-308853",
+      "inputHash": "76a6d818c134c94bb6f13a307474d876e82adcce0ad167fb963b3926f264c719",
+      "startedAt": "2026-11-15T02:39:41.494Z",
+      "finishedAt": "2026-11-15T02:39:59.290Z",
+      "pipelineElapsedMs": 17796,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "점용료를 안내도 되는 경우가 있나요?",
+            "value": "점용료를 납부하지 않아도 되는 경우",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "점용료를 안 내도 되는 경우가 있는지",
+            "value": "점용료를 납부하지 않아도 되는 경우가 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "점용료를 납부하지 않아도 되는 경우가 있는지 확인을 요청했습니다.",
+        "requests": [
+          "점용료를 납부하지 않아도 되는 경우가 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "똘마니",
+            "reason": "담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "여기 답변 맡은 똘마니한테 물어봅니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-182180-N",
+      "pairId": "ACRC-182180",
+      "inputHash": "c4a61c166e3544fe185b496f690e173fa2186215ed5d784c2169af6ba3137867",
+      "startedAt": "2026-11-15T02:39:47.357Z",
+      "finishedAt": "2026-11-15T02:40:03.441Z",
+      "pipelineElapsedMs": 16084,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "도로점용(연결)허가",
+            "value": "도로점용(연결)허가 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "금지구간은 어떤 구간인가요?",
+            "value": "도로점용(연결)허가의 금지구간이 어떤 구간인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "도로점용(연결)허가와 관련해 금지구간이 어떤 구간인지 안내를 요청했습니다.",
+        "requests": [
+          "도로점용(연결)허가의 금지구간이 어떤 구간인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-182180-A",
+      "pairId": "ACRC-182180",
+      "inputHash": "23250fe01e9f511c1ed1ebdddc39c9cbd8708851900f6b4a3ffe70f5ef5ea5dd",
+      "startedAt": "2026-11-15T02:39:50.783Z",
+      "finishedAt": "2026-11-15T02:41:00.968Z",
+      "pipelineElapsedMs": 70185,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "도로점용(연결)허가의 금지구간",
+            "value": "도로점용(연결)허가의 금지구간",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "금지구간이 어떤 구간인지",
+            "value": "도로점용(연결)허가의 금지구간이 어떤 구간인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "location",
+            "source": "body",
+            "quote": "도로변",
+            "value": "도로변",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "도로점용(연결)허가를 얻으려는데",
+            "value": "도로점용(연결)허가를 얻으려는 상황",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F4"
+          }
+        ],
+        "summary": "도로점용(연결)허가를 얻으려는 상황에서 금지구간이 어떤 구간인지 설명을 요청했습니다.",
+        "requests": [
+          "도로점용(연결)허가를 얻으려는 상황에서 금지구간이 어떤 구간인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "네 그 빈 대가리로도",
+            "reason": "담당자를 지칭하며 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "금지구간이 어떤 구간인지 네 그 빈 대가리로도 설명할 수는 있겠지?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-254748-N",
+      "pairId": "ACRC-254748",
+      "inputHash": "ca5a69ec305f940f2edc4ecd04d427fa366377a4c3e4a7368ffc3336f816f387",
+      "startedAt": "2026-11-15T02:39:59.299Z",
+      "finishedAt": "2026-11-15T02:40:34.679Z",
+      "pipelineElapsedMs": 35380,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "녹지내에서의 도로점용허가 가능 여부",
+            "value": "녹지 내 도로 점용허가 가능 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 여부",
+            "value": "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도로점용허가를 받을 수 없다면 법적 및 행정적 근거는 무엇이 있는지요",
+            "value": "도로점용허가를 받을 수 없다면 그 법적·행정적 근거가 무엇인지 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [
+              "도로점용허가를 받을 수 없다면"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "문의자는 도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 확인을 요청하고, 허가를 받을 수 없다면 그 법적·행정적 근거가 무엇인지 묻고 있습니다.",
+        "requests": [
+          "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 확인해 달라는 요청",
+          "도로점용허가를 받을 수 없다면 그 법적·행정적 근거가 무엇인지 알려 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-254748-A",
+      "pairId": "ACRC-254748",
+      "inputHash": "c36c4e1a50bd2cd41f43fb9a576953127bb86e9ea8b9cef87bcd77ac6bd9efc1",
+      "startedAt": "2026-11-15T02:40:03.449Z",
+      "finishedAt": "2026-11-15T02:40:28.498Z",
+      "pipelineElapsedMs": 25049,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "녹지내에서의 도로점용허가 가능 여부",
+            "value": "녹지 내 도로점용허가 가능 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있습니까?",
+            "value": "도시계획시설인 녹지에 아파트 진출입 도로를 위한 점용허가를 받을 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "받을 수 없다면 법적·행정적 근거가 뭔지",
+            "value": "점용허가를 받을 수 없는 경우의 법적·행정적 근거가 무엇인지 설명 요청",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [
+              "점용허가를 받을 수 없다면"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "도시계획시설인 녹지에 아파트 진출입 도로를 위한 점용허가가 가능한지와, 허가가 불가능한 경우 그 법적·행정적 근거를 문의했습니다.",
+        "requests": [
+          "도시계획시설인 녹지에 아파트 진출입 도로를 위한 점용허가를 받을 수 있는지 확인",
+          "점용허가를 받을 수 없다면 그 법적·행정적 근거 설명"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신네 같은 양아치들도",
+            "reason": "담당자를 낮춰 부르는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "받을 수 없다면 법적·행정적 근거가 뭔지, 당신네 같은 양아치들도 그 근거는 설명할 수 있을 거 아닙니까?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916730-N",
+      "pairId": "ACRC-6916730",
+      "inputHash": "449ba7a10921eae2a2ad0c7b94880b3b297d19984454bda35cced6499e07c725",
+      "startedAt": "2026-11-15T02:40:12.291Z",
+      "finishedAt": "2026-11-15T02:40:30.932Z",
+      "pipelineElapsedMs": 18641,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "담배소매인 지정 신청하려는 경우",
+            "value": "담배소매인 지정 신청",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "필요한 서류가 무엇인지 궁금합니다.",
+            "value": "담배소매인 지정 신청에 필요한 서류를 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "담배소매인 지정 신청에 필요한 서류 안내를 요청했습니다.",
+        "requests": [
+          "담배소매인 지정 신청에 필요한 서류를 안내해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916730-A",
+      "pairId": "ACRC-6916730",
+      "inputHash": "01792125b80a1d32a1c1f5cc3b8e31b72024a3c7b8e2bc5f2d9df0aed42e9682",
+      "startedAt": "2026-11-15T02:40:28.507Z",
+      "finishedAt": "2026-11-15T02:40:49.268Z",
+      "pipelineElapsedMs": 20761,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "담배소매인 지정 신청에 필요한 서류가 뭔지",
+            "value": "담배소매인 지정 신청에 필요한 서류",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "담배소매인 지정 신청에 필요한 서류가 뭔지, 이 개같은 부서에서 안내 좀 해보시죠.",
+            "value": "담배소매인 지정 신청에 필요한 서류를 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "담배소매인 지정 신청에 필요한 서류 안내를 요청했습니다.",
+        "requests": [
+          "담배소매인 지정 신청에 필요한 서류를 안내해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개같은 부서",
+            "reason": "담당 부서를 비속어로 표현해 비하하고 있습니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "담배소매인 지정 신청에 필요한 서류가 뭔지, 이 개같은 부서에서 안내 좀 해보시죠."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916946-N",
+      "pairId": "ACRC-6916946",
+      "inputHash": "35baea9743fd6581d80835cd7ce10505b80da311fa44462e79ce861b7b4796af",
+      "startedAt": "2026-11-15T02:40:30.940Z",
+      "finishedAt": "2026-11-15T02:40:46.366Z",
+      "pipelineElapsedMs": 15426,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "고용보험 관련문의",
+            "value": "고용보험 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "고용보험 가입대상자 궁금합니다.",
+            "value": "고용보험 가입 대상자가 누구인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "고용보험 관련 문의로, 가입 대상자가 누구인지 설명을 요청했습니다.",
+        "requests": [
+          "고용보험 가입 대상자가 누구인지 설명해 주세요."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916946-A",
+      "pairId": "ACRC-6916946",
+      "inputHash": "e04090933d0499318bcd8e4443d13fac2058f03626965d20a5ed80f522ebbb4b",
+      "startedAt": "2026-11-15T02:40:34.687Z",
+      "finishedAt": "2026-11-15T02:40:49.977Z",
+      "pipelineElapsedMs": 15290,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "고용보험 관련문의",
+            "value": "고용보험 가입 대상자 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "고용보험 가입대상자가 누구인지 네 그 텅 빈 머리로라도 설명해 봐.",
+            "value": "고용보험 가입대상자가 누구인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "고용보험 가입 대상자가 누구인지 설명해 달라는 문의입니다.",
+        "requests": [
+          "고용보험 가입 대상자가 누구인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "네 그 텅 빈 머리로라도",
+            "reason": "담당자의 지적 능력을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "고용보험 가입대상자가 누구인지 네 그 텅 빈 머리로라도 설명해 봐."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917328-N",
+      "pairId": "ACRC-6917328",
+      "inputHash": "f7f54f609602a22ddd7f160d7c6fd4b0c5ed7d78789d94364a1e38013ca0c66d",
+      "startedAt": "2026-11-15T02:40:46.375Z",
+      "finishedAt": "2026-11-15T02:41:03.580Z",
+      "pipelineElapsedMs": 17205,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "입증자료(전세계약서)만으로 미리 입학",
+            "value": "전세계약서를 입증자료로 한 사전 입학 가능 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이사할 예정이 있는 경우 입증자료(전세 계약서)만으로 미리 입학이 가능한가요?",
+            "value": "이사할 예정인 경우 입증자료인 전세 계약서만으로 미리 입학이 가능한지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "이사할 예정인 경우",
+              "입증자료가 전세 계약서만 있는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "이사 예정인 경우 전세 계약서만을 입증자료로 제출해 미리 입학할 수 있는지 확인을 요청했습니다.",
+        "requests": [
+          "이사 예정인 경우 전세 계약서만으로 미리 입학할 수 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917328-A",
+      "pairId": "ACRC-6917328",
+      "inputHash": "f6bc02187f91dd9cd31d4be59d41c90697c8be1e68e3e7421f7efbb4e750df15",
+      "startedAt": "2026-11-15T02:40:49.279Z",
+      "finishedAt": "2026-11-15T02:41:08.985Z",
+      "pipelineElapsedMs": 19706,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "입증자료(전세계약서)만으로 미리 입학이 가능여부는?",
+            "value": "전세계약서만 입증자료로 제출해 미리 입학할 수 있는지 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이사할 예정인 경우 전세 계약서만 입증자료로 내서 미리 입학할 수 있는지",
+            "value": "이사 예정인 경우 전세계약서만 입증자료로 제출해 미리 입학할 수 있는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "이사할 예정인 경우",
+              "전세계약서만 입증자료로 제출하는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "이사 예정인 경우 전세계약서만 입증자료로 제출해 미리 입학할 수 있는지 확인을 요청했습니다.",
+        "requests": [
+          "이사할 예정인 경우 전세계약서만 입증자료로 제출해 미리 입학할 수 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "이 멍청한 부서",
+            "reason": "부서를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이사할 예정인 경우 전세 계약서만 입증자료로 내서 미리 입학할 수 있는지, 이 멍청한 부서에서 답변 좀 해보세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917285-N",
+      "pairId": "ACRC-6917285",
+      "inputHash": "23b22d08b843c2d9775e1a32d723a4ec68dc57afcb0d46e842c5f020d5f9e50c",
+      "startedAt": "2026-11-15T02:40:49.987Z",
+      "finishedAt": "2026-11-15T02:41:10.694Z",
+      "pipelineElapsedMs": 20707,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "이사한 경우 전입신고는 언제까지 해야 하며, 어디에서 신청할 수 있나요?",
+            "value": "이사 후 전입신고의 기한과 신청 장소",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "전입신고는 언제까지 해야 하며",
+            "value": "이사한 경우 전입신고를 언제까지 해야 하는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "이사한 경우"
+            ],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "어디에서 신청할 수 있나요?",
+            "value": "이사한 경우 전입신고를 어디에서 신청할 수 있는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "이사한 경우"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "이사 후 전입신고를 언제까지 해야 하는지와 어디에서 신청할 수 있는지 안내를 요청했습니다.",
+        "requests": [
+          "이사한 경우 전입신고를 언제까지 해야 하는지 설명해 달라는 요청",
+          "이사한 경우 전입신고를 어디에서 신청할 수 있는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917285-A",
+      "pairId": "ACRC-6917285",
+      "inputHash": "2bdd23e4a27575698b1605f5545fe008ea402e2020e7c8f3f7df1905e87b416d",
+      "startedAt": "2026-11-15T02:41:00.977Z",
+      "finishedAt": "2026-11-15T02:41:25.739Z",
+      "pipelineElapsedMs": 24762,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "이사한 경우 전입신고",
+            "value": "이사한 경우의 전입신고",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이사한 경우 전입신고 기한이 언제까지인지",
+            "value": "이사한 경우 전입신고를 해야 하는 기한을 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신청은 어디서 할 수 있는지",
+            "value": "전입신고를 신청할 수 있는 장소를 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "이사한 경우 전입신고를 해야 하는 기한과 신청할 수 있는 장소를 안내해 달라는 요청입니다.",
+        "requests": [
+          "이사한 경우 전입신고를 해야 하는 기한을 알려 달라는 요청",
+          "전입신고를 신청할 수 있는 장소를 알려 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "답답한 인간",
+            "reason": "담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "당신 같은 답답한 인간한테도 안내는 받을 수 있겠죠?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917271-N",
+      "pairId": "ACRC-6917271",
+      "inputHash": "b272cd7fb7d779478b12b291f1ce566b35f4df1d1050e58cd4ed01f1228f7a02",
+      "startedAt": "2026-11-15T02:41:03.589Z",
+      "finishedAt": "2026-11-15T02:41:37.057Z",
+      "pipelineElapsedMs": 33468,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "인감증명서 발급 금지",
+            "value": "다른 사람이 본인의 인감증명서를 발급받지 못하게 하고자 함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "제 인감을 다른사람이 발급 못하게 하고 싶은데 방법이 있나요?",
+            "value": "다른 사람이 본인의 인감증명서를 발급받지 못하게 하는 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "다른 사람이 본인의 인감증명서를 발급받지 못하게 하는 방법을 문의했습니다.",
+        "requests": [
+          "다른 사람이 본인의 인감증명서를 발급받지 못하게 하는 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917261-N",
+      "pairId": "ACRC-6917261",
+      "inputHash": "07eb32daaaf3cabb3507e6fc15240c3b62b67310c99491583aaa93b3222c9912",
+      "startedAt": "2026-11-15T02:41:08.994Z",
+      "finishedAt": "2026-11-15T02:42:53.974Z",
+      "pipelineElapsedMs": 104980,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "부모급여 신청방법 문",
+            "value": "부모급여 신청 방법에 관한 행정 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "구체적인 지원 대상과 신청 방법이 궁금하여 문의드립니다.",
+            "value": "부모급여의 구체적인 지원 대상과 신청 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부모급여를 지원받을 수 있는 아동의 연령 기준",
+            "value": "부모급여를 지원받을 수 있는 아동의 연령 기준을 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "월별 지원금액은 어떻게 되나요?",
+            "value": "부모급여의 월별 지원금액을 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부모급여는 출생신고 후 자동으로 지급되는 것인지, 별도로 신청해야 하는 것인지 궁금합니다.",
+            "value": "출생신고 후 부모급여가 자동으로 지급되는지, 별도로 신청해야 하는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F5"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어디에서 신청해야 하며",
+            "value": "부모급여를 어디에서 신청해야 하는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F6"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신청 시 필요한 서류는 무엇인가요?",
+            "value": "부모급여 신청 시 필요한 서류를 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F7"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "출생 후 일정 기간이 지나서 신청하는 경우에도 출생월부터 소급하여 지원받을 수 있나요?",
+            "value": "출생 후 일정 기간이 지나서 신청하는 경우에도 출생월부터 소급하여 지원받을 수 있는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "출생 후 일정 기간이 지나서 신청하는 경우"
+            ],
+            "id": "F8"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부모급여는 매월 언제 지급되는지 궁금합니다.",
+            "value": "부모급여의 매월 지급 시기를 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F9"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "부모급여 신청 절차 및 지원 기준에 대해 자세히 안내해 주시면 감사하겠습니다.",
+            "value": "부모급여 신청 절차와 지원 기준을 자세히 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F10"
+          }
+        ],
+        "summary": "부모급여 신청 방법에 관한 문의입니다. 지원 대상과 아동 연령 기준, 지원금액, 신청·지급 절차 및 늦게 신청한 경우의 소급 지원 여부를 안내해 달라고 요청했습니다.",
+        "requests": [
+          "부모급여의 구체적인 지원 대상과 신청 방법을 설명해 달라는 요청",
+          "부모급여를 지원받을 수 있는 아동의 연령 기준을 확인해 달라는 요청",
+          "부모급여의 월별 지원금액을 확인해 달라는 요청",
+          "출생신고 후 자동 지급되는지, 별도 신청이 필요한지 확인해 달라는 요청",
+          "부모급여 신청 장소를 설명해 달라는 요청",
+          "신청 시 필요한 서류를 설명해 달라는 요청",
+          "출생 후 일정 기간이 지나 신청하는 경우에도 출생월부터 소급 지원이 가능한지 확인해 달라는 요청",
+          "부모급여의 매월 지급 시기를 확인해 달라는 요청",
+          "부모급여 신청 절차와 지원 기준을 자세히 안내해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917261-A",
+      "pairId": "ACRC-6917261",
+      "inputHash": "ee8892c0842bf586ea6dcd449dfe5bcfb1d2c6035f3f008abf884a597b6afdf8",
+      "startedAt": "2026-11-15T02:41:10.706Z",
+      "finishedAt": "2026-11-15T02:41:56.534Z",
+      "pipelineElapsedMs": 45828,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "부모급여 신청방법 문",
+            "value": "부모급여 신청방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "구체적으로 누가 대상이고 아이 연령 기준은 어떻게 되는지",
+            "value": "부모급여 지원 대상과 아이의 연령 기준을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "한 달 지원금은 얼마인지 알고 싶어요.",
+            "value": "부모급여의 월 지원액을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "출생신고를 하면 자동으로 나오는 겁니까",
+            "value": "출생신고를 하면 부모급여가 자동 지급되는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "따로 신청해야 하는 겁니까?",
+            "value": "부모급여를 별도로 신청해야 하는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F5"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신청은 어디서 하고",
+            "value": "부모급여 신청 장소를 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F6"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "필요한 서류는 뭔지",
+            "value": "부모급여 신청에 필요한 서류를 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F7"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "출생하고 일정 기간이 지난 다음에 신청해도 출생월부터 소급해서 받을 수 있어요?",
+            "value": "출생 후 일정 기간이 지나 신청해도 출생월부터 소급 지급받을 수 있는지 확인해 달라는 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "출생하고 일정 기간이 지난 다음에 신청"
+            ],
+            "id": "F8"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그리고 매달 지급되는 날은 언제인가요?",
+            "value": "부모급여의 매월 지급일을 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F9"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신청 절차랑 지원 기준을 자세히 안내해 주세요.",
+            "value": "부모급여의 신청 절차와 지원 기준을 자세히 안내해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F10"
+          }
+        ],
+        "summary": "부모급여의 지원 대상과 아동 연령 기준, 월 지원액, 신청 여부·장소·서류 및 절차, 출생 후 늦게 신청한 경우의 소급 지급 가능 여부와 매월 지급일에 대한 안내를 요청했습니다.",
+        "requests": [
+          "부모급여 지원 대상과 아이의 연령 기준을 설명해 달라는 요청",
+          "부모급여의 월 지원액을 설명해 달라는 요청",
+          "출생신고를 하면 부모급여가 자동 지급되는지 확인해 달라는 요청",
+          "부모급여를 별도로 신청해야 하는지 확인해 달라는 요청",
+          "부모급여 신청 장소를 안내해 달라는 요청",
+          "부모급여 신청에 필요한 서류를 안내해 달라는 요청",
+          "출생 후 일정 기간이 지나 신청해도 출생월부터 소급 지급받을 수 있는지 확인해 달라는 요청. 조건: 출생하고 일정 기간이 지난 다음에 신청",
+          "부모급여의 매월 지급일을 안내해 달라는 요청",
+          "부모급여의 신청 절차와 지원 기준을 자세히 안내해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "담당자에게 향한 욕설입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "필요한 서류는 뭔지, 씨발 이런 것도 당신 같은 멍청이한테 물어봐야 하네."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "멍청이",
+            "reason": "담당자를 지칭해 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "필요한 서류는 뭔지, 씨발 이런 것도 당신 같은 멍청이한테 물어봐야 하네."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917217-N",
+      "pairId": "ACRC-6917217",
+      "inputHash": "dd371e7dc7f1a1456814b0f068b8cfd94cd6920edd39a8a2a990a8802530aa06",
+      "startedAt": "2026-11-15T02:41:25.749Z",
+      "finishedAt": "2026-11-15T02:41:44.387Z",
+      "pipelineElapsedMs": 18638,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "농식품바우처 지원대상",
+            "value": "농식품바우처 지원 대상",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "농식품바우처는 어떤 사람이 지원 받을 수 있나요?",
+            "value": "농식품바우처를 지원받을 수 있는 사람이 누구인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "농식품바우처 지원 대상이 누구인지 안내를 요청했습니다.",
+        "requests": [
+          "농식품바우처를 지원받을 수 있는 사람이 누구인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917217-A",
+      "pairId": "ACRC-6917217",
+      "inputHash": "17867796f5c77dbeb9e20b7120da8d4cf47557ca79a8e6b176b6e8e980240f8b",
+      "startedAt": "2026-11-15T02:41:37.067Z",
+      "finishedAt": "2026-11-15T02:41:57.208Z",
+      "pipelineElapsedMs": 20141,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "농식품바우처 지원대상",
+            "value": "농식품바우처 지원 대상",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "농식품바우처는 어떤 사람이 지원받을 수 있는지 여기 답변하는 새끼가 설명 좀 해봐.",
+            "value": "농식품바우처를 지원받을 수 있는 사람이 누구인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "농식품바우처의 지원 대상에 관한 안내를 요청했습니다.",
+        "requests": [
+          "농식품바우처를 지원받을 수 있는 사람이 누구인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "새끼",
+            "reason": "답변자를 낮추어 부르는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "여기 답변하는 새끼가 설명 좀 해봐."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917266-N",
+      "pairId": "ACRC-6917266",
+      "inputHash": "3308793332d2d9a40bfd95f826c14f547bbc7172a0e8d126c3d86c9558bd48cf",
+      "startedAt": "2026-11-15T02:41:44.398Z",
+      "finishedAt": "2026-11-15T02:42:06.854Z",
+      "pipelineElapsedMs": 22456,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "월세세액공제 문의",
+            "value": "월세 세액공제 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "저도 월세세액공제를 받을수 있나요?",
+            "value": "프리랜서인 본인이 월세 세액공제를 받을 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "프리랜서로 일하는 경우"
+            ],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "방법을 알려주세요",
+            "value": "월세 세액공제를 받는 방법 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "프리랜서로 일하는 경우"
+            ],
+            "id": "F3"
+          }
+        ],
+        "summary": "프리랜서인 본인이 월세 세액공제를 받을 수 있는지와 신청 방법을 문의했습니다.",
+        "requests": [
+          "프리랜서인 경우 본인이 월세 세액공제를 받을 수 있는지 확인해 달라는 요청",
+          "프리랜서인 경우 월세 세액공제를 받는 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917266-A",
+      "pairId": "ACRC-6917266",
+      "inputHash": "aacffe97f640331984991fb5b94c2bbf41feccbd90994f15a67bb570aba23775",
+      "startedAt": "2026-11-15T02:41:56.545Z",
+      "finishedAt": "2026-11-15T02:42:18.235Z",
+      "pipelineElapsedMs": 21690,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "월세세액공제 문의",
+            "value": "월세세액공제에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그럼 나도 받을 수 있는 거예요?",
+            "value": "프리랜서도 월세세액공제를 받을 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "민원인이 프리랜서로 일하는 경우"
+            ],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 하면 되는지 알려줘요.",
+            "value": "월세세액공제를 받는 방법 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "프리랜서도 월세세액공제를 받을 수 있는지와 신청 방법을 문의했습니다.",
+        "requests": [
+          "프리랜서인 경우 월세세액공제를 받을 수 있는지 확인해 달라는 요청",
+          "월세세액공제를 받는 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너 같은 쓰레기한테",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "받는 방법까지 너 같은 쓰레기한테 물어봐야 한다니 짜증나지만, 어떻게 하면 되는지 알려줘요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917254-N",
+      "pairId": "ACRC-6917254",
+      "inputHash": "0d48c61552507a0077fb4aeeaf41a173487d6f588cdbd25212fb82e54273c16c",
+      "startedAt": "2026-11-15T02:41:57.219Z",
+      "finishedAt": "2026-11-15T02:42:22.195Z",
+      "pipelineElapsedMs": 24976,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "해외이주비 자금출처 확인서 관련 문의",
+            "value": "해외이주비 자금출처 확인서 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "통장 사본 및 동 예금․적금의 자금원천이 확인되는 서류는 통장의 잔고가 표시된 자료를 드리면 될까요?",
+            "value": "확인서 제출자료로 통장 잔고가 표시된 자료를 제출하면 되는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "가족이나 지인에게 받은 경우에는 어떻게 증명 해야 되는지요?",
+            "value": "가족이나 지인에게 받은 자금을 증명하는 방법에 대한 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "국내 대리인을 신청할 수 있는지요?",
+            "value": "국내 대리인을 신청할 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F4"
+          }
+        ],
+        "summary": "해외이주비(학비·생활비) 송금 관련 자금출처 확인서에 제출할 잔고 자료의 적정성, 가족·지인에게 받은 자금의 증명 방법, 국내 대리인 신청 가능 여부에 대한 답변을 요청했습니다.",
+        "requests": [
+          "자금출처 확인서 제출자료로 통장 잔고가 표시된 자료를 제출하면 되는지 확인해 달라는 요청",
+          "가족이나 지인에게 받은 자금을 증명하는 방법을 설명해 달라는 요청",
+          "국내 대리인을 신청할 수 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917224-N",
+      "pairId": "ACRC-6917224",
+      "inputHash": "cb5958b03d2adee2c88960eae77a46dcf758541bbf7904eaa3c02282cb52763d",
+      "startedAt": "2026-11-15T02:42:06.865Z",
+      "finishedAt": "2026-11-15T02:42:26.434Z",
+      "pipelineElapsedMs": 19569,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "근로하지 않은 곳에서 지급명세서를 발급받아\n근로장려금을 부정수급하고 있는 사람이 있는데",
+            "value": "근로하지 않은 곳의 지급명세서를 발급받아 근로장려금을 부정수급하고 있다는 의심 사례",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "신고 방법문의드립니다.",
+            "value": "근로하지 않은 곳에서 지급명세서를 발급받아 근로장려금을 부정수급하는 의심 사례의 신고 방법 안내",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "근로하지 않은 곳의 지급명세서를 이용해 근로장려금을 부정수급하고 있다는 의심 사례에 대해 신고 방법 안내를 요청했습니다.",
+        "requests": [
+          "근로하지 않은 곳의 지급명세서를 이용한 근로장려금 부정수급 의심 사례의 신고 방법을 안내해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917224-A",
+      "pairId": "ACRC-6917224",
+      "inputHash": "6da9247faa39e47a85e96c8d5602833431e061d0b305fb3bc044155ee0d929bd",
+      "startedAt": "2026-11-15T02:42:18.247Z",
+      "finishedAt": "2026-11-15T02:42:40.848Z",
+      "pipelineElapsedMs": 22601,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "근로하지 않은 곳에서 지급명세서를 발급받아서 근로장려금을 부정수급하는 사람이 있습니다.",
+            "value": "근로하지 않은 곳에서 발급받은 지급명세서를 이용한 근로장려금 부정수급 의혹",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 신고하면 되는지 알려주세요.",
+            "value": "근로하지 않은 곳에서 지급명세서를 발급받아 근로장려금을 부정수급하는 사람을 신고하는 방법 안내",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "근로하지 않은 곳에서 발급받은 지급명세서를 이용해 근로장려금을 부정수급한 것으로 의심되는 사례의 신고 방법을 문의했습니다.",
+        "requests": [
+          "근로하지 않은 곳에서 지급명세서를 발급받아 근로장려금을 부정수급하는 사람을 신고하는 방법 안내"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개자식들",
+            "reason": "담당자를 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "신고 방법을 너희 같은 개자식들한테 물어봐야 한다는 게 짜증나네요."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 같은 개자식들",
+            "reason": "담당자를 낮춰 부르는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "신고 방법을 너희 같은 개자식들한테 물어봐야 한다는 게 짜증나네요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917207-N",
+      "pairId": "ACRC-6917207",
+      "inputHash": "7b475494be2499de2ea7e071ea528f2518e9fc6b800e3a3da61cf5d590ae6f1f",
+      "startedAt": "2026-11-15T02:42:22.208Z",
+      "finishedAt": "2026-11-15T02:42:52.875Z",
+      "pipelineElapsedMs": 30667,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "본인은 202X년 근로장려금을 신청하였으나 재산합계 2억4천만 원 초과 사유로 지급 대상에서 제외되었습니다.",
+            "value": "202X년 귀속 근로장려금 신청이 재산 합계 2억4천만 원 초과 사유로 지급 대상에서 제외됨",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "당시 주민등록상 동일 주소 세대에 등재되어 있었으나, 배우자와 혼인하여 부부 단위로 독립적인 생계를 유지하고 있습니다.",
+            "value": "신청 당시 주민등록상 동일 주소 세대에 등재되어 있었음",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "해당 세대의 세대주는 배우자의 어머니의 배우자(계부)로, 배우자와 법률상 직계혈족 관계가 아니며, 주민등록 기록상 부모로 등록된 인물도 아닙니다.",
+            "value": "해당 세대의 세대주는 배우자의 어머니의 배우자이며, 배우자와 법률상 직계혈족 관계가 아니고 주민등록상 부모로 등록되어 있지 않다고 설명함",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "본인 부부는 생계와 재산을 별도로 운영하는 독립 가구임이 명백하므로, 재산 합산으로 탈락된 것은 잘못된 판정임을 분명히 밝힙니다.",
+            "value": "본인 부부가 생계와 재산을 별도로 운영하는 독립 가구라고 주장함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "이에 본인 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 주시기를 요청드립니다.",
+            "value": "본인 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 달라는 요청",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F5"
+          }
+        ],
+        "summary": "202X년 귀속 근로장려금 신청이 재산 합계 2억4천만 원 초과 사유로 지급 대상에서 제외되었습니다. 민원인은 배우자와 별도 생계·재산을 운영하는 독립 가구라고 주장하며, 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 달라고 요청합니다.",
+        "requests": [
+          "본인 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "재산 합산으로 탈락된 것은 잘못된 판정임을 분명히 밝힙니다.",
+            "reason": "지급 제외 판정이 잘못되었다고 지적하는 업무 처리에 대한 비판입니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "본인 부부는 생계와 재산을 별도로 운영하는 독립 가구임이 명백하므로, 재산 합산으로 탈락된 것은 잘못된 판정임을 분명히 밝힙니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917207-A",
+      "pairId": "ACRC-6917207",
+      "inputHash": "21c7f124e395de8784d10a79fb12a18e52e56342b98b1ca83c52f06c603948a1",
+      "startedAt": "2026-11-15T02:42:26.446Z",
+      "finishedAt": "2026-11-15T02:43:11.844Z",
+      "pipelineElapsedMs": 45398,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "202X년 귀속 근로장려금을 신청했는데 재산합계가 2억4천만 원을 초과한다는 이유로 지급 대상에서 빠졌습니다.",
+            "value": "202X년 귀속 근로장려금 신청이 재산 합계액 2억4천만 원 초과를 이유로 지급 대상에서 제외됨.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "당시 주민등록상 같은 주소의 세대에 올라가 있었던 건 맞지만, 배우자와 혼인해서 부부끼리 독립적으로 생계를 유지하고 있어요.",
+            "value": "신청 당시 부부는 주민등록상 같은 주소의 세대에 등재되어 있었고, 부부끼리 독립적으로 생계를 유지했다고 밝힘.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "그 세대주는 배우자 어머니의 배우자, 그러니까 계부입니다. 배우자와 법률상 직계혈족이 아니고 주민등록 기록에도 부모로 등록된 사람이 아닙니다.",
+            "value": "세대주는 배우자 어머니의 배우자(계부)이며, 세대주와 배우자는 법률상 직계혈족이 아니고 세대주는 주민등록 기록상 배우자의 부모로 등록되어 있지 않다고 밝힘.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "우리 부부와 그 세대 사이에는 법적 부양관계도 재산 공동체 관계도 없다고 설명하고 있는 겁니다.",
+            "value": "부부와 해당 세대 사이에 법적 부양관계나 재산 공동체 관계가 없다고 밝힘.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F4"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "우리 부부는 생계와 재산을 따로 운영하는 독립 가구예요.",
+            "value": "부부는 생계와 재산을 따로 운영하는 독립 가구라고 밝힘.",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F5"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "우리 부부를 독립된 가구로 보고 재산 요건과 가구 요건을 다시 검토해 주세요.",
+            "value": "부부를 독립된 가구로 보아 재산 요건과 가구 요건을 다시 검토해 달라는 요청.",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F6"
+          }
+        ],
+        "summary": "202X년 귀속 근로장려금 신청이 재산 합계액 2억4천만 원 초과를 이유로 지급 대상에서 제외되었습니다. 신청 당시 부부는 같은 주소의 세대에 등재되어 있었으나 독립적으로 생계와 재산을 운영한다고 밝혔습니다. 세대주는 배우자 어머니의 배우자(계부)이며, 신청자는 세대주와 배우자 사이에 법률상 직계혈족 관계나 주민등록상 부모 등록이 없고 부부와 해당 세대 사이에 법적 부양관계나 재산 공동체 관계도 없다고 주장합니다. 부부를 독립된 가구로 보아 재산 요건과 가구 요건을 다시 검토해 달라고 요청합니다.",
+        "requests": [
+          "부부를 독립된 가구로 보아 재산 요건과 가구 요건을 다시 검토해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신네 같은 멍청이들",
+            "reason": "담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "당신네 같은 멍청이들한테 우리 부부와 그 세대 사이에는 법적 부양관계도 재산 공동체 관계도 없다고 설명하고 있는 겁니다."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "재산을 합산해서 탈락시킨 건 잘못된 판정입니다.",
+            "reason": "재산 합산과 지급 제외라는 업무상 판단에 대한 이의 제기입니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "그런데 재산을 합산해서 탈락시킨 건 잘못된 판정입니다. 우리 부부를 독립된 가구로 보고 재산 요건과 가구 요건을 다시 검토해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917206-N",
+      "pairId": "ACRC-6917206",
+      "inputHash": "48e4edbab2d73e5bc76a4ffb5d533649b747295f6932e1dd4f2b2984b6386b85",
+      "startedAt": "2026-11-15T02:42:40.861Z",
+      "finishedAt": "2026-11-15T02:43:16.323Z",
+      "pipelineElapsedMs": 35462,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "퇴직소득세 신고 관련 문의",
+            "value": "퇴직소득세 신고 관련 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "학교에서 퇴직소득에 대한 세금신고를 안한걸로 알고 있습니다.",
+            "value": "학교의 퇴직소득 세금신고 여부가 불확실하다고 밝힘",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "제가 직접 신고를 하는게 맞는지요?",
+            "value": "본인이 직접 신고해야 하는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "맞다면 신고방법을 알려주십시오.",
+            "value": "본인이 직접 신고해야 하는 경우 신고 방법 안내 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "본인이 직접 신고해야 하는 경우"
+            ],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "홈택스에서 할 수 있는지도 알려주십시오.",
+            "value": "홈택스에서 신고할 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F5"
+          }
+        ],
+        "summary": "명예퇴직 후 학교가 퇴직소득 세금신고를 했는지 불확실하다고 합니다. 본인이 직접 신고해야 하는지, 직접 신고해야 한다면 방법은 무엇인지, 홈택스에서 신고할 수 있는지 확인을 요청했습니다.",
+        "requests": [
+          "본인이 직접 퇴직소득을 신고해야 하는지 확인해 달라는 요청",
+          "본인이 직접 신고해야 하는 경우 신고 방법을 안내해 달라는 요청",
+          "홈택스에서 퇴직소득을 신고할 수 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917206-A",
+      "pairId": "ACRC-6917206",
+      "inputHash": "04a0754463d7000c565f0bb10d88303cca0db65619e23999f071bed328ea9067",
+      "startedAt": "2026-11-15T02:42:52.886Z",
+      "finishedAt": "2026-11-15T02:43:27.870Z",
+      "pipelineElapsedMs": 34984,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "학교에서 퇴직소득 세금신고를 안 한 걸로 알고 있어요.",
+            "value": "학교가 퇴직소득 세금신고를 하지 않은 것으로 알고 있음",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "time",
+            "source": "body",
+            "quote": "202X년 X월 XX일",
+            "value": "202X년 X월 XX일",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "제가 직접 신고하는 게 맞는 겁니까?",
+            "value": "본인이 직접 퇴직소득 신고를 해야 하는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "직접 해야 하는 게 맞다면 신고 방법이 뭔지",
+            "value": "본인이 직접 신고해야 한다면 신고 방법 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "본인이 직접 신고해야 하는 경우"
+            ],
+            "id": "F4"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "홈택스에서도 할 수 있는지",
+            "value": "홈택스로 퇴직소득 신고를 할 수 있는지 확인 요청",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [
+              "본인이 직접 신고해야 하는 경우"
+            ],
+            "id": "F5"
+          }
+        ],
+        "summary": "명예퇴직 후 학교가 퇴직소득 세금신고를 하지 않은 것으로 알고 있으며, 본인이 직접 신고해야 하는지와 직접 신고해야 한다면 신고 방법 및 홈택스 이용 가능 여부를 문의합니다.",
+        "requests": [
+          "본인이 직접 퇴직소득 신고를 해야 하는지 확인해 달라는 요청",
+          "본인이 직접 신고해야 하는 경우 신고 방법을 설명해 달라는 요청",
+          "본인이 직접 신고해야 하는 경우 홈택스로 퇴직소득 신고를 할 수 있는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "빌어먹을",
+            "reason": "담당 부서를 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "직접 해야 하는 게 맞다면 신고 방법이 뭔지, 홈택스에서도 할 수 있는지 이 빌어먹을 부서에서 좀 알려주세요."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "상담하려고 여기저기 전화해도 연결이 너무 어려운데",
+            "reason": "전화 연결이 어렵다는 서비스 이용 경험에 대한 불만입니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "unclear",
+            "concreteThreat": false,
+            "contextQuote": "상담하려고 여기저기 전화해도 연결이 너무 어려운데, 제가 직접 신고하는 게 맞는 겁니까?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917558-N",
+      "pairId": "ACRC-6917558",
+      "inputHash": "9b8649f0761e9159e3fea8f01386b73917a9ace7349a06c90ac6dc0aaf45b60d",
+      "startedAt": "2026-11-15T02:42:53.986Z",
+      "finishedAt": "2026-11-15T02:43:09.592Z",
+      "pipelineElapsedMs": 15606,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "2026년 교원 핵심역량 강화 사업 운영 현황",
+            "value": "2026년 교원 핵심역량 강화 사업 운영 현황",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "2026년 교원 핵심역량 강화 사업은 어떻게 운영되고 있나요?",
+            "value": "2026년 교원 핵심역량 강화 사업의 운영 방식을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "2026년 교원 핵심역량 강화 사업의 운영 방식에 대한 설명을 요청했습니다.",
+        "requests": [
+          "2026년 교원 핵심역량 강화 사업의 운영 방식을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917558-A",
+      "pairId": "ACRC-6917558",
+      "inputHash": "dfbeb486ee15d2889eba385209e5f48bd8f3314f7ce33f2840e3baa8b5143049",
+      "startedAt": "2026-11-15T02:43:09.603Z",
+      "finishedAt": "2026-11-15T02:43:26.821Z",
+      "pipelineElapsedMs": 17218,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "2026년 교원 핵심역량 강화 사업 운영 현황",
+            "value": "2026년 교원 핵심역량 강화 사업 운영 현황",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "2026년 교원 핵심역량 강화 사업이 어떻게 운영되고 있는지",
+            "value": "2026년 교원 핵심역량 강화 사업의 운영 방식과 현황을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "2026년 교원 핵심역량 강화 사업의 운영 현황과 운영 방식을 설명해 달라는 요청입니다.",
+        "requests": [
+          "2026년 교원 핵심역량 강화 사업의 운영 방식과 현황을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "댁들 텅 빈 대가리라도 굴려서",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "2026년 교원 핵심역량 강화 사업이 어떻게 운영되고 있는지, 댁들 텅 빈 대가리라도 굴려서 설명해 봐요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917557-N",
+      "pairId": "ACRC-6917557",
+      "inputHash": "903917bd7f915c2facea747823cf61c9998fa77d9f7fd9a0065746b1040810b7",
+      "startedAt": "2026-11-15T02:43:11.856Z",
+      "finishedAt": "2026-11-15T02:43:36.134Z",
+      "pipelineElapsedMs": 24278,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "「2026 언어문화다양성 교육기반 조성사업」 및 언어문화다양성 시범기관은 무엇인가요?",
+            "value": "「2026 언어문화다양성 교육기반 조성사업」이 무엇인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "「2026 언어문화다양성 교육기반 조성사업」 및 언어문화다양성 시범기관은 무엇인가요?",
+            "value": "언어문화다양성 시범기관이 무엇인지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "「2026 언어문화다양성 교육기반 조성사업」과 언어문화다양성 시범기관의 의미에 대한 설명을 요청했습니다.",
+        "requests": [
+          "「2026 언어문화다양성 교육기반 조성사업」이 무엇인지 설명해 주세요.",
+          "언어문화다양성 시범기관이 무엇인지 설명해 주세요."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917557-A",
+      "pairId": "ACRC-6917557",
+      "inputHash": "2c465c2890851fab16b6212866a6e8e664a7abbf45fed43f586cdbdc5850636c",
+      "startedAt": "2026-11-15T02:43:16.336Z",
+      "finishedAt": "2026-11-15T02:43:42.751Z",
+      "pipelineElapsedMs": 26415,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "2026 언어문화다양성 교육기반 조성사업",
+            "value": "2026 언어문화다양성 교육기반 조성사업에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "「2026 언어문화다양성 교육기반 조성사업」이 뭔지",
+            "value": "「2026 언어문화다양성 교육기반 조성사업」이 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "언어문화다양성 시범기관이라는 건 또 뭔가요?",
+            "value": "‘언어문화다양성 시범기관’이 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "2026 언어문화다양성 교육기반 조성사업과 ‘언어문화다양성 시범기관’의 의미를 설명해 달라는 요청입니다.",
+        "requests": [
+          "「2026 언어문화다양성 교육기반 조성사업」이 무엇인지 설명해 달라는 요청",
+          "‘언어문화다양성 시범기관’이 무엇인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "개자식",
+            "reason": "담당자를 겨냥한 비하 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "「2026 언어문화다양성 교육기반 조성사업」이 뭔지 너 같은 개자식한테 묻게 되네요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917546-N",
+      "pairId": "ACRC-6917546",
+      "inputHash": "82c1b021b0bf6547c7d8f3fd4401715e0c8c904100314615be9d585b398ee0bf",
+      "startedAt": "2026-11-15T02:43:26.834Z",
+      "finishedAt": "2026-11-15T02:43:49.227Z",
+      "pipelineElapsedMs": 22393,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "목록화를 진행하고자 하는데 목록화 가능한 품목, 목록화 절차 등에 대해서",
+            "value": "목록화 가능한 품목과 목록화 절차에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "도움이 될 자료를 어디서 찾을 수 있을지 정보를 부탁드립니다.",
+            "value": "목록화 가능한 품목과 목록화 절차 등에 관한 자료를 어디서 찾을 수 있는지 정보 제공 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "목록화 가능한 품목과 목록화 절차를 안내하는 자료를 어디서 확인할 수 있는지 문의했습니다.",
+        "requests": [
+          "목록화 가능한 품목과 목록화 절차 등에 관한 자료를 어디서 찾을 수 있는지 정보 제공 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917546-A",
+      "pairId": "ACRC-6917546",
+      "inputHash": "a6dbb0f6cc3d6f3a985e93e4925f482abe9de7569de28a16c4dfa1021319ed64",
+      "startedAt": "2026-11-15T02:43:27.883Z",
+      "finishedAt": "2026-11-15T02:43:49.804Z",
+      "pipelineElapsedMs": 21921,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "방사청 목록화를 진행하려고 합니다.",
+            "value": "방위사업청 목록화에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "목록화 가능한 품목이나 목록화 절차 같은 걸 알아볼 자료는 어디서 찾을 수 있는지",
+            "value": "목록화 가능한 품목이나 목록화 절차를 알아볼 자료를 어디서 찾을 수 있는지 안내",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "방위사업청 목록화를 진행하려 하며, 목록화 가능한 품목과 절차를 알아볼 자료의 확인 경로를 문의했습니다.",
+        "requests": [
+          "목록화 가능한 품목이나 목록화 절차를 알아볼 자료를 어디서 찾을 수 있는지 안내해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개새끼",
+            "reason": "담당자를 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "여기 답하는 개새끼는 그 정도 안내할 머리는 있겠죠?"
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "그 정도 안내할 머리는 있겠죠",
+            "reason": "담당자의 능력을 낮춰 말하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "여기 답하는 개새끼는 그 정도 안내할 머리는 있겠죠?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-307911-N",
+      "pairId": "ACRC-307911",
+      "inputHash": "1f032525e41708a40ccaa4a0839cfdfc47b54a161e367392ac09247a7e436ee9",
+      "startedAt": "2026-11-15T02:43:36.147Z",
+      "finishedAt": "2026-11-15T02:44:01.220Z",
+      "pipelineElapsedMs": 25073,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "도로점용료를 5년치 부과하시다니요.",
+            "value": "도로점용료 5년치 부과",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "quantity",
+            "source": "body",
+            "quote": "도로점용료를 5년치 부과하시다니요.",
+            "value": "5년치",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그 근거를 좀 알고싶습니다!",
+            "value": "도로점용료를 5년치 부과한 근거가 무엇인지 알고자 함",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "몇 년간 별도 소식이 없던 중 도로점용료 5년치가 부과된 데 대해, 해당 부과의 근거를 알고자 합니다.",
+        "requests": [
+          "도로점용료를 5년치 부과한 근거를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "어이가없네요.",
+            "reason": "부과 처리에 대한 불만을 나타낸 표현이며 담당자 개인에 대한 비하나 욕설은 아닙니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "어이가없네요.\n몇 년간 아무 소식 없다가\n어느날 갑자기 도로점용료를 5년치 부과하시다니요."
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "몇 년간 아무 소식 없다가\n어느날 갑자기 도로점용료를 5년치 부과하시다니요.",
+            "reason": "사전 안내 없이 5년치가 부과된 처리 경위에 대한 불만을 나타냅니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "몇 년간 아무 소식 없다가\n어느날 갑자기 도로점용료를 5년치 부과하시다니요.\n그 근거를 좀 알고싶습니다!"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-307911-A",
+      "pairId": "ACRC-307911",
+      "inputHash": "5cef8ebcd0ba493a2fc27365a92d22dc8d962d49683b2905a553706709e3cae0",
+      "startedAt": "2026-11-15T02:43:42.764Z",
+      "finishedAt": "2026-11-15T02:44:11.460Z",
+      "pipelineElapsedMs": 28696,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "도로점용료를 5년치나 부과",
+            "value": "도로점용료 5년치 부과",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그렇게 부과할 수 있다는 근거가 대체 뭡니까?",
+            "value": "도로점용료를 5년치 부과할 수 있다는 근거 규정이 무엇인지 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [
+              "도로점용료를 5년치 부과하는 경우"
+            ],
+            "id": "F2"
+          }
+        ],
+        "summary": "도로점용료 5년치가 부과된 것과 관련하여, 해당 부과의 근거 규정이 무엇인지 설명을 요청했습니다.",
+        "requests": [
+          "도로점용료를 5년치 부과하는 경우의 근거 규정이 무엇인지 알려 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개자식들",
+            "reason": "담당자를 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "댁들 같은 개자식들이 그렇게 부과할 수 있다는 근거가 대체 뭡니까?"
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "댁들 같은 개자식들",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "댁들 같은 개자식들이 그렇게 부과할 수 있다는 근거가 대체 뭡니까?"
+          },
+          {
+            "kind": "criticism",
+            "source": "body",
+            "quote": "몇 년간 아무 소식도 없다가 어느 날 갑자기 도로점용료를 5년치나 부과하다니 어이가 없네.",
+            "reason": "부과 시점과 방식에 대한 불만을 나타낸 업무 비판입니다.",
+            "scope": "criticism",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "몇 년간 아무 소식도 없다가 어느 날 갑자기 도로점용료를 5년치나 부과하다니 어이가 없네. 댁들 같은 개자식들이 그렇게 부과할 수 있다는 근거가 대체 뭡니까?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917540-N",
+      "pairId": "ACRC-6917540",
+      "inputHash": "0ae19873b4ee382e234a0af51ee18b49130ad46daa37597259f87829c610e72c",
+      "startedAt": "2026-11-15T02:43:49.241Z",
+      "finishedAt": "2026-11-15T02:44:07.025Z",
+      "pipelineElapsedMs": 17784,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "국가자격검정 국방사업관리사 3급 응시자격 중 실무자격증에 관한 인정 문의",
+            "value": "국방사업관리사 3급 응시자격에서 실무자격증의 인정 여부",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "실무자격증에 관한 인정 문의",
+            "value": "실무자격증이 국방사업관리사 3급 응시자격으로 인정되는지 확인",
+            "essential": true,
+            "requestIntent": "confirmation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "국방사업관리사 3급 응시자격에서 실무자격증이 인정되는지 확인을 요청했습니다.",
+        "requests": [
+          "실무자격증이 국방사업관리사 3급 응시자격으로 인정되는지 확인해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917540-A",
+      "pairId": "ACRC-6917540",
+      "inputHash": "c4c538a5e980bb0810cf9c735cdbeddb5fca6f91c31f14e80dee957d7e0d64df",
+      "startedAt": "2026-11-15T02:43:49.818Z",
+      "finishedAt": "2026-11-15T02:44:13.064Z",
+      "pipelineElapsedMs": 23246,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "국방사업관리사 응시자격 관련 문의",
+            "value": "국방사업관리사 응시자격",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "실무자격증 인정에 관해, 그 멍청한 대가리로라도 답변 좀 해보세요.",
+            "value": "국방사업관리사 3급 응시자격에서 실무자격증 인정에 관해 답변",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "국방사업관리사 3급 응시자격에서 실무자격증 인정에 관한 답변을 요청했습니다.",
+        "requests": [
+          "국방사업관리사 3급 응시자격에서 실무자격증 인정에 관해 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "그 멍청한 대가리로라도 답변 좀 해보세요",
+            "reason": "담당자의 지적 능력을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "국가자격검정 국방사업관리사 3급 응시자격 중 실무자격증 인정에 관해, 그 멍청한 대가리로라도 답변 좀 해보세요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916211-N",
+      "pairId": "ACRC-6916211",
+      "inputHash": "61de1b53c3f4640db1818d061a89ba128b79fb569580aa2cb0a4433a8d9b68c0",
+      "startedAt": "2026-11-15T02:44:01.233Z",
+      "finishedAt": "2026-11-15T02:44:33.705Z",
+      "pipelineElapsedMs": 32472,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "EM발효액 수령방법 및 활용법",
+            "value": "EM발효액의 수령 방법 및 활용 방법에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 받을 수 있으며",
+            "value": "EM발효액을 어떻게 받을 수 있는지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 활용하나요?",
+            "value": "EM발효액을 어떻게 활용하는지 설명 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "EM발효액을 받는 방법과 활용 방법을 문의했습니다.",
+        "requests": [
+          "EM발효액을 어떻게 받을 수 있는지 설명해 달라는 요청",
+          "EM발효액을 어떻게 활용하는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916211-A",
+      "pairId": "ACRC-6916211",
+      "inputHash": "baff4eaa56e65ed378afeb228e08e573ccc25d4cc231f6d1fddc07e23a05873c",
+      "startedAt": "2026-11-15T02:44:07.039Z",
+      "finishedAt": "2026-11-15T02:44:30.929Z",
+      "pipelineElapsedMs": 23890,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "EM발효액 수령방법 및 활용법",
+            "value": "EM발효액의 수령 방법과 활용 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "EM발효액은 어떻게 받을 수 있고",
+            "value": "EM발효액을 받을 수 있는 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떻게 활용하면 되는지",
+            "value": "EM발효액의 활용 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "EM발효액을 받을 수 있는 방법과 활용 방법에 대한 안내를 요청했습니다.",
+        "requests": [
+          "EM발효액을 받을 수 있는 방법을 설명해 달라는 요청",
+          "EM발효액의 활용 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "네 그 멍청한 머리로라도",
+            "reason": "담당자의 지적 능력을 낮춰 부르는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "네 그 멍청한 머리로라도 설명 좀 해봐."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916118-N",
+      "pairId": "ACRC-6916118",
+      "inputHash": "6d4e93b63d82d1b165ceb65310a5198bf29029c535a42dcbc110e90322f83f36",
+      "startedAt": "2026-11-15T02:44:11.473Z",
+      "finishedAt": "2026-11-15T02:44:31.360Z",
+      "pipelineElapsedMs": 19887,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "순천시에 물어볼 게 있는데 대표 번호는 무엇인가요?",
+            "value": "순천시에 문의할 때 이용할 대표 번호",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "콜센터 번호좀 알려주세요",
+            "value": "순천시 콜센터 번호를 알려 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "순천시에 문의할 때 이용할 대표 전화번호를 알려 달라는 요청입니다.",
+        "requests": [
+          "순천시 콜센터 번호를 알려 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916118-A",
+      "pairId": "ACRC-6916118",
+      "inputHash": "7d0a9366a7797a0a0b8adf034b42c483fa9757ef3a96790c5106449c22f09511",
+      "startedAt": "2026-11-15T02:44:13.078Z",
+      "finishedAt": "2026-11-15T02:44:33.448Z",
+      "pipelineElapsedMs": 20370,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "순천시에 물어볼 게 있는데 대표 번호는 무엇인가요?",
+            "value": "순천시 문의 전화번호에 관한 질문",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "대표 번호, 콜센터 번호 좀 알려줘요.",
+            "value": "순천시 대표 번호 또는 콜센터 번호를 알려 달라고 요청함",
+            "essential": true,
+            "requestIntent": "action",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "순천시에 문의할 대표 번호 또는 콜센터 번호를 알려 달라고 요청했습니다.",
+        "requests": [
+          "순천시 대표 번호 또는 콜센터 번호를 알려 달라고 요청함"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "개자식",
+            "reason": "담당자를 향한 욕설 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "당신 같은 개자식한테 물어보기도 싫지만 대표 번호, 콜센터 번호 좀 알려줘요."
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신 같은 개자식",
+            "reason": "담당자를 비하하는 인신공격 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "당신 같은 개자식한테 물어보기도 싫지만 대표 번호, 콜센터 번호 좀 알려줘요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6915993-N",
+      "pairId": "ACRC-6915993",
+      "inputHash": "6a8942840a0c8ca3dea47bfaaac05cfa4a8b9f4c4cf972ef17f9b27b217178f9",
+      "startedAt": "2026-11-15T02:44:30.942Z",
+      "finishedAt": "2026-11-15T02:44:50.456Z",
+      "pipelineElapsedMs": 19514,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "연제구 보건소 방역소독사업",
+            "value": "연제구 보건소 방역소독사업",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "어떻게 실시하고 있나요?",
+            "value": "연제구 보건소 방역소독사업의 실시 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "연제구 보건소 방역소독사업의 실시 방법에 대한 설명을 요청했습니다.",
+        "requests": [
+          "연제구 보건소 방역소독사업의 실시 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6915993-A",
+      "pairId": "ACRC-6915993",
+      "inputHash": "718350b6545a193e4364f5d3b6c688f20d3f6843390f6c1f9b8909b8d3b82747",
+      "startedAt": "2026-11-15T02:44:31.376Z",
+      "finishedAt": "2026-11-15T02:44:56.355Z",
+      "pipelineElapsedMs": 24979,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "방역소독사업은 어떻게 실시하고 있나요?",
+            "value": "방역소독사업의 실시 방식",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "location",
+            "source": "title",
+            "quote": "연제구 보건소",
+            "value": "연제구 보건소",
+            "essential": false,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "방역소독사업은 어떤 식으로 실시하는 거냐?",
+            "value": "방역소독사업을 어떤 방식으로 실시하는지 설명",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "연제구 보건소 방역소독사업의 실시 방식을 설명해 달라는 문의입니다.",
+        "requests": [
+          "방역소독사업을 어떤 방식으로 실시하는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 같은 쓰레기들",
+            "reason": "보건소 담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "연제구 보건소 너희 같은 쓰레기들한테 묻는 건데, 방역소독사업은 어떤 식으로 실시하는 거냐?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6913908-N",
+      "pairId": "ACRC-6913908",
+      "inputHash": "5667b604ced48ee9bbc484c38970ccd53594482082ab1b27eefb16dd1a4cb983",
+      "startedAt": "2026-11-15T02:44:33.463Z",
+      "finishedAt": "2026-11-15T02:45:13.342Z",
+      "pipelineElapsedMs": 39879,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "빗물받이 설치 기준",
+            "value": "빗물받이 설치 기준에 관한 주제",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          }
+        ],
+        "summary": "빗물받이 설치 기준에 관한 내용입니다.",
+        "requests": [],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6914421-N",
+      "pairId": "ACRC-6914421",
+      "inputHash": "a0e17760ed71b0be2bd11c1a1024c62f34b98397aff11a7043d8b211b2d91855",
+      "startedAt": "2026-11-15T02:44:33.719Z",
+      "finishedAt": "2026-11-15T02:44:47.115Z",
+      "pipelineElapsedMs": 13396,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "장애인 등록 방법",
+            "value": "장애인 등록 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "problem",
+            "source": "body",
+            "quote": "장애인 등록 방법",
+            "value": "장애인 등록 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "장애인 등록 방법",
+            "value": "장애인 등록 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          }
+        ],
+        "summary": "장애인 등록 방법에 대한 안내를 요청했습니다.",
+        "requests": [
+          "장애인 등록 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6914421-A",
+      "pairId": "ACRC-6914421",
+      "inputHash": "d3c7c1f108e4f92b6ceb3e33dc00e67a5b106750512dc02ff418b9d87c50a9ee",
+      "startedAt": "2026-11-15T02:44:47.132Z",
+      "finishedAt": "2026-11-15T02:45:06.446Z",
+      "pipelineElapsedMs": 19314,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "장애인 등록 방법",
+            "value": "장애인 등록 방법",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "title",
+            "quote": "장애인 등록 방법",
+            "value": "장애인 등록 방법을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "장애인 등록 방법에 대한 안내를 요청했습니다.",
+        "requests": [
+          "장애인 등록 방법을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "재수 없는 인간들",
+            "reason": "글을 읽는 사람들을 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "이 글 받는 재수 없는 인간들한테 읽힐 생각을 하니 기분 더럽네요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917174-N",
+      "pairId": "ACRC-6917174",
+      "inputHash": "751f13afbf460b181cf084a81e3090de16c1324ce1e280863c5214978413cab5",
+      "startedAt": "2026-11-15T02:44:50.470Z",
+      "finishedAt": "2026-11-15T02:45:15.206Z",
+      "pipelineElapsedMs": 24736,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "금연구역 내 흡연자 발견 시 확인 방법 및 신고 절차",
+            "value": "금연구역 내 흡연자 발견 시 확인 방법 및 신고 절차",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "해당 장소가 정확히 법적 금연구역에 해당하는지 확인하는 방법",
+            "value": "해당 장소가 법적 금연구역에 해당하는지 확인하는 방법",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "흡연 행위를 목격했을 경우 구체적인 신고 절차",
+            "value": "흡연 행위를 목격했을 경우의 구체적인 신고 절차",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "처분 기준이 어떻게 되는지",
+            "value": "흡연 행위를 목격했을 경우 처분 기준이 어떻게 되는지",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [],
+            "id": "F4"
+          }
+        ],
+        "summary": "공공장소가 법적 금연구역인지 확인하는 방법과, 그곳에서 흡연을 목격했을 때의 신고 절차 및 처분 기준을 문의했습니다.",
+        "requests": [
+          "해당 장소가 법적 금연구역에 해당하는지 확인하는 방법을 설명해 달라는 요청",
+          "흡연 행위를 목격했을 때의 구체적인 신고 절차를 설명해 달라는 요청",
+          "흡연 행위에 적용되는 처분 기준의 근거를 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917174-A",
+      "pairId": "ACRC-6917174",
+      "inputHash": "91db25ce0fd6013cb95a5115f6e2051cc9c75831b76049b0f7186f822695f8d8",
+      "startedAt": "2026-11-15T02:44:56.368Z",
+      "finishedAt": "2026-11-15T02:45:45.538Z",
+      "pipelineElapsedMs": 49170,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "금연구역 내 흡연자 발견 시 확인 방법 및 신고 절차",
+            "value": "금연구역에서 흡연자를 발견했을 때 확인 방법과 신고 절차에 관한 문의",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그 장소가 정확히 법적 금연구역인지 어떻게 확인합니까?",
+            "value": "해당 장소가 정확히 법적 금연구역인지 확인하는 방법",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "공공장소 같은 데서 흡연자를 발견하면"
+            ],
+            "id": "F2"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "흡연을 목격했을 경우의 신고 절차는 구체적으로 어떻게 되는지",
+            "value": "흡연을 목격했을 경우의 구체적인 신고 절차",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [
+              "흡연을 목격했을 경우"
+            ],
+            "id": "F3"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그 경우 처분 기준도 알고 싶습니다.",
+            "value": "그 경우의 처분 기준",
+            "essential": true,
+            "requestIntent": "rule_basis",
+            "conditions": [
+              "흡연을 목격했을 경우"
+            ],
+            "id": "F4"
+          }
+        ],
+        "summary": "공공장소 등에서 흡연자를 발견했을 때 해당 장소가 법적 금연구역인지 확인하는 방법, 흡연 목격 시 구체적인 신고 절차와 처분 기준을 문의했습니다.",
+        "requests": [
+          "공공장소 같은 데서 흡연자를 발견하면 해당 장소가 정확히 법적 금연구역인지 확인하는 방법을 알려 달라는 요청",
+          "흡연을 목격했을 경우의 구체적인 신고 절차를 알려 달라는 요청",
+          "흡연을 목격했을 경우의 처분 기준을 알려 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너희 같은 등신들",
+            "reason": "담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "흡연을 목격했을 경우의 신고 절차는 구체적으로 어떻게 되는지, 너희 같은 등신들한테 물어보는 것도 짜증나네요. 그 경우 처분 기준도 알고 싶습니다."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6917167-N",
+      "pairId": "ACRC-6917167",
+      "inputHash": "654420e3e3acfd0220f1836d144e219b19f5cd2dd41788c17ae5ada3359bf713",
+      "startedAt": "2026-11-15T02:45:06.461Z",
+      "finishedAt": "2026-11-15T02:45:21.919Z",
+      "pipelineElapsedMs": 15458,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+            "value": "드론을 이용한 전경 촬영",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+            "value": "드론으로 전경을 촬영하는 절차 설명",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "드론으로 전경을 촬영하려는 경우의 절차를 문의했습니다.",
+        "requests": [
+          "드론으로 전경을 촬영하는 절차를 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6917167-A",
+      "pairId": "ACRC-6917167",
+      "inputHash": "2522f5a896de2cd0cdcbdca5945d3bb276d49f16656ae61924b011d48062fad8",
+      "startedAt": "2026-11-15T02:45:13.357Z",
+      "finishedAt": "2026-11-15T02:45:34.645Z",
+      "pipelineElapsedMs": 21288,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "드론으로 전경을 촬영하고 싶은데",
+            "value": "드론으로 전경을 촬영하려는 상황",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어떤 절차를 거쳐야 하는지",
+            "value": "드론으로 전경을 촬영하기 위해 거쳐야 하는 절차를 설명해 달라고 요청함",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "드론으로 전경을 촬영하려는 상황에서 촬영 절차 안내를 요청했습니다.",
+        "requests": [
+          "드론으로 전경을 촬영하기 위해 거쳐야 하는 절차를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "네 그 멍청한 대가리로 설명 좀 해줘.",
+            "reason": "담당자에게 비하 표현을 사용하고 있습니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "어떤 절차를 거쳐야 하는지, 네 그 멍청한 대가리로 설명 좀 해줘."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916878-N",
+      "pairId": "ACRC-6916878",
+      "inputHash": "78a54645247c10115d89b0cab6d2ccb041e18a6a99c1455e5d45a98acae85b62",
+      "startedAt": "2026-11-15T02:45:15.221Z",
+      "finishedAt": "2026-11-15T02:45:30.667Z",
+      "pipelineElapsedMs": 15446,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "모범납세자 제도란?",
+            "value": "모범납세자 제도의 의미",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "모범납세자 제도가 무엇인가요?",
+            "value": "모범납세자 제도가 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "모범납세자 제도가 무엇인지 설명해 달라는 문의입니다.",
+        "requests": [
+          "모범납세자 제도가 무엇인지 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916878-A",
+      "pairId": "ACRC-6916878",
+      "inputHash": "f174cd40119bf54e082729d3bc12e8d3bf6d9daf2bd53431feed7670a4f206cc",
+      "startedAt": "2026-11-15T02:45:21.933Z",
+      "finishedAt": "2026-11-15T02:45:42.182Z",
+      "pipelineElapsedMs": 20249,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "모범납세자 제도란?",
+            "value": "모범납세자 제도의 의미",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "모범납세자 제도가 뭐예요?",
+            "value": "모범납세자 제도가 무엇인지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "모범납세자 제도가 무엇인지 설명해 달라는 문의입니다.",
+        "requests": [
+          "모범납세자 제도의 의미를 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "너같이 재수 없는 인간",
+            "reason": "민원인이 응대자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "너같이 재수 없는 인간한테 묻기도 싫은데, 모범납세자 제도가 뭐예요?"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916893-N",
+      "pairId": "ACRC-6916893",
+      "inputHash": "d27d577639e5960828d0766dca2e033a419ca99165cc55cd1c8358cf248458ec",
+      "startedAt": "2026-11-15T02:45:30.681Z",
+      "finishedAt": "2026-11-15T02:45:50.608Z",
+      "pipelineElapsedMs": 19927,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "강서구 통합신청사 이전 및 업무 개시 안내",
+            "value": "강서구 통합신청사 이전 및 업무 개시 안내",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "강서구 통합신청사 이전 및 업무 개시가 궁금합니다.",
+            "value": "강서구 통합신청사 이전 및 업무 개시에 관한 설명",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "강서구 통합신청사의 이전 및 업무 개시 안내를 요청했습니다.",
+        "requests": [
+          "강서구 통합신청사 이전 및 업무 개시에 관한 설명을 요청함."
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916893-A",
+      "pairId": "ACRC-6916893",
+      "inputHash": "5f13315175e421d0ffdd057186f9a24ba442b68309184df2a15da55610a0b35f",
+      "startedAt": "2026-11-15T02:45:34.660Z",
+      "finishedAt": "2026-11-15T02:46:07.411Z",
+      "pipelineElapsedMs": 32751,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "강서구 통합신청사 이전 및 업무 개시 안내",
+            "value": "강서구 통합신청사 이전과 업무 개시에 관한 안내를 요청함",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "그 내용 좀 알려줘요.",
+            "value": "강서구 통합신청사 이전과 업무 개시가 어떻게 되는지 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "강서구 통합신청사 이전과 업무 개시가 어떻게 되는지 설명해 달라고 요청했습니다.",
+        "requests": [
+          "강서구 통합신청사 이전과 업무 개시가 어떻게 되는지 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "profanity",
+            "source": "body",
+            "quote": "씨발",
+            "reason": "담당자에게 사용하는 욕설입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "어떻게 되는지, 씨발, 여기 답변하는 머저리들은 아는 게 있기는 합니까?"
+          },
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "머저리들은",
+            "reason": "답변하는 담당자를 비하하는 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "씨발, 여기 답변하는 머저리들은 아는 게 있기는 합니까? 그 내용 좀 알려줘요."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ACRC-6916461-N",
+      "pairId": "ACRC-6916461",
+      "inputHash": "d64c27fc58d69b7f407d7d623927fee4c94ac65ded231cb9567a8e21b0c12691",
+      "startedAt": "2026-11-15T02:45:42.197Z",
+      "finishedAt": "2026-11-15T02:45:58.562Z",
+      "pipelineElapsedMs": 16365,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": false,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "어린이 기호식품 우수판매업소 지정범위",
+            "value": "어린이 기호식품 우수판매업소 지정 범위",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건은 무엇인가요?",
+            "value": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건을 설명해 달라는 요청",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "어린이 기호식품 우수판매업소의 지정 범위와 지정받을 수 있는 조건을 문의했습니다.",
+        "requests": [
+          "어린이 기호식품 우수판매업소로 지정받을 수 있는 조건을 설명해 달라는 요청"
+        ],
+        "expressionFindings": []
+      }
+    },
+    {
+      "id": "ACRC-6916461-A",
+      "pairId": "ACRC-6916461",
+      "inputHash": "2c7111f7b11b495a9c7f29fca8e2383707a619fe3489cb1b7f6810595e1dc084",
+      "startedAt": "2026-11-15T02:45:45.553Z",
+      "finishedAt": "2026-11-15T02:46:03.860Z",
+      "pipelineElapsedMs": 18307,
+      "pipelineStatus": "verified",
+      "detectedDirectAttack": true,
+      "output": {
+        "facts": [
+          {
+            "kind": "problem",
+            "source": "title",
+            "quote": "어린이 기호식품 우수판매업소 지정범위",
+            "value": "어린이 기호식품 우수판매업소 지정 범위",
+            "essential": true,
+            "requestIntent": null,
+            "conditions": [],
+            "id": "F1"
+          },
+          {
+            "kind": "requested_action",
+            "source": "body",
+            "quote": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건이 뭔지",
+            "value": "어린이 기호식품 우수판매업소로 지정받을 수 있는 조건",
+            "essential": true,
+            "requestIntent": "explanation",
+            "conditions": [],
+            "id": "F2"
+          }
+        ],
+        "summary": "어린이 기호식품 우수판매업소 지정 범위와 지정받을 수 있는 조건에 대한 안내를 요청했습니다.",
+        "requests": [
+          "어린이 기호식품 우수판매업소로 지정받을 수 있는 조건을 설명해 달라는 요청"
+        ],
+        "expressionFindings": [
+          {
+            "kind": "insult",
+            "source": "body",
+            "quote": "당신 같은 무식한 인간",
+            "reason": "담당자를 낮춰 부르는 인신공격성 표현입니다.",
+            "scope": "direct_attack",
+            "speaker": "complainant",
+            "target": "staff",
+            "concreteThreat": false,
+            "contextQuote": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건이 뭔지, 당신 같은 무식한 인간도 그 정도는 설명할 수 있겠죠?"
+          }
+        ]
+      }
+    }
+  ],
+  "metrics": {
+    "total": 100,
+    "completed": 100,
+    "failed": 0,
+    "detection": {
+      "tp": 47,
+      "tn": 50,
+      "fp": 0,
+      "fn": 3,
+      "unavailable": 0,
+      "agreementAllInputs": 0.97,
+      "precision": 1,
+      "recall": 0.94,
+      "f1": 0.9690721649484536
+    },
+    "timingSeconds": {
+      "count": 100,
+      "minimum": 12.351,
+      "median": 20.5385,
+      "mean": 24.005179999999996,
+      "p95NearestRank": 45.398,
+      "maximum": 104.98
+    }
+  }
+}
