@@ -44,7 +44,8 @@ export class GeminiCallAnalysis {
     ]);
     if(safety.status==='rejected')this.error('음성 보호 판정을 확인하지 못했습니다.');
     if(summary.status==='rejected')throw summary.reason;
-    if(!this.ended)this.onTranscript({turnId:turn.id,at:turn.at,text:summary.value.displayText||summary.value.text||'[공격 표현 가림]',redacted:summary.value.redacted===true});
+    const displayText=summary.value.displayText??summary.value.text;
+    if(!this.ended&&typeof displayText==='string'&&displayText.trim())this.onTranscript({turnId:turn.id,at:turn.at,text:displayText,redacted:summary.value.redacted===true});
     if(!this.ended&&summary.value.facts.length)this.onText({turnId:turn.id,revision:1,text:summary.value.text,facts:summary.value.facts.map(({kind,value})=>({kind,value})),status:'transcribed'});
   }
   async stop(){

@@ -26,8 +26,16 @@ test('real WebSocket bridge enforces roles, keeps human audio, shields incoming 
   analysis.onTranscript({turnId:'chat',text:'쓰레기를 수거해 주세요.',redacted:false});await until(()=>caller.events.some(e=>e.event==='conversation'));assert.equal(caller.events.find(e=>e.event==='conversation').entry.speaker,'caller');
   analysis.onText({turnId:'turn',text:'위치: 집 앞\n요청: 쓰레기 수거',facts:[],status:'audio_rechecked'});await until(()=>staff.events.some(e=>e.event==='neutral_text'));assert.equal(caller.events.some(e=>e.event==='neutral_text'),false);
   staff.send({event:'resume',callId:id});await until(()=>!app.calls.get(id).relay.mode.includes('shield'));caller.send({event:'media',payload});await until(()=>staff.events.filter(e=>e.event==='media').length===before+1);
+  const noticeCount=caller.events.filter(e=>e.event==='announcement').length;
+  analysis.onError('음성 인식 연결을 확인해 주세요.');await until(()=>caller.events.filter(e=>e.event==='announcement').length>noticeCount);
+  const notice=caller.events.filter(e=>e.event==='announcement').at(-1);assert.equal(notice.kind,'protection_notice');assert.equal(notice.text.includes('욕설이 감지'),false);
   staff.send({event:'hangup',callId:id});await until(()=>caller.events.some(e=>e.event==='ended'));assert.ok(app.calls.get(id).ended);
   await until(()=>app.calls.get(id).finalized);analysis.onText({turnId:'late',text:'must not change a finalized call'});assert.equal(app.calls.get(id).segments.length,1);
+  const nextCaller=await connect('caller');await until(()=>nextCaller.events.some(e=>e.event==='waiting'));const nextId=nextCaller.events.find(e=>e.event==='waiting').callId;
+  staff.send({event:'accept',callId:nextId});await until(()=>nextCaller.events.some(e=>e.event==='active'));assert.notEqual(nextId,id);assert.equal(app.calls.get(nextId).relay.mode,'human');
+  staff.send({event:'media',callId:nextId,payload});await until(()=>nextCaller.events.some(e=>e.event==='media'));
+  analysis.onTranscript({turnId:'next-greeting',text:'여보세요.',redacted:false});await until(()=>nextCaller.events.some(e=>e.event==='conversation'));assert.equal(nextCaller.events.find(e=>e.event==='conversation').entry.text,'여보세요.');
+  staff.send({event:'hangup',callId:nextId});await until(()=>app.calls.get(nextId).finalized);
   const httpUrl=url.replace('ws:','http:').replace('/connect','/provider/voice');assert.equal((await fetch(httpUrl,{method:'POST'})).status,404);
   assert.equal((await fetch(httpUrl+'?token=provider',{method:'POST'})).status,404,'web-only mode must not issue carrier tokens');
  }finally{for(const s of connections)s.terminate();await app.close();}

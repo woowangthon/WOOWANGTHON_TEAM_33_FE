@@ -12,11 +12,17 @@ test('Gemini call defaults to Gemini text processing and needs no OpenAI credent
  assert.ok(analysis.pipeline instanceof GeminiPipeline);assert.equal(analysis.pipeline.model,'gemini-3.5-flash-lite');await analysis.stop();
 });
 function setup(t,overrides={}){
- let callbacks;const shield=[],text=[],errors=[],done=[],checks=[],audio=[];
+ let callbacks;const shield=[],text=[],transcripts=[],errors=[],done=[],checks=[],audio=[];
  const pipeline={checkSafety:async(input,opts)=>{checks.push({input,opts});return normal;},neutralize:async()=>({text:'',facts:[]}),...overrides};
- const analysis=new GeminiCallAnalysis({geminiKey:'not-used',pipeline,onShield:r=>shield.push(r),onText:r=>text.push(r),onError:e=>errors.push(e),onSettled:id=>done.push(id),transcriberFactory:options=>{callbacks=options;return {start:async()=>{},push:b=>audio.push(b),finish:async()=>{},close:()=>{}};}});
- t.after(()=>analysis.stop());return {analysis,pipeline,shield,text,errors,done,checks,audio,get stt(){return callbacks;}};
+ const analysis=new GeminiCallAnalysis({geminiKey:'not-used',pipeline,onShield:r=>shield.push(r),onTranscript:r=>transcripts.push(r),onText:r=>text.push(r),onError:e=>errors.push(e),onSettled:id=>done.push(id),transcriberFactory:options=>{callbacks=options;return {start:async()=>{},push:b=>audio.push(b),finish:async()=>{},close:()=>{}};}});
+ t.after(()=>analysis.stop());return {analysis,pipeline,shield,text,transcripts,errors,done,checks,audio,get stt(){return callbacks;}};
 }
+
+test('empty transcription does not invent an attack warning, while a greeting remains visible',async t=>{
+ const s=setup(t,{neutralize:async input=>({text:input,facts:[]})});await s.analysis.start();
+ s.stt.onFinal('');await settle();assert.deepEqual(s.transcripts,[]);assert.deepEqual(s.shield,[]);
+ s.stt.onFinal('여보세요.');await settle();assert.equal(s.transcripts[0].text,'여보세요.');assert.equal(s.transcripts[0].redacted,false);
+});
 test('native PCM reaches STT unchanged and an incremental attack protects before final transcription or summary',async t=>{
  const summary=deferred(),s=setup(t,{checkSafety:async()=>attack,neutralize:()=>summary.promise});await s.analysis.start();const pcm=Buffer.alloc(640,12);s.analysis.pushPcm(pcm);assert.equal(s.audio[0],pcm);
  s.stt.onInterim('너를 해치겠다');await settle();assert.equal(s.shield.length,1);assert.equal(s.text.length,0);
