@@ -1,4 +1,4 @@
-const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),ts=require('typescript'),actual=require('../evals/loader.cjs')();
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),ts=require('typescript'),actual=require('./helpers/loader.cjs')();
 const coverage=actual('lib/coverage.ts'),{draftSentences}=actual('lib/review.ts'),{applyCoverageHarness}=actual('lib/coverage-harness.ts');
 const c={title:'합성 접수 이송',body:'담당 부서를 알려 주세요. 이송 사유를 알려 주세요.',location:'가상동',category:'기타',occurred_at:'2026-11-07',supplements:[],analysis:{summary:'담당 부서와 이송 사유 문의',requests:['담당 부서','이송 사유'],sensitiveQuotes:[]}};
 const audit=coverage.validateRequirementAudit(c,{requirements:[{text:'담당 부서 안내',source:'body',quote:'담당 부서를 알려 주세요.',summaryStatus:'preserved',summaryReason:'반영'},{text:'이송 사유 안내',source:'body',quote:'이송 사유를 알려 주세요.',summaryStatus:'preserved',summaryReason:'반영'}],noRequestReason:''});

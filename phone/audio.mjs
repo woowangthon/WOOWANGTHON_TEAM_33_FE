@@ -63,6 +63,26 @@ export function pcm24k(muLaw) {
   return pcm;
 }
 
+// Compatibility playback stays G.711; AI receives the untouched PCM16 side first.
+export function pcm16ToMuLaw(pcm){
+  if(pcm.length%4)throw Error('Invalid_PCM16_frame');
+  const output=Buffer.alloc(pcm.length/4);
+  for(let i=0;i<output.length;i++)output[i]=encodeMuLaw(Math.round((pcm.readInt16LE(i*4)+pcm.readInt16LE(i*4+2))/2));
+  return output;
+}
+
+export function resamplePcm16Wav(wav,targetRate=16000){
+  const {pcm,rate}=readWav(wav);if(rate===targetRate)return pcm;
+  const n=pcm.length/2,out=Buffer.alloc(Math.floor(n*targetRate/rate)*2),radius=24,cutoff=Math.min(.45,targetRate*.45/rate);
+  for(let i=0;i<out.length/2;i++){
+    const position=i*rate/targetRate;let sum=0,weights=0;
+    for(let j=Math.ceil(position-radius);j<=Math.floor(position+radius);j++){
+      if(j<0||j>=n)continue;const d=j-position,sinc=d===0?2*cutoff:Math.sin(2*Math.PI*cutoff*d)/(Math.PI*d),weight=sinc*(.5+.5*Math.cos(Math.PI*d/radius));sum+=pcm.readInt16LE(j*2)*weight;weights+=weight;
+    }
+    out.writeInt16LE(Math.max(-32768,Math.min(32767,Math.round(sum/weights))),i*2);
+  }return out;
+}
+
 export function pcmWav(pcm, rate = 24000) {
   const header = Buffer.alloc(44);
   header.write('RIFF'); header.writeUInt32LE(pcm.length + 36, 4); header.write('WAVEfmt ', 8);

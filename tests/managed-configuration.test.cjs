@@ -15,13 +15,13 @@ test('browser requests cannot create, replace, or clear API credentials',async()
   if(name.endsWith('/server'))return {AppError,database:()=>{databaseTouched=true;throw new Error('unexpected DB access');}};
   if(name.endsWith('/types'))return {categories:['기타'],statuses:['received']};
   if(name.endsWith('/access'))return {officeForOwner:owner=>owner,publicStaffInbox:()=>false};
-  if(name.endsWith('/request-tracking'))return require('../evals/loader.cjs')()('lib/request-tracking.ts');
-  if(name.endsWith('/request-tracking-store'))return {};
-  if(/\/(laws|samples|automatic|review|analysis-dispatch|supplements|citations|analysis-stages|semantic-search|coverage-ai|coverage|reports|report-core|protection)$/.test(name))return {};
+  if(name.endsWith('/request-tracking'))return require('./helpers/loader.cjs')()('lib/request-tracking.ts');
+  if(name.endsWith('/request-tracking-store')||name.endsWith('/complaint-list'))return {};
+  if(/\/(public-data|task-history|laws|samples|automatic|review|analysis-dispatch|supplements|citations|analysis-stages|semantic-search|coverage-ai|coverage|reports|report-core|protection)$/.test(name))return {};
   throw new Error(name);
  },route);
  try {
-  for(const input of [{gemini:'synthetic-new-key',law:'synthetic-new-oc'},{clearGemini:true,clearLaw:true}]){
+  for(const input of [{openai:'synthetic-new-key',law:'synthetic-new-oc'},{clearOpenai:true,clearLaw:true}]){
    const response=await route.POST(new Request('https://test.invalid/api/settings',{method:'POST',headers:{'Content-Type':'application/json',origin:'https://test.invalid'},body:JSON.stringify(input)}),{params:Promise.resolve({path:['settings']})});
    assert.equal(response.status,404);
   }
@@ -30,7 +30,7 @@ test('browser requests cannot create, replace, or clear API credentials',async()
 });
 
 test('only explicit service credentials are shared with guest workspaces',async()=>{
- const names=['GEMINI_API_KEY','LAW_API_OC','SERVICE_GEMINI_API_KEY','SERVICE_LAW_API_OC','SERVICE_GEMINI_MODEL','OPENAI_API_KEY','SERVICE_OPENAI_API_KEY','SERVICE_OPENAI_MODEL','SERVICE_AI_PROVIDER'];
+ const names=['LAW_API_OC','SERVICE_LAW_API_OC','OPENAI_API_KEY','SERVICE_OPENAI_API_KEY','SERVICE_OPENAI_MODEL','SERVICE_AI_PROVIDER'];
  const previous=Object.fromEntries(names.map(name=>[name,process.env[name]]));
  const server={};
  new Function('require','exports',compile('lib/server.ts'))(name=>{
@@ -42,23 +42,22 @@ test('only explicit service credentials are shared with guest workspaces',async(
  },server);
  try {
   for(const name of names)delete process.env[name];
-  process.env.GEMINI_API_KEY='private-legacy-key';process.env.LAW_API_OC='private-legacy-oc';
-  assert.equal((await server.credentials('guest:test')).gemini,'');
+  process.env.OPENAI_API_KEY='private-legacy-key';process.env.LAW_API_OC='private-legacy-oc';
+  assert.equal((await server.credentials('guest:test')).openai,'');
   assert.equal((await server.credentials('guest:test')).law,'');
   assert.equal((await server.credentials('office:cheongju:public')).law,'');
-  assert.equal((await server.credentials('office:cheongju:public')).gemini,'');
-  process.env.SERVICE_GEMINI_API_KEY='managed-service-key';
-  process.env.SERVICE_GEMINI_MODEL='gemini-test-model';
+  assert.equal((await server.credentials('office:cheongju:public')).openai,'');
+  process.env.SERVICE_OPENAI_API_KEY='managed-service-key';
+  process.env.SERVICE_OPENAI_MODEL='synthetic-openai-model';
   const partial=await server.credentials('guest:test');
-  assert.equal(partial.gemini,'managed-service-key');assert.equal(partial.law,'');assert.equal(partial.model,'gemini-test-model');
+  assert.equal(partial.openai,'managed-service-key');assert.equal(partial.law,'');assert.equal(partial.model,'synthetic-openai-model');
   process.env.SERVICE_LAW_API_OC='managed-service-oc';
   const full=await server.credentials('guest:test');
-  assert.equal(full.law,'managed-service-oc');assert.equal(full.gemini,'managed-service-key');
+  assert.equal(full.law,'managed-service-oc');assert.equal(full.openai,'managed-service-key');
   assert.deepEqual(full,await server.credentials('legacy-office'));
-  process.env.OPENAI_API_KEY='private-openai-key';
-  process.env.SERVICE_AI_PROVIDER='openai';
+  process.env.SERVICE_AI_PROVIDER='unsupported-old-value';
+  const fixed=await server.credentials('guest:test');assert.equal(fixed.provider,'openai');assert.equal(fixed.model,'synthetic-openai-model');
+  delete process.env.SERVICE_OPENAI_API_KEY;
   const unavailable=await server.credentials('guest:test');assert.equal(unavailable.openai,'');assert.equal(unavailable.provider,'openai');
-  process.env.SERVICE_OPENAI_API_KEY='managed-openai-key';
-  const openai=await server.credentials('guest:test');assert.equal(openai.openai,'managed-openai-key');assert.equal(openai.model,'gpt-6-luna');assert.equal(openai.provider,'openai');
  } finally {for(const [name,value] of Object.entries(previous)){if(value===undefined)delete process.env[name];else process.env[name]=value;}}
 });

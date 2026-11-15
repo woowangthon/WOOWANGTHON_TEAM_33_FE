@@ -1,11 +1,11 @@
 import { startAnalysis } from "../../../lib/analysis-dispatch";
-import {confirmRequests,updateProgress,replyToRequest,seedTracking,TrackingError} from '../../../lib/request-tracking';
-import {saveTracking} from '../../../lib/request-tracking-store';
-import { addSupplement } from "../../../lib/supplements";
+import {complaintListColumns,complaintListItem} from '../../../lib/complaint-list';
+import { taskChangeLabels } from "../../../lib/task-history";
 import { inlineReferences } from "../../../lib/citations";
 import { supplementedComplaint } from "../../../lib/analysis-stages";
 import { semanticPlan,rerank } from "../../../lib/semantic-search";
 import { z } from "zod";
+import {publicDataSource} from '../../../lib/public-data';
 import { getCurrentUser } from "../../user";
 import { publicStaffInbox, officeForOwner, officeScope, publicComplaint } from "../../../lib/access";
 import {
@@ -20,23 +20,17 @@ import {
 } from "../../../lib/server";
 import {
   autoSync,
-  importDocument,
   retrieve,
-  searchOfficial,
   type StoredDoc,
 } from "../../../lib/laws";
 import { categories, statuses } from "../../../lib/types";
 import { samples } from "../../../lib/samples";
 import { after } from "next/server";
-import { verifyDraft, reviewAllowsPublication } from '../../../lib/review';
-import {auditRequirements,checkAnswerCoverage} from '../../../lib/coverage-ai';
-import {coverageIsCurrent,coverageAllowsPublication,analysisSnapshot} from '../../../lib/coverage';
 import {createRecordReport} from '../../../lib/reports';
 import {renderReport,type RecordReport} from '../../../lib/report-core';
 import {expressionFindings,maskText} from '../../../lib/protection';
 import {
   queueAnalysis,
-  processComplaint,
   drainAnalysisQueue,
 } from "../../../lib/automatic";
 
@@ -44,14 +38,15 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 180;
 const createSchema = z.object({
   title: z.string().trim().min(3).max(120),
-  body: z.string().trim().min(10).max(6000),
+  body: z.string().trim().min(1).max(6000),
   category: z.enum(categories),
-  location: z.string().trim().min(2).max(200),
-  occurredAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  location: z.string().trim().max(200),
+  occurredAt: z.union([z.literal(''),z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]),
+  sourceRecordId:z.string().max(40).optional(),
   consent: z.literal(true),
   channel: z.enum(['web','phone']).optional(),
   sample: z.boolean().optional(),
-});
+}).refine(input=>!!input.sourceRecordId||input.body.length>=10,{message:'민원 내용을 10자 이상 입력해 주세요.',path:['body']});
 function json(value: unknown, status = 200) {
   return Response.json(value, {
     status,
@@ -78,10 +73,11 @@ async function addComplaint(
   const id =
     "SS-" + crypto.randomUUID().replaceAll("-", "").slice(0, 12).toUpperCase();
   const time = now();
+  const source=publicDataSource(input.sourceRecordId,input.body);
   await database().batch([
     database()
       .prepare(
-        "INSERT INTO complaints (id,owner,title,body,category,location,occurred_at,is_sample,created_at,updated_at,auto_state,channel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO complaints (id,owner,title,body,category,location,occurred_at,is_sample,created_at,updated_at,auto_state,channel,source_data) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       )
       .bind(
         id,
@@ -96,11 +92,12 @@ async function addComplaint(
         time,
         "queued",
         input.channel || 'web',
+        source?JSON.stringify(source):null,
       ),
     eventStatement(
       owner,
       id,
-      input.channel==='phone'?(sample?'가상 음성 민원 접수':'음성 민원 접수'):sample?'가상 시나리오 민원 등록':'홈페이지 민원 접수',
+      source?'공개 데이터 검증용 접수 · '+source.recordId:input.channel==='phone'?(sample?'가상 음성 민원 접수':'음성 민원 접수'):sample?'가상 시나리오 민원 등록':'홈페이지 민원 접수',
     ),
   ]);
   return id;
@@ -133,66 +130,60 @@ async function handler(
       if (Number(request.headers.get("content-length") || 0) > (photoUpload?3200000:20000))
         throw new AppError("입력 크기를 초과했습니다.", 413);
     }
+    if (route === 'complaints/trash' && method === 'DELETE') {
+      if (!staff) throw new AppError('담당자만 휴지통을 비울 수 있습니다.', 403);
+      const input = z.object({ ids: z.array(z.string().regex(/^SS-[A-F0-9]{12}$/)).min(1).max(200) }).strict().parse(await body(request));
+      const ids = [...new Set(input.ids)];
+      const scope = sharedStaff ? officeScope(office) : 'owner=?';
+      const scopedOwner = !sharedStaff ? [owner] : office.startsWith('guest:') ? [office] : [];
+      const result = await database().prepare(`DELETE FROM complaints WHERE (${scope}) AND deleted_at IS NOT NULL AND id IN (${ids.map(() => '?').join(',')})`).bind(...scopedOwner, ...ids).run();
+      return json({ deleted: result.meta.changes });
+    }
     if (route === "overview" && method === "GET") {
       if (staff) after(() => drainAnalysisQueue(office));
       const trash=staff&&url.searchParams.get("trash")==="1";
+      const columns=staff?complaintListColumns:'*';
       const rows = await (
         sharedStaff
           ? database().prepare(
-              `SELECT * FROM complaints WHERE ${officeScope(office)} ORDER BY created_at DESC LIMIT 1200`,
+              `SELECT ${columns} FROM complaints WHERE ${officeScope(office)} ORDER BY created_at DESC LIMIT 1200`,
             )
           : database()
               .prepare(
-                "SELECT * FROM complaints WHERE owner=? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 200",
+                `SELECT ${columns} FROM complaints WHERE owner=? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 200`,
               )
               .bind(owner)
       ).all<Record<string, unknown>>();
       const keys = staff
         ? await credentials(office)
-        : { gemini: "", openai: "", provider: "", law: "", model: "" };
-      // Background polls skip the law library; it only changes on explicit import.
-      const poll = url.searchParams.get("poll") === "1";
-      // Count articles in SQL so the full article text never leaves the database.
-      const docs = poll
-        ? null
-        : staff || user.isGuest
-          ? await database()
-              .prepare(
-                "SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC",
-              )
-              .bind(office)
-              .all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
-          : { results: [] };
+        : { openai: "", law: "", model: "" };
+      // The staff library is retired; retain the citizen site's read-only law guide.
+      const docs = !staff && user.isGuest && url.searchParams.get("poll") !== "1"
+        ? await database().prepare("SELECT id,source_id,title,kind,jurisdiction,effective_date,source_url,imported_at,json_array_length(articles::json) AS article_count FROM documents WHERE owner=? ORDER BY imported_at DESC").bind(office).all<Omit<StoredDoc, "owner" | "articles"> & { article_count: number }>()
+        : null;
       return json({
-        trashComplaints:staff?rows.results.filter(r=>r.deleted_at).map(decodeComplaint):[],
+        trashComplaints:staff?rows.results.filter(r=>r.deleted_at).map(complaintListItem):[],
         complaints: rows.results.filter(r=>trash?!!r.deleted_at:!r.deleted_at).map((row) =>
-          staff ? decodeComplaint(row) : publicComplaint(decodeComplaint(row)),
+          staff ? complaintListItem(row) : publicComplaint(decodeComplaint(row)),
         ),
         settings: {
-          geminiReady: !!keys.gemini,
-          aiReady: !!(keys.provider === 'openai' ? keys.openai : keys.gemini),
-          aiProviderLabel: runtime.SERVICE_AI_PROVIDER === 'openai' ? 'OpenAI' : 'Google Gemini',
+          aiReady: !!keys.openai,
+          aiProviderLabel: 'OpenAI',
           publicInbox: publicStaffInbox(),
           lawReady: !!keys.law,
           encryptionReady: staff && !!runtime.APP_SECRET,
           model: keys.model,
         },
-        ...(docs
-          ? {
-              documents: docs.results.map(({ article_count, ...d }) => ({
-                ...d,
-                articleCount: Number(article_count),
-              })),
-            }
-          : {}),
+        ...(docs ? {documents:docs.results.map(({article_count,...d})=>({...d,articleCount:Number(article_count)}))} : {}),
         user: { name: user.fullName || user.email },
       });
     }
     if (route === "complaints" && method === "POST") {
-      await rateLimit(owner, "create", 60);
       const input = createSchema.parse(await body(request));
+      if(staff&&input.channel!=="phone")return json({error:"담당자 직접 등록은 더 이상 제공하지 않습니다."},410);
+      await rateLimit(owner, "create", 60);
       if(input.channel==='phone'&&!staff)throw new AppError('전화 민원은 담당자가 접수합니다.',403);
-      if (
+      if (input.occurredAt && (
         input.occurredAt >
           new Intl.DateTimeFormat("en-CA", {
             timeZone: "Asia/Seoul",
@@ -203,7 +194,7 @@ async function handler(
         Number.isNaN(Date.parse(input.occurredAt)) ||
         new Date(input.occurredAt).toISOString().slice(0, 10) !==
           input.occurredAt
-      )
+      ))
         throw new AppError("발생일을 확인해 주세요.");
       const count = await database()
         .prepare("SELECT count(*) AS n FROM complaints WHERE owner=? AND deleted_at IS NULL")
@@ -258,7 +249,22 @@ async function handler(
       const c = decodeComplaint(row);
       if(c.deleted_at&&!(staff&&(url.searchParams.get("trash")==="1"||method==="PATCH")))throw new AppError("민원을 찾을 수 없습니다.",404);
       const complaintOwner = String(row.owner);
+      // Read-only diagnostics share the complaint's existing staff/office scope.
+      // Credentials and unrelated checkpoint fields are never projected.
+      if(path.length===3&&path[2]==='harness'&&method==='GET') {
+        if(!staff)throw new AppError('담당자 권한이 필요합니다.',403);
+        const checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}'));
+        return json({id:c.id,state:c.auto_state,audit:c.analysis?.summaryHarness||null,pending:{
+          facts:checkpoint.plan?.facts||null,candidate:checkpoint.analysis?.summary||null,requests:checkpoint.analysis?.requests||null,
+          review:checkpoint.summaryFailure||null,progress:checkpoint.summaryProgress||null,recovery:checkpoint.summaryRecovery||null,
+          stages:{plan:!!checkpoint.plan,evidence:!!checkpoint.evidence,analysis:!!checkpoint.analysis,summary:!!checkpoint.summary},
+        }});
+      }
       if (path.length === 2 && method === "GET") {
+        if (staff && !c.deleted_at && c.status !== 'resolved' &&
+          (c.auto_state === 'queued' || (c.auto_state === 'idle' && !c.analysis))) {
+          after(() => startAnalysis(c.id).catch(() => undefined));
+        }
         const events = await database()
           .prepare(
             "SELECT id,label,created_at FROM events WHERE complaint_id=? AND owner=? ORDER BY created_at DESC",
@@ -282,73 +288,11 @@ async function handler(
         if(!photo)throw new AppError('사진을 찾을 수 없습니다.',404);
         return new Response(new Uint8Array(photo.bytes),{headers:{'Content-Type':photo.mime,'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Content-Disposition':'inline'}});
       }
-      if(path[2]==='supplements'&&method==='POST') {
-        await rateLimit(owner,'supplement',30);
-        await addSupplement(request,c,complaintOwner,staff);
-        if(!staff)await startAnalysis(c.id).catch(()=>undefined);
-        return json({ok:true},201);
-      }
-      if(path[2]==='requirements'&&method==='POST') {
-        if(c.deleted_at)throw new AppError('삭제된 민원은 변경할 수 없습니다.',409);
-        await rateLimit(owner,'requirements',40);
-        const input=z.discriminatedUnion('action',[
-          z.object({action:z.literal('confirm'),revision:z.number().int(),items:z.array(z.object({id:z.string().max(60).optional(),text:z.string().trim().min(2).max(600),withdrawn:z.boolean()})).max(30)}),
-          z.object({action:z.literal('progress'),revision:z.number().int(),id:z.string().max(60),state:z.enum(['received','waiting','in_progress','completed','unavailable']),note:z.string().trim().min(5).max(2000)}),
-          z.object({action:z.literal('reply'),revision:z.number().int(),id:z.string().max(60),text:z.string().trim().min(2).max(2000)})
-        ]).parse(await body(request));
-        if(input.revision!==c.revision)throw new AppError('민원이 변경되었습니다. 새로고침 후 다시 저장해 주세요.',409);
-        const previous=seedTracking(c),time=now();
-        if(input.action==='progress'){
-          if(!staff)throw new AppError('담당자만 처리 상태를 변경할 수 있습니다.',403);
-          await saveTracking(c,complaintOwner,updateProgress(previous,input.id,input.state,input.note,time),'요구별 처리 상태 변경',false);
-        }else{
-          if(staff)throw new AppError('시민의 요구 확인과 보완은 민원인 화면에서 할 수 있습니다.',403);
-          if(input.action==='confirm'){
-            const next=confirmRequests(previous,input.items,time);
-            const changed=!previous.confirmedAt||JSON.stringify(previous.items.map(r=>[r.id,r.text,r.withdrawn]))!==JSON.stringify(next.items.map(r=>[r.id,r.text,r.withdrawn]));
-            await saveTracking(c,complaintOwner,next,'민원인 요구사항 확인·수정',changed);
-            if(changed)await startAnalysis(c.id).catch(()=>undefined);
-          }else{
-            const item=previous.items.find(r=>r.id===input.id);
-            const next=replyToRequest(previous,input.id,input.text,time);
-            await saveTracking(c,complaintOwner,next,'민원인 요구별 추가 정보 접수',true,{id:crypto.randomUUID(),role:'citizen',text:`[요구사항: ${item!.text}]\n담당자 확인 요청: ${item!.note}\n추가 정보: ${input.text}`,createdAt:time,attachments:[]});
-            await startAnalysis(c.id).catch(()=>undefined);
-          }
-        }
-        return json({ok:true});
+      if(['requirements','verify-draft','coverage-decision','supplements'].includes(path[2])&&method==='POST') {
+        return json({error:'더 이상 제공하지 않는 기능입니다.'},410);
       }
       if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
       if(c.deleted_at&&method!=='PATCH')throw new AppError('휴지통에서 복구한 후 사용할 수 있습니다.',409);
-      if(path[2]==='verify-draft'&&method==='POST') {
-        if(c.status==='resolved'||c.auto_state==='processing'||c.auto_state==='queued')throw new AppError('진행 중인 분석이 끝난 후 초안을 검증해 주세요.',409);
-        const input=z.object({draft:z.string().trim().min(10).max(10000),revision:z.number().int()}).parse(await body(request));
-        if(input.revision!==c.revision)throw new AppError('내용이 변경되었습니다. 새로고침 후 다시 검증해 주세요.',409);
-        await rateLimit(owner,'verify',20);
-        const keys=await credentials(office);
-        const [review,audit]=await Promise.all([verifyDraft(keys.provider==='openai'?keys.openai:keys.gemini,keys.model,keys.provider,input.draft,c.evidence?.citations||c.analysis?.citations||[]),auditRequirements(keys,c)]);
-        const coverage=await checkAnswerCoverage(keys,c,audit,input.draft);
-        const result=await database().prepare("UPDATE complaints SET draft_review=?,coverage_review=?,revision=revision+1 WHERE id=? AND owner=? AND revision=? AND status!='resolved' AND deleted_at IS NULL AND auto_state NOT IN ('processing','queued')").bind(JSON.stringify(review),JSON.stringify(coverage),c.id,complaintOwner,c.revision).run();
-        if(!result.meta.changes)throw new AppError('검증 중 초안이 변경되었습니다. 다시 검증해 주세요.',409);
-        await eventStatement(complaintOwner,c.id,'요구사항 누락 및 답변 문장별 근거 검증').run();
-        return json({review,coverage});
-      }
-      if(path[2]==='coverage-decision'&&method==='POST') {
-        if(c.status==='resolved'||['queued','processing'].includes(c.auto_state||''))throw new AppError('분석 완료 후 검토할 수 있습니다.',409);
-        const input=z.object({revision:z.number().int(),draft:z.string().trim().max(10000),requestId:z.string().max(60),decision:z.enum(['include','exclude','answered','refused','clarification','missing']),reason:z.string().trim().min(5).max(1000)}).parse(await body(request));
-        if(c.revision!==input.revision||!coverageIsCurrent(c.coverage_review,c,input.draft))throw new AppError('현재 내용으로 다시 검사한 후 판정을 수정해 주세요.',409);
-        const coverage=c.coverage_review!,item=coverage.requirements.find(r=>r.id===input.requestId);
-        if(!item)throw new AppError('요구사항을 찾을 수 없습니다.',404);
-        if(input.decision==='include') {
-          if(!c.analysis)throw new AppError('분석 결과가 없습니다.',409);
-          if(!c.analysis.requests.includes(item.text))c.analysis.requests.push(item.text);
-          item.summaryStatus='preserved';item.summaryReason='담당자가 원문 요구를 요구사항 목록에 반영했습니다.';
-          coverage.analysisSnapshot=analysisSnapshot(c);
-        } else item.override={responseStatus:input.decision==='exclude'?item.responseStatus:input.decision,excluded:input.decision==='exclude',reason:maskText(input.reason,c.analysis?.sensitiveQuotes),at:now()};
-        const result=await database().prepare("UPDATE complaints SET analysis=?,coverage_review=?,updated_at=?,revision=revision+1 WHERE id=? AND owner=? AND revision=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(c.analysis),JSON.stringify(coverage),now(),c.id,complaintOwner,c.revision).run();
-        if(!result.meta.changes)throw new AppError('다른 창에서 내용이 변경되었습니다.',409);
-        await eventStatement(complaintOwner,c.id,input.decision==='include'?'누락된 요구사항을 목록에 반영':'요구사항 대응 판정 담당자 수정').run();
-        return json({ok:true});
-      }
       if(path[2]==='reports'&&method==='POST') {
         const input=z.object({revision:z.number().int(),note:z.string().trim().max(2000),confirmed:z.array(z.string().regex(/^F\d+$/)).max(40)}).parse(await body(request));
         if(c.revision!==input.revision)throw new AppError('민원이 변경되었습니다. 새로고침해 주세요.',409);
@@ -437,7 +381,7 @@ async function handler(
             revision: z.number().int(),
             action: z.enum(["save", "approve", "status", "tasks", "delete", "restore"]),
             draft: z.string().max(10000).optional(),
-            status: z.enum(["received", "reviewing", "waiting"]).optional(),
+            status: z.enum(["received", "reviewing"]).optional(),
             reviewed: z.boolean().optional(),
             tasks: z
               .array(
@@ -457,9 +401,10 @@ async function handler(
             409,
           );
         if(input.action==='restore') {
-          const result=await database().prepare("UPDATE complaints SET deleted_at=NULL,updated_at=?,revision=revision+1,auto_state=CASE WHEN analysis IS NULL THEN 'idle' ELSE 'completed' END,auto_message='',workflow_run=NULL,analysis_checkpoint=NULL WHERE id=? AND owner=? AND revision=? AND deleted_at IS NOT NULL").bind(now(),c.id,complaintOwner,c.revision).run();
+          const result=await database().prepare("UPDATE complaints SET deleted_at=NULL,updated_at=?,revision=revision+1,auto_state=CASE WHEN analysis IS NULL AND status!='resolved' THEN 'queued' ELSE 'completed' END,auto_message='',workflow_run=NULL,analysis_checkpoint=NULL WHERE id=? AND owner=? AND revision=? AND deleted_at IS NOT NULL").bind(now(),c.id,complaintOwner,c.revision).run();
           if(!result.meta.changes)throw new AppError('복구할 민원을 찾을 수 없거나 변경되었습니다.',409);
           await eventStatement(complaintOwner,c.id,'담당자 민원 복구').run();
+          if (!c.analysis && c.status !== 'resolved') after(() => startAnalysis(c.id).catch(() => undefined));
           return json({ok:true});
         }
         if(c.deleted_at)throw new AppError('휴지통에서 복구한 후 사용할 수 있습니다.',409);
@@ -468,6 +413,24 @@ async function handler(
           if(!result.meta.changes)throw new AppError('내용이 변경되었습니다. 새로고침 후 다시 삭제해 주세요.',409);
           await eventStatement(complaintOwner,c.id,'담당자 민원 삭제').run();
           return json({ok:true});
+        }
+        if(input.action==='tasks') {
+          const submitted=input.tasks;
+          if(!submitted||submitted.length!==c.tasks.length||new Set(submitted.map(t=>t.id)).size!==c.tasks.length||submitted.some(t=>!c.tasks.some(old=>old.id===t.id)))
+            throw new AppError('후속 조치 항목이 변경되었습니다. 새로고침해 주세요.',409);
+          const tasks=c.tasks.map(task=>({...task,done:submitted.find(t=>t.id===task.id)!.done}));
+          const labels=taskChangeLabels(c.tasks,tasks);
+          if(!labels.length)return json({revision:c.revision,tasks});
+          const updatedAt=now(),event={id:crypto.randomUUID(),label:labels.join('\n'),created_at:updatedAt};
+          // Commit the checklist and its precise history together in one round trip.
+          const saved=await database().prepare(`WITH changed AS (
+            UPDATE complaints SET tasks=?,updated_at=?,revision=revision+1
+            WHERE id=? AND owner=? AND revision=? AND deleted_at IS NULL RETURNING id,owner,revision
+          ), logged AS (
+            INSERT INTO events(id,complaint_id,owner,label,created_at) SELECT ?,id,owner,?,? FROM changed
+          ) SELECT revision FROM changed`).bind(JSON.stringify(tasks),updatedAt,c.id,complaintOwner,c.revision,event.id,event.label,updatedAt).first<{revision:number}>();
+          if(!saved)throw new AppError('다른 창에서 후속 조치가 변경되었습니다.',409);
+          return json({revision:saved.revision,tasks,event,updatedAt});
         }
         let status = c.status,
           draft = c.draft,
@@ -483,13 +446,8 @@ async function handler(
         if (input.action === "status") {
           if (c.status === "resolved")
             throw new AppError("완료된 민원입니다.", 409);
-          if(input.status==='waiting')throw new AppError('보완 요청란에 확인할 내용을 작성해 주세요.');
           status = input.status || status;
           label = "처리 상태 변경: " + statuses[status];
-        }
-        if (input.action === "tasks") {
-          tasks = input.tasks || tasks;
-          label = "후속 조치 체크리스트 변경";
         }
         if (input.action === "approve") {
           if(c.auto_state==='processing'||c.auto_state==='queued')throw new AppError('진행 중인 분석이 끝난 후 답변을 검토해 주세요.',409);
@@ -500,8 +458,6 @@ async function handler(
               "답변을 작성하고 근거·사실 검토에 체크해 주세요.",
             );
           draft = input.draft.trim();
-          if(!reviewAllowsPublication(c.draft_review,draft))throw new AppError('현재 답변의 문장별 근거를 검증하고 확인이 필요한 문장을 수정해 주세요.',409);
-          if(!coverageAllowsPublication(c.coverage_review,c,draft))throw new AppError('요약과 답변에 누락된 요구사항을 확인해 주세요. 현재 답변으로 요구사항 검사를 완료해야 합니다.',409);
           published = draft;
           status = "resolved";
           label = "담당자 검토·승인 후 홈페이지 답변 등록";
@@ -531,37 +487,14 @@ async function handler(
         return json({ ok: true });
       }
     }
-    if (route === "laws/search" && method === "POST") {
+    if (["laws/search", "laws/import"].includes(route) && method === "POST") {
       if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
-      await rateLimit(owner, "law", 50);
-      const input = z
-        .object({
-          query: z.string().trim().min(2).max(100),
-          kind: z.enum(["law", "ordin"]),
-        })
-        .parse(await body(request));
-      const keys = await credentials(office);
-      return json({
-        results: await searchOfficial(keys.law, input.query, input.kind),
-      });
-    }
-    if (route === "laws/import" && method === "POST") {
-      if (!staff) throw new AppError("담당자 권한이 필요합니다.", 403);
-      await rateLimit(owner, "law", 50);
-      const input = z
-        .object({
-          id: z.string().regex(/^\d{1,15}$/),
-          kind: z.enum(["law", "ordin"]),
-        })
-        .parse(await body(request));
-      const keys = await credentials(office);
-      return json(await importDocument(office, keys.law, input.id, input.kind));
+      return json({error:"더 이상 제공하지 않는 기능입니다."},410);
     }
     throw new AppError("요청한 기능을 찾을 수 없습니다.", 404);
   } catch (error) {
     if (error instanceof z.ZodError)
       return json({ error: "입력 항목의 길이와 형식을 확인해 주세요." }, 400);
-    if(error instanceof TrackingError)return json({error:error.message},400);
     if (error instanceof AppError)
       return json({ error: error.message }, error.status);
     // Never log request bodies, credentials, or external error bodies.
@@ -574,3 +507,4 @@ async function handler(
 export const GET = handler;
 export const POST = handler;
 export const PATCH = handler;
+export const DELETE = handler;

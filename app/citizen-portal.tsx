@@ -1,14 +1,11 @@
 "use client";
-import SupplementPanel from './supplement-panel';
-import RequestTrackingPanel from './request-tracking-panel';
-import CitationText from './citation-text';
 import { protectedTitle } from '../lib/protection';
+import CitationText from './citation-text';
+import SaiMark from './sai-mark';
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Bell,
   BookOpen,
   Check,
   CheckCircle2,
@@ -18,18 +15,12 @@ import {
   ClipboardCheck,
   FilePenLine,
   FileText,
-  HelpCircle,
   Home,
   Leaf,
   LoaderCircle,
-  LogIn,
-  MapPin,
   Menu,
   MonitorCheck,
-  Pause,
-  Play,
   Search,
-  ShieldCheck,
   Sparkles,
   TrafficCone,
   Trash2,
@@ -37,6 +28,7 @@ import {
   Volume2,
   X,
 } from "lucide-react";
+import { useEffect,useRef,useState,type FormEvent } from "react";
 import {
   categories,
   statuses,
@@ -83,7 +75,7 @@ const guides = [
   },
   {
     q: "접수한 민원은 어디에서 확인하나요?",
-    a: "이 브라우저에서 접수한 민원은 나의 민원에서 확인할 수 있습니다. 접수번호나 제목으로 검색하고 접수·검토 중·보완 요청·답변 완료 상태별로 조회할 수 있습니다.",
+    a: "이 브라우저에서 접수한 민원은 나의 민원에서 확인할 수 있습니다. 접수번호나 제목으로 검색하고 접수·검토 중·답변 완료 상태별로 조회할 수 있습니다.",
   },
   {
     q: "법령과 조례의 근거는 어떻게 확인하나요?",
@@ -106,11 +98,11 @@ function Brand() {
   return (
     <>
       <span className="cp-brand-symbol">
-        <ShieldCheck size={38} strokeWidth={1.8} />
+        <SaiMark size={38}/>
       </span>
       <span>
         <strong>
-          민원<span>쉴드</span>
+          민원<span>사이</span>
         </strong>
       </span>
     </>
@@ -214,7 +206,7 @@ export default function CitizenPortal({
           <button
             className="cp-brand"
             onClick={() => go("home")}
-            aria-label="민원 쉴드 홈"
+            aria-label="민원사이 홈"
           >
             <Brand />
           </button>
@@ -282,7 +274,7 @@ export default function CitizenPortal({
           ))}
           <a href="/phone" style={{display:'flex',alignItems:'center',padding:'0 20px',fontWeight:600}}>음성 상담</a>
           <button className="cp-staff-nav" onClick={onStaff}>
-            <ShieldCheck size={19} />
+            <ClipboardCheck size={19} />
             담당자 업무
             <ArrowUpRight size={16} />
           </button>
@@ -468,7 +460,6 @@ export default function CitizenPortal({
                     </div>
                   ) : detail ? (
                     <CitizenDetail
-                      onRefresh={()=>open(detail.id)}
                       complaint={detail}
                       events={events}
                       onBack={() => setDetail(null)}
@@ -536,25 +527,6 @@ export default function CitizenPortal({
             >
               국민신문고 <ArrowUpRight size={14} />
             </a>
-          </div>
-          <div className="cp-footer-main">
-            <button
-              className="cp-brand"
-              onClick={() => go("home")}
-              aria-label="민원 쉴드 홈"
-            >
-              <Brand />
-            </button>
-            <div>
-              <strong>민원 쉴드 · Shield & Solve</strong>
-            </div>
-            <button
-              className="cp-to-top"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              aria-label="맨 위로"
-            >
-              ↑<span>TOP</span>
-            </button>
           </div>
         </div>
       </footer>
@@ -639,7 +611,7 @@ function ApplicationForm({
       {step === 0 ? (
         <>
           <div className="cp-guide-box">
-            <ShieldCheck size={33} />
+            <FilePenLine size={33} />
             <div>
               <h2>민원 신청</h2>
             </div>
@@ -1003,12 +975,10 @@ function CitizenDetail({
   complaint: c,
   events,
   onBack,
-  onRefresh,
 }: {
   complaint: Complaint;
   events: Event[];
   onBack: () => void;
-  onRefresh:()=>void|Promise<void>;
 }) {
   return (
     <>
@@ -1030,20 +1000,19 @@ function CitizenDetail({
         </div>
         <div>
           <dt>발생 일자</dt>
-          <dd>{c.occurred_at}</dd>
+          <dd>{c.occurred_at||'미확인'}</dd>
         </div>
         <div>
           <dt>민원 내용</dt>
           <dd>{c.body}</dd>
         </div>
       </dl>
-      <RequestTrackingPanel key={c.id} complaint={c} staff={false} onChanged={onRefresh}/>
-      <SupplementPanel complaint={c} staff={false} onChanged={onRefresh}/>
       <section className="cp-citizen-reply">
         <h2>
           <ClipboardCheck size={22} />
           처리 결과 및 답변
         </h2>
+        {c.source_data?<p>공개 데이터 검증 · <a href={c.source_data.url} target="_blank" rel="noreferrer">{c.source_data.provider} · {c.source_data.recordId}</a></p>:null}
         {c.published ? (
           <p><CitationText text={c.published} citations={c.published_citations||[]}/></p>
         ) : (
@@ -1090,7 +1059,7 @@ function Guide({ onApply }: { onApply: () => void }) {
       <div className="cp-guide-box">
         <BookOpen size={37} />
         <div>
-          <h2>민원 쉴드, 이렇게 이용하세요</h2>
+          <h2>민원사이, 이렇게 이용하세요</h2>
         </div>
       </div>
       <h2 className="cp-faq-heading">민원 처리 절차</h2>

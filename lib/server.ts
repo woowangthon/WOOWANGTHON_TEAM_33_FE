@@ -1,26 +1,28 @@
 import { database } from './database';
 import type { Complaint } from './types';
-import { protectedTitle } from './protection';
+import { businessSummary, protectedTitle } from './protection';
 import { readableCitations } from './citations';
-import {seedTracking} from './request-tracking';
 
 export const runtime = process.env;
 export { database };
 export const now = () => new Date().toISOString();
-export class AppError extends Error { constructor(message:string, public status=400) {super(message);} }
+export class AppError extends Error { constructor(message:string, public status=400,public retryable=true) {super(message);} }
 export function decodeComplaint(row:Record<string,unknown>):Complaint {
   const { owner: _owner, auto_token: _token, auto_started_at: _started, analysis_checkpoint:_checkpoint, analysis_generation:_generation, workflow_run:_run, ...safe }=row;
   const result={...safe, draft_review:row.draft_review?JSON.parse(String(row.draft_review)):null, evidence:row.evidence?JSON.parse(String(row.evidence)):null, analysis: row.analysis ? JSON.parse(String(row.analysis)):null, tasks:JSON.parse(String(row.tasks || '[]'))} as Complaint;
+  // Retired supplement waits return to the ordinary review flow without altering history.
+  if(row.status==='waiting')result.status='reviewing';
   result.supplements=JSON.parse(String(row.supplements||'[]'));
+  result.source_data=row.source_data?JSON.parse(String(row.source_data)):null;
   result.coverage_review=row.coverage_review?JSON.parse(String(row.coverage_review)):null;
   result.request_tracking=row.request_tracking?JSON.parse(String(row.request_tracking)):null;
-  result.request_tracking=seedTracking(result);
   result.published_citations=JSON.parse(String(row.published_citations||'[]'));
   const citations=result.evidence?.citations||result.analysis?.citations||[];
   result.draft=readableCitations(result.draft||'',citations);
   if(result.analysis)result.analysis.draft=readableCitations(result.analysis.draft,citations);
   if(result.published&&!result.published_citations?.length)result.published_citations=result.analysis?.citations||[];
   result.published=readableCitations(result.published||'',result.published_citations||[]);
+  if(result.analysis)result.analysis.summary=businessSummary(result);
   return {...result,display_title:protectedTitle(result)};
 }
 export async function complaint(owner:string,id:string) {
@@ -45,23 +47,22 @@ export async function credentials(owner:string) {
   // These credentials are deliberately provisioned for the public service.
   // Legacy account credentials below remain isolated from guest workspaces.
   const service = {
-    provider: runtime.SERVICE_AI_PROVIDER === 'openai' ? 'openai' : 'gemini',
+    provider: 'openai' as const,
     openai: runtime.SERVICE_OPENAI_API_KEY || '',
-    gemini: runtime.SERVICE_GEMINI_API_KEY || '',
     law: runtime.SERVICE_LAW_API_OC || '',
-    model: runtime.SERVICE_AI_PROVIDER === 'openai' ? runtime.SERVICE_OPENAI_MODEL || 'gpt-6-luna' : runtime.SERVICE_GEMINI_MODEL || 'gemini-2.5-flash-lite',
+    model: runtime.SERVICE_OPENAI_MODEL || 'gpt-6-luna',
   };
   if(owner==='office:cheongju:public')return service;
-  if ((service.provider==='openai' ? service.openai : service.gemini) && service.law) return service;
-  const row=await database().prepare('SELECT encrypted,model FROM settings WHERE owner=?').bind(owner).first<{encrypted:string;model:string}>();
-  let keys:{gemini?:string;law?:string}={};
+  if (service.openai && service.law) return service;
+  const row=await database().prepare('SELECT encrypted FROM settings WHERE owner=?').bind(owner).first<{encrypted:string}>();
+  let keys:{law?:string}={};
   if(row) {
     try { const [iv,data]=row.encrypted.split('.'); const bytes=(s:string)=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
       const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes(iv),additionalData:new TextEncoder().encode(owner)},await cipherKey(),bytes(data));
       keys=JSON.parse(new TextDecoder().decode(plain));
     } catch {throw new AppError('저장된 연결 정보를 읽을 수 없습니다. 서버 암호화 설정을 확인해 주세요.',503);}
   }
-  return {...service,gemini:service.gemini || keys.gemini || (!owner.startsWith('guest:') && runtime.GEMINI_API_KEY) || '',law:service.law || keys.law || (!owner.startsWith('guest:') && runtime.LAW_API_OC) || '',model:service.provider==='openai'||service.gemini ? service.model : row?.model || service.model};
+  return {...service,law:service.law || keys.law || (!owner.startsWith('guest:') && runtime.LAW_API_OC) || ''};
 }
 export async function rateLimit(owner:string,action:string,max:number) {
   const bucket=now().slice(0,13);

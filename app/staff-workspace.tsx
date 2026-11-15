@@ -1,71 +1,62 @@
 "use client";
 
 import {
+  AlertCircle,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  Download,
+  ExternalLink,
+  Inbox,
+  LoaderCircle,
+  Menu,
+  Phone,
+  RefreshCw,
+  X,
+} from "lucide-react";
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
   type FormEvent,
 } from "react";
-import {
-  ShieldCheck,
-  Inbox,
-  BookOpen,
-  ChevronRight,
-  ChevronLeft,
-  RefreshCw,
-  Search,
-  Plus,
-  Download,
-  ExternalLink,
-  UserRound,
-  LogIn,
-  CheckCircle2,
-  AlertCircle,
-  LoaderCircle,
-  Menu,
-  X,
-  House,
-  ClipboardList,
-} from "lucide-react";
+import type {ComplaintListItem} from '../lib/complaint-list';
+import {createLatestRequest} from '../lib/latest-request';
+import {createSignalRefresh,visibleComplaint} from '../lib/complaint-notifications';
+import {missingBusinessContentMessage} from '../lib/analysis-messages';
 import {
   autoStates,
   categories,
   statuses,
+  type AppSettings,
   type Complaint,
   type Event,
-  type AppSettings,
-  type LawDocument,
-  type Status,
 } from "../lib/types";
+import PhoneDesk from './phone-desk';
+import SaiMark from './sai-mark';
 import {
   ComplaintDetail,
-  Portal,
-  LibraryView,
 } from "./workspace";
-import { protectedTitle, expressionFindings } from '../lib/protection';
-import PhoneDesk from './phone-desk';
 
-type View = "inbox" | "intake" | "library" | "trash" | "phone";
+type View = "inbox" | "trash" | "phone";
 type Overview = {
-  complaints: Complaint[];
-  trashComplaints?:Complaint[];
+  complaints: ComplaintListItem[];
+  trashComplaints?:ComplaintListItem[];
   settings: AppSettings;
-  documents: LawDocument[];
   user: { name: string };
 };
 const settings: AppSettings = {
-  geminiReady: false,
+  aiReady: false,
   lawReady: false,
   encryptionReady: false,
-  model: "gemini-2.5-flash-lite",
+  model: "gpt-6-luna",
 };
 const views = {
   phone: "전화 상담",
   inbox: "민원 접수·처리",
   trash:"휴지통",
-  intake: "민원 직접 등록",
-  library: "법령·조례 자료실",
 };
 const initialFilter = {
   status: "all",
@@ -78,9 +69,11 @@ async function api<T>(
   path: string,
   method = "GET",
   body?: unknown,
+  signal?: AbortSignal,
 ): Promise<T> {
   const response = await fetch("/api/" + path, {
     method,
+    signal,
     headers: method === "GET" ? {} : { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
@@ -89,13 +82,14 @@ async function api<T>(
     throw new Error(result.error || "요청을 처리하지 못했습니다.");
   return result;
 }
-function date(value: string) {
-  return new Intl.DateTimeFormat("sv-SE", {
+const dateFormat = new Intl.DateTimeFormat("sv-SE", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
     timeZone: "Asia/Seoul",
-  }).format(new Date(value));
+  });
+function date(value: string) {
+  return dateFormat.format(new Date(value));
 }
 
 export default function StaffWorkspace({
@@ -108,7 +102,6 @@ export default function StaffWorkspace({
   const [data, setData] = useState<Overview>({
     complaints: [],
     settings,
-    documents: [],
     user: { name: "" },
   });
   const [view, setView] = useState<View>("inbox"),
@@ -125,8 +118,19 @@ export default function StaffWorkspace({
     [page, setPage] = useState(1),
     [pageSize, setPageSize] = useState(10);
   const selectedId = useRef<string | null>(null),
+    selectedRevision = useRef(0),
+    tasksPending = useRef(false),
     generation = useRef(0),
     running = useRef(false);
+  const [savingTasks,setSavingTasks]=useState(false);
+  const [opening,setOpening]=useState<string|null>(null);
+  const openingRef=useRef(false);
+  const [detailNavigation]=useState(()=>createLatestRequest((id,signal)=>
+    api<{complaint:Complaint;events:Event[]}>("complaints/"+id+"?trash=1","GET",undefined,signal)
+  ));
+  useEffect(()=>()=>detailNavigation.cancel(),[detailNavigation]);
+  const [connectionLost,setConnectionLost]=useState(false);
+  const syncSignals=useRef<ReturnType<typeof createSignalRefresh>|null>(null);
   const refresh = useCallback(async () => {
     const next = await api<Overview>("overview");
     setData(next);
@@ -149,43 +153,42 @@ export default function StaffWorkspace({
       active = false;
     };
   }, [authenticated]);
-  // Poll the shared inbox, so submissions from the citizen site appear without a reload.
+  // Database completion signals drive refreshes. No timer checks for analysis results.
   useEffect(() => {
     if (!authenticated) return;
-    let active = true,
-      inFlight = false;
-    const timer = setInterval(async () => {
-      if (document.hidden || inFlight || running.current) return;
-      inFlight = true;
-      try {
-        // An open complaint only needs its own record; the full inbox is
-        // refreshed while browsing the list. Keeps database egress small.
-        const id = selectedId.current;
-        if (!id) {
-          const d = await api<Overview>("overview?poll=1");
-          if (active) setData((prev) => ({ ...prev, ...d }));
-        } else {
-          const result = await api<{ complaint: Complaint; events: Event[] }>(
-            "complaints/" + id + "?trash=1",
-          );
-          if (active && selectedId.current === id) {
-            setSelected(result.complaint);
-            setEvents(result.events);
-          }
-        }
-      } catch {
-        /* Explicit refresh surfaces errors; transient background failures do not dismiss the editor. */
-      } finally {
-        inFlight = false;
+    let active=true,expectedReconnect=false;
+    const sync=createSignalRefresh(async()=>{
+      const id=selectedId.current;
+      const [overview,result]=await Promise.all([
+        api<Overview>('overview'),
+        id?api<{complaint:Complaint;events:Event[]}>('complaints/'+id+'?trash=1'):Promise.resolve(null)
+      ]);
+      if(!active)return;
+      setData(overview);
+      if(running.current||tasksPending.current){sync.signal();return;}
+      if(result&&selectedId.current===id&&result.complaint.revision>=selectedRevision.current){
+        selectedRevision.current=result.complaint.revision;
+        setSelected(result.complaint);setEvents(result.events);
       }
-    }, 15000);
+    },()=>running.current||tasksPending.current||openingRef.current,()=>{
+      if(active)setNotice({message:'변경된 결과를 불러오지 못했습니다. 새로고침해 주세요.',error:true});
+    });
+    syncSignals.current=sync;
+    const source=new EventSource('/api/complaint-events');
+    source.addEventListener('ready',()=>{if(active){expectedReconnect=false;setConnectionLost(false);sync.signal();}});
+    source.addEventListener('reconnect',()=>{expectedReconnect=true;});
+    source.addEventListener('complaint',()=>{
+      if(!active)return;
+      sync.signal();
+    });
+    source.onerror=()=>{if(active&&!expectedReconnect)setConnectionLost(true);};
     return () => {
-      active = false;
-      clearInterval(timer);
+      active=false;source.close();sync.stop();
+      if(syncSignals.current===sync)syncSignals.current=null;
     };
   }, [authenticated]);
   const run = async (label: string, action: () => Promise<void>) => {
-    if (running.current) return;
+    if (running.current || tasksPending.current) return;
     running.current = true;
     setBusy(label);
     setNotice(null);
@@ -199,35 +202,42 @@ export default function StaffWorkspace({
     } finally {
       running.current = false;
       setBusy("");
+      void syncSignals.current?.flush();
     }
   };
   function navigate(next: View) {
+    detailNavigation.cancel();openingRef.current=false;setOpening(null);
     generation.current++;
     selectedId.current = null;
+    selectedRevision.current=0;
+    tasksPending.current=false;setSavingTasks(false);
     setSelected(null);
     setView(next);
     setMenu(false);
+    void syncSignals.current?.flush();
   }
   async function detail(id: string) {
     const r = await api<{ complaint: Complaint; events: Event[] }>(
       "complaints/" + id + "?trash=1",
     );
-    if (selectedId.current === id) {
+    if (selectedId.current === id && r.complaint.revision>=selectedRevision.current) {
+      selectedRevision.current=r.complaint.revision;
       setSelected(r.complaint);
       setEvents(r.events);
     }
   }
   function open(id: string) {
-    const token = ++generation.current;
-    void run("open", async () => {
-      const r = await api<{ complaint: Complaint; events: Event[] }>(
-        "complaints/" + id + "?trash=1",
-      );
-      if (token === generation.current) {
+    if(running.current||tasksPending.current)return;
+    void detailNavigation.open(id,{
+      pending:()=>{openingRef.current=true;setOpening(id);setNotice(null);},
+      success:r=>{
         selectedId.current = id;
+        selectedRevision.current=r.complaint.revision;
         setSelected(r.complaint);
         setEvents(r.events);
-      }
+      },
+      error:error=>setNotice({message:error instanceof Error?error.message:"민원을 불러오지 못했습니다. 다시 눌러 주세요.",error:true}),
+      settled:()=>{openingRef.current=false;setOpening(null);void syncSignals.current?.flush();},
     });
   }
   function statusFilter(status: string) {
@@ -242,36 +252,38 @@ export default function StaffWorkspace({
     setApplied(filter);
     setPage(1);
   }
-  const filtered = (view==="trash"?(data.trashComplaints||[]):data.complaints).filter(
+  const readyComplaints=data.complaints.filter(visibleComplaint);
+  const filtered = (view==="trash"?(data.trashComplaints||[]):readyComplaints).filter(
     (c) =>
       (applied.status === "all" || c.status === applied.status) &&
       (applied.category === "all" || c.category === applied.category) &&
       (!applied.from || date(c.created_at) >= applied.from) &&
       (!applied.to || date(c.created_at) <= applied.to) &&
-      (c.title + " " + protectedTitle(c) + " " + c.id + " " + c.location)
+      (c.title + " " + c.id + " " + c.location)
         .toLowerCase()
         .includes(applied.query.trim().toLowerCase()),
   );
   const pages = Math.max(1, Math.ceil(filtered.length / pageSize)),
     currentPage = Math.min(page, pages);
+  // Detail navigation follows time: previous is older, next is newer.
+  const chronological = [...filtered].sort((a,b) => Date.parse(a.created_at)-Date.parse(b.created_at) || a.id.localeCompare(b.id));
+  const selectedIndex = selected ? chronological.findIndex(c => c.id === selected.id) : -1;
   const count = (status: string) =>
     status === "all"
-      ? data.complaints.length
-      : data.complaints.filter((c) => c.status === status).length;
-  const heading = selected ? "민원 상세 검토" : views[view];
+      ? readyComplaints.length
+      : readyComplaints.filter((c) => c.status === status).length;
   function exportCsv() {
     const cell = (s: string) =>
       '"' + s.replace(/^[\s]*[=+@-]/, "'$&").replaceAll('"', '""') + '"';
     const csv =
       "\uFEFF" +
       [
-        ["접수번호", "제목", "분야", "처리상태", "자동분석", "접수일"],
+        ["접수번호", "제목", "분야", "처리상태", "접수일"],
         ...filtered.map((c) => [
           c.id,
-          protectedTitle(c),
+          c.title,
           c.category,
           statuses[c.status],
-          autoStates[c.auto_state || "idle"],
           date(c.created_at),
         ]),
       ]
@@ -300,12 +312,10 @@ export default function StaffWorkspace({
           <Menu size={22} />
         </button>
         <button className="admin-brand" onClick={() => navigate("inbox")}>
-          <span>
-            <ShieldCheck size={30} />
-          </span>
-          <strong>민원쉴드</strong>
+          <SaiMark size={32}/>
+          <strong>민원<span>사이</span></strong>
           <i />
-          <b>민원업무관리시스템</b>
+          <b>담당자 업무</b>
         </button>
         <div className="admin-user">
           <a href={otherSiteUrl}>
@@ -315,27 +325,19 @@ export default function StaffWorkspace({
         </div>
       </header>
       <nav className="admin-nav" aria-label="주 메뉴">
-        <button onClick={()=>navigate('phone')} className={view==='phone'?'active':''}><ShieldCheck size={18}/>전화 상담</button>
+        <button onClick={()=>navigate('phone')} className={view==='phone'?'active':''}><Phone size={18}/>전화 상담</button>
         <button
           onClick={() => navigate("inbox")}
-          className={view === "inbox" || view === "intake" ? "active" : ""}
+          className={view === "inbox" ? "active" : ""}
         >
           <Inbox size={18} />
           민원 관리
-        </button>
-        <button
-          onClick={() => navigate("library")}
-          className={view === "library" ? "active" : ""}
-        >
-          <BookOpen size={18} />
-          법령·조례
         </button>
       </nav>
       <div className="admin-layout">
         <aside className={"admin-sidebar " + (menu ? "open" : "")}>
           <div className="admin-side-title">
             <span>민원업무</span>
-            <strong>청주시</strong>
           </div>
           <button
             className={"admin-side-main " + (view === "inbox" ? "active" : "")}
@@ -361,23 +363,9 @@ export default function StaffWorkspace({
               ),
             )}
           </div>
-          <button
-            className="admin-side-main"
-            onClick={() => navigate("intake")}
-          >
-            <ClipboardList size={18} />
-            직접 등록
-          </button>
           <button className={"admin-side-main "+(view==="trash"?"active":"")} onClick={()=>{navigate("trash");setFilter(initialFilter);setApplied(initialFilter);setPage(1);}}>휴지통 <b>{data.trashComplaints?.length||0}</b></button>
           <div className="admin-side-divider" />
-          <button className={'admin-side-main '+(view==='phone'?'active':'')} onClick={()=>navigate('phone')}><ShieldCheck size={18}/>전화 상담</button>
-          <button
-            className="admin-side-main"
-            onClick={() => navigate("library")}
-          >
-            <BookOpen size={18} />
-            법령·조례 자료실
-          </button>
+          <button className={'admin-side-main '+(view==='phone'?'active':'')} onClick={()=>navigate('phone')}><Phone size={18}/>전화 상담</button>
         </aside>
         {menu ? (
           <button
@@ -387,14 +375,6 @@ export default function StaffWorkspace({
           />
         ) : null}
         <main id="staff-main" className="admin-content">
-          <div className="admin-breadcrumb">
-            <House size={13} />
-            <span>업무포털</span>
-            <ChevronRight size={12} />
-            <span>민원 관리</span>
-            <ChevronRight size={12} />
-            <strong>{heading}</strong>
-          </div>
           {notice ? (
             <div
               className={"admin-alert " + (notice.error ? "error" : "")}
@@ -411,6 +391,7 @@ export default function StaffWorkspace({
               </button>
             </div>
           ) : null}
+          {connectionLost?<div className="admin-alert error" role="status">실시간 연결이 끊겼습니다. 다시 연결 중입니다.</div>:null}
           <div hidden={view!=='phone'||!!selected}><PhoneDesk staff={true} onRegistered={()=>void refresh()}/></div>
           {view==='phone'&&!selected?null:loading ? (
             <div className="admin-loading">
@@ -419,12 +400,10 @@ export default function StaffWorkspace({
             </div>
           ) : selected ? (
             <>
-              {selected.auto_state === "completed" &&
-              selected.status !== "waiting" &&
-              !selected.deleted_at ? null : (
+              {selected.auto_state === "completed" || selected.deleted_at ? null : (
               <div
                 className={
-                  "admin-processing " + (selected.auto_state || "idle")
+                  "admin-processing " + (selected.auto_state || "idle") + (/크레딧|잔액/.test(selected.auto_message||'')?' quota-error':'')
                 }
                 role="status"
               >
@@ -438,12 +417,12 @@ export default function StaffWorkspace({
                   )}
                 </span>
                 <div>
-                  <strong>{selected.deleted_at?"휴지통":selected.status==="waiting"?"보완 답변 대기":autoStates[selected.auto_state || "idle"]}</strong>
+                  <strong>{selected.deleted_at?"휴지통":selected.auto_message===missingBusinessContentMessage?'내용 확인 필요':/크레딧|잔액/.test(selected.auto_message||'')?'OpenAI 크레딧 확인 필요':autoStates[selected.auto_state || "idle"]}</strong>
                   <p>{selected.auto_message || ""}</p>
                 </div>
                 {authenticated &&
-                !["queued", "processing"].includes(selected.auto_state || "") &&
-                selected.status !== "resolved" && !selected.deleted_at && selected.status!=="waiting" ? (
+                selected.auto_state === "failed" &&
+                selected.status !== "resolved" && !selected.deleted_at ? (
                   <button
                     className="button outline small"
                     disabled={!!busy}
@@ -458,13 +437,14 @@ export default function StaffWorkspace({
                       })
                     }
                   >
-                    자동 분석 재시도
+                    재시도
                   </button>
                 ) : null}
               </div>
               )}
               <div className={!authenticated ? "admin-readonly" : ""}>
                 <ComplaintDetail
+                  key={selected.id}
                   c={selected}
                   events={events}
                   citizen={false}
@@ -475,22 +455,31 @@ export default function StaffWorkspace({
                             selected.auto_state || "",
                           )
                         ? "automatic"
-                        : busy
+                        : busy || (savingTasks ? "tasks" : "")
                   }
-                  ready={data.settings.aiReady ?? data.settings.geminiReady}
                   lawReady={data.settings.lawReady}
+                  navigation={{
+                    previous: selectedIndex > 0 ? chronological[selectedIndex - 1].id : undefined,
+                    next: selectedIndex >= 0 ? chronological[selectedIndex + 1]?.id : undefined,
+                    position: selectedIndex + 1,
+                    total: filtered.length,
+                    busy: !!opening || !!busy || savingTasks,
+                    onNavigate: id => { const index = filtered.findIndex(c => c.id === id); if (index >= 0) setPage(Math.floor(index / pageSize) + 1); open(id); },
+                  }}
                   onBack={() => navigate(selected.deleted_at?"trash":"inbox")}
-                  onRefresh={async()=>{await Promise.all([detail(selected.id),refresh()]);}}
-                  onAnalyze={() =>
-                    void run("analyze", async () => {
-                      await api(
-                        "complaints/" + selected.id + "/analyze",
-                        "POST",
-                        {},
-                      );
-                      await detail(selected.id);
-                    })
-                  }
+                  onTasksPending={pending=>{
+                    if(selectedId.current!==selected.id)return;
+                    tasksPending.current=pending;setSavingTasks(pending);
+                    if(!pending)void syncSignals.current?.flush();
+                  }}
+                  onTasksError={message=>setNotice({message,error:true})}
+                  onTasksSaved={snapshot=>{
+                    const update=(c:Complaint)=>c.id===selected.id&&c.revision<=snapshot.revision?{...c,tasks:snapshot.tasks,revision:snapshot.revision,updated_at:snapshot.updatedAt||c.updated_at}:c;
+                    if(selectedId.current!==selected.id || snapshot.revision<selectedRevision.current)return;
+                    selectedRevision.current=snapshot.revision;
+                    setSelected(previous=>previous?update(previous):previous);
+                    if(snapshot.event)setEvents(previous=>previous.some(e=>e.id===snapshot.event!.id)?previous:[snapshot.event!,...previous]);
+                  }}
                   onEvidence={() =>
                     void run("evidence", async () => {
                       await api(
@@ -523,10 +512,6 @@ export default function StaffWorkspace({
                       });
                     })
                   }
-                  onVerify={(draft)=>void run('verify',async()=>{
-                    await api('complaints/'+selected.id+'/verify-draft','POST',{draft,revision:selected.revision});
-                    await detail(selected.id);
-                  })}
                 />
               </div>
             </>
@@ -537,6 +522,21 @@ export default function StaffWorkspace({
                   <h1>{views[view]}</h1>
                 </div>
                 <div>
+                  {view === 'trash' ? <button type="button" className="button outline danger" disabled={!!busy || !authenticated || !data.trashComplaints?.length}
+                    onClick={() => {
+                      const ids = (data.trashComplaints || []).map(c => c.id);
+                      if (!ids.length || !window.confirm(`휴지통의 민원 ${ids.length}건을 영구 삭제하시겠습니까? 삭제한 민원과 첨부자료, 처리 이력은 복구할 수 없습니다.`)) return;
+                      void run('purge', async () => {
+                        let deleted = 0;
+                        try {
+                          for (let i = 0; i < ids.length; i += 200) {
+                            const result = await api<{ deleted: number }>('complaints/trash', 'DELETE', { ids: ids.slice(i, i + 200) });
+                            deleted += result.deleted;
+                          }
+                          setNotice({ message: `휴지통의 민원 ${deleted}건을 영구 삭제했습니다.` });
+                        } finally { await refresh(); }
+                      });
+                    }}>{busy === 'purge' ? '비우는 중…' : '휴지통 비우기'}</button> : null}
                   <button
                     className="button outline"
                     disabled={!!busy || !authenticated}
@@ -552,13 +552,6 @@ export default function StaffWorkspace({
                     />
                     새로고침
                   </button>
-                  <button
-                    className="button primary"
-                    onClick={() => navigate("intake")}
-                  >
-                    <Plus size={16} />
-                    직접 등록
-                  </button>
                 </div>
               </div>
               <section className="admin-counters" aria-label="민원 처리 현황" hidden={view==="trash"}>
@@ -566,12 +559,12 @@ export default function StaffWorkspace({
                   ["all", "전체 민원"],
                   ["received", "접수 대기"],
                   ["reviewing", "검토 중"],
-                  ["waiting", "보완 요청"],
                   ["resolved", "답변 완료"],
                 ].map(([s, label]) => (
                   <button
                     key={s}
                     className={applied.status === s ? "active" : ""}
+                    aria-pressed={applied.status === s}
                     onClick={() => statusFilter(s)}
                   >
                     <span>{label}</span>
@@ -583,6 +576,35 @@ export default function StaffWorkspace({
                 ))}
               </section>
               <form className="admin-filter" onSubmit={search}>
+                <div className="admin-search-row">
+                  <label className="admin-search-label">
+                    <span>민원 검색</span>
+                    <input
+                      placeholder="민원 제목, 접수번호 또는 발생 위치 검색"
+                      value={filter.query}
+                      onChange={(e) =>
+                        setFilter({ ...filter, query: e.target.value })
+                      }
+                    />
+                  </label>
+                  <button className="button primary" type="submit">조회</button>
+                  <button
+                    className="button quiet"
+                    type="button"
+                    onClick={() => {
+                      setFilter(initialFilter);
+                      setApplied(initialFilter);
+                      setPage(1);
+                    }}
+                  >
+                    초기화
+                  </button>
+                </div>
+                <details className="admin-filter-details">
+                  <summary>
+                    상세 조건
+                    {applied.status !== "all" || applied.category !== "all" || applied.from || applied.to ? <span>적용 중</span> : null}
+                  </summary>
                 <div className="admin-filter-row">
                   <label>
                     <span>접수 기간</span>
@@ -639,33 +661,8 @@ export default function StaffWorkspace({
                     </select>
                   </label>
                 </div>
-                <div className="admin-filter-row second">
-                  <label>
-                    <span>검색어</span>
-                    <input
-                      placeholder="민원 제목, 접수번호 또는 발생 위치"
-                      value={filter.query}
-                      onChange={(e) =>
-                        setFilter({ ...filter, query: e.target.value })
-                      }
-                    />
-                  </label>
-                  <button className="button primary" type="submit">
-                    <Search size={16} />
-                    조회
-                  </button>
-                  <button
-                    className="button outline"
-                    type="button"
-                    onClick={() => {
-                      setFilter(initialFilter);
-                      setApplied(initialFilter);
-                      setPage(1);
-                    }}
-                  >
-                    초기화
-                  </button>
-                </div>
+                <button className="button outline admin-filter-apply" type="submit">조건 적용</button>
+                </details>
               </form>
               <section className="admin-list">
                 <div className="admin-list-toolbar">
@@ -705,8 +702,6 @@ export default function StaffWorkspace({
                         <th>민원 분야</th>
                         <th>접수일</th>
                         <th>처리 상태</th>
-                        <th>자동 분석</th>
-                        <th>근거</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -726,13 +721,16 @@ export default function StaffWorkspace({
                               <button
                                 className="admin-complaint-title"
                                 onClick={() => open(c.id)}
+                                aria-busy={opening===c.id}
                               >
                                 <small>
                                   {c.id}
-                                  {c.is_sample ? <em>가상 사례</em> : null}
+
                                 </small>
-                                <strong>{protectedTitle(c)}</strong>
-                                {expressionFindings(c).some(f=>f.kind!=='criticism')?<em className="expression-list-flag">주의 표현</em>:null}
+                                <strong>{c.title}</strong>
+                                {opening===c.id?<span role="status"><LoaderCircle className="spin" size={14} aria-hidden="true"/> 민원을 불러오는 중입니다.</span>:null}
+                                {c.auto_state==='failed'?<span>원문 확인 필요</span>:null}
+                                {c.hasSensitiveExpression?<em className="expression-list-flag">주의 표현</em>:null}
                                 <span>{c.location}</span>
                               </button>
                             </td>
@@ -745,34 +743,6 @@ export default function StaffWorkspace({
                                 {statuses[c.status]}
                               </span>
                             </td>
-                            <td>
-                              <span
-                                className={
-                                  "admin-auto-status " +
-                                  (c.auto_state || "idle")
-                                }
-                              >
-                                {["queued", "processing"].includes(
-                                  c.auto_state || "",
-                                ) ? (
-                                  <LoaderCircle className="spin" size={12} />
-                                ) : null}
-                                {autoStates[c.auto_state || "idle"]}
-                              </span>
-                            </td>
-                            <td>
-                              {c.evidence ? (
-                                <button
-                                  className="admin-evidence-link"
-                                  onClick={() => open(c.id)}
-                                >
-                                  {c.evidence.citations.length}건
-                                  <ChevronRight size={13} />
-                                </button>
-                              ) : (
-                                <span className="admin-dash">—</span>
-                              )}
-                            </td>
                           </tr>
                         ))}
                     </tbody>
@@ -780,14 +750,13 @@ export default function StaffWorkspace({
                 </div>
                 {!filtered.length ? (
                   <div className="admin-empty">
-                    <Inbox size={34} />
                     <h3>
-                      {data.complaints.length
+                      {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length
                         ? "조회 조건에 맞는 민원이 없습니다."
-                        : "접수된 민원이 없습니다."}
+                                : view==='trash'?'휴지통이 비어 있습니다.':'표시할 민원이 없습니다.'}
                     </h3>
                     <p>
-                      {data.complaints.length
+                      {(view==='trash'?(data.trashComplaints||[]):readyComplaints).length
                         ? "검색 조건을 변경하여 다시 조회해 주세요."
                         : ""}
                     </p>
@@ -829,47 +798,7 @@ export default function StaffWorkspace({
                 </div>
               </section>
             </>
-          ) : view === "intake" ? (
-            <Portal
-              complaints={data.complaints}
-              busy={busy}
-              onSelect={open}
-              onSubmit={(input) =>
-                void run("submit", async () => {
-                  const r = await api<{ id: string }>(
-                    "complaints",
-                    "POST",
-                    input,
-                  );
-                  selectedId.current = r.id;
-                  await Promise.all([refresh(), detail(r.id)]);
-                  setNotice({
-                    message:
-                      "민원을 접수했습니다. 법령 검색과 분석이 자동으로 시작됩니다.",
-                  });
-                })
-              }
-            />
-          ) : (
-            <LibraryView
-              docs={data.documents}
-              ready={data.settings.lawReady}
-              busy={busy}
-              onSearch={(input) => api("laws/search", "POST", input)}
-              onImport={(input) =>
-                void run("import", async () => {
-                  await api("laws/import", "POST", input);
-                  await refresh();
-                  setNotice({ message: "공식 법령 자료를 저장했습니다." });
-                })
-              }
-            />
-          )}
-          <footer className="admin-footer">
-            <strong>
-              민원쉴드 <span>Shield & Solve</span>
-            </strong>
-          </footer>
+          ) : null}
         </main>
       </div>
     </div>

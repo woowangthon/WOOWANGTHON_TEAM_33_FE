@@ -10,18 +10,15 @@ const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.Common
 const exportsObj={};
 const protection={};new Function('exports',ts.transpileModule(fs.readFileSync('lib/protection.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(protection);
 class AppError extends Error {}
-new Function('require','exports',js)(name=>{if(name==='./protection')return protection;if(name==='./server')return {AppError,now:()=>new Date().toISOString(),database:()=>{throw new Error('No live database in pure retrieval tests');}};throw new Error(name);},exportsObj);
+new Function('require','exports',js)(name=>{if(name==='./harness-policy')return require('./helpers/loader.cjs')()('lib/harness-policy.ts');if(name==='./protection')return protection;if(name==='./server')return {AppError,now:()=>new Date().toISOString(),database:()=>{throw new Error('No live database in pure retrieval tests');}};throw new Error(name);},exportsObj);
 const {parseOfficialDocument,retrieve}=exportsObj;
-test('expanded plans distinguish floor noise, parking, construction, animal and park complaints',()=>{
- const plan=(text)=>exportsObj.searchPlan('기타',{title:text,body:text});
- assert.ok(plan('윗집 층간소음').sources.some(s=>s.query==='공동주택관리법'));
- assert.equal(plan('윗집 층간소음').sources.some(s=>s.query==='소음ㆍ진동관리법'),false);
- assert.ok(plan('횡단보도 불법 주차').sources.some(s=>s.query==='도로교통법'));
- assert.ok(plan('무허가 건축 증축').sources.some(s=>s.query==='건축법'));
- assert.ok(plan('유기견 보호 요청').sources.some(s=>s.query==='동물보호법'));
- assert.ok(plan('공원시설 파손').sources.some(s=>s.query==='도시공원 및 녹지 등에 관한 법률'));
- assert.ok(plan('알 수 없는 요청').sources.some(s=>s.query==='민원 처리에 관한 법률'));
+test('offline search plans do not invent category-specific laws or example answers',()=>{
+ for(const category of ['생활폐기물','도로·교통','기타']){
+  const plan=exportsObj.searchPlan(category,{title:'가상 현장 점검',body:'시설 상태 확인 요청'});
+  assert.deepEqual(plan.sources,[]);assert.deepEqual(plan.profiles,[]);assert.ok(plan.terms.includes('시설'));
+ }
 });
+
 test('national law: preserves subparagraphs, article branch and effective date',()=>{
   const result=parseOfficialDocument({법령:{기본정보:{법령명_한글:'검증용 가상법',시행일자:'20260101'},조문:{조문단위:[{조문번호:'8',조문가지번호:'2',조문여부:'Y',조문제목:'검증',조문내용:'가상의 본문',항:[{항내용:'가상의 항',호:[{호내용:'가상의 호'}]}]}]}}},'law');
   assert.equal(result.articles[0].number,'제8조의2');assert.match(result.articles[0].text,/가상의 항\n가상의 호/);assert.equal(result.effective,'2026-01-01');
@@ -61,24 +58,13 @@ test('unrelated or missing sources yield no fabricated citations',()=>{
   assert.equal(retrieve([doc('irrelevant',{title:'가상 동물 법규',articles:JSON.stringify([{number:'제1조',title:'조류',text:'참새 조류 서식지 산림',effectiveDate:'2020-01-01'}])})],input).citations.length,0);
 });
 
-test('short household complaints retrieve public duties and disposal rules before operator penalties',()=>{
- const article=(number,title,text)=>({number,title,text,effectiveDate:'2020-01-01'});
- const law=doc('law',{title:'폐기물관리법',articles:JSON.stringify([
-  article('제14조의2','생활폐기물 수집ㆍ운반 대행자에 대한 과징금 처분','생활폐기물 수집 운반 대행자 과징금 처분'),
-  article('제14조의5','생활폐기물 수집ㆍ운반 관련 안전기준 등','생활폐기물 수집 운반 대행자의 안전기준'),
-  article('제14조','생활폐기물의 처리 등','시장 군수 구청장은 관할 구역에서 배출되는 생활폐기물을 처리하여야 한다.'),
- ])});
- const ordin=doc('ordin',{title:'청주시 폐기물관리에 관한 조례',kind:'ordin',jurisdiction:'청주시',articles:JSON.stringify([
-  article('제20조','생활폐기물 수집운반 대행료의 정산 등','생활폐기물 수집 운반 대행료 정산'),
-  article('제11조','폐기물의 배출방법 등','생활폐기물은 종량제봉투에 담아 정해진 배출 장소에 배출하여야 한다.'),
- ])});
- for(const body of ['집 앞에 쓰레기 있어요','우리집앞에 쓰레기 있잖아 병신아 장난해?','쓰레기를 치워주세요']){
-  const r=retrieve([law,ordin],{...input,title:'씨발 집 앞',body});
-  assert.match(r.citations.find(c=>c.kind==='law').article,/^제14조 \(/);
-  assert.match(r.citations.find(c=>c.kind==='ordin').article,/^제11조 \(/);
- }
- const specific=retrieve([law,ordin],{...input,title:'대행업체 과징금',body:'생활폐기물 수집 운반 대행자 과징금 처분 근거를 확인해주세요'});
- assert.match(specific.citations.find(c=>c.kind==='law').article,/^제14조의2/);
+test('renaming equally relevant laws cannot change their retrieval scores',()=>{
+ const article={number:'제1조',title:'시설 점검',text:'시설 상태 점검 확인 요청',effectiveDate:'2020-01-01'};
+ const base=doc('one',{title:'임의의 가상법',articles:JSON.stringify([article])});
+ const query={...input,title:'시설 점검',body:'시설 상태 확인 요청'};
+ const plan={profiles:[],sources:[],terms:['시설','점검']};
+ const a=retrieve([base],query,plan),b=retrieve([{...base,title:'폐기물관리법'}],query,plan);
+ assert.equal(a.citations.length,1);assert.equal(b.citations.length,1);assert.equal(a.citations[0].text,b.citations[0].text);
 });
 
 test('connection check requires approved national and ordinance search AND article access',async()=>{

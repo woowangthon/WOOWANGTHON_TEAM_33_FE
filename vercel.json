@@ -1,1 +1,1 @@
-{"framework":"nextjs","regions":["sin1"],"functions":{"app/api/[...path]/route.ts":{"maxDuration":180}}}
+{"framework":"nextjs","regions":["sin1"],"functions":{"app/api/[...path]/route.ts":{"maxDuration":180,"regions":["sin1"]},"app/api/complaint-events/route.ts":{"maxDuration":180,"regions":["sin1"]}}}

@@ -16,3 +16,13 @@ scripts/port.mjs
 *.log
 *.zip
 *.tar.gz
+__pycache__/
+
+# Local development records and evaluation outputs
+/evals/
+/work/
+/app/.well-known/workflow/
+*.har
+*.pem
+*.key
+!.env.phone-comparison.example

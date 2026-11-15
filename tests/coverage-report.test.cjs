@@ -1,4 +1,4 @@
-const test=require('node:test'),assert=require('node:assert/strict'),load=require('../evals/loader.cjs')();
+const test=require('node:test'),assert=require('node:assert/strict'),load=require('./helpers/loader.cjs')();
 const m=load('lib/coverage.ts'),reports=load('lib/report-core.ts'),protection=load('lib/protection.ts');
 const complaint={title:'수거와 일정 문의',body:'쓰레기를 수거해 주세요. 처리 일정을 알려 주세요.',supplements:[],analysis:{summary:'쓰레기 수거 요청',requests:['쓰레기 수거'],sensitiveQuotes:[]}};
 const payload={requirements:[{text:'쓰레기 수거',source:'body',quote:'쓰레기를 수거해 주세요.',summaryStatus:'preserved',summaryReason:'반영됨'},{text:'처리 일정 안내',source:'body',quote:'처리 일정을 알려 주세요.',summaryStatus:'missing',summaryReason:'일정 문의 누락'}],noRequestReason:''};

@@ -8,14 +8,16 @@
   },
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
-    "build": "next build",
+    "build": "node scripts/migrate-notifications.mjs && next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.cjs",
-    "test:phone": "node --test phone/*.test.mjs evals/phone-handoff/filter-relay.test.mjs evals/phone-handoff/text-pipeline.test.mjs",
+    "test:phone": "node --test phone/*.test.mjs",
     "db:migrate": "node --env-file=.env.local scripts/migrate.mjs"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
     "@neondatabase/auth": "latest",
     "@vercel/functions": "latest",
     "lucide-react": "^1.31.0",

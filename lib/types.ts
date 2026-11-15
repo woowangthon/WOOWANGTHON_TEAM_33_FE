@@ -1,17 +1,20 @@
-export type Status = 'received' | 'reviewing' | 'waiting' | 'resolved';
-export const statuses: Record<Status, string> = { received:'접수', reviewing:'검토 중', waiting:'보완 요청', resolved:'답변 완료' };
+export type Status = 'received' | 'reviewing' | 'resolved';
+export const statuses: Record<Status, string> = { received:'접수', reviewing:'검토 중', resolved:'답변 완료' };
 export const categories = ['생활폐기물', '소음·환경', '도로·교통', '건축·주거', '동물·공원', '기타'] as const;
 export type SentenceCheck = {id:string;text:string;status:'supported'|'needs_review'|'not_legal';reason:string;references:{citationId:string;quote:string}[]};
 export type DraftReview = {draft:string;status:'checked'|'unavailable';sentences:SentenceCheck[];checkedAt:string;validatorVersion?:number};
 export type Supplement = {id:string;role:'staff'|'citizen';text:string;createdAt:string;attachments:{id:string;name:string;mime:string;size:number}[]};
 export type Citation = { id:string; title:string; article:string; text:string; sourceUrl:string; effectiveDate:string; jurisdiction:string; kind:string; relation?:string };
-export type ExpressionFinding = {kind:'profanity'|'insult'|'threat'|'sexual_harassment'|'criticism';source:'title'|'body';quote:string;reason:string};
+export type ExpressionFinding = {kind:'profanity'|'insult'|'threat'|'sexual_harassment'|'criticism';source:'title'|'body';quote:string;reason:string;scope?:'direct_attack'|'reported_speech'|'criticism'|'unclear'|'third_party_attack'|'non_attack';speaker?:'complainant'|'third_party'|'unclear';target?:'staff'|'third_party'|'animal'|'unclear';concreteThreat?:boolean;contextQuote?:string;evidenceRepairs?:{proposedQuote:string;proposedContext:string;method:'unique_whitespace_alignment'}};
 export type RequestStatus = 'answered'|'refused'|'clarification'|'missing';
 export type RequirementCheck = {id:string;text:string;source:string;quote:string;summaryStatus:'preserved'|'missing'|'distorted';summaryReason:string;responseStatus:RequestStatus;responseReason:string;sentenceIds:string[];override?:{responseStatus:RequestStatus;excluded:boolean;reason:string;at:string}};
 export type RequirementAudit = {requirements:Omit<RequirementCheck,'responseStatus'|'responseReason'|'sentenceIds'>[];noRequestReason:string;sourceSnapshot:string;analysisSnapshot:string;checkedAt:string};
 export type CoverageRequestPlan={sourceSnapshot:string;items:{id:string;kind:string;quote:string}[]};
 export type CoverageReview = {version:1|2|3|4|5|6|7;draft:string;sourceSnapshot:string;analysisSnapshot:string;requirements:RequirementCheck[];noRequestReason:string;checkedAt:string;harness?:{version:1;decisions:{id:string;rule:string}[];plan?:CoverageRequestPlan;observations?:unknown[]};evidenceRetry?:{attemptedIds:string[];recoveredIds:string[]};repair?:{attempted:true;accepted:boolean;originalDraft:string;beforeMissing:number;afterMissing:number;rejection?:'invalid_proposal'}};
 export type Analysis = {
+  expressionRepair?:{initialFindings:ExpressionFinding[];invalidIndexes:number[]};
+  summaryHarness?:import('./summary-harness').SummaryAudit;
+  replyHarness?:import('./reply-harness').ReplyAudit;
   safeTitle?:string; expressionFindings?:ExpressionFinding[];
   summary:string; requests:string[]; questions:string[]; shieldLevel:'normal'|'caution'|'threat'; shieldReason:string;
   sensitiveQuotes:string[]; actions:string[]; draft:string; citationIds:string[]; citations:Citation[]; warnings:string[];
@@ -24,6 +27,7 @@ export type RequestTracking = {version:1;confirmedAt:string|null;items:TrackedRe
 export type AutoState = 'idle'|'queued'|'processing'|'blocked'|'completed'|'failed';
 export const autoStates:Record<AutoState,string>={idle:'분석 전',queued:'자동 분석 대기',processing:'자동 분석 중',blocked:'분석 대기',completed:'분석 완료',failed:'재시도 필요'};
 export type Complaint = { id:string; title:string; body:string; category:string; location:string; occurred_at:string;
+  source_data?:import('./public-data').PublicDataSource|null;
   request_tracking?:RequestTracking|null;
   display_title?:string;
   channel?:'web'|'phone';
@@ -35,4 +39,4 @@ export type Complaint = { id:string; title:string; body:string; category:string;
 };
 export type Event = {id:string; label:string; created_at:string};
 export type LawDocument = {id:string; source_id:string; title:string; kind:string; jurisdiction:string; effective_date:string; source_url:string; articleCount:number; imported_at:string};
-export type AppSettings = { geminiReady:boolean; aiReady?:boolean; aiProviderLabel?:string; publicInbox?:boolean; lawReady:boolean; encryptionReady:boolean; model:string };
+export type AppSettings = { aiReady:boolean; aiProviderLabel?:string; publicInbox?:boolean; lawReady:boolean; encryptionReady:boolean; model:string };

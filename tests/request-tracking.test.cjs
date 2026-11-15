@@ -1,6 +1,6 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('fs'),ts=require('typescript');
-const load=require('../evals/loader.cjs')(),tracking=load('lib/request-tracking.ts'),coverage=load('lib/coverage.ts');
-const cases=JSON.parse(fs.readFileSync('evals/request-tracking-12.json','utf8')).cases;
+const load=require('./helpers/loader.cjs')(),tracking=load('lib/request-tracking.ts'),coverage=load('lib/coverage.ts');
+const cases=JSON.parse(fs.readFileSync('tests/fixtures/request-tracking.json','utf8')).cases;
 for(const s of cases)test(`${s.id}: corrections retain IDs/history, one-request reply reopens only its request, answers cannot complete work`,()=>{
  const c={title:s.title,body:s.body,supplements:[],analysis:{summary:s.requests.join(' '),requests:s.requests,sensitiveQuotes:[]}};
  let initial=tracking.seedTracking(c);assert.equal(tracking.trackingCounts(initial).completed,0);

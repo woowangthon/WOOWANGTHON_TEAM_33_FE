@@ -63,28 +63,22 @@ not_legal: 인사, 민원인이 제공한 사실의 요약, 위치 확인 질문
 접수·내용 확인과 현장 조치 완료를 구분한다. '요청을 확인했습니다', '민원 내용을 읽었습니다'는 답변자가 민원을 읽었다는 수신 확인이므로 not_legal이다. '수거를 완료했습니다', '현장 점검을 마쳤습니다'처럼 실제 조치 완료를 주장하는 경우는 별도 사실 근거가 없으므로 needs_review다. '위치·폐기물 종류 확인 전에는 수거 시점을 확정하기 어렵습니다'처럼 정보 부족을 이유로 아직 일정 안내가 어렵다고 설명하는 문장은 법률상 제한·거절을 주장하지 않는 한 not_legal이다. 이 설명에 법적 근거가 없다는 이유만으로 needs_review를 주지 않는다. 특정 날짜·기한을 약속하거나 법률상 의무·제재·권한을 주장하는 문장은 계속 엄격하게 검증한다.
 reason은 짧은 한국어로 쓰고 욕설을 반복하지 않는다. 모든 문장의 상태를 제공하며 JSON만 출력한다.`;
 export async function verifyDraft(key:string,model:string,provider:string,draft:string,citations:Citation[]):Promise<DraftReview> {
+  if(provider!=='openai')throw new AppError('OpenAI 분석 설정을 확인해 주세요.',503,false);
   if(!key)throw new AppError('답변 근거 검증을 사용할 수 없습니다.',503);
   const sentences=draftSentences(draft);
   if(!sentences.length||sentences.length>60)throw new AppError('답변을 1~60개 문장으로 작성해 주세요.',400);
   const input=JSON.stringify({sentences,retrievedArticles:citations});
   let response:Response;
   try {
-    response=await fetch(provider==='openai'?'https://api.openai.com/v1/responses':`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{
-      method:'POST',signal:AbortSignal.timeout(55000),headers:provider==='openai'?{'Content-Type':'application/json',Authorization:`Bearer ${key}`}:{'Content-Type':'application/json','x-goog-api-key':key},
-      body:JSON.stringify(provider==='openai'?{model,instructions,input,reasoning:{effort:'low'},text:{format:{type:'json_schema',name:'draft_review',strict:true,schema}},max_output_tokens:8192,store:false}:{systemInstruction:{parts:[{text:instructions}]},contents:[{role:'user',parts:[{text:input}]}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:schema,maxOutputTokens:8192}}),
+    response=await fetch('https://api.openai.com/v1/responses',{
+      method:'POST',signal:AbortSignal.timeout(55000),headers:{'Content-Type':'application/json',Authorization:`Bearer ${key}`},
+      body:JSON.stringify({model,instructions,input,reasoning:{effort:'low'},text:{format:{type:'json_schema',name:'draft_review',strict:true,schema}},max_output_tokens:8192,store:false}),
     });
   }catch{throw new AppError('답변 근거 검증이 지연되었습니다. 초안은 보존됩니다.',504);}
   if(!response.ok)throw new AppError('답변 근거 검증을 완료하지 못했습니다. 잠시 후 다시 검증해 주세요.',response.status===429?429:502);
   const data=await response.json();
-  let text='';
-  if(provider==='openai') {
-    const parts=data.output?.filter((x:{type:string})=>x.type==='message').flatMap((x:{content?:{type:string;text?:string}[]})=>x.content||[])||[];
-    if(data.status!=='completed'||parts.some((x:{type:string})=>x.type==='refusal'))throw new AppError('답변 근거 검증이 완료되지 않았습니다.',502);
-    text=parts.filter((x:{type:string})=>x.type==='output_text').map((x:{text?:string})=>x.text||'').join('');
-  } else {
-    const candidate=data.candidates?.[0];
-    if(candidate?.finishReason!=='STOP')throw new AppError('답변 근거 검증이 완료되지 않았습니다.',502);
-    text=candidate.content?.parts?.filter((x:{thought?:boolean})=>!x.thought).map((x:{text?:string})=>x.text||'').join('')||'';
-  }
+  const parts=data.output?.filter((x:{type:string})=>x.type==='message').flatMap((x:{content?:{type:string;text?:string}[]})=>x.content||[])||[];
+  if(data.status!=='completed'||parts.some((x:{type:string})=>x.type==='refusal'))throw new AppError('답변 근거 검증이 완료되지 않았습니다.',502);
+  const text=parts.filter((x:{type:string})=>x.type==='output_text').map((x:{text?:string})=>x.text||'').join('');
   try{return validateDraftReview(draft,citations,JSON.parse(text));}catch(e){if(e instanceof AppError)throw e;throw new AppError('답변 근거 검증 응답 형식이 올바르지 않습니다.',502);}
 }

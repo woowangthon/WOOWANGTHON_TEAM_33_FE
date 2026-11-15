@@ -10,6 +10,6 @@ export function verifyTicket(secret, token) {
   const actual=Buffer.from(mac||'','base64url');
   if(extra||actual.length!==expected.length||!timingSafeEqual(actual,expected))throw new Error('Invalid_ticket');
   const claims=JSON.parse(Buffer.from(payload,'base64url').toString());
-  if(!claims.nonce||claims.exp<Math.floor(Date.now()/1000)||!['staff','caller','carrier'].includes(claims.role))throw new Error('Expired_ticket');
+  if(typeof claims.nonce!=='string'||!claims.nonce||!Number.isFinite(claims.exp)||claims.exp<=Math.floor(Date.now()/1000)||!['staff','caller'].includes(claims.role))throw new Error('Expired_ticket');
   return claims;
 }

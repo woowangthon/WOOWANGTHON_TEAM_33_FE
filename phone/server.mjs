@@ -1,119 +1,138 @@
 import http from 'node:http';
-import {randomUUID,timingSafeEqual} from 'node:crypto';
+import {randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-import {verifyTicket,signTicket} from './token.mjs';
+import {verifyTicket} from './token.mjs';
 import {FilterRelay} from './filter-relay.mjs';
 import {CallAnalysis} from './analysis.mjs';
+import {GeminiCallAnalysis} from './gemini-analysis.mjs';
+import {OfficerTranscriber} from './officer-transcriber.mjs';
+import {pcm16ToMuLaw} from './audio.mjs';
+import {createCallHistory} from './history.mjs';
 const Ws=createRequire(import.meta.url)('next/dist/compiled/ws');
 const send=(socket,event)=>{
-  // Carrier sockets accept media protocol messages, never browser control or private text events.
-  if(socket?.carrier&&!['media','clear','mark','dtmf'].includes(event.event))return;
   if(socket?.readyState===Ws.OPEN&&socket.bufferedAmount<128000)socket.send(JSON.stringify(event));
 };
-const equal=(a,b)=>{const x=Buffer.from(a||''),y=Buffer.from(b||'');return x.length>0&&x.length===y.length&&timingSafeEqual(x,y);};
-const xml=s=>s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
 
-export function createPhoneServer({secret,key,providerToken,publicUrl,origins,model='gpt-6-luna',analysisFactory=options=>new CallAnalysis(options),maxCallSeconds=600}){
-  if(!secret||!key)throw new Error('Phone_server_configuration_missing');
-  const agents=new Set(),calls=new Map(),usedTickets=new Map();let dailyDate='',dailySeconds=0;
+export function createPhoneServer({secret,historyFile,historyRetentionDays=30,allowDemo=true,key,geminiKey,analysisProvider='gemini',textProvider='gemini',origins=[],model='gpt-6-luna',geminiModel='gemini-3.5-flash-lite',transcriptionModel='gemini-3.5-transcribe-live',safetyIntervalMs=400,playbackDelayMs=2500,analysisFactory,officerFactory,maxCallSeconds=600,waitSeconds=60,heartbeatMs=15000,maxDailySeconds=1800}){
+  if(!['openai','gemini'].includes(analysisProvider))throw Error('Invalid_phone_analysis_provider');
+  if(!['openai','gemini'].includes(textProvider))throw Error('Invalid_phone_text_provider');
+  if(!secret||(!analysisFactory&&(analysisProvider==='gemini'?(!geminiKey||(textProvider==='openai'&&!key)):!key)))throw new Error('Phone_server_configuration_missing');
+  if(!Number.isFinite(playbackDelayMs)||playbackDelayMs<0||playbackDelayMs>10000)throw Error('Invalid_audio_delay');
+  analysisFactory??=options=>analysisProvider==='gemini'?new GeminiCallAnalysis({...options,geminiKey,textProvider,model:textProvider==='openai'?model:geminiModel,transcriptionModel,safetyIntervalMs}):new CallAnalysis(options);
+  if(!Number.isFinite(maxCallSeconds)||maxCallSeconds<=0||maxCallSeconds>600||!Number.isFinite(maxDailySeconds)||maxDailySeconds<=0||maxDailySeconds>1800)throw new Error('Invalid_call_limit');
+  officerFactory??=geminiKey?options=>new OfficerTranscriber({geminiKey,model:geminiModel,transcriptionModel,...options}):null;
+  const history=createCallHistory({file:historyFile,secret,retentionDays:historyRetentionDays});
+  const agents=new Set(),calls=new Map(),usedTickets=new Map();let dailyDate='',dailySeconds=0,closing=false;
   const active=()=>[...calls.values()].filter(c=>!c.ended);
-  const snapshot=c=>({id:c.id,status:c.ended?'ended':c.accepted?'active':'waiting',source:c.source,startedAt:c.startedAt,shield:c.relay?.mode==='shield',finalizing:!!c.ended&&!c.finalized,segments:c.segments,reason:c.reason||''});
-  const list=()=>{const rows=[...calls.values()].filter(c=>!c.ended||Date.now()-c.ended<3600000).map(snapshot);for(const agent of agents)send(agent,{event:'calls',calls:rows});};
-  function protect(c,reason){if(!c.accepted||c.ended)return;c.relay.enableShield({category:'threat',protectiveTakeoverRecommended:true,evidence:'보호'},'보호');c.reason=reason;send(c.agent,{event:'protection',callId:c.id,enabled:true,reason});list();}
+  const snapshot=c=>({id:c.id,status:c.ended?'ended':c.ready?'active':c.accepted?'connecting':'waiting',source:c.source,callerId:c.callerId,callerName:c.callerName,callerCallNumber:c.callerCallNumber,callerCallCount:history.count(c.callerId),startedAt:c.startedAt,connectedAt:c.connectedAt,shield:c.relay?.mode==='shield',finalizing:!!c.ended&&!c.finalized,segments:c.segments,messages:c.messages,typing:c.typing,recording:true,reason:c.reason||''});
+  const available=()=>[...agents].some(a=>a.readyState===Ws.OPEN);
+  function resetDay(){const date=new Date().toISOString().slice(0,10);if(date!==dailyDate){dailyDate=date;dailySeconds=0;}}
+  const rows=()=>[...new Map([...history.list(),...[...calls.values()].filter(c=>c.source!=='demo').map(snapshot)].map(c=>[c.id,c])).values()].sort((a,b)=>b.startedAt.localeCompare(a.startedAt));
+  const list=()=>{if(closing)return;for(const c of calls.values())history.remember(snapshot(c));const entries=rows();for(const agent of agents)send(agent,{event:'calls',calls:entries});for(const c of calls.values())if(c.socket.readyState===Ws.OPEN)send(c.socket,{event:'calls',calls:[snapshot(c)]});};
+  const announce=(c,kind,text)=>{const event={event:'announcement',callId:c.id,kind,text};send(c.agent,event);send(c.socket,event);};
+  const conversation=(c,speaker,event)=>{
+    if(c.finalized||typeof event.text!=='string'||!event.text.trim())return;
+    const message={id:event.turnId,speaker,text:event.text,at:event.at||new Date().toISOString(),redacted:!!event.redacted};
+    const existing=c.messages.findIndex(m=>m.id===message.id);if(existing>=0)c.messages[existing]=message;else c.messages.push(message);
+    c.messages.sort((a,b)=>a.at.localeCompare(b.at));
+    const wire={event:'conversation',callId:c.id,entry:message};send(c.agent,wire);send(c.socket,wire);
+  };
+  const typing=(c,speaker,value)=>{if(c.ended)return;if(c.typing[speaker]===value)return;c.typing[speaker]=value;const event={event:'typing',callId:c.id,speaker,value};send(c.agent,event);send(c.socket,event);};
+  function protect(c,reason,decision,transcript='',source='manual'){if(!c.accepted||c.ended)return;const changed=source==='ai'?c.relay.enableShield({category:decision?.category,protectiveTakeoverRecommended:decision?.directAbuse===true&&decision?.scope==='direct_attack',evidence:decision?.evidence},transcript):c.relay.protectManually(source,reason);if(!changed)return;c.reason=reason;const event={event:'protection',callId:c.id,enabled:true,reason};send(c.agent,event);send(c.socket,event);announce(c,'text_mode',source==='ai'?'욕설이 감지되어 민원인의 말씀은 담당자에게 문자로만 전달됩니다. 담당자의 안내는 음성으로 계속 전달됩니다.':'민원인의 말씀은 담당자에게 문자로만 전달됩니다. 담당자의 안내는 음성으로 계속 전달됩니다.');list();}
   async function end(c,reason='통화가 종료되었습니다.'){
     if(!c||c.ended)return;c.ended=Date.now();clearTimeout(c.timer);clearTimeout(c.waitTimer);c.reason=reason;
     send(c.socket,{event:'ended',callId:c.id,reason});send(c.agent,{event:'ended',callId:c.id,reason});
     c.relay?.end();list();
-    // End the paid telephone leg immediately; finish outstanding text analysis separately.
-    if(c.source==='phone')c.socket.close(1000);
-    await c.analysis?.stop();c.finalized=true;list();
+    c.typing={caller:false,staff:false};
+    try{await Promise.all([c.analysis?.stop(),c.officer?.stop()]);}catch{c.reason+=' 일부 내용을 정리하지 못했습니다.';send(c.agent,{event:'analysis_error',callId:c.id,message:c.reason});}
+    finally{c.finalized=true;list();send(c.socket,{event:'finalized',callId:c.id});c.socket.close(1000);}
   }
   async function accept(c,agent){
-    if(!c||c.ended||c.accepted||active().some(other=>other.accepted))return;
+    if(!c||c.ended||c.accepted||active().some(other=>other.accepted)){
+      send(agent,{event:'accept_error',callId:c?.id,message:'이미 연결 중이거나 종료된 통화입니다. 상담 목록을 확인해 주세요.'});return;
+    }
     c.accepted=true;c.agent=agent;clearTimeout(c.waitTimer);c.startedAt=new Date().toISOString();
-    c.relay=new FilterRelay({caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:payload=>c.analysis?.push(Buffer.from(payload,'base64'))});c.relay.start(c.id);
-    c.analysis=analysisFactory({key,model,onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:()=>protect(c,'욕설·위협 표현 감지'),onError:message=>{protect(c,'분석 확인 필요');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>send(agent,{event:'processing',callId:c.id,turnId})});
+    c.relay=new FilterRelay({reviewed:analysisProvider==='gemini',textOnlyBothDirections:false,delayMs:playbackDelayMs,caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:(payload,pcm)=>{if(pcm&&c.analysis?.pushPcm)c.analysis.pushPcm(pcm);else c.analysis?.push(Buffer.from(payload,'base64'));},onAudioError:()=>protect(c,'음성 재생 버퍼 확인 필요',undefined,'','analysis_error')});c.relay.start(c.id);
     send(agent,{event:'connecting',callId:c.id});list();
-    try{await c.analysis.start();if(c.ended){await c.analysis.stop();return;}c.ready=true;send(c.socket,{event:'active',callId:c.id});send(agent,{event:'active',callId:c.id});c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
+    try{c.analysis=analysisFactory({key,model,onTranscript:event=>conversation(c,'caller',event),onTyping:value=>typing(c,'caller',value),onAudioBoundary:(id,range)=>c.relay.audioBoundary(id,range),onAudioReviewed:(id,allow)=>c.relay.audioReviewed(id,allow),onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});c.segments.sort((a,b)=>(c.turnOrder.get(a.turnId)??0)-(c.turnOrder.get(b.turnId)??0));send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>{c.turnOrder.set(turnId,c.turnOrder.size);send(agent,{event:'processing',callId:c.id,turnId});},onSettled:turnId=>send(agent,{event:'processing_done',callId:c.id,turnId})});c.officer=officerFactory?.({onTranscript:event=>conversation(c,'staff',event),onTyping:value=>typing(c,'staff',value),onError:message=>{send(c.agent,{event:'analysis_error',callId:c.id,message});}});await Promise.all([c.analysis.start(),c.officer?.start()]);if(c.ended){await Promise.all([c.analysis.stop(),c.officer?.stop()]);return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});announce(c,'start','상담 내용은 녹음 및 문자로 기록됩니다. 욕설이 감지되면 텍스트 모드로 전환됩니다.');c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
     catch{await end(c,'음성 분석 서버에 연결하지 못했습니다.');}
   }
-  function incoming(socket,source){
-    const available=[...agents].some(a=>a.readyState===Ws.OPEN);
-    if(!available||active().length>=2){send(socket,{event:'ended',reason:'현재 연결 가능한 담당자가 없습니다.'});socket.close(1000);return null;}
-    const c={id:randomUUID(),source,socket,segments:[],accepted:false,ready:false,ended:null,startedAt:new Date().toISOString(),frames:0,windowAt:Date.now(),windowFrames:0};calls.set(c.id,c);socket.callId=c.id;
-    c.waitTimer=setTimeout(()=>void end(c,'담당자 연결 대기 시간이 지났습니다.'),60000);
+  function incoming(socket,source,claims){
+    resetDay();
+    if(!available()||active().length>=2||dailySeconds>=maxDailySeconds){send(socket,{event:'ended',reason:dailySeconds>=maxDailySeconds?'오늘의 음성 상담 이용 한도에 도달했습니다.':'현재 연결 가능한 담당자가 없습니다.'});socket.close(1000);return null;}
+    const identity=history.identify(claims.owner,claims.nickname,source);
+    const c={id:randomUUID(),source,...identity,socket,segments:[],messages:[],typing:{caller:false,staff:false},recordings:{caller:[],staff:[]},recordingBytes:0,turnOrder:new Map(),accepted:false,ready:false,ended:null,startedAt:new Date().toISOString(),frames:0,windowAt:Date.now(),windowFrames:0};calls.set(c.id,c);socket.callId=c.id;
+    c.waitTimer=setTimeout(()=>void end(c,'담당자 연결 대기 시간이 지났습니다.'),waitSeconds*1000);
     send(socket,{event:'waiting',callId:c.id});list();return c;
   }
-  function frame(c,payload,speaker){
-    if(!c?.ready||c.ended||typeof payload!=='string'||payload.length!==216||!/^[A-Za-z0-9+/]+={0,2}$/.test(payload))return;
-    const bytes=Buffer.from(payload,'base64');if(bytes.length!==160)return;
+  function frame(c,payload,speaker,format){
+    const pcm=format==='pcm16-16000';if(format&& !pcm)return;
+    if(!c?.ready||c.ended||typeof payload!=='string'||payload.length!==(pcm?856:216)||!/^[A-Za-z0-9+/]+={0,2}$/.test(payload))return;
+    const bytes=Buffer.from(payload,'base64');if(bytes.length!==(pcm?640:160))return;
+    // Temporary in-memory recordings expire with this call (one hour after end).
+    const recorded=pcm?pcm16ToMuLaw(bytes):bytes;if(c.recordingBytes<9600000){c.recordings[speaker==='caller'?'caller':'staff'].push(Buffer.from(recorded));c.recordingBytes+=recorded.length;}
     const now=Date.now();if(now-c.windowAt>1000){c.windowAt=now;c.windowFrames=0;}if(++c.windowFrames>180){void end(c,'통화 데이터 속도를 초과했습니다.');return;}
     if(speaker==='caller'){
-      const date=new Date().toISOString().slice(0,10);if(date!==dailyDate){dailyDate=date;dailySeconds=0;}
-      dailySeconds+=.02;if(dailySeconds>1800){void end(c,'오늘의 음성 상담 이용 한도에 도달했습니다.');return;}
-      c.relay.fromCaller(payload);
-    }else c.relay.fromOfficer(payload);
+      resetDay();dailySeconds+=.02;if(dailySeconds>maxDailySeconds){void end(c,'오늘의 음성 상담 이용 한도에 도달했습니다.');return;}
+      c.relay.fromCaller(pcm?pcm16ToMuLaw(bytes).toString('base64'):payload,pcm?bytes:undefined);
+    }else {c.officer?.push(recorded,pcm?bytes:undefined);c.relay.fromOfficer(recorded.toString('base64'));}
   }
   const server=http.createServer(async(req,res)=>{
     const url=new URL(req.url,'http://localhost');
     res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
-    if(url.pathname==='/health'){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({ready:true,officers:agents.size,active:active().length}));}
-    if(url.pathname==='/provider/voice'&&req.method==='POST'&&equal(url.searchParams.get('token'),providerToken)){
-      // The configured webhook capability only authorizes a fresh, single-use media session.
-      let body='';for await(const chunk of req){body+=chunk;if(body.length>16000){res.writeHead(413);res.end();return;}}
-      if(!publicUrl||!agents.size){res.setHeader('Content-Type','application/xml');return res.end('<Response><Say>지금은 상담 연결이 어렵습니다. 잠시 후 다시 전화해 주세요.</Say><Hangup/></Response>');}
-      const token=signTicket(secret,{role:'carrier'},90),stream=new URL('/carrier',publicUrl);stream.protocol='wss:';
-      res.setHeader('Content-Type','application/xml');return res.end(`<Response><Say language="ko-KR">민원 상담을 위해 통화 내용이 자동으로 분석됩니다. 담당자에게 연결합니다.</Say><Connect><Stream url="${xml(stream.toString())}" track="inbound"><Parameter name="token" value="${xml(token)}"/></Stream></Connect><Hangup/></Response>`);
+    if(url.pathname==='/history'&&req.method==='GET'){
+      try{const claims=verifyTicket(secret,req.headers.authorization?.replace(/^Bearer /,''));if(claims.role!=='staff'||claims.scope!=='history')throw Error('Forbidden');res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({calls:rows()}));}catch{res.writeHead(401);return res.end();}
     }
+    if(url.pathname==='/health'&&req.method==='GET'){resetDay();res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({ready:true,audioPolicy:analysisProvider==='gemini'?'final_reviewed_ranges':'legacy_delay',transport:'web',officers:agents.size,active:active().length,acceptingCalls:available()&&active().length<2&&dailySeconds<maxDailySeconds}));}
     res.writeHead(404);res.end();
   });
   const wss=new Ws.WebSocketServer({noServer:true,maxPayload:18000,perMessageDeflate:false});
   server.on('upgrade',(req,socket,head)=>{
     const path=new URL(req.url,'http://localhost').pathname;
-    if(!['/connect','/carrier'].includes(path)||(path==='/connect'&&!origins.includes(req.headers.origin))){socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');socket.destroy();return;}
-    wss.handleUpgrade(req,socket,head,ws=>{ws.carrier=path==='/carrier';wss.emit('connection',ws);});
+    if(path!=='/connect'||!origins.includes(req.headers.origin)){socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');socket.destroy();return;}
+    wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws));
   });
   wss.on('connection',socket=>{
-    let role=null,consumed=false;const authTimer=setTimeout(()=>socket.close(1008),8000);
+    let role=null,consumed=false;socket.alive=true;const authTimer=setTimeout(()=>socket.close(1008),8000);
+    socket.on('pong',()=>{socket.alive=true;});
     socket.on('error',()=>{});
     socket.on('message',bytes=>{
       try{
         const e=JSON.parse(bytes.toString());
         if(!role){
-          if(socket.carrier&&e.event==='connected')return;
-          const token=socket.carrier&&e.event==='start'?e.start?.customParameters?.token:e.event==='auth'?e.token:null;
+          const token=e.event==='auth'?e.token:null;
           const claims=verifyTicket(secret,token);
-          if((socket.carrier&&claims.role!=='carrier')||(!socket.carrier&&claims.role==='carrier')||usedTickets.has(claims.nonce))throw new Error('Rejected');
-          if(socket.carrier&&(e.start?.mediaFormat?.encoding!=='audio/x-mulaw'||Number(e.start?.mediaFormat?.sampleRate)!==8000||Number(e.start?.mediaFormat?.channels)!==1))throw new Error('Wrong_codec');
+          if(claims.role==='carrier'||claims.scope==='history'||(!allowDemo&&claims.demo===true)||usedTickets.has(claims.nonce))throw new Error('Rejected');
           usedTickets.set(claims.nonce,claims.exp);role=claims.role;clearTimeout(authTimer);
           if(role==='staff'){agents.add(socket);send(socket,{event:'ready'});list();}
-          else{consumed=true;incoming(socket,role==='carrier'?'phone':claims.demo===true?'demo':'browser');}
+          else{consumed=true;incoming(socket,claims.demo===true?'demo':'browser',claims);}
           return;
         }
         if(role==='staff'){
           const c=calls.get(e.callId);
           if(e.event==='accept'){void accept(c,socket);return;}
           if(!c||c.agent!==socket)return;
-          if(e.event==='media')frame(c,e.payload,'officer');
+          if(e.event==='media')frame(c,e.payload,'officer',e.format);
           if(e.event==='hangup')void end(c);
           if(e.event==='shield')protect(c,'담당자 보호 모드');
-          if(e.event==='resume'&&!c.ended){c.relay?.resume();c.reason='';send(socket,{event:'protection',callId:c.id,enabled:false});list();}
+          if(e.event==='resume'&&!c.ended){if(c.analysis?.canResume&&!c.analysis.canResume()){send(socket,{event:'analysis_error',callId:c.id,message:'음성 분석 연결이 복구된 뒤 다시 연결해 주세요.'});return;}c.relay?.resume();c.reason='';const resumed={event:'protection',callId:c.id,enabled:false};send(socket,resumed);send(c.socket,resumed);list();}
         }else{
           const c=calls.get(socket.callId);
-          if(e.event==='media')frame(c,socket.carrier?e.media?.payload:e.payload,'caller');
+          if(e.event==='media')frame(c,e.payload,'caller',e.format);
           if(e.event==='hangup'||e.event==='stop')void end(c);
         }
       }catch{send(socket,{event:'error',message:'통화 연결을 다시 시작해 주세요.'});socket.close(1008);}
     });
-    socket.on('close',()=>{clearTimeout(authTimer);agents.delete(socket);if(consumed)void end(calls.get(socket.callId),'상대방 연결이 종료되었습니다.');else for(const c of active())if(c.agent===socket)void end(c,'담당자 연결이 종료되었습니다.');list();});
+    socket.on('close',()=>{clearTimeout(authTimer);agents.delete(socket);if(consumed)void end(calls.get(socket.callId),'상대방 연결이 종료되었습니다.');else for(const c of active())if(c.agent===socket||!available())void end(c,'담당자 연결이 종료되었습니다.');list();});
   });
   const cleanup=setInterval(()=>{for(const[id,c]of calls)if(c.ended&&Date.now()-c.ended>3600000)calls.delete(id);for(const[n,e]of usedTickets)if(e*1000<Date.now())usedTickets.delete(n);},60000);cleanup.unref();
-  return {server,wss,calls,close:async()=>{clearInterval(cleanup);await Promise.all(active().map(c=>end(c)));for(const s of wss.clients)s.terminate();await new Promise(resolve=>server.close(resolve));}};
+  const heartbeat=setInterval(()=>{for(const s of wss.clients){if(!s.alive){s.terminate();continue;}s.alive=false;s.ping();}},heartbeatMs);heartbeat.unref();
+  return {server,wss,calls,close:async()=>{clearInterval(cleanup);clearInterval(heartbeat);await Promise.all(active().map(c=>end(c)));closing=true;for(const s of wss.clients)s.terminate();await new Promise(resolve=>server.close(resolve));await history.flush();}};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   const origins=(process.env.PHONE_ALLOWED_ORIGINS||'https://shield-solve-staff.vercel.app,https://shield-and-solve.vercel.app,http://127.0.0.1:3100').split(',').map(s=>s.trim()).filter(Boolean);
-  const app=createPhoneServer({secret:process.env.PHONE_BRIDGE_SECRET,key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,providerToken:process.env.PHONE_PROVIDER_TOKEN,publicUrl:process.env.PHONE_BRIDGE_URL,origins,model:process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'});
-  app.server.listen(Number(process.env.PHONE_PORT||4318),'127.0.0.1',()=>console.log('Phone bridge listening on 127.0.0.1:4318'));
+  const app=createPhoneServer({secret:process.env.PHONE_BRIDGE_SECRET,historyFile:process.env.PHONE_HISTORY_FILE||'outputs/phone-history/calls.json',historyRetentionDays:Number(process.env.PHONE_HISTORY_DAYS||30),allowDemo:false,key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,analysisProvider:process.env.PHONE_ANALYSIS_PROVIDER||'gemini',textProvider:process.env.PHONE_TEXT_PROVIDER||'gemini',geminiModel:process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite',transcriptionModel:process.env.PHONE_GEMINI_TRANSCRIPTION_MODEL||'gemini-3.5-transcribe-live',safetyIntervalMs:Number(process.env.PHONE_SAFETY_INTERVAL_MS||400),playbackDelayMs:Number(process.env.PHONE_AUDIO_DELAY_MS||2500),origins,model:process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'});
+  app.server.listen(Number(process.env.PHONE_PORT||4318),'127.0.0.1',()=>console.log('Phone bridge listening on 127.0.0.1:'+app.server.address().port));
   for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>void app.close().then(()=>process.exit(0)));
 }

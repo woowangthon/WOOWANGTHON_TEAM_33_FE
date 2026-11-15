@@ -1,0 +1,47 @@
+.phone-standalone:has(.phone-live.phone-staff){max-width:1500px;padding-top:24px}
+.phone-live .phone-heading{margin:6px 0 20px}.phone-live.phone-caller{max-width:820px}
+.phone-live .phone-live-columns{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:20px;align-items:start}
+.phone-live .caller-columns{grid-template-columns:1fr}
+.phone-live .phone-chat-panel,.phone-live .phone-assistance{position:relative;border:1px solid #c6d5e9;border-radius:14px;background:white;overflow:hidden}
+.phone-live .phone-chat-heading,.phone-live .phone-assistance-heading{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:#e9f1fc;border-bottom:1px solid #cedcf0}
+.phone-live h2{font-size:17px;margin:0;color:#173f78}.phone-live h3{font-size:14px;margin:0 0 10px}
+.phone-live .phone-chat-heading span{font-size:12px;color:#315e98}.phone-live .phone-chat-heading .text-mode{font-weight:700}
+.phone-live .phone-chat-log{height:510px;overflow:auto;overscroll-behavior:contain;padding:24px;background:#f1f5fc;scrollbar-gutter:stable}
+.phone-live .phone-chat-system{text-align:center;font-size:12px;color:#617797;margin:0 0 25px}
+.phone-live .phone-chat-empty{padding:110px 12px;text-align:center;font-size:14px;color:#536d8b}
+.phone-live .phone-bubble-row{display:flex;flex-direction:column;align-items:flex-start;margin:0 0 23px;gap:7px}.phone-live .phone-bubble-row.mine{align-items:flex-end}
+.phone-live .phone-bubble-meta{display:flex;align-items:center;gap:9px;font-size:12px;color:#536781}.phone-live .phone-bubble-meta strong{font-weight:600}.phone-live .phone-bubble-meta time{font-size:11px}
+.phone-live .phone-bubble{font-size:15px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:13px 17px;max-width:88%;border:1px solid #d8e2ef;border-radius:3px 16px 16px;background:#fff;color:#243b59;user-select:text}
+.phone-live .mine .phone-bubble{background:#2458a6;color:white;border-color:#2458a6;border-radius:16px 3px 16px 16px}
+.phone-live .phone-chat-footer{font-size:12px;line-height:1.6;color:#294e7e;background:#e8f0fc;margin:0;padding:13px 20px;border-top:1px solid #cfddf0}
+.phone-live .phone-chat-listening{font-size:13px;color:#526c8e;margin:12px 0}.phone-live .phone-new-message{position:absolute;bottom:54px;left:50%;transform:translateX(-50%);box-shadow:0 3px 12px #173f7822}
+.phone-live .phone-assistance{padding:0;min-height:567px}.phone-live .phone-assistance-status{padding:12px 22px;font-size:12px;line-height:1.6;color:#63758d;margin:0;min-height:42px}
+.phone-live .phone-assistance-body{padding:0 22px 22px;max-height:490px;overflow:auto}.phone-live .phone-assistance-block{padding:19px 0;border-top:1px solid #e0e7f1}.phone-live .phone-assistance-block h3{color:#294c7c}
+.phone-live .phone-assistance-reply{font-size:15px;line-height:1.8;background:#f3f7fd;border-left:3px solid #648bc2;padding:14px 16px;white-space:pre-wrap;user-select:text;margin:10px 0}
+.phone-live .phone-law-card{border:1px solid #d3dff0;border-radius:9px;padding:13px 15px;margin:10px 0;font-size:13px;line-height:1.65}.phone-live .phone-law-card a{color:#2458a6;font-weight:650;text-decoration:underline;text-underline-offset:3px}.phone-live .phone-law-card p{margin:7px 0;color:#425771}.phone-live .phone-law-card small{color:#65768b;font-size:11px}
+.phone-live .phone-support-empty{font-size:13px;line-height:1.7;color:#687c96;padding:8px 0}.phone-live .phone-assistance-checks{padding:0;background:none;border:0;font-size:13px;color:#4a5f7b;line-height:1.7}.phone-live .phone-assistance-checks ul{padding-left:18px}
+.phone-live .phone-mode-notice{border:1px solid #c8d7ec;background:#f3f7fd;border-radius:9px;padding:14px 18px;margin-bottom:18px;color:#284c7e;font-size:13px}.phone-live .phone-mode-notice p{margin:5px 0 0;line-height:1.6}.phone-live .phone-mode-notice.protected{background:#e3edfd;border-color:#97b4de;border-left:4px solid #2458a6}
+.phone-live .phone-call-tabs{display:flex;gap:8px;overflow:auto;margin:0 0 16px}.phone-live .phone-call-tabs button{flex-shrink:0;border-radius:8px;font-size:12px}.phone-live .phone-call-tabs button.selected{background:#e6effd;border-color:#7196cb}.phone-live .phone-call-tabs span{margin-left:8px;color:#53739b;font-size:11px}
+.phone-live .phone-incoming{display:flex;justify-content:space-between;align-items:center;padding:16px;background:#e7f0fd;margin-bottom:16px;border-radius:8px}
+.phone-live .phone-sample-controls{border:1px solid #d6e0ee;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;background:#fff}.phone-live .phone-sample-controls summary{cursor:pointer;color:#4b6484}.phone-live .phone-sample-controls label{display:flex;gap:8px;align-items:center;margin:12px 0}.phone-live .phone-sample-controls small{display:block;margin:10px 0;color:#687b93}
+.phone-live .phone-retention{font-size:11px;color:#677991;margin:14px 0}.phone-live button:focus-visible,.phone-live summary:focus-visible{outline:3px solid #2458a6;outline-offset:3px}
+@media(max-width:900px){.phone-live .phone-live-columns{grid-template-columns:1fr}.phone-live .phone-chat-log{height:430px}.phone-live .phone-assistance{min-height:260px}.phone-live .phone-assistance-body{max-height:none}.phone-live .phone-bubble{max-width:94%}}
+
+.phone-home-bottom{display:flex;justify-content:flex-end;padding:20px 2px;font-size:13px;color:#315e98}.phone-home-bottom a{padding:8px;text-underline-offset:3px}.phone-home-bottom a:focus-visible{outline:3px solid #2458a6;outline-offset:3px}
+.phone-live button.phone-call-status:disabled{opacity:1;color:#2458a6;background:#e7f0fd;border-color:#c6d8f1;cursor:default}
+.phone-live .phone-heading{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.phone-live .phone-heading h1{margin:0}.phone-live .phone-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.phone-live.phone-staff .phone-live-columns{grid-template-columns:210px minmax(0,1.15fr) minmax(280px,.85fr);gap:18px}
+.phone-live .phone-history{min-width:0;min-height:567px;border:1px solid #c6d5e9;border-radius:14px;overflow:hidden;background:white}
+.phone-live .phone-history-heading{display:flex;justify-content:space-between;align-items:center;padding:18px;background:#e9f1fc;border-bottom:1px solid #cedcf0;gap:10px}
+.phone-live .phone-history-heading span{color:#315e98;font-size:13px}.phone-live .phone-history-heading h2{font-size:15px}
+.phone-live .phone-history-empty{padding:24px 18px;margin:0;font-size:13px;color:#647892;line-height:1.7}.phone-live .phone-history-empty button{margin-top:12px}
+.phone-live .phone-history-callers{max-height:270px;overflow:auto}.phone-live .phone-history-entries{max-height:250px;overflow:auto}
+.phone-live .phone-history button.phone-history-person,.phone-live .phone-history button.phone-history-entry{display:grid;width:100%;text-align:left;justify-content:stretch;gap:7px;padding:16px;border:0;border-bottom:1px solid #e2e9f3;border-radius:0;background:white;overflow-wrap:anywhere}
+.phone-live .phone-history button.selected{background:#edf3fc;box-shadow:inset 3px 0 #2458a6}
+.phone-live .phone-history-person strong{font-size:14px}.phone-live .phone-history-person span,.phone-live .phone-history-entry span{font-size:12px;color:#315e98}.phone-live .phone-history-person small{font-size:11px;color:#647892;line-height:1.5}
+.phone-live .phone-history-previous{border-top:1px solid #c6d5e9}.phone-live .phone-history-previous h3{padding:18px 16px 10px;margin:0;font-size:13px;overflow-wrap:anywhere}.phone-live .phone-history-entry time{font-size:12px}
+.phone-live .phone-nickname{display:block;font-size:14px;font-weight:600;margin-bottom:18px}.phone-live .phone-nickname input{display:block;width:100%;max-width:360px;margin-top:9px;padding:12px 14px;border:1px solid #a8bfdf;border-radius:9px;background:#fff;color:#243b59;font:inherit}
+.phone-live .phone-chat-heading h2{overflow-wrap:anywhere;min-width:0}.phone-live .phone-chat-heading span{flex-shrink:0}
+@media(max-width:1150px){.phone-live.phone-staff .phone-live-columns{grid-template-columns:190px minmax(0,1fr)}.phone-live.phone-staff .phone-history{grid-row:span 2}.phone-live.phone-staff .phone-assistance{grid-column:2;min-height:260px}}
+@media(max-width:700px){.phone-live.phone-staff .phone-live-columns{grid-template-columns:1fr}.phone-live.phone-staff .phone-history{grid-row:auto;min-height:0}.phone-live.phone-staff .phone-assistance{grid-column:auto}.phone-live .phone-history-callers,.phone-live .phone-history-entries{max-height:180px}.phone-live .phone-heading{align-items:flex-start;gap:12px}.phone-live .phone-heading h1{font-size:24px}.phone-live .phone-chat-heading{flex-wrap:wrap}}

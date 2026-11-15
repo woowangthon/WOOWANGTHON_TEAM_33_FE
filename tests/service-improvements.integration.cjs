@@ -23,22 +23,24 @@ const get=async(id,trash=false)=>(await req('complaints/'+id+(trash?'?trash=1':'
 (async()=>{try{
  const created=await req('complaints','POST',{title:'[가상 검증] 보완 흐름',body:'실제 민원과 무관한 보완 및 복구 기능 검증입니다.',category:'기타',location:'청주시 가상 장소',occurredAt:'2020-06-01',consent:true});assert.equal(created.status,201);const id=created.data.id;
  process.env.SITE_MODE='staff';user.userId=owners[1];let c=await get(id);
- assert.equal((await req('complaints/'+id+'/supplements','POST',{text:'정확한 위치를 알려 주세요.',revision:c.revision})).status,201);c=await get(id);assert.equal(c.status,'waiting');
- assert.equal((await req('complaints/'+id+'/supplements','POST',{text:'중복 요청',revision:c.revision-1})).status,409);
- process.env.SITE_MODE='citizen';const form=new FormData();form.set('text','추가 위치는 가상길 10번지 앞입니다.');form.set('revision',String(c.revision));
- const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jW1QAAAAASUVORK5CYII=','base64');form.append('photos',new Blob([png],{type:'image/png'}),'synthetic.png');
- assert.equal((await req('complaints/'+id+'/supplements','POST',form)).status,404,'another citizen cannot answer');user.userId=owners[0];
- assert.equal((await req('complaints/'+id+'/supplements','POST',form)).status,201);c=await get(id);assert.equal(c.status,'reviewing');assert.equal(c.supplements.length,2);const photo=c.supplements[1].attachments[0];assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);
- user.userId=owners[1];assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,404);process.env.SITE_MODE='staff';assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);
+ assert.equal((await req('complaints/'+id+'/supplements','POST',{text:'종료된 요청',revision:c.revision})).status,410);
+ const photo={id:crypto.randomUUID(),name:'legacy.png',mime:'image/png',size:68};
+ const history=[{id:'old-staff',role:'staff',text:'기존 위치 확인',createdAt:new Date().toISOString(),attachments:[]},{id:'old-citizen',role:'citizen',text:'추가 위치는 가상길 10번지 앞입니다.',createdAt:new Date().toISOString(),attachments:[photo]}];
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jW1QAAAAASUVORK5CYII=','base64');
+ await db.query("UPDATE complaints SET status='waiting',supplements=$1 WHERE id=$2",[JSON.stringify(history),id]);
+ await db.query('INSERT INTO complaint_attachments(id,complaint_id,owner,name,mime,bytes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7)',[photo.id,id,owners[0],photo.name,photo.mime,png,new Date().toISOString()]);
+ c=await get(id);assert.equal(c.status,'reviewing');assert.equal(c.supplements.length,2);
+ process.env.SITE_MODE='citizen';assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,404);user.userId=owners[0];assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);
+ user.userId=owners[1];process.env.SITE_MODE='staff';assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);
  const gen=(await db.query('SELECT analysis_generation FROM complaints WHERE id=$1',[id])).rows[0].analysis_generation;
  await stages.runAnalysisStage(id,gen,'plan');await stages.runAnalysisStage(id,gen,'evidence');await assert.rejects(stages.runAnalysisStage(id,gen,'analysis'));
  await stages.runAnalysisStage(id,gen,'plan');await stages.runAnalysisStage(id,gen,'evidence');await stages.runAnalysisStage(id,gen,'analysis');await stages.runAnalysisStage(id,gen,'review');
  await stages.runAnalysisStage(id,gen,'requirements');await stages.runAnalysisStage(id,gen,'coverage');
  await db.query('UPDATE complaints SET draft=$1,revision=revision+1 WHERE id=$2',['담당자가 직접 수정한 초안을 보존합니다.',id]);
- await stages.runAnalysisStage(id,gen,'finish');c=await get(id);assert.equal(c.auto_state,'completed');assert.equal(c.draft,'담당자가 직접 수정한 초안을 보존합니다.');assert.equal(c.draft_review,null);assert.deepEqual(calls,{plan:1,evidence:1,analysis:2,review:1});
+ await stages.runAnalysisStage(id,gen,'finish');c=await get(id);assert.equal(c.auto_state,'completed');assert.equal(c.draft,'담당자가 직접 수정한 초안을 보존합니다.');assert.equal(c.draft_review,null);assert.deepEqual(calls,{plan:1,evidence:1,analysis:2,review:0});
  assert.equal((await req('complaints/'+id,'PATCH',{action:'delete',revision:c.revision})).status,200);assert.equal(await stages.runAnalysisStage(id,gen,'finish'),false);assert.equal((await req('complaints/'+id)).status,404);
  c=await get(id,true);assert.ok(c.deleted_at);assert.ok((await req('overview')).data.trashComplaints.some(c=>c.id===id));
  assert.equal((await req('complaints/'+id,'PATCH',{action:'restore',revision:c.revision})).status,200);c=await get(id);assert.equal(c.deleted_at,null);assert.equal(c.supplements.length,2);assert.equal((await req(`complaints/${id}/attachments/${photo.id}`)).status,200);
- console.log('PASS: supplement request/reply/photo isolation, shared trash/restore, durable checkpoints resume only failed stage, concurrent staff edits and deleted generations preserved.');
+ console.log('PASS: retired supplement writes, legacy history/photo isolation, shared trash/restore, durable checkpoints resume only failed stage, concurrent staff edits and deleted generations preserved.');
  }finally{for(const owner of owners){await db.query('DELETE FROM complaints WHERE owner=$1',[owner]);await db.query('DELETE FROM limits WHERE id LIKE $1',[owner+'%']);}await db.end();}
 })().catch(e=>{console.error(e.name,e.message,e.stack?.split('\n').slice(1,3).join('\n'));process.exitCode=1;});

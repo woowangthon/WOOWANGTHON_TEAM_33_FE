@@ -1,6 +1,5 @@
 {
   "source": "package-lock.json",
-  "limitations": "Metadata inventory, not a legal review. Read each upstream LICENSE/NOTICE before redistribution.",
   "packages": [
     {
       "package": "@aws-sdk/core",

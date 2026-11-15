@@ -1,0 +1,258 @@
+/* 민원사이 — the original blue palette, scoped to the staff site. */
+body.site-staff {
+  color-scheme: light;
+  --sai-page: #f5f7fa;
+  --sai-surface: #ffffff;
+  --sai-soft: #f1f4f8;
+  --sai-ink: #243146;
+  --sai-muted: #657387;
+  --sai-line: #d8dfe8;
+  --sai-input-line: #8293ac;
+  --sai-accent: #2458a6;
+  --sai-accent-hover: #173f78;
+  --sai-accent-soft: #eef3fa;
+  --sai-accent-line: #c6d0df;
+  --sai-warning: #865b29;
+  --sai-warning-soft: #fbf2e4;
+  --sai-warning-line: #e2cfb0;
+  --sai-danger: #a13e38;
+  --sai-danger-soft: #fcf0ed;
+  --sai-danger-line: #e4c3bb;
+  --sai-shadow: 0 4px 22px rgb(36 49 70 / 4%);
+  --bg: var(--sai-page);
+  --ink: var(--sai-ink);
+  --muted: var(--sai-muted);
+  --line: var(--sai-line);
+  --green: var(--sai-accent);
+  --pale: var(--sai-accent-soft);
+}
+
+body.site-staff { background: var(--sai-page); color: var(--sai-ink); }
+body.site-staff ::selection { background: var(--sai-accent-soft); color: var(--sai-ink); }
+body.site-staff input, body.site-staff textarea, body.site-staff select { border-color: var(--sai-input-line); }
+body.site-staff input:focus, body.site-staff textarea:focus, body.site-staff select:focus {
+  border-color: var(--sai-accent);
+  box-shadow: 0 0 0 3px var(--sai-accent-soft);
+}
+body.site-staff button:focus-visible, body.site-staff a:focus-visible, body.site-staff summary:focus-visible {
+  outline-color: var(--sai-accent);
+}
+body.site-staff .button { border-radius: 10px; }
+body.site-staff .button.primary { background: var(--sai-accent); border-color: var(--sai-accent); }
+body.site-staff .button.primary:hover:not(:disabled) { background: var(--sai-accent-hover); }
+body.site-staff .card { background: var(--sai-surface); border-radius: 16px; box-shadow: var(--sai-shadow); }
+
+/* Staff workspace: original blue colors with the current layout. */
+body.site-staff .staff-app {
+  --green: var(--sai-accent); --green-dark: var(--sai-accent-hover);
+  --green-light: var(--sai-accent-soft); --text: var(--sai-ink);
+  --muted: var(--sai-muted); --border: var(--sai-line);
+  background: var(--sai-page); font-size: 14px;
+}
+body.site-staff .admin-header { height: 88px; padding: 0 32px; background: var(--sai-surface); border-bottom: 1px solid var(--sai-line); }
+body.site-staff .admin-brand { color: var(--sai-ink); gap: 20px; }
+body.site-staff .admin-brand > svg { color: var(--sai-accent); }
+body.site-staff .admin-brand > strong { font-size: 27px; font-weight: 600; letter-spacing: -.075em; }
+body.site-staff .admin-brand > strong span { color: var(--sai-accent); }
+body.site-staff .admin-brand b { color: var(--sai-muted); font-size: 12px; font-weight: 400; }
+body.site-staff .admin-brand i { border-color: var(--sai-line); height: 18px; margin: 0; }
+body.site-staff .admin-user { font-size: 12px; }
+body.site-staff .admin-nav { display: none; }
+body.site-staff .admin-layout { min-height: calc(100vh - 88px); grid-template-columns: 224px minmax(0, 1fr); align-items: stretch; }
+body.site-staff .admin-sidebar { background: var(--sai-surface); border-color: var(--sai-line); padding: 18px 16px 32px; }
+body.site-staff .admin-side-title { border: 0; padding: 16px 12px 24px; }
+body.site-staff .admin-side-title > span { font-size: 12px; font-weight: 500; color: var(--sai-muted); }
+body.site-staff .admin-side-main { border-radius: 12px; margin: 3px 0; min-height: 46px; padding: 12px; color: var(--sai-muted); font-size: 13px; }
+body.site-staff .admin-side-main.active { background: var(--sai-accent-soft); color: var(--sai-accent-hover); border-left: 0; padding-left: 12px; font-weight: 600; }
+body.site-staff .admin-side-main:hover, body.site-staff .admin-side-sub button:hover { background: var(--sai-page); }
+body.site-staff .admin-side-sub { padding: 8px 0 20px 18px; border-bottom: 0; }
+body.site-staff .admin-side-sub button { padding: 10px 12px; min-height: 42px; border-radius: 10px; font-size: 12px; }
+body.site-staff .admin-side-sub button.active { color: var(--sai-accent-hover); }
+body.site-staff .admin-side-sub button > b { border-radius: 6px; background: var(--sai-soft); font-weight: 500; }
+body.site-staff .admin-side-sub button.active > b { background: var(--sai-accent-soft); }
+body.site-staff .admin-side-main > b { margin-left: auto; font-size: 11px; font-weight: 500; }
+body.site-staff .admin-side-divider { margin: 20px 12px; border-color: var(--sai-line); }
+body.site-staff .admin-content { padding: 42px 48px 0; max-width: 1550px; margin: 0 auto; }
+body.site-staff .admin-heading { margin: 0 0 30px; align-items: center; }
+body.site-staff .admin-heading h1, body.site-staff .staff-app .page-heading h1 { color: var(--sai-ink); font-size: 30px; font-weight: 500; letter-spacing: -.065em; margin: 0; }
+body.site-staff .admin-counters { display: grid; gap: 16px; margin-bottom: 28px; border: 0; border-radius: 0; box-shadow: none; background: transparent; overflow: visible; }
+body.site-staff .admin-counters[hidden] { display: none; }
+body.site-staff .admin-counters > button { flex-direction: column; align-items: flex-start; gap: 20px; min-height: 132px; padding: 24px; border: 1px solid var(--sai-line); border-radius: 18px; background: var(--sai-surface); color: var(--sai-muted); }
+body.site-staff .admin-counters > button:last-child { border-right: 1px solid var(--sai-line); }
+body.site-staff .admin-counters > button:hover { border-color: var(--sai-input-line); }
+body.site-staff .admin-counters > button.active { background: var(--sai-accent-soft); border-color: var(--sai-accent-line); box-shadow: inset 0 0 0 1px var(--sai-accent-line); }
+body.site-staff .admin-counters > button > span { font-size: 13px; }
+body.site-staff .admin-counters strong { font-size: 32px; color: var(--sai-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+body.site-staff .admin-counters small { font-size: 12px; margin-left: 8px; }
+body.site-staff .admin-counters button.active strong, body.site-staff .admin-counters > button.active > span { color: var(--sai-accent-hover); }
+body.site-staff .admin-filter { padding: 22px 24px 12px; border: 0; border-radius: 18px; background: #eaf0f8; margin-bottom: 28px; }
+body.site-staff .admin-search-row { display: flex; align-items: center; gap: 10px; }
+body.site-staff .admin-search-label { flex: 1; min-width: 0; }
+body.site-staff .admin-search-label > span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+body.site-staff .admin-filter-details > summary { cursor: pointer; padding: 14px 0 4px; width: fit-content; min-height: 40px; color: var(--sai-accent-hover); font-size: 12px; }
+body.site-staff .admin-filter-details > summary > span { margin-left: 10px; border-bottom: 1px solid currentColor; }
+body.site-staff .admin-filter-details[open] > summary { margin-bottom: 18px; }
+body.site-staff .admin-filter-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+body.site-staff .admin-filter-row label { display: flex; flex-direction: column; align-items: stretch; gap: 8px; font-size: 12px; }
+body.site-staff .admin-filter-row label > span { color: var(--sai-accent-hover); }
+body.site-staff .admin-date-range input { font-size: 12px; }
+body.site-staff .admin-filter-apply { margin: 18px 0 10px; }
+body.site-staff .staff-app .button { min-height: 42px; border-radius: 11px; font-size: 12px; padding: 10px 16px; font-weight: 500; }
+body.site-staff .staff-app .button.small { min-height: 38px; font-size: 12px; }
+body.site-staff .staff-app .button.primary { background: var(--sai-accent); border-color: var(--sai-accent); }
+body.site-staff .staff-app .button.primary:hover { background: var(--sai-accent-hover); }
+body.site-staff .staff-app .button.outline { background: var(--sai-surface); border-color: var(--sai-input-line); color: var(--sai-ink); }
+body.site-staff .staff-app .button.quiet { color: var(--sai-accent-hover); }
+body.site-staff .staff-app .button.quiet:hover { background: var(--sai-accent-soft); }
+body.site-staff .staff-app input, body.site-staff .staff-app select, body.site-staff .staff-app textarea { border-radius: 10px; border-color: var(--sai-input-line); background: var(--sai-surface); color: var(--sai-ink); }
+body.site-staff .staff-app input, body.site-staff .staff-app select { height: 42px; }
+body.site-staff .staff-app input[type=checkbox] { height: 18px; width: 18px; accent-color: var(--sai-accent); }
+body.site-staff .staff-app :focus-visible { outline-color: var(--sai-accent); }
+body.site-staff .admin-list { border: 1px solid var(--sai-line); border-radius: 20px; background: var(--sai-surface); box-shadow: none; overflow: hidden; padding: 0 20px; }
+body.site-staff .admin-list-toolbar { padding: 24px 4px 10px; }
+body.site-staff .admin-list-toolbar h2 { font-size: 17px; font-weight: 500; }
+body.site-staff .admin-list-toolbar h2 span { font-size: 12px; }
+body.site-staff .admin-list-toolbar select { height: 38px; }
+body.site-staff .admin-table { border-collapse: separate; border-spacing: 0 10px; }
+body.site-staff .admin-table th { border: 0; background: transparent; color: var(--sai-muted); font-size: 11px; font-weight: 400; padding-top: 8px; padding-bottom: 4px; }
+body.site-staff .admin-table td { border: 0; background: #f7f9fc; font-size: 12px; padding: 20px 12px; height: 104px; color: var(--sai-muted); }
+body.site-staff .admin-table td:first-child { border-radius: 12px 0 0 12px; }
+body.site-staff .admin-table td:last-child { border-radius: 0 12px 12px 0; }
+body.site-staff .admin-table tbody tr:hover { background: transparent; }
+body.site-staff .admin-table tbody tr:hover td { background: var(--sai-accent-soft); }
+body.site-staff .admin-complaint-title { gap: 6px; }
+body.site-staff .admin-complaint-title small { font-size: 10px; }
+body.site-staff .admin-complaint-title strong { color: var(--sai-ink); font-size: 14px; font-weight: 500; }
+body.site-staff .admin-complaint-title > span { font-size: 11px; }
+body.site-staff .admin-complaint-title:hover strong { color: var(--sai-accent-hover); }
+body.site-staff .admin-status, body.site-staff .staff-app .badge { border-radius: 20px; font-size: 11px; padding: 5px 10px; }
+body.site-staff .admin-status.reviewing { background: #edf3ff; color: #345dae; border-color: #d5e1f8; }
+body.site-staff .admin-status.resolved { background: #eef6f1; color: #488266; border-color: #d6e9de; }
+body.site-staff .admin-table-footer { border: 0; padding: 16px 0 24px; }
+body.site-staff .admin-pagination button { border-radius: 9px; min-width: 36px; height: 36px; font-size: 12px; }
+body.site-staff .admin-pagination button.active { background: var(--sai-accent); border-color: var(--sai-accent); }
+body.site-staff .admin-footer { font-size: 11px; padding: 28px 0; margin-top: 30px; border-color: var(--sai-line); }
+body.site-staff .admin-footer strong { color: var(--sai-muted); font-size: 12px; font-weight: 500; }
+body.site-staff .staff-app .card, body.site-staff .staff-app .detail-main > .card, body.site-staff .staff-app .detail-aside > .card {
+  border-radius: 16px;
+  background: var(--sai-surface);
+  border-color: var(--sai-line);
+}
+body.site-staff .staff-app .card-header { padding: 20px 24px; }
+body.site-staff .staff-app .card-header h2 { color: var(--sai-ink); }
+body.site-staff .staff-app .panel-padding { padding: 24px; }
+body.site-staff .staff-app .detail-tabs { background: var(--sai-surface); padding: 0 14px; gap: 12px; border-radius: 16px 16px 0 0; }
+body.site-staff .staff-app .detail-tabs button { padding: 16px 12px; font-size: 13px; }
+body.site-staff .staff-app .detail-tabs button.active { color: var(--sai-accent-hover); border-bottom-color: var(--sai-accent); }
+body.site-staff .staff-app .summary-box { background: var(--sai-accent-soft); color: var(--sai-ink); border-radius: 12px; font-size: 14px; line-height: 1.95; padding: 20px; }
+body.site-staff .staff-app .response-editor textarea { border-radius: 10px; font-size: 14px; color: var(--sai-ink); line-height: 1.95; padding: 16px; }
+body.site-staff .staff-app .status-panel, body.site-staff .staff-app .task-panel { padding: 22px; }
+body.site-staff .status-panel h3, body.site-staff .task-panel h3 { font-size: 14px; }
+body.site-staff .status-panel > label, body.site-staff .status-panel dl, body.site-staff .task-item { font-size: 12px; }
+body.site-staff .task-item { gap: 11px; margin-bottom: 16px; color: var(--sai-ink); }
+body.site-staff .approved-banner { background: var(--sai-accent-soft); color: var(--sai-accent-hover); border-radius: 10px; }
+body.site-staff .staff-app .source-card { border-radius: 10px; }
+body.site-staff .staff-app .source-card summary { background: var(--sai-page); }
+body.site-staff .staff-app .expression-panel.abusive { background: var(--sai-warning-soft); border-color: var(--sai-warning-line); }
+body.site-staff .staff-app .back-link { font-size: 13px; }
+
+body.site-staff .phone-desk{color:var(--sai-ink)}body.site-staff .phone-heading{display:flex;justify-content:space-between;align-items:center;margin:12px 0 24px}body.site-staff .phone-heading h1{font-size:27px;font-weight:750;margin:6px 0}body.site-staff .phone-eyebrow{font-size:12px;color:var(--sai-muted)}body.site-staff .phone-availability{font-size:12px;padding:8px 12px;border:1px solid var(--sai-accent-line);border-radius:4px;color:var(--sai-muted)}body.site-staff .phone-availability.on{color:var(--sai-accent);background:var(--sai-page);border-color:var(--sai-accent-line)}body.site-staff .phone-toolbar{display:flex;gap:16px;align-items:center;justify-content:space-between;background:white;border:1px solid var(--sai-accent-line);border-top:3px solid var(--sai-accent);padding:22px;margin-bottom:18px}body.site-staff .phone-toolbar>div,body.site-staff .phone-actions,body.site-staff .phone-panel-title{display:flex;align-items:center;gap:12px;flex-wrap:wrap}body.site-staff .phone-desk button{display:inline-flex;gap:7px;align-items:center;justify-content:center;min-height:38px;padding:9px 14px;background:white;border:1px solid var(--sai-accent-line);border-radius:4px;cursor:pointer;font-size:13px;color:var(--sai-ink)}body.site-staff .phone-desk button:disabled{opacity:.5;cursor:default}body.site-staff .phone-desk button.primary{background:var(--sai-accent);color:white;border-color:var(--sai-accent)}body.site-staff .phone-desk button.danger{color:var(--sai-danger);border-color:var(--sai-danger-line)}body.site-staff .phone-grid{display:grid;grid-template-columns:235px minmax(0,1fr);gap:18px}body.site-staff .phone-panel{border:1px solid var(--sai-accent-line);background:white}body.site-staff .phone-panel h2{font-size:15px;font-weight:700;margin:0}body.site-staff .phone-panel-title{justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--sai-accent-line)}body.site-staff .phone-call-list>h2{padding:19px;border-bottom:1px solid var(--sai-accent-line)}body.site-staff .phone-call-list h2 span{float:right;color:var(--sai-muted)}body.site-staff .phone-call-list>button{display:flex;border:0;border-radius:0;border-bottom:1px solid var(--sai-line);width:100%;justify-content:space-between;text-align:left;padding:17px}body.site-staff .phone-call-list>button.selected{background:var(--sai-page);box-shadow:inset 3px 0 var(--sai-accent)}body.site-staff .phone-call-list strong,body.site-staff .phone-call-list small{display:block}body.site-staff .phone-call-list small{font-size:11px;color:var(--sai-muted);margin-top:7px}body.site-staff .phone-call-list b{font-size:11px;font-weight:500;color:var(--sai-accent)}body.site-staff .phone-transcript{min-height:230px;max-height:460px;overflow:auto;padding:16px 20px}body.site-staff .phone-transcript article{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--sai-line)}body.site-staff .phone-transcript time{font-size:11px;color:var(--sai-muted);padding-top:4px}body.site-staff .phone-transcript p{white-space:pre-wrap;font-size:14px;line-height:1.8;margin:0}body.site-staff .phone-transcript small{font-size:11px;color:var(--sai-warning)}body.site-staff .phone-empty{padding:30px 10px;text-align:center;font-size:13px;color:var(--sai-muted)}body.site-staff .phone-shield{display:flex;align-items:center;gap:7px;background:var(--sai-page);color:var(--sai-accent);padding:12px 20px;font-size:13px}body.site-staff .phone-notice{padding:12px 16px;margin-bottom:16px;background:var(--sai-warning-soft);border:1px solid var(--sai-warning-line);font-size:13px}body.site-staff .phone-processing{display:flex;gap:8px;align-items:center;color:var(--sai-muted)}body.site-staff .phone-registration{border-top:1px solid var(--sai-accent-line);padding:20px}body.site-staff .phone-registration h2{margin-bottom:17px}body.site-staff .phone-fields{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px}body.site-staff .phone-registration label{display:block;font-size:12px;font-weight:600;margin-bottom:14px}body.site-staff .phone-registration input,body.site-staff .phone-registration select,body.site-staff .phone-registration textarea{display:block;width:100%;border:1px solid var(--sai-accent-line);background:white;padding:10px;margin-top:7px;border-radius:3px;font-size:14px;font-weight:400;color:var(--sai-ink)}body.site-staff .phone-registration textarea{line-height:1.7;resize:vertical}body.site-staff .phone-consent{display:flex;align-items:center;gap:9px;font-size:13px;margin:18px 0;color:var(--sai-muted)}body.site-staff .phone-consent input{width:16px;height:16px}body.site-staff .phone-number{display:inline-flex;align-items:center;gap:10px;font-size:24px;padding:12px 0 24px;color:var(--sai-accent)}body.site-staff .phone-standalone{max-width:1160px;margin:0 auto;padding:36px 24px}body.site-staff .phone-home{display:flex;justify-content:space-between;padding-bottom:22px;margin-bottom:25px;border-bottom:1px solid var(--sai-accent-line);font-size:20px;font-weight:750;color:var(--sai-ink)}body.site-staff .phone-home span{font-size:13px;font-weight:500}body.site-staff .phone-receipt{font-size:12px;display:inline-block;margin-left:12px;color:var(--sai-muted)}@media(max-width:850px){body.site-staff .phone-grid{grid-template-columns:1fr}body.site-staff .phone-toolbar{align-items:flex-start;flex-direction:column}body.site-staff .phone-fields{grid-template-columns:1fr}body.site-staff .phone-call-list{max-height:230px;overflow:auto}}
+body.site-staff .phone-demo{display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid var(--sai-accent-line);background:var(--sai-page);padding:14px 18px;margin-bottom:16px;font-size:13px}body.site-staff .phone-demo label{display:flex;gap:7px;align-items:center}body.site-staff .phone-mic-level{display:inline-flex;gap:6px;align-items:center;color:var(--sai-muted)}body.site-staff .phone-mic-level meter{width:65px;height:8px}body.site-staff .phone-receipt{text-decoration:underline;text-underline-offset:3px}
+
+/* Staff phone and sign-in. */
+body.site-staff:has(.phone-standalone) { background: #edf3fc; }
+body.site-staff .phone-desk { color: var(--sai-ink); }
+body.site-staff .phone-desk .phone-heading { gap: 20px; margin-bottom: 28px; }
+body.site-staff .phone-heading h1 { font-size: 28px; color: var(--sai-accent-hover); }
+body.site-staff .phone-eyebrow, body.site-staff .phone-empty { color: #49678f; }
+body.site-staff .phone-desk .phone-availability { border-radius: 30px; background: var(--sai-soft); color: var(--sai-muted); }
+body.site-staff .phone-desk .phone-availability.on { background: var(--sai-accent-soft); color: var(--sai-accent-hover); }
+body.site-staff .phone-desk .phone-toolbar { padding: 24px; border: 1px solid #bfd1eb; border-top: 3px solid var(--sai-accent); border-radius: 16px; background: #e5eefb; color: var(--sai-accent-hover); box-shadow: none; }
+body.site-staff .phone-desk button { border-radius: 10px; border-color: var(--sai-input-line); color: var(--sai-ink); background: var(--sai-surface); min-height: 42px; }
+body.site-staff .phone-desk button.primary { background: var(--sai-accent); color: white; border-color: var(--sai-accent); }
+body.site-staff .phone-desk button.primary:hover:not(:disabled) { background: var(--sai-accent-hover); }
+body.site-staff .phone-desk button.danger { color: var(--sai-danger); border-color: var(--sai-danger-line); }
+body.site-staff .phone-desk .phone-panel { border-radius: 16px; overflow: hidden; border-color: #bfd1eb; background: var(--sai-surface); box-shadow: none; }
+body.site-staff .phone-panel-title { background: #e5eefb; color: var(--sai-accent-hover); border-color: #bfd1eb; }
+body.site-staff .phone-call-list > h2 { background: var(--sai-accent); color: white; border-color: var(--sai-accent); }
+body.site-staff .phone-call-list > h2 span { color: white; }
+body.site-staff .phone-desk .phone-call-list > button { border-radius: 0; }
+body.site-staff .phone-desk .phone-call-list > button.selected { background: var(--sai-accent-soft); box-shadow: inset 3px 0 var(--sai-accent); }
+body.site-staff .phone-desk .phone-shield { background: var(--sai-accent-soft); color: var(--sai-accent-hover); }
+body.site-staff .phone-desk .phone-notice, body.site-staff .phone-desk .phone-demo { border-radius: 12px; }
+body.site-staff .phone-desk .phone-registration input, body.site-staff .phone-desk .phone-registration select, body.site-staff .phone-desk .phone-registration textarea { border-radius: 9px; border-color: var(--sai-input-line); background: var(--sai-surface); }
+body.site-staff .phone-home { color: var(--sai-accent); border-color: var(--sai-line); letter-spacing: -.05em; font-size: 25px; }
+body.site-staff .phone-caller .phone-call-card { background: var(--sai-surface); border-color: var(--sai-line); border-radius: 24px; box-shadow: var(--sai-shadow); }
+body.site-staff .phone-caller .phone-avatar { background: var(--sai-accent-soft); color: var(--sai-accent); }
+body.site-staff .phone-caller .phone-duration { color: var(--sai-ink); }
+body.site-staff .phone-caller .phone-consent { background: var(--sai-page); }
+body.site-staff .phone-desk .phone-hangup { background: var(--sai-danger); border-color: var(--sai-danger); color: white; }
+body.site-staff .phone-desk button:focus-visible, body.site-staff .phone-desk input:focus-visible { outline-color: var(--sai-accent); }
+body.site-staff .auth-shell, body.site-staff .admin-auth { background: var(--sai-page); }
+body.site-staff .auth-brand, body.site-staff .admin-auth .auth-brand { color: var(--sai-accent); font-size: 30px; letter-spacing: -.065em; }
+body.site-staff .auth-card, body.site-staff .admin-auth .auth-card { border-radius: 22px; background: var(--sai-surface); border-color: var(--sai-line); box-shadow: var(--sai-shadow); }
+body.site-staff .admin-auth .button.primary { background: var(--sai-accent); border-color: var(--sai-accent); border-radius: 10px; }
+body.site-staff .auth-card input, body.site-staff .admin-auth .auth-card input { background: var(--sai-surface); border-radius: 10px; border-color: var(--sai-input-line); }
+body.site-staff .auth-card .button { min-height: 46px; justify-content: center; font-size: 14px; }
+body.site-staff .auth-home, body.site-staff .admin-auth .auth-home { color: var(--sai-accent); }
+
+@media (max-width: 1200px) {
+  body.site-staff .admin-content { padding: 32px 28px 0; }
+  body.site-staff .admin-layout { grid-template-columns: 200px minmax(0, 1fr); }
+  body.site-staff .admin-counters { gap: 12px; }
+  body.site-staff .admin-counters > button { padding: 22px 18px; }
+  body.site-staff .admin-filter-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.site-staff .admin-filter-row label:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 800px) {
+  body.site-staff .admin-layout { grid-template-columns: 176px minmax(0, 1fr); }
+  body.site-staff .admin-sidebar { padding-left: 8px; padding-right: 8px; }
+  body.site-staff .admin-content { padding: 28px 20px 0; }
+  body.site-staff .admin-counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  body.site-staff .admin-header { height: 72px; padding: 0 18px; }
+  body.site-staff .admin-brand > strong { font-size: 24px; }
+  body.site-staff .admin-brand { gap: 8px; }
+  body.site-staff .admin-mobile { color: var(--sai-accent); min-width: 36px; min-height: 44px; }
+  body.site-staff .admin-nav { display: flex; height: 56px; padding: 6px 16px; gap: 8px; background: var(--sai-surface); border-bottom: 1px solid var(--sai-line); }
+  body.site-staff .admin-nav button { padding: 0 18px; font-size: 13px; color: var(--sai-muted); border-radius: 10px; }
+  body.site-staff .admin-nav button.active { background: var(--sai-accent-soft); color: var(--sai-accent-hover); }
+  body.site-staff .admin-nav button.active::after { display: none; }
+  body.site-staff .admin-layout { display: block; min-height: calc(100vh - 128px); }
+  body.site-staff .admin-sidebar.open { padding-top: 28px; }
+  body.site-staff .admin-scrim { left: 230px; }
+  body.site-staff .admin-content { padding: 28px 18px 0; }
+  body.site-staff .admin-heading { margin: 0 0 24px; }
+  body.site-staff .admin-heading h1 { font-size: 25px; }
+  body.site-staff .admin-counters { gap: 10px; margin-bottom: 20px; }
+  body.site-staff .admin-counters > button { min-height: 112px; padding: 18px; gap: 16px; border-radius: 15px; }
+  body.site-staff .admin-counters > button > span { font-size: 12px; }
+  body.site-staff .admin-counters strong { font-size: 28px; }
+  body.site-staff .admin-filter { padding: 16px 14px 10px; margin-bottom: 20px; border-radius: 15px; }
+  body.site-staff .admin-search-row { flex-wrap: wrap; gap: 8px; }
+  body.site-staff .admin-search-label { flex-basis: 100%; }
+  body.site-staff .admin-search-row > button { flex: 1; }
+  body.site-staff .admin-filter-row { gap: 16px 12px; }
+  body.site-staff .admin-date-range input { font-size: 12px; padding: 8px; }
+  body.site-staff .admin-list { padding: 0 12px; border-radius: 16px; }
+  body.site-staff .admin-list-toolbar { padding: 20px 2px 8px; gap: 14px; }
+  body.site-staff .admin-list-toolbar > div { flex-wrap: wrap; }
+  body.site-staff .admin-table-footer > span { right: 0; }
+  body.site-staff .staff-app .panel-padding, body.site-staff .staff-app .card-header { padding: 20px; }
+  body.site-staff .staff-app .detail-tabs { padding: 0 8px; gap: 6px; }
+  body.site-staff .staff-app .detail-tabs button { font-size: 12px; padding: 15px 10px; }
+  body.site-staff .staff-app .summary-box { font-size: 14px; padding: 18px; }
+  body.site-staff .staff-app .response-editor textarea { font-size: 14px; padding: 13px; }
+  body.site-staff .phone-desk .phone-toolbar { padding: 20px; }
+  body.site-staff .phone-desk .phone-heading h1 { font-size: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.site-staff *, body.site-staff *::before, body.site-staff *::after { scroll-behavior: auto !important; }
+}
+@media (prefers-contrast: more) {
+  body.site-staff { --sai-muted: #34465e; --sai-line: #8293ac; --sai-accent-line: #8293ac; }
+}
+body.site-staff .admin-processing.quota-error { border: 2px solid #a82727; background: #fff2f0; color: #8b2020; padding: 24px; }
+body.site-staff .admin-processing.quota-error strong { font-size: 21px; color: #8b2020; }
+body.site-staff .data-source { font-size: 13px; color: var(--sai-muted); margin-top: 10px; }

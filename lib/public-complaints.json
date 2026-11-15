@@ -1,0 +1,83 @@
+{
+  "source": {
+    "id": "koen-environment-20220914",
+    "name": "한국남동발전㈜_환경관련 민원사항 현황_20220914",
+    "provider": "한국남동발전㈜ / 공공데이터포털",
+    "url": "https://www.data.go.kr/data/15093026/fileData.do",
+    "license": "이용허락범위 제한 없음",
+    "licenseUrl": "https://www.data.go.kr/ugs/selectPortalPolicyView.do",
+    "format": "CSV / EUC-KR",
+    "records": 13,
+    "use": "요약·요청 보존 검사. 입력은 민원내용만 사용하고 처리내용은 분리한다.",
+    "limitations": "기관이 정리한 짧은 민원 내용이며 시민의 전체 원문이나 실제 통화 녹음이 아니다. 욕설 탐지 성능을 증명하지 않는다."
+  },
+  "collectedAt": "2026-11-14T19:13:19.409Z",
+  "csvSha256": "4eb3db580d7ac8dfc8009620a2f6cde93ecc92288dcd18b515e34a20bbf0061f",
+  "records": [
+    {
+      "id": "KOEN-001",
+      "receivedAt": "2021-01-11",
+      "complaintContent": "저주파 소음 및 진동 발생에 대한 답변 요청"
+    },
+    {
+      "id": "KOEN-002",
+      "receivedAt": "2021-01-25",
+      "complaintContent": "소음 민원"
+    },
+    {
+      "id": "KOEN-003",
+      "receivedAt": "2021-04-26",
+      "complaintContent": "분당복합발전 굴뚝 분진으로 인한 건강이상 호소"
+    },
+    {
+      "id": "KOEN-004",
+      "receivedAt": "2021-10-13",
+      "complaintContent": "분당 소음문제 해결을 위한 방음벽 설치 요청"
+    },
+    {
+      "id": "KOEN-005",
+      "receivedAt": "2021-10-27",
+      "complaintContent": "분당 소음문제 해결 요구"
+    },
+    {
+      "id": "KOEN-006",
+      "receivedAt": "2021-12-08",
+      "complaintContent": "분당발전본부 사무동 소음문제 해결 촉구"
+    },
+    {
+      "id": "KOEN-007",
+      "receivedAt": "2021-12-20",
+      "complaintContent": "삼천포본부 인근주민 건강영향조사 결과에 대한 조치 문의"
+    },
+    {
+      "id": "KOEN-008",
+      "receivedAt": "2021-12-21",
+      "complaintContent": "지역주민 고충"
+    },
+    {
+      "id": "KOEN-009",
+      "receivedAt": "2022-01-25",
+      "complaintContent": "분당 대기오염 확인 및 조치 요구"
+    },
+    {
+      "id": "KOEN-010",
+      "receivedAt": "2022-03-11",
+      "complaintContent": "소음문제 조치 촉구"
+    },
+    {
+      "id": "KOEN-011",
+      "receivedAt": "2022-03-22",
+      "complaintContent": "소음문제 조치 요청"
+    },
+    {
+      "id": "KOEN-012",
+      "receivedAt": "2022-05-23",
+      "complaintContent": "발전소 배출물질 기준치 준수 문의"
+    },
+    {
+      "id": "KOEN-013",
+      "receivedAt": "2022-09-14",
+      "complaintContent": "도장작업 안전조치 미흡"
+    }
+  ]
+}

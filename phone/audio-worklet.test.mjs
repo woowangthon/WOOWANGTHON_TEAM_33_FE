@@ -20,3 +20,11 @@ for(const rate of [44100,48000])test(`browser worklet at ${rate} Hz preserves du
   assert.ok(new Uint8Array(audio.messages.filter(message=>message.type==='frame').at(-1).frame).every(value=>value===255));
   audio.command({type:'audio',frame:new Uint8Array(160).fill(128).buffer});assert.ok(audio.render(128).some(value=>value!==0),'microphone mute must not mute incoming speech');
 });
+
+for(const rate of [44100,48000])test(`native PCM capture at ${rate} Hz preserves 16kHz input and independent incoming playback`,()=>{
+ const audio=processor(rate);audio.command({type:'capture_format',format:'pcm16-16000'});audio.render(rate,.25);
+ const frames=audio.messages.filter(m=>m.type==='frame');assert.ok(frames.length>=49&&frames.length<=50);assert.equal(frames[0].format,'pcm16-16000');assert.equal(frames[0].frame.byteLength,640);
+ const samples=new Int16Array(frames[0].frame);assert.ok([...samples].every(x=>Math.abs(x-8192)<=1));
+ audio.command({type:'muted',value:true});audio.render(rate,.5);assert.ok([...new Int16Array(audio.messages.filter(m=>m.type==='frame').at(-1).frame)].every(x=>x===0));
+ audio.command({type:'audio',frame:new Uint8Array(160).fill(128).buffer});assert.ok(audio.render(128).some(x=>x!==0));audio.command({type:'clear'});assert.ok(audio.render(128).every(x=>x===0));
+});

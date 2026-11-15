@@ -1,3 +1,6 @@
+import { semanticPlan } from './semantic-search';
+import { verifyBusinessSummary } from './summary-harness';
+import {verifyReply} from './reply-harness';
 import { OFFICE, officeForOwner, officeScope } from "./access";
 import {
   AppError,
@@ -10,8 +13,6 @@ import {
 } from "./server";
 import { autoSync, retrieve, type StoredDoc } from "./laws";
 import { generateAnalysis } from "./ai";
-import { verifyDraft } from './review';
-import type { DraftReview } from './types';
 
 // A persisted queue and atomic lease make repeated after() callbacks safe.
 // Interrupted leases are retried when the authenticated workspace is next opened.
@@ -19,7 +20,7 @@ export async function queueAnalysis(id: string) {
   const stale = new Date(Date.now() - 240000).toISOString();
   const result = await database()
     .prepare(
-      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN analysis_checkpoint ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state!='processing' OR auto_started_at<?)",
+      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure' - 'summaryRecovery' - 'replyProgress')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state NOT IN ('processing','queued') OR (auto_state='processing' AND auto_started_at<?))",
     )
     .bind(id, stale)
     .run();
@@ -55,7 +56,7 @@ export async function processComplaint(id: string) {
   };
   try {
     const keys = await credentials(office);
-    const aiKey = keys.provider === 'openai' ? keys.openai : keys.gemini;
+    const aiKey = keys.openai;
     if (!aiKey && !keys.law) {
       await finish(
         "blocked",
@@ -64,14 +65,15 @@ export async function processComplaint(id: string) {
       return;
     }
     await rateLimit(office, "automatic", 60);
+    const plan=aiKey?await semanticPlan(keys,c):undefined;
     const notes = keys.law
-      ? await autoSync(office, keys.law, c.category, c)
+      ? await autoSync(office, keys.law, c.category, c,plan)
       : ["법령 API가 연결되지 않아 저장된 공식 자료만 검색했습니다."];
     const docs = await database()
       .prepare("SELECT * FROM documents WHERE owner=?")
       .bind(office)
       .all<StoredDoc>();
-    const search = retrieve(docs.results, c);
+    const search = retrieve(docs.results, c,plan);
     const evidence = {
       ...search,
       warnings: [...notes, ...search.warnings],
@@ -90,7 +92,7 @@ export async function processComplaint(id: string) {
       );
       return;
     }
-    const analysis = await generateAnalysis(
+    const generated = await generateAnalysis(
       aiKey,
       keys.model,
       c,
@@ -98,10 +100,12 @@ export async function processComplaint(id: string) {
       evidence.warnings,
       search.mode,
       keys.provider,
+      plan?.facts,
     );
-    let draftReview:DraftReview;
-    try {draftReview=await verifyDraft(aiKey,keys.model,keys.provider,analysis.draft,search.citations);}
-    catch {draftReview={draft:analysis.draft,status:'unavailable',sentences:[],checkedAt:now()};}
+    const verified=await verifyBusinessSummary(keys,c,plan?.facts||[],generated.summary,{requests:generated.requests,findings:generated.expressionFindings});
+    const summarized={...generated,summary:verified.summary,requests:verified.requests,summaryHarness:verified.audit};
+    const reply=await verifyReply(keys,c,summarized,evidence.citations);
+    const analysis={...summarized,draft:reply.draft,citationIds:reply.citationIds,citations:reply.citations,replyHarness:reply.audit};
     // Read the latest draft after the network calls; never overwrite staff edits or approvals.
     const current = await database()
       .prepare("SELECT * FROM complaints WHERE id=? AND auto_token=?")
@@ -126,12 +130,11 @@ export async function processComplaint(id: string) {
     const replaceDraft=!latest.draft||latest.draft===latest.analysis?.draft;
     const updated = await database()
       .prepare(
-        "UPDATE complaints SET analysis=?,draft=?,draft_review=?,tasks=?,status=?,updated_at=?,revision=revision+1 WHERE id=? AND auto_token=? AND revision=? AND status!='resolved'",
+        "UPDATE complaints SET analysis=?,draft=?,draft_review=NULL,coverage_review=NULL,tasks=?,status=?,updated_at=?,revision=revision+1 WHERE id=? AND auto_token=? AND revision=? AND status!='resolved'",
       )
       .bind(
         JSON.stringify(analysis),
         replaceDraft ? analysis.draft : latest.draft,
-        replaceDraft ? JSON.stringify(draftReview) : latest.draft_review ? JSON.stringify(latest.draft_review) : null,
         JSON.stringify(tasks),
         latest.status === "received" ? "reviewing" : latest.status,
         now(),
@@ -159,9 +162,6 @@ export async function processComplaint(id: string) {
       );
       return;
     }
-    if(draftReview.status==='unavailable') {
-      await finish('failed','분석과 초안은 저장했습니다. 답변의 문장별 근거 검증을 다시 실행해 주세요.');return;
-    }
     await finish(
       "completed",
       "법령 검색·분석 완료. 담당자의 근거 검토와 답변 승인을 기다립니다.",
@@ -178,17 +178,17 @@ export async function processComplaint(id: string) {
 
 export async function drainAnalysisQueue(office = OFFICE) {
   const keys = await credentials(office);
-  if ((keys.provider==='openai' ? keys.openai : keys.gemini) && keys.law) await resumeAfterConfiguration(office);
+  if (keys.openai && keys.law) await resumeAfterConfiguration(office);
   const guest = office.startsWith("guest:");
   const stale = new Date(Date.now() - 240000).toISOString();
   const pending = await database()
     .prepare(
-      `SELECT id FROM complaints WHERE ${officeScope(office)} AND deleted_at IS NULL AND status!='resolved' AND workflow_run IS NULL AND (auto_state='queued' OR (auto_state='processing' AND auto_started_at<?)) ORDER BY created_at LIMIT 2`,
+      `SELECT id FROM complaints WHERE ${officeScope(office)} AND deleted_at IS NULL AND status!='resolved' AND workflow_run IS NULL AND (auto_state='queued' OR (auto_state='idle' AND analysis IS NULL) OR (auto_state='processing' AND auto_started_at<?)) ORDER BY created_at LIMIT 2`,
     )
     .bind(...(guest ? [office, stale] : [stale]))
     .all<{ id: string }>();
   const {startAnalysis}=await import('./analysis-dispatch');
-  await Promise.all(pending.results.map((c) => startAnalysis(c.id)));
+  await Promise.allSettled(pending.results.map((c) => startAnalysis(c.id)));
 }
 
 export async function resumeAfterConfiguration(office = OFFICE) {

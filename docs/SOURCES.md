@@ -1,30 +1,36 @@
-# 외부 기술·데이터·자산
+# 기술·자료 출처
 
-## 직접 구현한 부분
+## 서비스 API
 
-민원 접수·공통 접수함, 원문 보호 UI, 공식 법령 응답 파싱·조문 검색·시행일 필터, AI 호출 구성 및 구조화 검증, 문장별 근거와 요구 누락 검사, 사람 승인 흐름, 기록 보고서, 웹 음성 중계·차단·정제 텍스트 표시를 이 저장소에서 구현했다. AI 모델 자체나 통신망을 학습·개발한 것은 아니다. 개발 과정에서 Codex를 사용했다.
+| 항목 | 사용 범위 | 출처·이용 조건 |
+| --- | --- | --- |
+| 국가법령정보 공동활용 API | 공식 법령·자치법규 검색 및 답변 근거 | [법제처](https://open.law.go.kr/LSO/openApi/openApiManual.do), 승인된 API 이용 조건 준수·원문 출처와 조문·시행일 표시 |
+| OpenAI API | 웹 민원 분석·답변 및 설정에 따른 음성 처리 | [API 문서](https://platform.openai.com/docs), [이용 조건](https://openai.com/policies/services-agreement/) |
+| Google Gemini API | 실시간 전사·보호 판단·통화 답변 지원 | [API 문서](https://ai.google.dev/gemini-api/docs), [이용 조건](https://ai.google.dev/gemini-api/terms) |
 
-## 데이터와 모델
+모델 ID와 설정은 README 및 환경 변수 예시에 기록되어 있습니다. 모델을 별도로 학습하거나 미세조정하지 않습니다.
 
-- [국가법령정보센터](https://www.law.go.kr/) / [법제처 OPEN API](https://open.law.go.kr/LSO/openApi/openApiManual.do): 공식 법령·청주시 자치법규를 서버에서 조회한다. 승인된 OC와 등록 서비스 주소가 필요하다. 원문 출처·조문·시행일을 표시하며 AI가 위법 여부를 자동 확정하지 않는다.
-- [OpenAI API](https://platform.openai.com/docs): 민원 분석·검색어 생성·조문 재평가·검증 및 음성 인식/분류에 사용한다. 모델 ID는 실행 설정/코드에 기록되어 있다. 외부 API 사용료·계정별 접근권한은 별도다.
-- [Gemini API](https://ai.google.dev/gemini-api/docs): 선택 가능한 텍스트 분석 공급자. OpenAI 장애 시 자동으로 다른 공급자를 사용하는 구조가 아니다.
-- `lib/samples.ts`, `evals/complaints-40.json`: 팀 개발 과정에서 작성한 가상/합성 민원. 실제 시민의 민원 자료를 수집한 데이터셋이 아니다. 정답 후보 작성과 채점에 AI를 사용했고 사람 독립 검수는 아직 필요하다.
-- `public/demo-audio/*.wav`: 합성 한국어 음원. 생성 모델/음성 및 대본은 같은 폴더의 `README.txt`에 기록했다. 실제 민원인 녹취가 아니며 입력을 전송한 이후의 STT·분류·정제는 실시간 API 처리다.
+## 포함된 데이터·음원
 
-## 오픈소스와 서비스
+- `lib/samples.ts`, `tests/fixtures/`: 팀 제작 합성 민원 및 단위 테스트 입력.
+- `lib/public-complaints.json`: [한국남동발전 환경관련 민원사항 현황](https://www.data.go.kr/data/15093026/fileData.do)의 13건. 공개 자료 출처를 대조하는 기능에 포함되어 있으며, 포털 이용허락범위는 제한 없음입니다. 원문 URL·접수일·파일 해시는 JSON에 보존합니다.
+- `public/demo-audio/`: 합성 시연·안내 음원. 파일 설명과 대본은 같은 폴더의 README 및 JSON에 기록합니다.
 
-주요 라이브러리: Next.js, React, TypeScript, lucide-react, pg, Zod, Vercel Workflow, @vercel/functions, @neondatabase/auth. 정확한 버전·전이 의존성은 `package-lock.json`, 라이선스 목록은 `dependency-licenses.json`을 참고한다. 누락된 메타데이터나 각 패키지의 추가 NOTICE/저작권 고지는 실제 배포 전 해당 패키지 원문으로 확인해야 한다.
+## 오픈소스
 
-호스팅/DB는 Vercel과 Neon, 로컬 음성 서버의 공개 터널은 [Cloudflare cloudflared](https://github.com/cloudflare/cloudflared)를 사용한다. cloudflared 실행 파일은 이 저장소에 재배포하지 않는다. `next/dist/compiled/ws` 내부 모듈에 의존하므로 Next.js를 바꾸면 음성 프로토콜 테스트도 다시 실행해야 한다.
+| 라이브러리 | 잠금 파일 버전 | 라이선스 |
+| --- | --- | --- |
+| Next.js | 16.4.3 | MIT |
+| React / React DOM | 19.2.6 | MIT |
+| TypeScript | 5.9.3 | Apache-2.0 |
+| lucide-react | 1.61.0 | ISC, 일부 아이콘 MIT |
+| pg | 8.23.1 | MIT |
+| Zod | 4.6.7 | MIT |
+| Vercel Workflow | 5.2.3 | Apache-2.0 |
+| @vercel/functions | 3.10.3 | Apache-2.0 |
+| @neondatabase/auth | 0.6.0-beta | Apache-2.0 |
+| @grpc/grpc-js / @grpc/proto-loader | 1.14.7 / 0.8.1 | Apache-2.0 |
 
-## 시각 자산
+전체 의존성 버전은 [package-lock.json](../package-lock.json), 라이선스 목록은 [dependency-licenses.json](dependency-licenses.json)을 참조합니다. 각 패키지에 포함된 LICENSE·NOTICE·저작권 고지를 유지합니다.
 
-- `public/favicon.svg`: 프로젝트에 포함된 SVG. 제3자 공식 기관 인증 마크를 사용했다는 뜻이 아니다.
-- 아이콘: lucide-react의 라이선스/저작권 고지를 따른다.
-- `public/images/portal-hero.jpg`: 현재 파일만으로 최초 제작자·생성 도구·원본 사용 조건을 확인하지 못했다. 출처 확인 전 이 자산의 권리 검토가 끝났다고 주장하지 않는다. 제출용 부록에 출처를 추가하거나 사용 권한이 명확한 자산으로 교체해야 한다.
-- 사이트 디자인은 공공 민원 포털의 정보 구조를 참고한 시제품이다. 국민신문고나 청주시 공식 서비스로 소개하지 않는다.
-
-## 검증 한계
-
-테스트용 고정 응답, 과거 평가 결과, 예전 음성 자동 응대 실험은 `tests/`와 `evals/`의 개발 자료다. 현재 운영 기능과 분리해서 설명한다. Notion 기록은 Codex가 연결 도구를 통해 정리했으며, 실제로 사용하지 않은 Notion Agent 기능이나 팀 회의 이력을 만들지 않는다.
+음성 서버의 HTTPS 터널은 [Cloudflare cloudflared](https://github.com/cloudflare/cloudflared)(Apache-2.0)를 사용합니다. 실행 파일은 별도로 설치합니다. 웹 호스팅은 [Vercel](https://vercel.com/), DB·인증은 [Neon](https://neon.tech/)을 사용합니다.

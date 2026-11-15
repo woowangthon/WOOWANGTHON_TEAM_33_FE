@@ -1,4 +1,4 @@
-const test=require('node:test'),assert=require('node:assert/strict'),load=require('../evals/loader.cjs')();
+const test=require('node:test'),assert=require('node:assert/strict'),load=require('./helpers/loader.cjs')();
 const coverage=load('lib/coverage.ts'),repair=load('lib/coverage-repair.ts');
 const c={title:'공원 시설',body:'시설을 점검해 주세요. 점검 결과를 알려 주세요.',location:'가상동',category:'기타',occurred_at:'2026-11-07',supplements:[],analysis:{summary:'시설 점검과 결과 요청',requests:['시설 점검','결과 안내'],sensitiveQuotes:[]}};
 const audit=()=>coverage.validateRequirementAudit(c,{requirements:[{text:'시설 점검',source:'body',quote:'시설을 점검해 주세요.',summaryStatus:'preserved',summaryReason:'반영'},{text:'결과 안내',source:'body',quote:'점검 결과를 알려 주세요.',summaryStatus:'preserved',summaryReason:'반영'}],noRequestReason:''});

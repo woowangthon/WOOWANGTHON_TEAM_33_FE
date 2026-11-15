@@ -9,8 +9,7 @@ export default function ExpressionPanel({complaint:c}:{complaint:Complaint}) {
   if(!findings.length)return null;
   const abusive=findings.some(f=>f.kind!=='criticism');
   return <section className={'card expression-panel'+(abusive?' abusive':'')} aria-label="주의 표현">
-    <details>
-      <summary>
+    <div className="expression-summary">
         <ShieldAlert size={17}/>
         <strong>{abusive?'공격적 표현이 있어 가려 두었습니다':'업무에 대한 불만 표현이 있습니다'}</strong>
         <span className="expression-tags">
@@ -19,9 +18,6 @@ export default function ExpressionPanel({complaint:c}:{complaint:Complaint}) {
             return count?<span className={'expression-tag '+(kind==='criticism'?'criticism':'detected')} key={kind}>{label} {count}</span>:null;
           })}
         </span>
-        <span className="expression-toggle">근거 보기</span>
-      </summary>
-      <ul className="expression-quote-list">{findings.map((f,i)=><li key={i}><span>{f.source==='title'?'제목':'본문'} · {labels[f.kind]}</span><q>{f.quote}</q></li>)}</ul>
-    </details>
+    </div>
   </section>;
 }

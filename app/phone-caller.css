@@ -1,0 +1,91 @@
+.phone-caller { max-width: 540px; margin: 0 auto; }
+.phone-caller .phone-heading { gap: 12px; align-items: flex-start; }
+.phone-caller .phone-heading h1 { font-size: 24px; }
+.phone-availability { white-space: nowrap; }
+.phone-call-card { background: #fff; border: 1px solid #d4deea; border-radius: 24px; padding: 34px 24px 22px; text-align: center; }
+.phone-avatar { display: grid; place-items: center; width: 88px; height: 88px; margin: 0 auto 22px; background: #edf3fb; color: #315b90; border-radius: 50%; }
+.phone-avatar.is-active { background: #e9f6ee; color: #237447; }
+.phone-call-card h2 { font-size: 23px; margin: 0 0 10px; font-weight: 700; }
+.phone-call-status { font-size: 14px; color: #526980; margin: 0; }
+.phone-duration { font-size: 44px; line-height: 1.3; font-variant-numeric: tabular-nums; letter-spacing: 2px; margin: 20px 0; color: #203550; }
+.phone-duration-small { font-variant-numeric: tabular-nums; color: #526980; }
+.phone-call-help { font-size: 14px; line-height: 1.8; color: #526980; margin: 0 0 26px; }
+.phone-caller .phone-consent { text-align: left; align-items: flex-start; gap: 12px; line-height: 1.7; padding: 14px; background: #f5f8fc; border-radius: 12px; }
+.phone-caller .phone-consent input { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; accent-color: #275b9c; }
+.phone-call-controls { display: flex; justify-content: center; align-items: stretch; gap: 24px; margin: 24px 0; }
+.phone-desk .phone-start { min-height: 58px; width: 100%; border-radius: 14px; font-size: 17px; font-weight: 650; }
+.phone-desk .phone-circle { flex-direction: column; gap: 9px; width: 112px; min-height: 92px; border-radius: 20px; font-size: 13px; background: #f5f8fc; }
+.phone-desk .phone-circle.is-muted { background: #e0e8f3; border-color: #7c91b0; }
+.phone-desk .phone-hangup { background: #b63238; color: #fff; border-color: #b63238; }
+.phone-call-card .phone-mic-level { justify-content: center; min-height: 20px; font-size: 12px; }
+.phone-web-note { margin: 22px 0 0; color: #687c90; font-size: 12px; }
+.phone-desk button:focus-visible, .phone-desk input:focus-visible { outline: 3px solid #6094d6; outline-offset: 4px; }
+.phone-staff button { min-height: 44px; }
+@media (max-width: 600px) {
+  .phone-standalone { padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .phone-caller .phone-heading { margin-bottom: 18px; }
+  .phone-caller .phone-heading h1 { font-size: 22px; }
+  .phone-caller .phone-availability { padding: 7px 9px; font-size: 11px; }
+  .phone-call-card { padding: 28px 20px 20px; }
+  .phone-call-controls { gap: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .phone-desk .spin { animation: none; } }
+
+/* Keep caller controls visible while the conversation scrolls independently. */
+main.phone-standalone:has(> .phone-caller) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 868px;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 440px;
+  padding: max(16px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+}
+.phone-standalone > .phone-live.phone-caller {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  min-height: 0;
+}
+.phone-standalone .phone-caller .phone-heading { flex-shrink: 0; margin: 0; min-height: 40px; align-items: center; }
+.phone-standalone .phone-caller .phone-heading h1 { font-size: 24px; }
+.phone-standalone .phone-caller .phone-connect-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 16px;
+  align-items: end;
+  flex-shrink: 0;
+}
+.phone-standalone .phone-caller .phone-nickname { margin: 0; }
+.phone-standalone .phone-caller .phone-nickname input { width: 100%; max-width: none; min-height: 44px; margin-top: 5px; font-size: 16px; }
+.phone-standalone .phone-caller .phone-consent { grid-row: 2; grid-column: 1 / -1; margin: 0; padding: 8px 0; gap: 9px; background: none; line-height: 1.5; }
+.phone-standalone .phone-caller .phone-consent input { flex: 0 0 20px; }
+.phone-standalone .phone-caller .phone-connect-controls > button { grid-row: 1; grid-column: 2; min-width: 112px; }
+.phone-standalone .phone-caller button { min-height: 44px; border-radius: 9px; }
+.phone-standalone .phone-caller .phone-incoming,
+.phone-standalone .phone-caller .phone-notice { margin: 0; flex-shrink: 0; }
+.phone-standalone .phone-caller .caller-columns { display: flex; flex: 1; align-items: stretch; min-height: 100px; }
+.phone-standalone .phone-caller .phone-chat-panel { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
+.phone-standalone .phone-caller .phone-chat-heading { flex-shrink: 0; padding: 13px 18px; gap: 5px 14px; }
+.phone-standalone .phone-caller .phone-chat-log { flex: 1; min-height: 0; height: auto; padding: 18px; }
+.phone-standalone .phone-caller .phone-chat-empty { display: grid; place-items: center; min-height: 100%; padding: 16px 8px; margin: 0; }
+.phone-standalone .phone-caller .phone-bubble-meta { flex-wrap: wrap; overflow-wrap: anywhere; }
+.phone-standalone .phone-caller .phone-new-message { bottom: 16px; }
+.phone-standalone:has(> .phone-caller) > .phone-home-bottom { flex-shrink: 0; padding: 0; margin-top: 4px; }
+.phone-standalone:has(> .phone-caller) > .phone-home-bottom a { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; min-height: 44px; }
+@media (max-width: 600px) {
+  main.phone-standalone:has(> .phone-caller) { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); padding-top: max(12px, env(safe-area-inset-top)); }
+  .phone-standalone > .phone-live.phone-caller { gap: 10px; }
+  .phone-standalone .phone-caller .phone-heading { flex-wrap: wrap; gap: 6px 12px; }
+  .phone-standalone .phone-caller .phone-heading h1 { font-size: 22px; }
+  .phone-standalone .phone-caller .phone-actions { gap: 6px; }
+  .phone-standalone .phone-caller .phone-connect-controls { gap: 6px 10px; }
+  .phone-standalone .phone-caller .phone-connect-controls > button { min-width: 96px; padding: 10px 12px; }
+  .phone-standalone .phone-caller .phone-chat-heading { padding: 11px 14px; }
+  .phone-standalone .phone-caller .phone-chat-heading h2 { font-size: 16px; }
+  .phone-standalone .phone-caller .phone-chat-log { padding: 14px; scrollbar-gutter: auto; }
+  .phone-standalone .phone-caller .phone-bubble { max-width: 94%; padding: 10px 13px; }
+}

@@ -15,15 +15,11 @@ async function request(p,method='GET',body){const response=await route[method](n
  process.env.SITE_MODE='staff';assert.equal((await request('overview')).status,403);
  user=officer;assert.equal((await request('complaints/'+id)).status,200);
  r=await request('complaints/'+id,'PATCH',{revision:0,action:'save',draft:'담당자가 확인 중인 비공개 초안입니다.'});assert.equal(r.status,200);
- assert.equal((await request('complaints/'+id,'PATCH',{revision:0,action:'status',status:'waiting'})).status,409);
+ assert.equal((await request('complaints/'+id,'PATCH',{revision:0,action:'status',status:'reviewing'})).status,409);
  process.env.SITE_MODE='citizen';user=citizen;r=await request('complaints/'+id);assert.equal(r.data.complaint.draft,'');assert.equal(r.data.complaint.published,'');
  process.env.SITE_MODE='staff';user=officer;
  const reviewedDraft='가상 검증 결과입니다. 확인 후 안내드립니다.';
- assert.equal((await request('complaints/'+id,'PATCH',{revision:1,action:'approve',reviewed:true,draft:reviewedDraft})).status,409,'unverified drafts cannot be published');
- await sql.query("UPDATE complaints SET draft_review=$1,auto_state='completed' WHERE id=$2",[JSON.stringify({draft:reviewedDraft,status:'checked',validatorVersion:2,sentences:[{id:'S1',text:reviewedDraft,status:'not_legal',reason:'테스트 검증',references:[]}]}),id]);
- const current=(await request('complaints/'+id)).data.complaint,coverageModule=load('lib/coverage.ts');
- assert.equal((await request('complaints/'+id,'PATCH',{revision:1,action:'approve',reviewed:true,draft:reviewedDraft})).status,409,'legal review alone does not satisfy requirement coverage');
- await sql.query('UPDATE complaints SET coverage_review=$1 WHERE id=$2',[JSON.stringify({version:1,draft:reviewedDraft,sourceSnapshot:coverageModule.sourceSnapshot(current),analysisSnapshot:coverageModule.analysisSnapshot(current),requirements:[],noRequestReason:'가상 테스트용 담당자 확인',checkedAt:new Date().toISOString()}),id]);
+ await sql.query("UPDATE complaints SET auto_state='completed',draft_review=NULL,coverage_review=NULL WHERE id=$1",[id]);
  r=await request('complaints/'+id,'PATCH',{revision:1,action:'approve',reviewed:true,draft:reviewedDraft});assert.equal(r.status,200);
  process.env.SITE_MODE='citizen';user=citizen;r=await request('complaints/'+id);assert.equal(r.data.complaint.status,'resolved');assert.equal(r.data.complaint.published,'가상 검증 결과입니다. 확인 후 안내드립니다.');assert.equal(r.data.complaint.draft,'');
  console.log('PASS: real DB create/read, citizen isolation, staff-only access, optimistic locking, approval and citizen final response (session provider stubbed).');

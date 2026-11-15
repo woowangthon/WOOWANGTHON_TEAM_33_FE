@@ -22,3 +22,28 @@ test('compound insults are masked in full including suffixes and old titles',()=
  for(const text of ['씨발럼아','씨발놈들아','씨발새끼에게'])assert.equal(ex.maskText(text),'[보호된 표현]');
  assert.equal(ex.protectedTitle({title:'씨발럼아',analysis:null}),'민원 내용 확인');
 });
+
+test('business summaries drop paraphrased disclosure threats and keep the service issue',()=>{
+ const summary='골목에 대형 폐기물이 2주째 방치돼 있습니다. 이번 주 안에 수거되지 않으면 담당자 이름을 온라인에 공개하겠다고 밝혔습니다.';
+ const c={title:'폐기물 수거 일정 확인',body:'가상 원문',analysis:{summary,safeTitle:'폐기물 수거 일정 확인',sensitiveQuotes:[],expressionFindings:[]}};
+ assert.equal(ex.businessSummary(c),'골목에 대형 폐기물이 2주째 방치돼 있습니다.');assert.equal(c.analysis.summary,summary);
+});
+test('legacy summary protection removes attacks without truncating the remaining business content',()=>{
+ const c={title:'안전한 현장 확인 요청',body:'씨발',analysis:{summary:'씨발 답답하다. 시설물이 떨어질 위험이 있습니다. 현장 점검을 요청합니다. 부가 설명입니다.',safeTitle:'현장 확인 요청',sensitiveQuotes:['씨발'],expressionFindings:[]}};
+ assert.equal(ex.businessSummary(c),'시설물이 떨어질 위험이 있습니다. 현장 점검을 요청합니다. 부가 설명입니다.');
+ c.analysis.summary='담당자를 죽이겠다고 합니다.';assert.equal(ex.businessSummary(c),'');
+ c.analysis.summary='시설물의 고정 상태를 점검하고 보수 일정을 안내해 주세요. '.repeat(12).trim();
+ assert.ok(c.analysis.summary.length>220);assert.equal(ex.businessSummary(c),c.analysis.summary);
+});
+
+test('verified victim reports are displayed intact without keyword deletion or title substitution',()=>{
+ const summary='이웃의 협박 피해를 신고하고 보호 조치를 요청합니다. '+('안전한 귀가를 위한 지원 가능 여부와 신고 절차를 안내해 주세요. '.repeat(10).trim());
+ const c={title:'보호 요청',body:'원문',analysis:{summary,summaryHarness:{status:'verified'}}};
+ assert.equal(ex.businessSummary(c),summary);
+});
+
+test('word-list signals cannot override a completed contextual assessment',()=>{
+ const c={title:'피해 신고',body:'병신이라는 말을 들었습니다.',analysis:{expressionFindings:[{kind:'profanity',scope:'reported_speech',source:'body',quote:'병신',reason:'인용 신고'}]}};
+ assert.deepEqual(ex.expressionFindings(c),[]);assert.equal(ex.allExpressionFindings(c).length,1);
+ assert.deepEqual(ex.expressionFindings({...c,analysis:{expressionFindings:[]}}),[]);
+});

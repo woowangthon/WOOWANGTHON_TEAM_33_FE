@@ -1,4 +1,4 @@
-const test=require('node:test'),assert=require('node:assert/strict'),load=require('../evals/loader.cjs')();
+const test=require('node:test'),assert=require('node:assert/strict'),load=require('./helpers/loader.cjs')();
 const {applyCoverageHarness,coverageObservationSchema,HARNESS_LIMITS,validateRequestPlan}=load('lib/coverage-harness.ts');
 const audit={requirements:[{id:'R1',text:'요청 처리',source:'body',quote:'처리해 주세요.',summaryStatus:'preserved',summaryReason:'반영'}],sourceSnapshot:'frozen',analysisSnapshot:'frozen',noRequestReason:''};
 const question='현장 점검을 위해 시설의 주소를 알려 주세요.',quoted=text=>[{sentenceId:'S1',quote:text}];
