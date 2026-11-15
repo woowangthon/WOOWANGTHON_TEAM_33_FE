@@ -8,6 +8,7 @@ const reference=z.object({citationId:z.string(),quote:z.string().min(1).max(1200
 const item=z.object({requestId:z.string(),reply:z.string().min(1).max(1800),status:z.enum(['guidance','needs_information','limited']),checks:z.array(z.string().min(1).max(300)).max(5),references:z.array(reference).max(4)});
 const resultSchema=z.object({items:z.array(item).max(30)});
 export type Assistance={callId:string;revision:string;inputHash:string;model:string;generatedAt:string;elapsedMs:number;items:(z.infer<typeof item>&{request:string})[];citations:Citation[];warnings:string[]};
+export class AssistanceProviderError extends Error {constructor(public status:number){super('답변 생성 연결이 지연되었습니다. 다시 시도해 주세요.');this.name='AssistanceProviderError';}}
 export function assistanceRequests(input:AssistanceInput){
  const values=[...new Set(input.segments.flatMap(s=>s.facts.filter(f=>f.kind==='request').map(f=>f.value.trim())).filter(Boolean))];
  return values.map((text,index)=>({id:'R'+(index+1),text}));
@@ -36,16 +37,16 @@ export async function generateAssistance(input:AssistanceInput,citations:Citatio
  let value:unknown;
  if(config.provider==='gemini'){
   const response=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',signal:combined,headers:{'Content-Type':'application/json','x-goog-api-key':config.key,'Api-Revision':'2026-05-20'},body:JSON.stringify({model:config.model,system_instruction:assistanceInstructions,input:JSON.stringify(payload),response_format:{type:'text',mime_type:'application/json',schema},store:false,generation_config:{thinking_level:'minimal',max_output_tokens:3000}})});
-  if(!response.ok)throw Error('답변 생성 연결이 지연되었습니다. 다시 시도해 주세요.');
+  if(!response.ok)throw new AssistanceProviderError(response.status);
   const data=await response.json();if(data.status!=='completed')throw Error('답변을 완성하지 못했습니다. 다시 시도해 주세요.');
   const output=data.steps?.filter((s:{type:string})=>s.type==='model_output').at(-1);
   const text=output?.content?.filter((x:{type:string})=>x.type==='text').map((x:{text:string})=>x.text).join('');value=JSON.parse(text);
  }else{
   const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',signal:combined,headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.key}`},body:JSON.stringify({model:config.model,instructions:assistanceInstructions,input:JSON.stringify(payload),reasoning:{effort:'low'},text:{format:{type:'json_schema',name:'phone_assistance',strict:true,schema}},max_output_tokens:3000,store:false})});
-  if(!response.ok)throw Error('답변 생성 연결이 지연되었습니다. 다시 시도해 주세요.');
+  if(!response.ok)throw new AssistanceProviderError(response.status);
   const data=await response.json();if(data.status!=='completed')throw Error('답변을 완성하지 못했습니다. 다시 시도해 주세요.');
   const text=(data.output||[]).filter((x:{type:string})=>x.type==='message').flatMap((x:{content:unknown[]})=>x.content||[]).filter((x:{type:string})=>x.type==='output_text').map((x:{text:string})=>x.text).join('');value=JSON.parse(text);
  }
  const items=validateAssistance(value,requests,citations),used=new Set(items.flatMap(i=>i.references.map(r=>r.citationId)));
- return {...base,elapsedMs:Math.round(performance.now()-started),items,citations:citations.filter(c=>used.has(c.id)),warnings:citations.length?[]:['현재 조회된 자료만으로 규정·처리 결과를 확정할 수 없습니다.']};
+ return {...base,elapsedMs:Math.round(performance.now()-started),items,citations:citations.filter(c=>used.has(c.id)),warnings:used.size?[]:['현재 답변을 뒷받침할 공식 근거가 확인되지 않아 규정·처리 결과를 확정할 수 없습니다.']};
 }
