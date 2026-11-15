@@ -35,7 +35,7 @@ test('real WebSocket bridge enforces roles, keeps human audio, shields incoming 
   staff.send({event:'accept',callId:nextId});await until(()=>nextCaller.events.some(e=>e.event==='active'));assert.notEqual(nextId,id);assert.equal(app.calls.get(nextId).relay.mode,'human');
   staff.send({event:'media',callId:nextId,payload});await until(()=>nextCaller.events.some(e=>e.event==='media'));
   analysis.onTranscript({turnId:'next-greeting',text:'여보세요.',redacted:false});await until(()=>nextCaller.events.some(e=>e.event==='conversation'));assert.equal(nextCaller.events.find(e=>e.event==='conversation').entry.text,'여보세요.');
-  staff.send({event:'hangup',callId:nextId});await until(()=>app.calls.get(nextId).finalized);
+  nextCaller.send({event:'hangup',callId:nextId});await until(()=>app.calls.get(nextId).finalized);assert.ok(staff.events.some(e=>e.event==='ended'&&e.callId===nextId),'caller hangup ends the staff call too');
   const httpUrl=url.replace('ws:','http:').replace('/connect','/provider/voice');assert.equal((await fetch(httpUrl,{method:'POST'})).status,404);
   assert.equal((await fetch(httpUrl+'?token=provider',{method:'POST'})).status,404,'web-only mode must not issue carrier tokens');
  }finally{for(const s of connections)s.terminate();await app.close();}

@@ -15,3 +15,7 @@ export function phoneHistorySelection<T extends HistoryCall>(calls:T[],ownedCall
   return scope.current?.id===previousCallId&&scope.history.some(call=>call.id===previousSelection)
     ?previousSelection:scope.current?.id||'';
 }
+
+export function archivedPhoneCalls<T extends HistoryCall>(calls:T[]){
+  return calls.filter(call=>call.status==='ended').sort((a,b)=>b.startedAt.localeCompare(a.startedAt));
+}

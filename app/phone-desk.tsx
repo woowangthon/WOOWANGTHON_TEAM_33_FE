@@ -3,8 +3,9 @@ import './phone-caller.css';
 import {useEffect,useRef,useState} from 'react';
 import PhoneAssistance from './phone-assistance';
 import PhoneHistory from './phone-history';
-import {phoneHistoryScope,phoneHistorySelection} from '../lib/phone-history-scope';
+import {phoneHistoryScope,phoneHistorySelection,archivedPhoneCalls} from '../lib/phone-history-scope';
 import {phoneNoticeAudio} from '../lib/phone-notice';
+import {phoneAssistanceContext} from '../lib/phone-assistance-context';
 import PhoneConversation,{type PhoneMessage} from './phone-conversation';
 import './phone-chat.css';
 
@@ -34,6 +35,8 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const [online,setOnline]=useState(false),[available,setAvailable]=useState(false);
   const [state,setState]=useState('offline'),[message,setMessage]=useState('');
   const [calls,setCalls]=useState<Call[]>([]),[selected,setSelected]=useState('');
+  const [archiveMode,setArchiveMode]=useState(false),[historyLoading,setHistoryLoading]=useState(false),[historyError,setHistoryError]=useState('');
+  const archiveOpen=useRef(false),historyRequest=useRef(0);
   const [consent,setConsent]=useState(false),[nickname,setNickname]=useState('');
   const [connectedAt,setConnectedAt]=useState<number|null>(null),[elapsed,setElapsed]=useState(0),[audioPaused,setAudioPaused]=useState(false);
   const [micLevel,setMicLevel]=useState(0);
@@ -89,11 +92,12 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const session=useRef<Session|null>(null),active=useRef(''),currentCall=useRef(''),historyCall=useRef('');
   const callsVersion=useRef(0);
   const callerHistory=phoneHistoryScope(calls,currentCall.current);
-  const displayCalls=staff?callerHistory.history:calls;
+  const displayCalls=staff?(archiveMode?archivedPhoneCalls(calls):callerHistory.history):calls;
   const call=displayCalls.find(c=>c.id===selected),segments=call?.segments||[];
+  const assistanceContext=phoneAssistanceContext(calls,selected);
   const waitingCall=calls.find(c=>c.status==='waiting');
   const processing=!!call?.finalizing||Object.values(pending).includes(selected);
-  const connected=!['offline','ended'].includes(state);
+  const connected=staff?state!=='offline':!['offline','ended'].includes(state);
   const duration=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
   function send(value:unknown){const socket=session.current?.socket;if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(value));}
   function disconnect(){
@@ -123,8 +127,21 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     const visible=rows.filter(row=>row.source!=='demo');
     setCalls(visible);
     const ownedCallId=currentCall.current,previousCallId=historyCall.current;
-    historyCall.current=phoneHistoryScope(visible,ownedCallId).current?.id||'';
+    const nextCallId=phoneHistoryScope(visible,ownedCallId).current?.id||'';
+    if(nextCallId&&nextCallId!==previousCallId){archiveOpen.current=false;setArchiveMode(false);setHistoryError('');if(staff&&!currentCall.current&&session.current)setState('ready');}
+    historyCall.current=nextCallId;
+    if(staff&&archiveOpen.current){const archived=archivedPhoneCalls(visible);setSelected(previous=>archived.some(c=>c.id===previous)?previous:archived[0]?.id||'');return;}
     setSelected(previous=>staff?phoneHistorySelection(visible,ownedCallId,previous,previousCallId):visible.some(c=>c.id===previous)?previous:visible.find(c=>c.id===ownedCallId)?.id||visible[0]?.id||'');
+  }
+  async function toggleArchive(){
+    const open=!archiveOpen.current;archiveOpen.current=open;setArchiveMode(open);setHistoryError('');
+    const request=++historyRequest.current;setHistoryLoading(false);
+    if(!open){setSelected(phoneHistoryScope(calls,currentCall.current).current?.id||'');return;}
+    setSelected(archivedPhoneCalls(calls)[0]?.id||'');setHistoryLoading(true);
+    const version=callsVersion.current;
+    try{const response=await fetch('/api/phone?history=1',{cache:'no-store',signal:AbortSignal.timeout(7000)});if(!response.ok)throw Error('History_unavailable');const data=await response.json();if(!Array.isArray(data.calls))throw Error('History_invalid');if(request===historyRequest.current&&archiveOpen.current&&version===callsVersion.current)applyCalls(data.calls);}
+    catch{if(request===historyRequest.current&&archiveOpen.current)setHistoryError('기록을 불러오지 못했습니다. 이전 상담을 다시 열어 주세요.');}
+    finally{if(request===historyRequest.current)setHistoryLoading(false);}
   }
   useEffect(()=>{
     if(!staff){try{setNickname(localStorage.getItem('minwonsai-phone-nickname')||'');}catch{}}
@@ -168,6 +185,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   async function accept(){
     const call=waitingCall;
     const current=session.current;if(!current||!call||call.status!=='waiting')return;
+    archiveOpen.current=false;setArchiveMode(false);
     useCheckedMicrophone(current);
     setSelected(call.id);
     setMessage('');setState('connecting');
@@ -220,7 +238,9 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
         if(['neutral_text','processing_done'].includes(event.event)&&event.turnId)setPending(previous=>{const next={...previous};delete next[event.turnId!];return next;});
         if(event.event==='analysis_error'){
           setPending(previous=>Object.fromEntries(Object.entries(previous).filter(([,id])=>id!==event.callId)));
-          setMessage(event.message||'내용을 확인해 주세요.');
+          const warning=event.message||'일부 대화 기록을 확인하지 못했습니다.';
+          // Ignore late finalization warnings after hangup; keep errors for the current call.
+          if(!event.callId||event.callId===currentCall.current)setMessage(warning);
         }
         if(event.event==='ended'){
           setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,status:'ended',typing:{caller:false,staff:false}}:c));
@@ -241,14 +261,14 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
 
   async function resumeAudio(){try{if(session.current?.context)await resumeAudioContext(session.current.context);}catch{setMessage('오디오를 켜지 못했습니다. 통화를 다시 연결해 주세요.');}}
   function finishCurrentCall(connection:Session){
-    active.current='';currentCall.current='';historyCall.current='';textMode.current=false;setConnectedAt(null);setElapsed(0);setPending({});connection.node?.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage('');stopNotice();
+    active.current='';currentCall.current='';historyCall.current='';textMode.current=false;setConnectedAt(null);setElapsed(0);setPending({});connection.node?.port.postMessage({type:'clear'});setState('ended');setMessage('');stopNotice();
     if(staff){setSelected('');setAudioPaused(connection.context?.state!=='running');}
     else{setAudioPaused(false);setMicLevel(0);setMicReady(false);session.current=null;release(connection);}
   }
 
   return <section className={'phone-desk phone-live '+(staff?'phone-staff':'phone-caller')}>
     <div className="phone-heading"><h1>{staff?'전화 상담':'민원 상담'}</h1><div className="phone-actions">
-      {state==='active'?<><button className="phone-call-status" disabled>통화 중</button><span className="phone-duration-small">{duration}</span>{selected!==active.current&&<button onClick={()=>setSelected(active.current)}>현재 통화</button>}<button className="danger" onClick={()=>send({event:'hangup',callId:active.current})}>종료</button></>:staff&&<button className="primary" disabled={!online||connected} onClick={()=>{receivingRequested.current=true;void connect();}}>{state==='connecting'?'수신 준비 중':connected?'수신 대기 중':'수신 시작'}</button>}
+      {state==='active'?<><button className="phone-call-status" disabled>통화 중</button><span className="phone-duration-small">{duration}</span>{selected!==active.current&&<button onClick={()=>{archiveOpen.current=false;setArchiveMode(false);setSelected(active.current);}}>현재 통화</button>}<button className="danger" onClick={()=>send({event:'hangup',callId:active.current})}>종료</button></>:staff&&<button className="primary" disabled={!online||connected} onClick={()=>{receivingRequested.current=true;void connect();}}>{state==='connecting'?'수신 준비 중':state==='ended'?'통화 종료':connected?'수신 대기 중':'수신 시작'}</button>}
     </div></div>
     {message&&<div className="phone-notice" role="alert">{message}</div>}
     {state==='active'&&audioPaused&&<button onClick={()=>void resumeAudio()}>오디오 켜기</button>}
@@ -263,9 +283,9 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     {!staff&&['waiting','connecting'].includes(state)&&<div className="phone-incoming"><span>담당자 연결 중</span><button onClick={disconnect}>취소</button></div>}
     {staff&&waitingCall&&state!=='active'&&<div className="phone-incoming" role="status"><strong>{waitingCall.callerName||'민원인'}님의 전화입니다. 받으시겠습니까?</strong><button className="primary" disabled={state==='connecting'} onClick={()=>void accept()}>받기</button></div>}
     <div className={'phone-live-columns '+(!staff?'caller-columns':'')}>
-      {staff&&<PhoneHistory calls={displayCalls} selected={selected} onSelect={setSelected}/>}
-      <PhoneConversation key={'conversation:'+selected} callerName={call?.callerName} messages={call?.messages||[]} staff={staff} active={call?.status==='active'} textOnly={call?.shield===true} typing={call?.typing} processing={processing}/>
-      {staff&&<PhoneAssistance key={'assistance:'+selected} callId={selected} segments={segments.map(({turnId,text,facts})=>({turnId,text,facts}))}/>}
+      {staff&&<PhoneHistory calls={displayCalls} selected={selected} onSelect={setSelected} archive={archiveMode} loading={historyLoading} error={historyError} onToggleArchive={()=>void toggleArchive()}/>}
+      <PhoneConversation key={'conversation:'+selected} callerName={call?.callerName} messages={call?.messages||[]} staff={staff} active={call?.status==='active'} textOnly={call?.shield===true} typing={call?.typing} processing={processing} recordedAt={call?.status==='ended'?call.startedAt:undefined}/>
+      {staff&&<PhoneAssistance key={'assistance:'+selected} callId={selected} segments={segments.map(({turnId,text,facts})=>({turnId,text,facts}))} archived={call?.status==='ended'} context={assistanceContext}/>}
     </div>
   </section>;
 }

@@ -41,6 +41,7 @@
 .phone-live .phone-history button.selected{background:#edf3fc;box-shadow:inset 3px 0 #2458a6}
 .phone-live .phone-history-person strong{font-size:14px}.phone-live .phone-history-person span,.phone-live .phone-history-entry span{font-size:12px;color:#315e98}.phone-live .phone-history-person small{font-size:11px;color:#647892;line-height:1.5}
 .phone-live .phone-history-previous{border-top:1px solid #c6d5e9}.phone-live .phone-history-previous h3{padding:18px 16px 10px;margin:0;font-size:13px;overflow-wrap:anywhere}.phone-live .phone-history-entry time{font-size:12px}
+.phone-live .phone-history-tools{padding:10px 16px;border-bottom:1px solid #e2e9f3}.phone-live .phone-history-tools button{font-size:12px;padding:7px 10px}
 .phone-live .phone-nickname{display:block;font-size:14px;font-weight:600;margin-bottom:18px}.phone-live .phone-nickname input{display:block;width:100%;max-width:360px;margin-top:9px;padding:12px 14px;border:1px solid #a8bfdf;border-radius:9px;background:#fff;color:#243b59;font:inherit}
 .phone-live .phone-chat-heading h2{overflow-wrap:anywhere;min-width:0}.phone-live .phone-chat-heading span{flex-shrink:0}
 @media(max-width:1150px){.phone-live.phone-staff .phone-live-columns{grid-template-columns:190px minmax(0,1fr)}.phone-live.phone-staff .phone-history{grid-row:span 2}.phone-live.phone-staff .phone-assistance{grid-column:2;min-height:260px}}
