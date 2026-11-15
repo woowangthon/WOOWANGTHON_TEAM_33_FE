@@ -48,6 +48,7 @@ test('a checked microphone is reused for reception and two successive calls with
     ws.event({event:'calls',calls:[waiting(id)]});await d.render().accept();
     assert.equal(ws.sent.at(-1).event,'accept');assert.equal(ws.sent.at(-1).callId,id);
     ws.event({event:'active',callId:id});
+    if(id==='second'){ws.event({event:'ended',callId:'first'});assert.equal(d.render().state,'active','a delayed end from the previous call cannot end the next call');}
     d.nodes[0].port.onmessage({data:{type:'frame',format:'pcm16-16000',frame:new Uint8Array(640).fill(12).buffer}});
     assert.equal(ws.sent.at(-1).event,'media');assert.equal(ws.sent.at(-1).callId,id);
     assert.ok(Buffer.from(ws.sent.at(-1).payload,'base64').some(byte=>byte===12));
@@ -71,4 +72,12 @@ test('a missed incoming socket notification is recovered by reception synchroniz
   d.setHistory([waiting('recovered')]);const cleanup=d.effects[1]();await flush();await flush();
   assert.equal(d.render().waitingCall.id,'recovered');await d.render().accept();assert.equal(ws.sent.at(-1).callId,'recovered');
   cleanup();
+});
+
+test('a missed hangup does not leave the next incoming call hidden behind active state',async()=>{
+  const d=desk();const api=d.render();api.receivingRequested.current=true;await api.connect();
+  const ws=d.sockets[0];ws.open();ws.event({event:'ready'});ws.event({event:'calls',calls:[waiting('old')]});await d.render().accept();ws.event({event:'active',callId:'old'});
+  d.setHistory([{...waiting('old'),status:'ended'},waiting('next')]);const cleanup=d.effects[1]();await flush();await flush();
+  assert.equal(d.render().state,'ready');assert.equal(d.render().waitingCall.id,'next');await d.render().accept();assert.equal(ws.sent.at(-1).callId,'next');
+  assert.equal(d.requests.length,1);cleanup();
 });
