@@ -10,7 +10,7 @@ import './phone-chat.css';
 
 type Segment={turnId:string;text:string;status:string;at:string;facts:{kind:string;value:string}[]};
 type Call={id:string;status:'waiting'|'connecting'|'active'|'ended';source:string;callerId?:string;callerName?:string;callerCallCount?:number;startedAt:string;connectedAt?:string;shield:boolean;finalizing?:boolean;segments:Segment[];messages?:PhoneMessage[];typing?:{caller:boolean;staff:boolean};reason?:string};
-type Wire={event:string;callId?:string;messageId?:string;connectedAt?:string;message?:string;reason?:string;enabled?:boolean;payload?:string;media?:{payload:string};calls?:Call[];entry?:PhoneMessage;speaker?:'caller'|'staff';value?:boolean;kind?:string;text?:string}&Partial<Segment>;
+type Wire={event:string;callId?:string;connectedAt?:string;message?:string;reason?:string;enabled?:boolean;payload?:string;media?:{payload:string};calls?:Call[];entry?:PhoneMessage;speaker?:'caller'|'staff';value?:boolean;kind?:string;text?:string}&Partial<Segment>;
 type Session={context?:AudioContext;node?:AudioWorkletNode;microphone?:MediaStream;socket?:WebSocket;player?:AudioBufferSourceNode;timer?:ReturnType<typeof setTimeout>;disposed:boolean};
 
 function releaseAudio(session:Session){
@@ -34,10 +34,6 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const [consent,setConsent]=useState(false),[nickname,setNickname]=useState('');
   const [connectedAt,setConnectedAt]=useState<number|null>(null),[elapsed,setElapsed]=useState(0),[audioPaused,setAudioPaused]=useState(false);
   const [micLevel,setMicLevel]=useState(0);
-  const [draft,setDraft]=useState(''),[sending,setSending]=useState(false);
-  const outgoing=useRef<{id:string;text:string;timer:ReturnType<typeof setTimeout>}|null>(null);
-  function finishSending(){if(outgoing.current)clearTimeout(outgoing.current.timer);outgoing.current=null;setSending(false);}
-  function sendReply(){const socket=session.current?.socket;if(!draft.trim()||sending||!active.current||socket?.readyState!==WebSocket.OPEN)return;const id=crypto.randomUUID(),text=draft.trim();setMessage('');setSending(true);outgoing.current={id,text,timer:setTimeout(()=>{if(outgoing.current?.id===id){finishSending();setMessage('전송을 확인하지 못했습니다. 다시 보내 주세요.');}},10000)};socket.send(JSON.stringify({event:'text_message',callId:active.current,messageId:id,text}));}
   const [pending,setPending]=useState<Record<string,string>>({});
   const textMode=useRef(false),noticePlayer=useRef<HTMLAudioElement|null>(null),noticePlaying=useRef(false),noticeSequence=useRef(0),receivingRequested=useRef(false);
   function stopNotice(){noticeSequence.current++;noticePlayer.current?.pause();noticePlayer.current=null;noticePlaying.current=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();}
@@ -57,7 +53,6 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const duration=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
   function send(value:unknown){const socket=session.current?.socket;if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(value));}
   function disconnect(){
-    finishSending();
     send({event:'hangup',callId:currentCall.current});
     const current=session.current;session.current=null;if(current)release(current);
     active.current='';currentCall.current='';historyCall.current='';setCalls([]);setSelected('');setConnectedAt(null);setAudioPaused(false);setState('offline');setPending({});textMode.current=false;stopNotice();
@@ -66,7 +61,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     let live=true;
     async function status(){try{const response=await fetch('/api/phone',{cache:'no-store',signal:AbortSignal.timeout(7000)});const data=await response.json();if(live){setOnline(response.ok&&data.online===true);setAvailable(response.ok&&data.available===true);if(staff&&receivingRequested.current&&response.ok&&data.online===true&&!session.current)void connect();}}catch{if(live){setOnline(false);setAvailable(false);}}}
     void status();const timer=setInterval(status,15000);
-    return()=>{live=false;clearInterval(timer);if(outgoing.current)clearTimeout(outgoing.current.timer);stopNotice();const current=session.current;session.current=null;if(current)release(current);};
+    return()=>{live=false;clearInterval(timer);stopNotice();const current=session.current;session.current=null;if(current)release(current);};
   },[]);
   useEffect(()=>{const before=(event:BeforeUnloadEvent)=>{if(currentCall.current){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',before);return()=>window.removeEventListener('beforeunload',before);},[]);
   function applyCalls(rows:Call[]){
@@ -117,7 +112,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     const current=session.current;if(!current||!call||call.status!=='waiting')return;
     setSelected(call.id);
     setMessage('');setState('connecting');
-    try{if(session.current===current&&!current.disposed)send({event:'accept',callId:call.id});}
+    try{await prepareAudio(current);if(session.current===current&&!current.disposed)send({event:'accept',callId:call.id});}
     catch(error){releaseAudio(current);setState('ready');setMessage(error instanceof DOMException&&error.name==='NotAllowedError'?'전화를 받으려면 마이크 사용을 허용해 주세요.':'마이크를 연결하지 못했습니다. 다시 받아 주세요.');}
   }
 
@@ -157,9 +152,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
           textMode.current=event.enabled===true;if(staff)connection.node?.port.postMessage({type:'clear'});
           setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,shield:event.enabled===true}:c));
         }
-        if(event.event==='announcement'&&event.text&&!staff)playNotice(event.kind||'start',event.text);
-        if(event.event==='delivered'&&event.messageId===outgoing.current?.id){finishSending();setDraft('');}
-        if(event.event==='delivery_error'&&event.messageId===outgoing.current?.id){finishSending();setMessage(event.message||'메시지를 다시 보내 주세요.');}
+        if(event.event==='announcement'&&event.text)playNotice(event.kind||'start',event.text);
         if(event.event==='conversation'&&event.entry)setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,messages:[...(c.messages||[]).filter(m=>m.id!==event.entry!.id),event.entry!].sort((a,b)=>a.at.localeCompare(b.at))}:c));
         if(event.event==='typing'&&event.speaker)setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,typing:{caller:false,staff:false,...c.typing,[event.speaker!]:event.value===true}}:c));
         if(event.event==='finalized'&&!staff){session.current=null;release(connection);}
@@ -174,7 +167,6 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
           active.current='';currentCall.current='';historyCall.current='';textMode.current=false;setConnectedAt(null);setElapsed(0);setAudioPaused(false);setMicLevel(0);setPending({});connection.node?.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage('');
           setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,status:'ended',typing:{caller:false,staff:false}}:c));if(staff)setSelected('');
           releaseAudio(connection);stopNotice();
-          finishSending();setDraft('');
           if(!staff){session.current=null;release(connection);}
         }
         if(event.event==='accept_error'){releaseAudio(connection);setState('ready');}
@@ -198,14 +190,13 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     </div></div>
     {message&&<div className="phone-notice" role="alert">{message}</div>}
     {state==='active'&&audioPaused&&<button onClick={()=>void resumeAudio()}>오디오 켜기</button>}
-    {!staff&&state==='active'&&<div className="phone-mic-input"><span>{audioPaused?'마이크 일시 정지':noticePlaying.current?'통화 안내 중':micLevel>.015?'마이크 입력 중':'마이크 입력 대기'}</span><meter aria-label="마이크 입력 크기" min={0} max={1} value={micLevel}/></div>}
+    {state==='active'&&<div className="phone-mic-input"><span>{audioPaused?'마이크 일시 정지':noticePlaying.current?'통화 안내 중':micLevel>.015?'마이크 입력 중':'마이크 입력 대기'}</span><meter aria-label="마이크 입력 크기" min={0} max={1} value={micLevel}/></div>}
     {!staff&&!connected&&<div className="phone-connect-controls"><label className="phone-nickname">닉네임<input autoComplete="nickname" name="nickname" maxLength={30} value={nickname} onChange={event=>setNickname(event.target.value)} placeholder="상담에 사용할 닉네임"/></label><label className="phone-consent"><input type="checkbox" checked={consent} onChange={event=>setConsent(event.target.checked)}/>상담 녹음·문자 기록 및 자동 분석에 동의합니다.</label><button className="primary" onClick={()=>void connect()} disabled={!online||!available||!consent||!nickname.trim()}>전화 걸기</button></div>}
     {!staff&&['waiting','connecting'].includes(state)&&<div className="phone-incoming"><span>담당자 연결 중</span><button onClick={disconnect}>취소</button></div>}
     {staff&&waitingCall&&state!=='active'&&<div className="phone-incoming" role="status"><strong>{waitingCall.callerName||'민원인'}님의 전화입니다. 받으시겠습니까?</strong><button className="primary" disabled={state==='connecting'} onClick={()=>void accept()}>받기</button></div>}
     <div className={'phone-live-columns '+(!staff?'caller-columns':'')}>
       {staff&&<PhoneHistory calls={displayCalls} selected={selected} onSelect={setSelected}/>}
-      <div className="phone-conversation-column"><PhoneConversation key={'conversation:'+selected} callerName={call?.callerName} messages={call?.messages||[]} staff={staff} active={call?.status==='active'} textOnly={call?.shield===true} textReply typing={call?.typing} processing={processing}/>
-      {staff&&state==='active'&&selected===active.current&&<form className="phone-reply" onSubmit={event=>{event.preventDefault();sendReply();}}><textarea aria-label="답변 메시지" placeholder="답변을 입력하세요" rows={3} maxLength={4000} value={draft} disabled={sending} onChange={event=>setDraft(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();sendReply();}}}/><button className="primary" type="submit" disabled={sending||!draft.trim()}>{sending?'전송 중':'보내기'}</button></form>}</div>
+      <PhoneConversation key={'conversation:'+selected} callerName={call?.callerName} messages={call?.messages||[]} staff={staff} active={call?.status==='active'} textOnly={call?.shield===true} typing={call?.typing} processing={processing}/>
       {staff&&<PhoneAssistance key={'assistance:'+selected} callId={selected} segments={segments.map(({turnId,text,facts})=>({turnId,text,facts}))}/>}
     </div>
   </section>;
