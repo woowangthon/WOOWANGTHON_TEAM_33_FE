@@ -10,7 +10,7 @@ function fixture({staff=true,docs=[],key='service-key',failDocs=false,failGemini
  '../../../../lib/access':{officeForOwner:id=>'office:'+id},
  '../../../../lib/server':{AppError,rateLimit:async()=>{},credentials:async owner=>{calls.owners.push(owner);return {openai:key,model:'test-model'};},database:()=>({prepare:()=>({bind:owner=>{calls.owners.push(owner);return {all:async()=>{if(failDocs)throw Error('unavailable');return {results:docs};}};}})})},
  '../../../../lib/laws':{retrieve:d=>({citations:d,warnings:[]})},
- '../../../../lib/phone-assistance':{assistanceInput:lib.assistanceInput,AssistanceProviderError:lib.AssistanceProviderError,generateAssistance:async(input,citations,config)=>{calls.generated.push({input,citations,config});if(failGemini&&config.provider==='gemini')throw new lib.AssistanceProviderError(429);return {...input,model:config.model,items:[],citations,warnings:[]};}}
+ '../../../../lib/phone-assistance':{assistanceInput:lib.assistanceInput,assistanceTranscript:lib.assistanceTranscript,AssistanceProviderError:lib.AssistanceProviderError,generateAssistance:async(input,citations,config)=>{calls.generated.push({input,citations,config});if(failGemini&&config.provider==='gemini')throw new lib.AssistanceProviderError(429);return {...input,model:config.model,items:[],citations,warnings:[]};}}
  };
  new Function('require','exports',source)(name=>mocks[name],exports);
  return {calls,post:(body=input,origin='https://staff.test')=>exports.POST(new Request('https://staff.test/api/phone/assistance',{method:'POST',headers:{origin},body:typeof body==='string'?body:JSON.stringify(body)}))};

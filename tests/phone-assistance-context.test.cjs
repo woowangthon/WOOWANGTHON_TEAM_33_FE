@@ -24,6 +24,6 @@ test('both model providers receive conversation and prior context, while request
   global.fetch=async(url,options)=>{bodies.push(JSON.parse(options.body));return Response.json(url.includes('googleapis')?{status:'completed',steps:[{type:'model_output',content:[{type:'text',text:JSON.stringify(result)}]}]}:{status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(result)}]}]});};
   try{for(const provider of ['openai','gemini']){
     await h.generateAssistance(input,[],{provider,key:'test',model:'test'});
-    const payload=JSON.parse(bodies.at(-1).input);assert.equal(payload.currentConversation[0].speaker,'staff');assert.equal(payload.previousConsultations[0].callId,'old');assert.deepEqual(payload.requests,[{id:'R1',text:'진행 현황 확인'}]);
+    const payload=JSON.parse(bodies.at(-1).input);assert.equal(payload.currentConversation[0].speaker,'staff');assert.equal(payload.transcript,'담당자: current 안내');assert.equal(payload.previousConsultations[0].callId,'old');assert.deepEqual(payload.requests,[{id:'R1',text:'진행 현황 확인'}]);
   }}finally{global.fetch=previous;}
 });

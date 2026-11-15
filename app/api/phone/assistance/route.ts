@@ -3,7 +3,7 @@ import {credentials,database,rateLimit,AppError} from '../../../../lib/server';
 import {officeForOwner} from '../../../../lib/access';
 import {retrieve,autoSync,type StoredDoc} from '../../../../lib/laws';
 import {phoneLawPlan} from '../../../../lib/phone-law-search';
-import {assistanceInput,generateAssistance,AssistanceProviderError} from '../../../../lib/phone-assistance';
+import {assistanceInput,assistanceTranscript,generateAssistance,AssistanceProviderError} from '../../../../lib/phone-assistance';
 
 export const dynamic='force-dynamic';
 export const maxDuration=60;
@@ -29,7 +29,7 @@ export async function POST(request:Request){
   if(!config.key)return Response.json({error:'답변 생성 서비스 연결을 확인해 주세요.'},{status:503});
   let timer:ReturnType<typeof setTimeout>|undefined;
   let docs=await Promise.race([cachedDocuments(office).catch(()=>null),new Promise<null>(resolve=>{timer=setTimeout(()=>resolve(null),5000);})]).finally(()=>clearTimeout(timer));
-  const source={title:'음성 상담',body:input.segments.map(s=>s.text).join('\n'),category:'기타',occurred_at:'',location:input.segments.flatMap(s=>s.facts).find(f=>f.kind==='location')?.value||''};
+  const source={title:'음성 상담',body:assistanceTranscript(input),category:'기타',occurred_at:'',location:input.segments.flatMap(s=>s.facts).find(f=>f.kind==='location')?.value||''};
   let plan;const searchWarnings:string[]=[];
   if(keys.law&&keys.openai){
    try{plan=await phoneLawPlan(keys,source.body);searchWarnings.push(...await autoSync(office,keys.law,'기타',source,plan));documents.delete(office);docs=await cachedDocuments(office);}catch(error){searchWarnings.push(error instanceof AppError?error.message:'법령 검색 계획을 확인하지 못했습니다.');}
