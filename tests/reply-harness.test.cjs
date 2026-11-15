@@ -15,18 +15,29 @@ test('reply validation uses original request IDs and only certifies the exact dr
  assert.deepEqual(calls[0][3].sourceRequests,requests);assert.equal(result.audit.status,'verified');
  const checked={...analysis,draft:result.draft,replyHarness:result.audit};assert.equal(h.replyIsVerified(c,checked,[]),true);assert.equal(h.replyIsVerified(c,{...checked,draft:draft+'수정'},[]),false);assert.equal(h.replyIsVerified({...c,body:'다른 요청'},checked,[]),false);
 });
-test('a missing response is repaired once, then reviewed again; permanent omissions stay failed',async()=>{
+test('missing responses are automatically repaired within a fixed budget and never falsely certified',async()=>{
  const missing=structuredClone(review);missing.responses[1].kind='missing';let calls=0;const progress=[];
  const h=harness(async(_keys,name)=>{calls++;return name==='reply_request_repair'?{draft}:calls===1?missing:review;});
  const result=await h.verifyReply({openai:'test',model:'test'},c,analysis,[],{onProgress:async p=>progress.push(structuredClone(p))});assert.equal(calls,3);assert.equal(result.audit.attempts.length,2);assert.ok(progress.some(p=>p.phase==='repairing'&&p.repairsUsed===1));
  let repairs=0;const fail=harness(async(_keys,name)=>{if(name==='reply_request_repair'){repairs++;return {draft};}return missing;});
- await assert.rejects(fail.verifyReply({openai:'test',model:'test'},c,analysis,[]),e=>e.retryable===false);assert.equal(repairs,1);
+ await assert.rejects(fail.verifyReply({openai:'test',model:'test'},c,analysis,[]),e=>e.retryable===false);assert.equal(repairs,3);
 });
-test('unknown repair outcome cannot silently make a second paid repair',async()=>{
+test('an interrupted repair resumes automatically and keeps its consumed budget',async()=>{
  let saved;const missing=structuredClone(review);missing.responses[1].kind='missing';let calls=0;
  const h=harness(async(_keys,name)=>{calls++;if(name==='reply_request_repair')throw new Error('network');return missing;});
  await assert.rejects(h.verifyReply({openai:'test',model:'test'},c,analysis,[],{onProgress:async p=>saved=structuredClone(p)}));assert.equal(saved.phase,'repairing');
- await assert.rejects(h.verifyReply({openai:'test',model:'test'},c,analysis,[],{progress:saved}),e=>e.retryable===false);assert.equal(calls,2);
+ assert.equal(saved.repairsUsed,1);
+ let repairs=0,checks=0;const resumed=harness(async(_keys,name)=>name==='reply_request_repair'?(repairs++,{draft}):++checks===1?missing:review);
+ const result=await resumed.verifyReply({openai:'test',model:'test'},c,analysis,[],{progress:saved,onProgress:async p=>saved=structuredClone(p)});
+ assert.equal(result.audit.status,'verified');assert.equal(repairs,1);assert.equal(saved.repairsUsed,2);
+});
+
+test('a second unsuccessful review triggers another repair instead of ending the complaint',async()=>{
+ const missing=structuredClone(review);missing.paragraphs[0].supported=false;
+ let checks=0,repairs=0;
+ const h=harness(async(_keys,name)=>name==='reply_request_repair'?(repairs++,{draft}):++checks<3?missing:review);
+ const result=await h.verifyReply({openai:'test',model:'test'},c,analysis,[]);
+ assert.equal(repairs,2);assert.equal(result.audit.attempts.length,3);assert.equal(result.audit.status,'verified');
 });
 
 test('a repaired reply refreshes its actual citation list',async()=>{

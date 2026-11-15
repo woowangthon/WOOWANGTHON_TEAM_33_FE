@@ -1,5 +1,5 @@
 const test=require('node:test'),assert=require('node:assert/strict');
-const {phoneHistoryScope,phoneHistorySelection}=require('../evals/loader.cjs')()('lib/phone-history-scope.ts');
+const {phoneHistoryScope,phoneHistorySelection}=require('./helpers/loader.cjs')()('lib/phone-history-scope.ts');
 const call=(id,callerId,status='ended',startedAt='2026-11-15T01:00:00Z')=>({id,callerId,status,startedAt});
 const history=[call('a-old','a'),call('b-old','b')];
 test('idle reception remains empty even when stored history exists',()=>{

@@ -6,7 +6,7 @@ function harness({draft='',conflict=false,missing=false,unverified=false}={}){
  const row={owner:'guest:test',analysis_checkpoint:JSON.stringify({analysis,evidence:{citations:[],warnings:[]}})},writes=[];
  const stubs={
   './server':{database:()=>({prepare:sql=>({bind:(...values)=>({first:async()=>missing?null:row,run:async()=>{writes.push({sql,values});return {meta:{changes:conflict&&sql.includes('SET evidence=')?0:1}};}})})}),credentials:async()=>({provider:'openai',openai:'synthetic',law:'synthetic'}),decodeComplaint:()=>c,now:()=> 'now'},
-  './summary-harness':{sourceHash:()=> 'source:test'},'./harness-policy':{harnessPolicy:{version:2}},'./access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{},'./reply-harness':{replyIsVerified:()=>true}
+  './citations':{inlineReferences:()=>({ids:[],unknown:[]})},'./summary-harness':{sourceHash:()=> 'source:test'},'./harness-policy':{harnessPolicy:{version:2}},'./access':{officeForOwner:()=> 'office:test'},'./laws':{},'./semantic-search':{},'./ai':{},'./structured-ai':{},'./reply-harness':{replyIsVerified:()=>true}
  };
  const e={};new Function('require','exports',ts.transpileModule(fs.readFileSync('lib/analysis-stages.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(n=>{assert.ok(n in stubs,'Unexpected dependency '+n);return stubs[n];},e);
  return {...e,writes,c,analysis,run:stage=>e.runAnalysisStage('test',1,stage)};
@@ -31,7 +31,16 @@ test('existing citizen corrections remain context when reanalyzing historical re
 test('unverified summaries cannot be saved as completed results',async()=>{await assert.rejects(harness({unverified:true}).run('finish'),/Summary verification missing/);});
 
 test('credit failure preserves an actionable message without marking completion',async()=>{
- const h=harness();await h.failAnalysis('test',1,true);
+ const h=harness({unverified:true});await h.failAnalysis('test',1,true);
  assert.match(h.writes[0].values[0],/OpenAI 크레딧/);assert.match(h.writes[0].sql,/auto_state='failed'/);
  assert.match(h.writes[0].sql,/auto_state!='completed'/);
+});
+
+test('reply exhaustion preserves a verified summary and draft as reviewable work',async()=>{
+ const h=harness();await h.failAnalysis('test',1);
+ const partial=h.writes.find(w=>w.sql.includes('SET analysis=')),state=h.writes.find(w=>w.sql.includes("auto_state='needs_review'"));
+ const saved=JSON.parse(partial.values[0]);assert.equal(saved.summary,h.analysis.summary);assert.equal(saved.draft,h.analysis.draft);assert.equal(saved.replyHarness,undefined);
+ assert.ok(state);assert.equal(h.writes.some(w=>w.sql.includes("auto_state='failed'")),false);
+ assert.match(partial.sql,/deleted_at IS NULL/);assert.match(partial.sql,/analysis_generation=\?/);assert.match(partial.sql,/ELSE draft END/);
+ await harness({missing:true}).failAnalysis('deleted',1);
 });

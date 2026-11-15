@@ -20,7 +20,7 @@ export async function queueAnalysis(id: string) {
   const stale = new Date(Date.now() - 240000).toISOString();
   const result = await database()
     .prepare(
-      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state='failed' THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure' - 'summaryRecovery' - 'replyProgress')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state NOT IN ('processing','queued') OR (auto_state='processing' AND auto_started_at<?))",
+      "UPDATE complaints SET auto_state='queued',auto_message='접수 내용을 기준으로 법령 검색과 분석을 준비합니다.',auto_token=NULL,workflow_run=NULL,analysis_generation=analysis_generation+1,analysis_checkpoint=CASE WHEN auto_state IN ('failed','needs_review') THEN (analysis_checkpoint::jsonb - 'summaryProgress' - 'summaryFailure' - 'summaryRecovery' - 'replyProgress')::text ELSE NULL END WHERE id=? AND deleted_at IS NULL AND status!='resolved' AND (auto_state NOT IN ('processing','queued') OR (auto_state='processing' AND auto_started_at<?))",
     )
     .bind(id, stale)
     .run();

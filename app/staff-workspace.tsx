@@ -182,8 +182,13 @@ export default function StaffWorkspace({
       sync.signal();
     });
     source.onerror=()=>{if(active&&!expectedReconnect)setConnectionLost(true);};
+    const refreshOnReturn=()=>{if(document.visibilityState==='visible')sync.signal();};
+    window.addEventListener('focus',refreshOnReturn);
+    document.addEventListener('visibilitychange',refreshOnReturn);
     return () => {
       active=false;source.close();sync.stop();
+      window.removeEventListener('focus',refreshOnReturn);
+      document.removeEventListener('visibilitychange',refreshOnReturn);
       if(syncSignals.current===sync)syncSignals.current=null;
     };
   }, [authenticated]);
@@ -421,7 +426,7 @@ export default function StaffWorkspace({
                   <p>{selected.auto_message || ""}</p>
                 </div>
                 {authenticated &&
-                selected.auto_state === "failed" &&
+                (selected.auto_state === "failed" || selected.auto_state === "needs_review") &&
                 selected.status !== "resolved" && !selected.deleted_at ? (
                   <button
                     className="button outline small"
@@ -437,7 +442,7 @@ export default function StaffWorkspace({
                       })
                     }
                   >
-                    재시도
+                    {selected.auto_state === 'needs_review' ? '답변 다시 보완' : '재시도'}
                   </button>
                 ) : null}
               </div>
@@ -730,6 +735,8 @@ export default function StaffWorkspace({
                                 <strong>{c.title}</strong>
                                 {opening===c.id?<span role="status"><LoaderCircle className="spin" size={14} aria-hidden="true"/> 민원을 불러오는 중입니다.</span>:null}
                                 {c.auto_state==='failed'?<span>원문 확인 필요</span>:null}
+                                {c.auto_state==='needs_review'?<span>요약 준비 · 답변 초안 확인</span>:null}
+                                {c.auto_state==='processing'||c.auto_state==='queued'?<span>접수 완료 · 자동 분석 중</span>:null}
                                 {c.hasSensitiveExpression?<em className="expression-list-flag">주의 표현</em>:null}
                                 <span>{c.location}</span>
                               </button>

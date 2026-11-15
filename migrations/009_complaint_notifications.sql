@@ -1,15 +1,19 @@
 CREATE OR REPLACE FUNCTION notify_complaint_change() RETURNS trigger AS $$
 DECLARE change_kind text;
 BEGIN
-  IF NEW.deleted_at IS DISTINCT FROM OLD.deleted_at THEN
+  IF TG_OP = 'INSERT' THEN
+    change_kind := 'updated';
+  ELSIF NEW.deleted_at IS DISTINCT FROM OLD.deleted_at THEN
     change_kind := 'updated';
   ELSIF NEW.auto_state = 'failed' AND OLD.auto_state IS DISTINCT FROM NEW.auto_state THEN
     change_kind := 'failed';
   ELSIF NEW.auto_state = 'completed' AND NEW.analysis IS NOT NULL
     AND (OLD.auto_state IS DISTINCT FROM NEW.auto_state OR OLD.analysis IS DISTINCT FROM NEW.analysis) THEN
     change_kind := 'completed';
-  ELSIF (NEW.auto_state = 'completed' AND NEW.analysis IS NOT NULL OR NEW.status = 'resolved')
-    AND NEW.revision IS DISTINCT FROM OLD.revision THEN
+  ELSIF NEW.auto_state IS DISTINCT FROM OLD.auto_state
+    OR NEW.auto_message IS DISTINCT FROM OLD.auto_message
+    OR NEW.analysis IS DISTINCT FROM OLD.analysis
+    OR NEW.revision IS DISTINCT FROM OLD.revision THEN
     change_kind := 'updated';
   ELSE
     RETURN NEW;
@@ -22,4 +26,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER complaint_changes_notification
-AFTER UPDATE ON complaints FOR EACH ROW EXECUTE FUNCTION notify_complaint_change();
+AFTER INSERT OR UPDATE ON complaints FOR EACH ROW EXECUTE FUNCTION notify_complaint_change();

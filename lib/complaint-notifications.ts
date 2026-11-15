@@ -2,8 +2,8 @@ import { PUBLIC_OFFICE } from './access';
 import type { Complaint } from './types';
 
 export type ComplaintNotification={id:string;revision:number;kind:'completed'|'updated'|'failed'};
-export function visibleComplaint(c:Pick<Complaint,'auto_state'|'status'> & {analysis?:unknown;hasAnalysis?:boolean}) {
-  return (c.auto_state==='completed' && (c.hasAnalysis ?? !!c.analysis)) || c.status==='resolved' || c.auto_state==='failed';
+export function visibleComplaint(c:Pick<Complaint,'auto_state'|'status'|'deleted_at'> & {analysis?:unknown;hasAnalysis?:boolean}) {
+  return !c.deleted_at;
 }
 export function notificationForOffice(payload:string|undefined,office:string):ComplaintNotification|null {
   try {

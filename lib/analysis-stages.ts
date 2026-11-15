@@ -9,10 +9,24 @@ import { verifyBusinessSummary,sourceHash,SummaryRejectedError,requiredOmissions
 import { harnessPolicy } from './harness-policy';
 import {verifyReply,replyIsVerified,type ReplyProgress} from './reply-harness';
 import {hasBusinessFacts,missingBusinessContentMessage} from './summary-harness';
+import {inlineReferences} from './citations';
 
 export type Stage='plan'|'evidence'|'analysis'|'summary'|'reply'|'requirements'|'review'|'coverage'|'finish';
 type SummaryFailure=Omit<SummaryAudit,'verifiedAt'|'status'>;
 type Checkpoint={plan?:SearchPlan;evidence?:Complaint['evidence'];analysis?:Analysis;photoNotes?:string;summary?:boolean;summaryFailure?:SummaryFailure;summaryProgress?:SummaryProgress;replyProgress?:ReplyProgress;summaryRecovery?:{sourceHash:string;used:number;failures:SummaryFailure[]}};
+// Make useful results available while the answer is being checked. The state remains
+// processing/needs_review; only finish can mark the answer verified and completed.
+export async function publishAnalysisProgress(id:string,generation:number,cp:Checkpoint) {
+  if(cp.analysis?.summaryHarness?.status!=='verified')return;
+  const draft=cp.replyProgress?.draft??cp.analysis.draft;
+  const citations=cp.evidence?.citations||cp.analysis.citations;
+  const refs=inlineReferences(draft,citations);
+  const partial={...cp.analysis,draft,citationIds:refs.ids,citations:citations.filter(c=>refs.ids.includes(c.id)),replyHarness:undefined};
+  const value=JSON.stringify(partial);
+  // Compare the stored AI draft atomically; never overwrite a saved staff edit.
+  await database().prepare("UPDATE complaints SET analysis=?,draft=CASE WHEN COALESCE(draft,'')='' OR draft=COALESCE(analysis::jsonb->>'draft','') THEN ? ELSE draft END,revision=revision+1 WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed' AND analysis IS DISTINCT FROM ?")
+    .bind(value,draft,id,generation,value).run();
+}
 export function supplementedComplaint(c:Complaint,photoNotes=''):Complaint {
   const messages=(c.supplements||[]).map(s=>`${s.role==='staff'?'담당자 보완 질문':'민원인 보완 답변'}: ${s.text}`).join('\n');
   const confirmed=c.request_tracking?.confirmedAt?JSON.stringify(c.request_tracking.items.map(r=>({request:r.text,withdrawn:r.withdrawn}))):'';
@@ -68,6 +82,7 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
         await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
       }});
       cp.analysis={...cp.analysis,summary:verified.summary,requests:verified.requests,summaryHarness:verified.audit};cp.summary=true;delete cp.summaryFailure;
+      await publishAnalysisProgress(id,generation,cp);
     } catch(error) {
       if(error instanceof SummaryRejectedError){
         cp.summaryFailure=error.audit;
@@ -87,7 +102,9 @@ export async function runAnalysisStage(id:string,generation:number,stage:Stage) 
     if(!replyIsVerified(c,cp.analysis,cp.evidence.citations)){
       const verified=await verifyReply(keys,c,cp.analysis,cp.evidence.citations,{progress:cp.replyProgress,onProgress:async progress=>{
         cp.replyProgress=progress;
-        await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
+        const message=progress.repairsUsed?'요약은 준비되었습니다. 답변 초안을 자동으로 보완하고 있습니다.':'요약은 준비되었습니다. 답변 초안의 근거와 요청별 대응을 확인하고 있습니다.';
+        await database().prepare("UPDATE complaints SET analysis_checkpoint=?,auto_message=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),message,id,generation).run();
+        await publishAnalysisProgress(id,generation,cp);
       }});
       cp.analysis={...cp.analysis,draft:verified.draft,citationIds:verified.citationIds,citations:verified.citations,replyHarness:verified.audit};delete cp.replyProgress;
       await database().prepare("UPDATE complaints SET analysis_checkpoint=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved'").bind(JSON.stringify(cp),id,generation).run();
@@ -128,6 +145,18 @@ export async function prepareSummaryRetry(id:string,generation:number,attempt:nu
   return true;
 }
 export async function failAnalysis(id:string,generation:number,quota=false,needsContent=false) {
+  if(!needsContent){
+    const row=await database().prepare("SELECT * FROM complaints WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(id,generation).first<Record<string,unknown>>();
+    if(!row)return;
+    const cp:Checkpoint=JSON.parse(String(row.analysis_checkpoint||'{}'));
+    const audit=cp.analysis?.summaryHarness;
+    if(audit?.status==='verified'&&audit.version===harnessPolicy.version&&audit.sourceHash===sourceHash(supplementedComplaint(decodeComplaint(row),cp.photoNotes))){
+      await publishAnalysisProgress(id,generation,cp);
+      const message=quota?'요약과 답변 초안을 저장했습니다. AI 사용 한도로 자동 보완이 멈췄습니다. 초안을 직접 검토하거나 한도 확인 후 다시 보완해 주세요.':'요약과 답변 초안을 저장했습니다. 자동 보완 후에도 확인할 사항이 남아 있습니다. 초안을 검토하거나 다시 보완해 주세요.';
+      await database().prepare("UPDATE complaints SET auto_state='needs_review',auto_message=?,auto_token=NULL WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(message,id,generation).run();
+      return;
+    }
+  }
   const message=needsContent?missingBusinessContentMessage:quota?'OpenAI 크레딧 또는 사용 한도가 부족합니다. 관리자 계정에서 잔액을 확인한 뒤 재시도해 주세요. 접수 원문은 보존됩니다.':'원문을 확인하거나 재시도해 주세요. 저장한 단계부터 다시 진행합니다.';
   await database().prepare("UPDATE complaints SET auto_state='failed',auto_message=? WHERE id=? AND analysis_generation=? AND deleted_at IS NULL AND status!='resolved' AND auto_state!='completed'").bind(message,id,generation).run();
 }

@@ -18,6 +18,6 @@ test('reported speech, criticism and invented evidence do not become list attack
 });
 test('legacy protection and final failure visibility survive without a full analysis payload',()=>{
   const failed=complaintListItem({...row,analysis:null,auto_state:'failed'});assert.equal(visibleComplaint(failed),true);assert.equal(failed.hasSensitiveExpression,true);assert.doesNotMatch(failed.title,/씨발/);
-  for(const auto_state of ['queued','processing','completed'])assert.equal(visibleComplaint({...failed,auto_state}),false);
+  for(const auto_state of ['queued','processing','completed','needs_review'])assert.equal(visibleComplaint({...failed,auto_state}),true);
   assert.equal(visibleComplaint({...failed,status:'resolved'}),true);
 });
