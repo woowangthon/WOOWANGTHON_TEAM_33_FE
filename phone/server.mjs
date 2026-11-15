@@ -14,7 +14,7 @@ const send=(socket,event)=>{
   if(socket?.readyState===Ws.OPEN&&socket.bufferedAmount<128000)socket.send(JSON.stringify(event));
 };
 
-export function createPhoneServer({secret,historyFile,historyRetentionDays=30,allowDemo=true,key,geminiKey,analysisProvider='gemini',textProvider='gemini',origins=[],model='gpt-6-luna',geminiModel='gemini-3.5-flash-lite',transcriptionModel='gemini-3.5-transcribe-live',safetyIntervalMs=400,playbackDelayMs=2500,analysisFactory,officerFactory,maxCallSeconds=600,waitSeconds=60,heartbeatMs=15000,maxDailySeconds=1800}){
+export function createPhoneServer({secret,historyFile,historyRetentionDays=30,allowDemo=true,staffTextOnly=false,key,geminiKey,analysisProvider='gemini',textProvider='gemini',origins=[],model='gpt-6-luna',geminiModel='gemini-3.5-flash-lite',transcriptionModel='gemini-3.5-transcribe-live',safetyIntervalMs=400,playbackDelayMs=2500,analysisFactory,officerFactory,maxCallSeconds=600,waitSeconds=60,heartbeatMs=15000,maxDailySeconds=1800}){
   if(!['openai','gemini'].includes(analysisProvider))throw Error('Invalid_phone_analysis_provider');
   if(!['openai','gemini'].includes(textProvider))throw Error('Invalid_phone_text_provider');
   if(!secret||(!analysisFactory&&(analysisProvider==='gemini'?(!geminiKey||(textProvider==='openai'&&!key)):!key)))throw new Error('Phone_server_configuration_missing');
@@ -53,9 +53,9 @@ export function createPhoneServer({secret,historyFile,historyRetentionDays=30,al
       send(agent,{event:'accept_error',callId:c?.id,message:'이미 연결 중이거나 종료된 통화입니다. 상담 목록을 확인해 주세요.'});return;
     }
     c.accepted=true;c.agent=agent;clearTimeout(c.waitTimer);c.startedAt=new Date().toISOString();
-    c.relay=new FilterRelay({reviewed:analysisProvider==='gemini',textOnlyBothDirections:false,delayMs:playbackDelayMs,caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:(payload,pcm)=>{if(pcm&&c.analysis?.pushPcm)c.analysis.pushPcm(pcm);else c.analysis?.push(Buffer.from(payload,'base64'));},onAudioError:()=>protect(c,'음성 재생 버퍼 확인 필요',undefined,'','analysis_error')});c.relay.start(c.id);
+    c.relay=new FilterRelay({reviewed:analysisProvider==='gemini',textOnlyBothDirections:false,delayMs:playbackDelayMs,caller:event=>send(c.socket,event),officer:event=>send(agent,{...event,callId:c.id}),onCallerAudio:(payload,pcm)=>{if(pcm&&c.analysis?.pushPcm)c.analysis.pushPcm(pcm);else c.analysis?.push(Buffer.from(payload,'base64'));},onAudioError:()=>protect(c,'음성 재생 버퍼 확인 필요',undefined,'','analysis_error')});c.relay.start(c.id);if(staffTextOnly)c.relay.protectManually('manual','담당자 문자 상담');
     send(agent,{event:'connecting',callId:c.id});list();
-    try{c.analysis=analysisFactory({key,model,onTranscript:event=>conversation(c,'caller',event),onTyping:value=>typing(c,'caller',value),onAudioBoundary:(id,range)=>c.relay.audioBoundary(id,range),onAudioReviewed:(id,allow)=>c.relay.audioReviewed(id,allow),onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});c.segments.sort((a,b)=>(c.turnOrder.get(a.turnId)??0)-(c.turnOrder.get(b.turnId)??0));send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>{c.turnOrder.set(turnId,c.turnOrder.size);send(agent,{event:'processing',callId:c.id,turnId});},onSettled:turnId=>send(agent,{event:'processing_done',callId:c.id,turnId})});c.officer=officerFactory?.({onTranscript:event=>conversation(c,'staff',event),onTyping:value=>typing(c,'staff',value),onError:message=>{send(c.agent,{event:'analysis_error',callId:c.id,message});}});await Promise.all([c.analysis.start(),c.officer?.start()]);if(c.ended){await Promise.all([c.analysis.stop(),c.officer?.stop()]);return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});announce(c,'start','상담 내용은 녹음 및 문자로 기록됩니다. 욕설이 감지되면 텍스트 모드로 전환됩니다.');c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
+    try{c.analysis=analysisFactory({key,model,onTranscript:event=>conversation(c,'caller',event),onTyping:value=>typing(c,'caller',value),onAudioBoundary:(id,range)=>c.relay.audioBoundary(id,range),onAudioReviewed:(id,allow)=>c.relay.audioReviewed(id,allow),onText:event=>{if(c.finalized)return;c.segments.push({...event,at:new Date().toISOString()});c.segments.sort((a,b)=>(c.turnOrder.get(a.turnId)??0)-(c.turnOrder.get(b.turnId)??0));send(agent,{event:'neutral_text',callId:c.id,...event});list();},onShield:(decision,transcript)=>protect(c,'욕설·위협 표현 감지',decision,transcript,'ai'),onError:message=>{protect(c,'분석 확인 필요',undefined,'','analysis_error');send(agent,{event:'analysis_error',callId:c.id,message});},onProcessing:turnId=>{c.turnOrder.set(turnId,c.turnOrder.size);send(agent,{event:'processing',callId:c.id,turnId});},onSettled:turnId=>send(agent,{event:'processing_done',callId:c.id,turnId})});c.officer=staffTextOnly?null:officerFactory?.({onTranscript:event=>conversation(c,'staff',event),onTyping:value=>typing(c,'staff',value),onError:message=>{send(c.agent,{event:'analysis_error',callId:c.id,message});}});await Promise.all([c.analysis.start(),c.officer?.start()]);if(c.ended){await Promise.all([c.analysis.stop(),c.officer?.stop()]);return;}c.ready=true;c.connectedAt=new Date().toISOString();send(c.socket,{event:'active',callId:c.id,connectedAt:c.connectedAt});send(agent,{event:'active',callId:c.id,connectedAt:c.connectedAt});announce(c,staffTextOnly?'start_text_reply':'start',staffTextOnly?'상담 내용은 녹음 및 문자로 기록됩니다. 말씀하신 내용은 담당자에게 문자로 전달되며, 답변은 메시지로 받으실 수 있습니다.':'상담 내용은 녹음 및 문자로 기록됩니다. 욕설이 감지되면 텍스트 모드로 전환됩니다.');c.timer=setTimeout(()=>void end(c,'상담 시간이 종료되었습니다.'),maxCallSeconds*1000);list();}
     catch{await end(c,'음성 분석 서버에 연결하지 못했습니다.');}
   }
   function incoming(socket,source,claims){
@@ -77,6 +77,12 @@ export function createPhoneServer({secret,historyFile,historyRetentionDays=30,al
       resetDay();dailySeconds+=.02;if(dailySeconds>maxDailySeconds){void end(c,'오늘의 음성 상담 이용 한도에 도달했습니다.');return;}
       c.relay.fromCaller(pcm?pcm16ToMuLaw(bytes).toString('base64'):payload,pcm?bytes:undefined);
     }else {c.officer?.push(recorded,pcm?bytes:undefined);c.relay.fromOfficer(recorded.toString('base64'));}
+  }
+  function textMessage(c,socket,event){
+    const id=event.messageId,text=typeof event.text==='string'?event.text.trim():'';
+    if(!c?.ready||c.ended||typeof id!=='string'||!id||id.length>80||!text||text.length>4000){send(socket,{event:'delivery_error',messageId:id,message:'메시지를 확인한 뒤 다시 보내 주세요.'});return;}
+    if(!c.messages.some(m=>m.id===id))conversation(c,'staff',{turnId:id,text});
+    send(socket,{event:'delivered',callId:c.id,messageId:id});list();
   }
   const server=http.createServer(async(req,res)=>{
     const url=new URL(req.url,'http://localhost');
@@ -113,6 +119,7 @@ export function createPhoneServer({secret,historyFile,historyRetentionDays=30,al
           const c=calls.get(e.callId);
           if(e.event==='accept'){void accept(c,socket);return;}
           if(!c||c.agent!==socket)return;
+          if(e.event==='text_message'){textMessage(c,socket,e);return;}
           if(e.event==='media')frame(c,e.payload,'officer',e.format);
           if(e.event==='hangup')void end(c);
           if(e.event==='shield')protect(c,'담당자 보호 모드');
@@ -132,7 +139,7 @@ export function createPhoneServer({secret,historyFile,historyRetentionDays=30,al
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   const origins=(process.env.PHONE_ALLOWED_ORIGINS||'https://shield-solve-staff.vercel.app,https://shield-and-solve.vercel.app,http://127.0.0.1:3100').split(',').map(s=>s.trim()).filter(Boolean);
-  const app=createPhoneServer({secret:process.env.PHONE_BRIDGE_SECRET,historyFile:process.env.PHONE_HISTORY_FILE||'outputs/phone-history/calls.json',historyRetentionDays:Number(process.env.PHONE_HISTORY_DAYS||30),allowDemo:false,key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,analysisProvider:process.env.PHONE_ANALYSIS_PROVIDER||'gemini',textProvider:process.env.PHONE_TEXT_PROVIDER||'gemini',geminiModel:process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite',transcriptionModel:process.env.PHONE_GEMINI_TRANSCRIPTION_MODEL||'gemini-3.5-transcribe-live',safetyIntervalMs:Number(process.env.PHONE_SAFETY_INTERVAL_MS||400),playbackDelayMs:Number(process.env.PHONE_AUDIO_DELAY_MS||2500),origins,model:process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'});
+  const app=createPhoneServer({secret:process.env.PHONE_BRIDGE_SECRET,staffTextOnly:true,historyFile:process.env.PHONE_HISTORY_FILE||'outputs/phone-history/calls.json',historyRetentionDays:Number(process.env.PHONE_HISTORY_DAYS||30),allowDemo:false,key:process.env.SERVICE_OPENAI_API_KEY||process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,analysisProvider:process.env.PHONE_ANALYSIS_PROVIDER||'gemini',textProvider:process.env.PHONE_TEXT_PROVIDER||'gemini',geminiModel:process.env.PHONE_GEMINI_MODEL||'gemini-3.5-flash-lite',transcriptionModel:process.env.PHONE_GEMINI_TRANSCRIPTION_MODEL||'gemini-3.5-transcribe-live',safetyIntervalMs:Number(process.env.PHONE_SAFETY_INTERVAL_MS||400),playbackDelayMs:Number(process.env.PHONE_AUDIO_DELAY_MS||2500),origins,model:process.env.SERVICE_OPENAI_MODEL||'gpt-6-luna'});
   app.server.listen(Number(process.env.PHONE_PORT||4318),'127.0.0.1',()=>console.log('Phone bridge listening on 127.0.0.1:'+app.server.address().port));
   for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>void app.close().then(()=>process.exit(0)));
 }
