@@ -44,11 +44,39 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   const audioPreferences=useRef({microphone:'',speaker:''});
   const micPreview=useRef<Session|null>(null);
   function stopMicPreview(){const current=micPreview.current;micPreview.current=null;if(current)release(current);setMicReady(false);setMicLevel(0);}
-  async function checkMicrophone(){stopMicPreview();setMessage('');setMicChecking(true);const current:Session={disposed:false};micPreview.current=current;try{await prepareAudio(current);}catch(error){stopMicPreview();setMessage(error instanceof DOMException&&error.name==='NotAllowedError'?'마이크 사용 권한을 허용해 주세요.':'마이크를 연결하지 못했습니다. 장치 연결을 확인해 주세요.');}finally{setMicChecking(false);}}
+  async function checkMicrophone(){
+    setMessage('');setMicChecking(true);
+    const connectedAudio=session.current?.node?session.current:null;
+    if(connectedAudio){try{await prepareAudio(connectedAudio);}catch{setMessage('마이크를 연결하지 못했습니다. 입력 장치를 다시 선택해 주세요.');}finally{setMicChecking(false);}return;}
+    stopMicPreview();const current:Session={disposed:false};micPreview.current=current;
+    try{await prepareAudio(current);}catch(error){stopMicPreview();setMessage(error instanceof DOMException&&error.name==='NotAllowedError'?'마이크 사용 권한을 허용해 주세요.':'마이크를 연결하지 못했습니다. 장치 연결을 확인해 주세요.');}finally{setMicChecking(false);}
+  }
   function saveAudioPreference(kind:'microphone'|'speaker',deviceId:string){audioPreferences.current[kind]=deviceId;try{localStorage.setItem('minwonsai-audio-'+kind,deviceId);}catch{}}
-  async function chooseMicrophone(deviceId:string){const connection=session.current?.node?session.current:micPreview.current;if(!connection?.context||!connection.node){setSelectedMic(deviceId);saveAudioPreference('microphone',deviceId);return;}setMicChecking(true);setMessage('');try{const microphone=await navigator.mediaDevices.getUserMedia({audio:{deviceId:deviceId?{exact:deviceId}:{ideal:'communications'},echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});if(connection.disposed){microphone.getTracks().forEach(track=>track.stop());return;}const source=connection.context.createMediaStreamSource(microphone);source.connect(connection.node);connection.source?.disconnect();connection.microphone?.getTracks().forEach(track=>track.stop());connection.source=source;connection.microphone=microphone;setSelectedMic(deviceId);saveAudioPreference('microphone',deviceId);setMicDevice(microphone.getAudioTracks()[0]?.label||'마이크');setMicLevel(0);await resumeAudioContext(connection.context);}catch{setMessage('선택한 마이크를 연결하지 못했습니다. 다른 장치를 선택해 주세요.');}finally{setMicChecking(false);}}
+  async function chooseMicrophone(deviceId:string){const connection=session.current?.node?session.current:micPreview.current;if(!connection?.context||!connection.node){setSelectedMic(deviceId);saveAudioPreference('microphone',deviceId);return;}setMicChecking(true);setMessage('');try{const microphone=await navigator.mediaDevices.getUserMedia({audio:{...(deviceId?{deviceId:{exact:deviceId}}:{}),echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});if(connection.disposed){microphone.getTracks().forEach(track=>track.stop());return;}const source=connection.context.createMediaStreamSource(microphone);source.connect(connection.node);connection.source?.disconnect();connection.microphone?.getTracks().forEach(track=>track.stop());connection.source=source;connection.microphone=microphone;rememberMicrophone(microphone);bindCapture(connection);setMicLevel(0);await resumeAudioContext(connection.context);}catch{setMessage('선택한 마이크를 연결하지 못했습니다. 다른 장치를 선택해 주세요.');}finally{setMicChecking(false);}}
   async function chooseSpeaker(deviceId:string){const context=(session.current?.context||micPreview.current?.context) as OutputContext|undefined;try{const sink=deviceId||(speakers.some(device=>device.deviceId==='communications')?'communications':'');if(context?.setSinkId)await context.setSinkId(sink);setSelectedSpeaker(sink);saveAudioPreference('speaker',deviceId);if(context)await resumeAudioContext(context);}catch{setMessage('선택한 듣기 장치를 연결하지 못했습니다. 다른 장치를 선택해 주세요.');}}
   async function refreshDevices(){try{const devices=await navigator.mediaDevices.enumerateDevices();setMicDevices(devices.filter(device=>device.kind==='audioinput'));setSpeakers(devices.filter(device=>device.kind==='audiooutput'));return devices;}catch{return [];}}
+  function rememberMicrophone(microphone:MediaStream){const track=microphone.getAudioTracks()[0],deviceId=track?.getSettings().deviceId||'';setSelectedMic(deviceId);saveAudioPreference('microphone',deviceId);setMicDevice(track?.label||'기본 마이크');setMicReady(true);}
+  function bindCapture(connection:Session){
+    const alive=()=>(session.current===connection||micPreview.current===connection)&&!connection.disposed;
+    const context=connection.context,node=connection.node;if(!context||!node)return;
+    context.onstatechange=()=>{if(alive())setAudioPaused(context.state!=='running');};
+    node.port.onmessage=({data})=>{
+      const socket=connection.socket;
+      if(alive()&&data.type==='level')setMicLevel(Math.max(0,Math.min(1,Number(data.value)||0)));
+      if(alive()&&data.type==='frame'&&active.current&&socket?.readyState===WebSocket.OPEN&&socket.bufferedAmount<32000){const bytes=new Uint8Array(data.frame);if(noticePlaying.current)bytes.fill(0);socket.send(JSON.stringify({event:'media',callId:active.current,format:data.format,payload:btoa(String.fromCharCode(...bytes))}));}
+    };
+    const track=connection.microphone?.getAudioTracks()[0];
+    if(track)track.onended=()=>{if(alive()&&connection.microphone?.getAudioTracks()[0]===track){setMicReady(false);setMicLevel(0);setMessage('마이크 연결이 끊겼습니다. 마이크를 다시 선택해 주세요.');}};
+  }
+  function useCheckedMicrophone(connection:Session){
+    const preview=micPreview.current;if(!preview)return;
+    if(!preview.node||!preview.context||preview.microphone?.getAudioTracks()[0]?.readyState!=='live'){stopMicPreview();return;}
+    // Move the working graph; reopening a Bluetooth microphone can switch profiles or lose input.
+    micPreview.current=null;
+    connection.context=preview.context;connection.node=preview.node;connection.source=preview.source;connection.microphone=preview.microphone;
+    preview.disposed=true;preview.context=undefined;preview.node=undefined;preview.source=undefined;preview.microphone=undefined;
+    bindCapture(connection);
+  }
   const [pending,setPending]=useState<Record<string,string>>({});
   const textMode=useRef(false),noticePlayer=useRef<AudioBufferSourceNode|null>(null),noticePlaying=useRef(false),noticeSequence=useRef(0),receivingRequested=useRef(false);
   function stopNotice(){noticeSequence.current++;try{noticePlayer.current?.stop();}catch{}noticePlayer.current?.disconnect();noticePlayer.current=null;noticePlaying.current=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();}
@@ -59,6 +87,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     else{noticePlaying.current=false;setMessage(text);}
   }
   const session=useRef<Session|null>(null),active=useRef(''),currentCall=useRef(''),historyCall=useRef('');
+  const callsVersion=useRef(0);
   const callerHistory=phoneHistoryScope(calls,currentCall.current);
   const displayCalls=staff?callerHistory.history:calls;
   const call=displayCalls.find(c=>c.id===selected),segments=call?.segments||[];
@@ -80,12 +109,17 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   },[]);
   useEffect(()=>{
     let live=true;
-    async function status(){try{const response=await fetch('/api/phone',{cache:'no-store',signal:AbortSignal.timeout(7000)});const data=await response.json();if(live){setOnline(response.ok&&data.online===true);setAvailable(response.ok&&data.available===true);if(staff&&receivingRequested.current&&response.ok&&data.online===true&&!session.current)void connect();}}catch{if(live){setOnline(false);setAvailable(false);}}}
-    void status();const timer=setInterval(status,15000);
+    let checking=false;
+    async function status(){if(checking)return;checking=true;try{const response=await fetch('/api/phone',{cache:'no-store',signal:AbortSignal.timeout(7000)});const data=await response.json();if(live){setOnline(response.ok&&data.online===true);setAvailable(response.ok&&data.available===true);if(staff&&receivingRequested.current&&response.ok&&data.online===true&&!session.current)void connect();
+      const connection=session.current,version=callsVersion.current;
+      if(staff&&receivingRequested.current&&connection?.socket?.readyState===WebSocket.OPEN){try{const snapshot=await fetch('/api/phone?history=1',{cache:'no-store',signal:AbortSignal.timeout(5000)});if(snapshot.ok){const result=await snapshot.json();if(live&&session.current===connection&&version===callsVersion.current&&Array.isArray(result.calls)){const owned=result.calls.find((row:Call)=>row.id===currentCall.current);if(owned?.status==='ended')finishCurrentCall(connection);applyCalls(result.calls);}}}catch{/* The live socket still handles reception when the recovery request fails. */}}
+    }}catch{if(live){setOnline(false);setAvailable(false);}}finally{checking=false;}}
+    void status();const timer=setInterval(status,5000);
     return()=>{live=false;clearInterval(timer);stopNotice();const preview=micPreview.current;micPreview.current=null;if(preview)release(preview);const current=session.current;session.current=null;if(current)release(current);};
   },[]);
   useEffect(()=>{const before=(event:BeforeUnloadEvent)=>{if(currentCall.current){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',before);return()=>window.removeEventListener('beforeunload',before);},[]);
   function applyCalls(rows:Call[]){
+    callsVersion.current++;
     const visible=rows.filter(row=>row.source!=='demo');
     setCalls(visible);
     const ownedCallId=currentCall.current,previousCallId=historyCall.current;
@@ -109,18 +143,18 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   },[state]);
 
   async function prepareAudio(connection:Session){
-    if(connection.node){if(connection.context)await resumeAudioContext(connection.context);return;}
+    if(connection.node&&connection.microphone?.getAudioTracks()[0]?.readyState==='live'){if(connection.context)await resumeAudioContext(connection.context);return;}
+    if(connection.node)releaseAudio(connection);
     const alive=()=>(session.current===connection||micPreview.current===connection)&&!connection.disposed;
     const context=new AudioContext();connection.context=context;
     context.onstatechange=()=>{if(alive())setAudioPaused(context.state!=='running');};
     // Unlock on the click, but do not wait before showing the microphone permission prompt.
     void context.resume().catch(()=>{});
     const preferredMic=audioPreferences.current.microphone;
-    const microphone=await navigator.mediaDevices.getUserMedia({audio:{deviceId:preferredMic?{ideal:preferredMic}:{ideal:'communications'},echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
+    const microphone=await navigator.mediaDevices.getUserMedia({audio:{...(preferredMic?{deviceId:{exact:preferredMic}}:{}),echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
     if(!alive()){microphone.getTracks().forEach(track=>track.stop());return;}
     connection.microphone=microphone;
-    setMicDevice(microphone.getAudioTracks()[0]?.label||'기본 마이크');setMicReady(true);
-    setSelectedMic(microphone.getAudioTracks()[0]?.getSettings().deviceId||'');
+    rememberMicrophone(microphone);
     const devices=await refreshDevices();if(!alive())return;
     const output=context as OutputContext;
     if(output.setSinkId){const preferred=audioPreferences.current.speaker;const sink=devices.some(device=>device.kind==='audiooutput'&&device.deviceId===preferred)?preferred:devices.some(device=>device.kind==='audiooutput'&&device.deviceId==='communications')?'communications':'';try{await output.setSinkId(sink);setSelectedSpeaker(sink);}catch{setMessage('듣기 장치를 연결하지 못했습니다. 스피커·이어폰을 다시 선택해 주세요.');}}
@@ -129,16 +163,12 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     node.port.postMessage({type:'capture_format',format:'pcm16-16000'});
     connection.source=context.createMediaStreamSource(microphone);connection.source.connect(node);node.connect(context.destination);
     await resumeAudioContext(context);if(!alive())return;
-    node.port.onmessage=({data})=>{
-      const socket=connection.socket;
-      if(alive()&&data.type==='level')setMicLevel(noticePlaying.current?0:Math.max(0,Math.min(1,Number(data.value)||0)));
-      if(alive()&&data.type==='frame'&&active.current&&socket?.readyState===WebSocket.OPEN&&socket.bufferedAmount<32000){const bytes=new Uint8Array(data.frame);if(noticePlaying.current)bytes.fill(0);socket.send(JSON.stringify({event:'media',callId:active.current,format:data.format,payload:btoa(String.fromCharCode(...bytes))}));}
-    };
+    bindCapture(connection);
   }
   async function accept(){
     const call=waitingCall;
     const current=session.current;if(!current||!call||call.status!=='waiting')return;
-    stopMicPreview();
+    useCheckedMicrophone(current);
     setSelected(call.id);
     setMessage('');setState('connecting');
     try{await prepareAudio(current);if(session.current===current&&!current.disposed)send({event:'accept',callId:call.id});}
@@ -147,12 +177,11 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
 
   async function connect(){
     if(session.current)return;
-    stopMicPreview();
     if(!staff&&!nickname.trim()){setMessage('닉네임을 입력해 주세요.');return;}
     setState('connecting');setMessage('');setElapsed(0);setConnectedAt(null);setAudioPaused(false);textMode.current=false;stopNotice();
     let current:Session|undefined;
     try{
-      current={disposed:false};session.current=current;
+      current={disposed:false};session.current=current;useCheckedMicrophone(current);
       const connection=current;
       const alive=()=>session.current===connection&&!connection.disposed;
       connection.timer=setTimeout(()=>{if(alive()){disconnect();setMessage('연결 시간이 초과되었습니다. 마이크 권한과 네트워크를 확인해 주세요.');}},30000);
@@ -194,10 +223,8 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
           setMessage(event.message||'내용을 확인해 주세요.');
         }
         if(event.event==='ended'){
-          active.current='';currentCall.current='';historyCall.current='';textMode.current=false;setConnectedAt(null);setElapsed(0);setAudioPaused(false);setMicLevel(0);setPending({});connection.node?.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage('');
-          setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,status:'ended',typing:{caller:false,staff:false}}:c));if(staff)setSelected('');
-          releaseAudio(connection);setMicReady(false);stopNotice();
-          if(!staff){session.current=null;release(connection);}
+          setCalls(previous=>previous.map(c=>c.id===event.callId?{...c,status:'ended',typing:{caller:false,staff:false}}:c));
+          if(!event.callId||!currentCall.current||event.callId===currentCall.current)finishCurrentCall(connection);
         }
         if(event.event==='accept_error'){releaseAudio(connection);setState('ready');}
         if(event.event==='error'||event.event==='accept_error')setMessage(event.message||'연결 오류');
@@ -213,6 +240,11 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
   }
 
   async function resumeAudio(){try{if(session.current?.context)await resumeAudioContext(session.current.context);}catch{setMessage('오디오를 켜지 못했습니다. 통화를 다시 연결해 주세요.');}}
+  function finishCurrentCall(connection:Session){
+    active.current='';currentCall.current='';historyCall.current='';textMode.current=false;setConnectedAt(null);setElapsed(0);setPending({});connection.node?.port.postMessage({type:'clear'});setState(staff?'ready':'ended');setMessage('');stopNotice();
+    if(staff){setSelected('');setAudioPaused(connection.context?.state!=='running');}
+    else{setAudioPaused(false);setMicLevel(0);setMicReady(false);session.current=null;release(connection);}
+  }
 
   return <section className={'phone-desk phone-live '+(staff?'phone-staff':'phone-caller')}>
     <div className="phone-heading"><h1>{staff?'전화 상담':'민원 상담'}</h1><div className="phone-actions">
@@ -221,7 +253,7 @@ export default function PhoneDesk({staff,demo=false,onRegistered}:{staff:boolean
     {message&&<div className="phone-notice" role="alert">{message}</div>}
     {state==='active'&&audioPaused&&<button onClick={()=>void resumeAudio()}>오디오 켜기</button>}
     <div className="phone-mic-input">
-      <label>마이크<select aria-label="입력 마이크 선택" value={selectedMic} onChange={event=>void chooseMicrophone(event.target.value)} disabled={micChecking}><option value="">통화용 기본 마이크</option>{micDevices.map(device=><option key={device.deviceId} value={device.deviceId}>{device.label||'마이크'}</option>)}</select></label>
+      <label>마이크<select aria-label="입력 마이크 선택" value={selectedMic} onChange={event=>void chooseMicrophone(event.target.value)} disabled={micChecking}><option value="">시스템 기본 마이크</option>{micDevices.map(device=><option key={device.deviceId} value={device.deviceId}>{device.label||'마이크'}</option>)}</select></label>
       <label>스피커·이어폰<select aria-label="듣기 장치 선택" value={selectedSpeaker} onChange={event=>void chooseSpeaker(event.target.value)} disabled={!outputSupported}><option value="">통화용 기본 출력</option>{speakers.map(device=><option key={device.deviceId} value={device.deviceId}>{device.label||'스피커'}</option>)}</select></label>
       {!['active','connecting','waiting'].includes(state)&&<button type="button" onClick={()=>void checkMicrophone()} disabled={micChecking}>{micChecking?'확인 중':'마이크 확인'}</button>}
       <span>{!micReady?'마이크 확인 전':audioPaused?'오디오 일시 정지':noticePlaying.current?'통화 안내 중':micLevel>.002?'마이크 입력 중':'마이크 입력 대기'}</span><meter aria-label="마이크 입력 크기" min={0} max={1} value={micLevel}/>
