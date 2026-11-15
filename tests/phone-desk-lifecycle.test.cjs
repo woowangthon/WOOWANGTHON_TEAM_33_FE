@@ -31,7 +31,7 @@ function desk(){
   const source=fs.readFileSync('app/phone-desk.tsx','utf8');
   const cut=source.indexOf('  return <section className=');assert.ok(cut>0);
   const code=ts.transpileModule(source.slice(0,cut)+'  return {checkMicrophone,chooseMicrophone,connect,accept,state,calls,waitingCall,receivingRequested};\n}',{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-  const out={},load=require('../evals/loader.cjs')();
+  const out={},load=require('./helpers/loader.cjs')();
   new Function('require','exports','AudioContext','AudioWorkletNode','WebSocket','navigator','window','localStorage','fetch','setInterval','clearInterval',code)(name=>{
     if(name==='react')return hooks;if(name.includes('phone-history-scope'))return load('lib/phone-history-scope.ts');if(name.includes('phone-notice'))return load('lib/phone-notice.ts');return{};
   },out,Context,Worklet,Socket,{mediaDevices},{},{getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)},fetcher,fn=>{intervals.push(fn);return intervals.length;},()=>{});
@@ -81,3 +81,4 @@ test('a missed hangup does not leave the next incoming call hidden behind active
   assert.equal(d.render().state,'ready');assert.equal(d.render().waitingCall.id,'next');await d.render().accept();assert.equal(ws.sent.at(-1).callId,'next');
   assert.equal(d.requests.length,1);cleanup();
 });
+
