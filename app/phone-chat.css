@@ -48,3 +48,4 @@
 .phone-mic-input{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:28px;margin:-4px 0 10px;color:#315b8e;font-size:13px}.phone-mic-input meter{width:88px;height:12px;accent-color:#2459a6}
 .phone-mic-input{flex-wrap:wrap}.phone-mic-input button{padding:6px 10px;background:white;color:#2459a6;border:1px solid #bdd0ec;border-radius:7px;font:inherit}.phone-mic-input small{font-size:11px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .phone-mic-input select{max-width:260px;min-width:0;border:1px solid #bdd0ec;border-radius:7px;padding:6px;color:#315b8e;background:white;font-size:12px}
+.phone-mic-input label{display:flex;align-items:center;gap:6px;font-weight:500}.phone-mic-input select{width:220px}@media(max-width:640px){.phone-mic-input{justify-content:flex-start}.phone-mic-input label{width:100%;justify-content:space-between}.phone-mic-input select{flex:1;max-width:calc(100% - 100px)}}
