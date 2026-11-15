@@ -1,6 +1,6 @@
 import type {AssistanceInput} from './phone-assistance';
 
-type RecordedCall={id:string;callerId?:string;startedAt:string;status:string;messages?:{speaker:'caller'|'staff';text:string;at:string}[];segments:{text:string}[]};
+type RecordedCall={id:string;callerId?:string;startedAt:string;status:string;messages?:{id?:string;speaker:'caller'|'staff';text:string;at:string}[];segments:{text:string}[]};
 
 export function phoneAssistanceContext(calls:RecordedCall[],selected:string):Pick<AssistanceInput,'conversation'|'priorCalls'>{
   const current=calls.find(call=>call.id===selected);
@@ -10,7 +10,7 @@ export function phoneAssistanceContext(calls:RecordedCall[],selected:string):Pic
   const conversation=(current.messages||[]).slice(-40).reverse().flatMap(message=>{
     if(remaining<=0)return [];
     const text=message.text.slice(0,Math.min(1500,remaining));remaining-=text.length;
-    return [{speaker:message.speaker,text,at:message.at}];
+    return [{turnId:message.id,speaker:message.speaker,text,at:message.at}];
   }).reverse();
   remaining=18000;
   const priorCalls=current.callerId?calls.filter(call=>call.id!==current.id&&call.callerId===current.callerId&&call.status==='ended'&&call.startedAt<current.startedAt)

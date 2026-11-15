@@ -16,6 +16,11 @@ test('large history is bounded and explicitly marked as an excerpt',()=>{
   assert.equal(context.priorCalls[0].transcript.length,6000);assert.equal(context.priorCalls[0].excerpted,true);
 });
 
+test('the source caller utterance replaces an incorrect extracted request instead of repeating it to the model',()=>{
+  const input=h.assistanceInput.parse({callId:'call',revision:'1',segments:[{turnId:'turn',text:'신청 삭제 요청',facts:[{kind:'request',value:'신청 삭제 요청'}]}],conversation:[{turnId:'turn',speaker:'caller',at:'now',text:'접수한 가로등이 아직도 안 켜지는데 언제 수리하나요?'}]});
+  assert.deepEqual(h.assistanceRequests(input),[{id:'R1',text:'접수한 가로등이 아직도 안 켜지는데 언제 수리하나요?'}]);
+});
+
 test('both model providers receive conversation and prior context, while request IDs remain current-only',async()=>{
   const previous=global.fetch,bodies=[];
   const context=phoneAssistanceContext([call('current','a',15),call('old','a',14)],'current');
