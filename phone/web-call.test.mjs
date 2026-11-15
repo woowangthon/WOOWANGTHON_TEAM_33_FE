@@ -49,7 +49,7 @@ test('waiting caller is notified as soon as the last officer disconnects',async 
 
 test('cancel during AI startup never activates a ghost call',async t=>{
   let start,stops=0;const {pair}=await setup(t,{analysisFactory:()=>({start:()=>new Promise(resolve=>{start=resolve;}),stop:async()=>{stops++;},push:()=>{}})});
-  const {staff,caller,call}=await pair();staff.send({event:'accept',callId:call.id});await until(()=>start);
+  const {staff,caller,call}=await pair();staff.send({event:'accept',callId:call.id});await until(()=>start&&staff.events.some(e=>e.event==='calls'&&e.calls.some(row=>row.id===call.id&&row.status==='connecting')));
   assert.equal(staff.events.filter(e=>e.event==='calls').at(-1).calls[0].status,'connecting');
   caller.send({event:'hangup'});await until(()=>call.ended);start();await until(()=>stops>=2);
   assert.equal(call.ready,false);assert.equal(staff.events.some(e=>e.event==='active'),false);

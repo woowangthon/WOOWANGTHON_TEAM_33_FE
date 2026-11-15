@@ -5,6 +5,10 @@
 - [담당자 업무](https://shield-solve-staff.vercel.app/) · [민원인 홈페이지](https://shield-and-solve.vercel.app/)
 - [담당자 전화 상담](https://shield-solve-staff.vercel.app/phone) · [민원인 전화 상담](https://shield-and-solve.vercel.app/phone)
 - [팀 Notion](https://www.notion.so/41034d7f11c2810ea737dada0f8cea88)
+- [최종 시연 영상 · 1분 59초](https://youtu.be/7-oxolmVdQg)
+- [W33 프로젝트 아카이빙](https://github.com/woowangthon/hub/tree/W33)
+
+공개 시연 사이트는 별도 계정이나 설치 없이 사용할 수 있습니다. 음성 상담은 담당자 화면에서 수신을 시작한 뒤 민원인이 연결하며, 각 기기의 마이크 권한과 헤드셋이 필요합니다. 배포된 음성 중계 서버는 AWS EC2에서 실행합니다.
 
 ## 기능
 
