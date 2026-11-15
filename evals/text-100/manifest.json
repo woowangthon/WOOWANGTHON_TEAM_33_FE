@@ -1,0 +1,58 @@
+{
+  "version": "acrc-natural-agent-v3",
+  "publishedDate": "2026-11-15",
+  "counts": {
+    "original": 50,
+    "synthetic": 50,
+    "total": 100,
+    "sourcePairs": 50
+  },
+  "source": {
+    "id": "15074671",
+    "name": "국민권익위원회_민원정책 질의응답조회서비스",
+    "url": "https://www.data.go.kr/data/15074671/openapi.do",
+    "license": "이용허락범위 제한 없음",
+    "licenseCheckedAt": "2026-11-15",
+    "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+  },
+  "validation": {
+    "uniqueIds": true,
+    "pairedInputs": true,
+    "originalsMatchCollectedSource": true,
+    "attackQuotesPresentInSyntheticBody": true
+  },
+  "files": {
+    "complaints-100.csv": {
+      "sha256": "d154a1d16535df17d0257bd6dbd830f227e18cd03acf264625a274233daa26ea",
+      "bytes": 29281
+    },
+    "dataset.json": {
+      "sha256": "cbe5e83770bd782a02de7faa5e678c48d1f873793ec2397ddcea103bb03b1e97",
+      "bytes": 170740
+    },
+    "original-50.json": {
+      "sha256": "bd7deda6816eb392c337fc4adb4c0721cb8928bf5ff39c5450e99d9a2fab5752",
+      "bytes": 73633
+    },
+    "preparation.json": {
+      "sha256": "0b1e645cde7b93d34a3050c03e7d09fa11ee4613d681e725a4f0f36d8ba4b8b0",
+      "bytes": 831
+    },
+    "prompts.json": {
+      "sha256": "6de679fdf240c33da9dc79877cba7bb2e1f49a3866b5f44bf3df9dbccc5d4208",
+      "bytes": 1231
+    },
+    "README.md": {
+      "sha256": "720e857409ea6b4822be1aee6abe80f7c1d47176d2217bb6203db88838ad4665",
+      "bytes": 2811
+    },
+    "sources.json": {
+      "sha256": "9e58c0803d0b2bb8c600a47185b135e4ccda5dfdee13ab133f9fb76f30c58543",
+      "bytes": 68592
+    },
+    "synthetic-50.json": {
+      "sha256": "04fada4bd14e859e75b6a802049b6c4d25f7686accaa3ac718756679512a34fc",
+      "bytes": 92053
+    }
+  }
+}

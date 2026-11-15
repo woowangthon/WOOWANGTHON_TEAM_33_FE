@@ -1,0 +1,22 @@
+{
+  "version": "acrc-natural-agent-v3",
+  "model": "Codex 작성 에이전트 2개 + 별도 검토 에이전트; 기존 사실 초안은 gpt-6-luna",
+  "createdAt": "2026-11-15T02:11:45.754Z",
+  "sourceDatasetHash": "7a88c033ec85bc9a5760765e58831f60fbcba9c62ef38527bd379f63d85ab1e0",
+  "authors": [
+    "natural_complaints_1",
+    "natural_complaints_2"
+  ],
+  "reviewFiles": [
+    "review.json",
+    "reference-review.json",
+    "final-language-review.json"
+  ],
+  "replaced": {
+    "removed": "ACRC-6917544",
+    "added": "ACRC-307911",
+    "reason": "감사글은 욕설 변형에 부적합하여 같은 공개 Q&A의 완결된 질의로 교체"
+  },
+  "steps": "50개별 재작성 → 독립 검토와 27수정안 → 사실 기준 재검토 → 최종 표현 재검토 → 통합 및 구조 검사",
+  "humanReviewed": false
+}

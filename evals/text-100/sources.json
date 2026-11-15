@@ -1,0 +1,1302 @@
+[
+  {
+    "id": "ACRC-6916133",
+    "title": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인가요?",
+    "complaintContent": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "소음",
+    "provenance": {
+      "id": "ACRC-6916133",
+      "faqNo": "6916133",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260826",
+      "agency": "충청남도 부여군",
+      "rawTitle": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인가요?",
+      "rawQuestion": "자동차 배기음이 순정 차량보다 큰 경우 자동차관리법 위반사항인가요?",
+      "rawQuestionSha256": "fabbb540cbfa553f85523169abdc1152830f87f25df058b265b997a7d75c23d9",
+      "normalizedQuestionSha256": "fabbb540cbfa553f85523169abdc1152830f87f25df058b265b997a7d75c23d9"
+    }
+  },
+  {
+    "id": "ACRC-6915922",
+    "title": "도서관 노트북 사용공간 문의",
+    "complaintContent": "도서관에 노트북을 이용하여 학습할 수 있는 공간이 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "소음",
+    "provenance": {
+      "id": "ACRC-6915922",
+      "faqNo": "6915922",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260807",
+      "agency": "서울특별시교육청",
+      "rawTitle": "도서관 노트북 사용공간 문의",
+      "rawQuestion": "도서관에 노트북을 이용하여 학습할 수 있는 공간이 있나요?",
+      "rawQuestionSha256": "de5064e60b99a6626ec0393315dff2b2bf9098d7e14726a8d9e99a50f69d6bcd",
+      "normalizedQuestionSha256": "de5064e60b99a6626ec0393315dff2b2bf9098d7e14726a8d9e99a50f69d6bcd"
+    }
+  },
+  {
+    "id": "ACRC-6915738",
+    "title": "응답소 현장민원의 처리기한",
+    "complaintContent": "응답소 현장민원의 처리기한은 어떻게 되나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "소음",
+    "provenance": {
+      "id": "ACRC-6915738",
+      "faqNo": "6915738",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "서울특별시 마포구",
+      "rawTitle": "응답소 현장민원의 처리기한",
+      "rawQuestion": "응답소 현장민원의 처리기한은 어떻게 되나요?",
+      "rawQuestionSha256": "c21a4670402aa02c70af7f95e108655f37fee62ceca835d4382afa666d51f3ef",
+      "normalizedQuestionSha256": "c21a4670402aa02c70af7f95e108655f37fee62ceca835d4382afa666d51f3ef"
+    }
+  },
+  {
+    "id": "ACRC-6915848",
+    "title": "반려동물 울음 소리",
+    "complaintContent": "○○○○ 번지에서 개를 키우는데 개 짖는 소리 때문에 저녁에 잠을 잘 수가 없는데 조치 요청드립니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "소음",
+    "provenance": {
+      "id": "ACRC-6915848",
+      "faqNo": "6915848",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "전남광주통합특별시 순천시",
+      "rawTitle": "반려동물 울음 소리",
+      "rawQuestion": "○○○○ 번지에서 개를 키우는데 개 짖는 소리 때문에 저녁에 잠을 잘 수가 없는데 조치 요청드립니다.",
+      "rawQuestionSha256": "58dc46e229016d770aeab686f351feb5b7f0879b316e39c8b7d8b9699f1dacbf",
+      "normalizedQuestionSha256": "58dc46e229016d770aeab686f351feb5b7f0879b316e39c8b7d8b9699f1dacbf"
+    }
+  },
+  {
+    "id": "ACRC-6915155",
+    "title": "사업장(공사장, 확성기) 소음 단속",
+    "complaintContent": "사업장(공사장, 확성기 등) 소음 단속",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "소음",
+    "provenance": {
+      "id": "ACRC-6915155",
+      "faqNo": "6915155",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "경기도 부천시",
+      "rawTitle": "사업장(공사장, 확성기) 소음 단속",
+      "rawQuestion": "사업장(공사장, 확성기 등) 소음 단속",
+      "rawQuestionSha256": "b517328bec83f6774bd3384b05ba10b4e6516431419ca3178d1001c9697e0825",
+      "normalizedQuestionSha256": "b517328bec83f6774bd3384b05ba10b4e6516431419ca3178d1001c9697e0825"
+    }
+  },
+  {
+    "id": "ACRC-6916908",
+    "title": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제",
+    "complaintContent": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상 문의",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "폐기물",
+    "provenance": {
+      "id": "ACRC-6916908",
+      "faqNo": "6916908",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261013",
+      "agency": "국세청",
+      "rawTitle": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제",
+      "rawQuestion": "중고자동차 구입에 따른 부가가치세 폐자원매입세액 공제 대상 문의",
+      "rawQuestionSha256": "333e06f8943360c1f32b042fecf20bd7d593259e3b587464e557af202a63d6a0",
+      "normalizedQuestionSha256": "333e06f8943360c1f32b042fecf20bd7d593259e3b587464e557af202a63d6a0"
+    }
+  },
+  {
+    "id": "ACRC-6916651",
+    "title": "대형폐기물은 어떻게 버리나요?",
+    "complaintContent": "대형폐기물 배출 절차가 궁금합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "폐기물",
+    "provenance": {
+      "id": "ACRC-6916651",
+      "faqNo": "6916651",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261012",
+      "agency": "경기도 용인시",
+      "rawTitle": "대형폐기물은 어떻게 버리나요?",
+      "rawQuestion": "대형폐기물 배출 절차가 궁금합니다.",
+      "rawQuestionSha256": "8f6a7fcfbcbc93bcd0da7b7b158985eb87358bbb6b47844b80ccc35a8df0b860",
+      "normalizedQuestionSha256": "8f6a7fcfbcbc93bcd0da7b7b158985eb87358bbb6b47844b80ccc35a8df0b860"
+    }
+  },
+  {
+    "id": "ACRC-6916203",
+    "title": "내용연수가 지난 폐소화기 폐기방법은 어떻게 되나요?",
+    "complaintContent": "내용연수가 지난 폐소화기 폐기방법",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "폐기물",
+    "provenance": {
+      "id": "ACRC-6916203",
+      "faqNo": "6916203",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260901",
+      "agency": "대구광역시",
+      "rawTitle": "내용연수가 지난 폐소화기 폐기방법은 어떻게 되나요?",
+      "rawQuestion": "내용연수가 지난 폐소화기 폐기방법",
+      "rawQuestionSha256": "b88b1b7c1fea413f647fc9a36cdaf7e44e6f356592b0a26c40cded309f412679",
+      "normalizedQuestionSha256": "b88b1b7c1fea413f647fc9a36cdaf7e44e6f356592b0a26c40cded309f412679"
+    }
+  },
+  {
+    "id": "ACRC-6915827",
+    "title": "쓰레기 배출 요령 알려 드립니다.",
+    "complaintContent": "각종 쓰레기(가구, 대형폐기물 등) 처리 방법 문의 드립니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "폐기물",
+    "provenance": {
+      "id": "ACRC-6915827",
+      "faqNo": "6915827",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260804",
+      "agency": "경기도 평택시",
+      "rawTitle": "쓰레기 배출 요령 알려 드립니다.",
+      "rawQuestion": "각종 쓰레기(가구, 대형폐기물 등) 처리 방법 문의 드립니다.",
+      "rawQuestionSha256": "bafe43420736d066a90994ca70d42f775e99eea221988b4afe0fb276cd94105e",
+      "normalizedQuestionSha256": "bafe43420736d066a90994ca70d42f775e99eea221988b4afe0fb276cd94105e"
+    }
+  },
+  {
+    "id": "ACRC-6915148",
+    "title": "담배꽁초 무단투기를 신고하고 싶습니다.",
+    "complaintContent": "담배꽁초 무단투기를 신고하고 싶습니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "폐기물",
+    "provenance": {
+      "id": "ACRC-6915148",
+      "faqNo": "6915148",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "경기도 부천시",
+      "rawTitle": "담배꽁초 무단투기를 신고하고 싶습니다.",
+      "rawQuestion": "담배꽁초 무단투기를 신고하고 싶습니다.",
+      "rawQuestionSha256": "bc0bcbe43c3b754de2c633a06b68975b936902993fdd51df80782bf555fc61cf",
+      "normalizedQuestionSha256": "bc0bcbe43c3b754de2c633a06b68975b936902993fdd51df80782bf555fc61cf"
+    }
+  },
+  {
+    "id": "ACRC-6917218",
+    "title": "광한루원 주차요금이 있나요",
+    "complaintContent": "광한루원 주차는 유료인가요",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "주차",
+    "provenance": {
+      "id": "ACRC-6917218",
+      "faqNo": "6917218",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261029",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "광한루원 주차요금이 있나요",
+      "rawQuestion": "광한루원 주차는 유료인가요",
+      "rawQuestionSha256": "f332b2114a2d2736e693b01e1a69c42bca5716ef86e38f42593cdfc014aa43fb",
+      "normalizedQuestionSha256": "f332b2114a2d2736e693b01e1a69c42bca5716ef86e38f42593cdfc014aa43fb"
+    }
+  },
+  {
+    "id": "ACRC-6916759",
+    "title": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+    "complaintContent": "연면적이 1,000㎡ 이상인 복합용도 건축물로 1층은 농산물 판매시설로 사용하고 있으며 2층은 음식점으로 운영하고 있습니다.\n또한 2층 음식점과 계단으로 연결된 카페도 있는 경우 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는 건가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "주차",
+    "provenance": {
+      "id": "ACRC-6916759",
+      "faqNo": "6916759",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261027",
+      "agency": "충청북도 보은군",
+      "rawTitle": "복합용도 건축물 내 음식점 및 판매시설의 금연구역 지정 범위",
+      "rawQuestion": "연면적이 1,000㎡ 이상인 복합용도 건축물로 1층은 농산물 판매시설로 사용하고 있으며 2층은 음식점으로 운영하고 있습니다.\n또한 2층 음식점과 계단으로 연결된 카페도 있는 경우 건축물 전체를 음식점으로 보아 금연구역으로 지정해야 하는 건가요?",
+      "rawQuestionSha256": "764a1bc20f331b3784e85a4b9a1b57e57c59b33171f4ebfd68bc3b26e8fb6f67",
+      "normalizedQuestionSha256": "764a1bc20f331b3784e85a4b9a1b57e57c59b33171f4ebfd68bc3b26e8fb6f67"
+    }
+  },
+  {
+    "id": "ACRC-184869",
+    "title": "도로점용의 허가기간",
+    "complaintContent": "1.도로점용허가를 받았는데, 도로점용허가의 허가기간은 어떻게 되나요?\n2. 만일 허가기간이 만료되었을 때에는 어떻게 해야 하나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "주차",
+    "provenance": {
+      "id": "ACRC-184869",
+      "faqNo": "184869",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261026",
+      "agency": "국토교통부",
+      "rawTitle": "도로점용의 허가기간",
+      "rawQuestion": "1.도로점용허가를 받았는데, 도로점용허가의 허가기간은 어떻게 되나요?&lt;br/&gt;2. 만일 허가기간이 만료되었을 때에는 어떻게 해야 하나요?",
+      "rawQuestionSha256": "879819b4cfde0cfec13d01249e9356610dada8edd36016a19413beca7939c212",
+      "normalizedQuestionSha256": "ff956529de48ff35cdb6ec849b4853069dc708ef8799d3096f58c65cb087a0c7"
+    }
+  },
+  {
+    "id": "ACRC-367689",
+    "title": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우",
+    "complaintContent": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우 어떻게 해결해야 하는지에 대해 문의합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "주차",
+    "provenance": {
+      "id": "ACRC-367689",
+      "faqNo": "367689",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261026",
+      "agency": "국토교통부",
+      "rawTitle": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우",
+      "rawQuestion": "도로점용(연결)허가 신청 시 연결로가 중첩될 경우 어떻게 해결해야 하는지에 대해 문의합니다.",
+      "rawQuestionSha256": "dd1f6d0fa4e22303f111a306cfc8fe14f438064f4bbeca4709064fed16beb00f",
+      "normalizedQuestionSha256": "dd1f6d0fa4e22303f111a306cfc8fe14f438064f4bbeca4709064fed16beb00f"
+    }
+  },
+  {
+    "id": "ACRC-6916948",
+    "title": "모범납세자에게 어떤 혜택이 있나요?",
+    "complaintContent": "국세청 홈텍스로 모범납세자를 신청했습니다.\n모범납세자에 선정되면 어떤 혜택이 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "주차",
+    "provenance": {
+      "id": "ACRC-6916948",
+      "faqNo": "6916948",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261014",
+      "agency": "국세청",
+      "rawTitle": "모범납세자에게 어떤 혜택이 있나요?",
+      "rawQuestion": "국세청 홈텍스로 모범납세자를 신청했습니다.\n모범납세자에 선정되면 어떤 혜택이 있나요?\n",
+      "rawQuestionSha256": "cfe4458bad94bbee361b546bc68866943866a5939524edfa145f1b48477ed06d",
+      "normalizedQuestionSha256": "02c36b4e4d8ef0ae71e62e0af278740c033e4184535f4500ebcaaae1da43f72a"
+    }
+  },
+  {
+    "id": "ACRC-6917251",
+    "title": "1사단 신병교육대대 관련 도로표지판 제거 요청",
+    "complaintContent": "1사단 신병교육대대가 없어진 것으로 알고 있습니다.\n문산 사거리 인근에 신병교육대대 표지판이 남아 있어서 혼동방지를 위해 표지판을 제거해주시기 바랍니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-6917251",
+      "faqNo": "6917251",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261030",
+      "agency": "국방부",
+      "rawTitle": "1사단 신병교육대대 관련 도로표지판 제거 요청",
+      "rawQuestion": "1사단 신병교육대대가 없어진 것으로 알고 있습니다.\n문산 사거리 인근에 신병교육대대 표지판이 남아 있어서 혼동방지를 위해 표지판을 제거해주시기 바랍니다.",
+      "rawQuestionSha256": "ea945d2cf8d16d3cf75b2d51b2a466f7266cd6e8c37c3f745e9f58ce72c87cdf",
+      "normalizedQuestionSha256": "ea945d2cf8d16d3cf75b2d51b2a466f7266cd6e8c37c3f745e9f58ce72c87cdf"
+    }
+  },
+  {
+    "id": "ACRC-360044",
+    "title": "국토관리사무소의 업무는 무엇인가요?",
+    "complaintContent": "국토관리사무소의 업무는 무엇인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-360044",
+      "faqNo": "360044",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261028",
+      "agency": "국토교통부",
+      "rawTitle": "국토관리사무소의 업무는 무엇인가요?",
+      "rawQuestion": "국토관리사무소의 업무는 무엇인가요?",
+      "rawQuestionSha256": "9c2037d3903126579167ae69dc43f7c32e41cb9d9b63334704924cf39cda45cc",
+      "normalizedQuestionSha256": "9c2037d3903126579167ae69dc43f7c32e41cb9d9b63334704924cf39cda45cc"
+    }
+  },
+  {
+    "id": "ACRC-360045",
+    "title": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+    "complaintContent": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-360045",
+      "faqNo": "360045",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261028",
+      "agency": "국토교통부",
+      "rawTitle": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+      "rawQuestion": "예산국토관리사무소의 조직구성 및 당당업무가 무엇인가요?",
+      "rawQuestionSha256": "dc8cf3b7fe49bd2a5bf6f211ada02680f58ff907f1fb3d0f013c04b7e20919e0",
+      "normalizedQuestionSha256": "dc8cf3b7fe49bd2a5bf6f211ada02680f58ff907f1fb3d0f013c04b7e20919e0"
+    }
+  },
+  {
+    "id": "ACRC-6917177",
+    "title": "나대지 등 건축물이 없는 곳의 전입신고 신청 처리 가능여부",
+    "complaintContent": "나대지나 도로 등에 전입신고 시에도 신고주의 원칙에 의하여 전입신고 처리 가능 한지 여부",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-6917177",
+      "faqNo": "6917177",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261028",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "나대지 등 건축물이 없는 곳의 전입신고 신청 처리 가능여부 ",
+      "rawQuestion": "나대지나 도로 등에 전입신고 시에도 신고주의 원칙에 의하여 전입신고 처리 가능 한지 여부",
+      "rawQuestionSha256": "200b5f657eb66f4be85de8232dec69977c8a3bd814a55609e4ce7afe45908af1",
+      "normalizedQuestionSha256": "200b5f657eb66f4be85de8232dec69977c8a3bd814a55609e4ce7afe45908af1"
+    }
+  },
+  {
+    "id": "ACRC-307909",
+    "title": "부가가치세 문의드립니다.",
+    "complaintContent": "안녕하세요. 저는 보은국토관리사무소에서\n98년도부터 주유소 진출입로로 도로점용허가를 받아서 쓰고있습니다.\n예전에는 부가가치세라고 따로 낸 적이 없었던것 같은데,\n언젠가부터 고지서에 부가가치세라고 10%정도 떼더라구요.\n왜 그런거죠? 그리고 부가세신고하면 돌려받을 수 있다던데 제가 따로 신고해야하는 건가요??",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-307909",
+      "faqNo": "307909",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261027",
+      "agency": "국토교통부",
+      "rawTitle": "부가가치세 문의드립니다.",
+      "rawQuestion": "안녕하세요. 저는 보은국토관리사무소에서 &lt;br/&gt;98년도부터 주유소 진출입로로 도로점용허가를 받아서 쓰고있습니다.&lt;br/&gt;예전에는 부가가치세라고 따로 낸 적이 없었던것 같은데,&lt;br/&gt;언젠가부터 고지서에 부가가치세라고 10%정도 떼더라구요.&lt;br/&gt;왜 그런거죠? 그리고 부가세신고하면 돌려받을 수 있다던데 제가 따로 신고해야하는 건가요??",
+      "rawQuestionSha256": "356ab7a4e810745cfbba76d3187e98a76cf7fcc5df60bc2cbfbd29b395ba2648",
+      "normalizedQuestionSha256": "cd977ae86d302766e78a9067ca34a3eec438ec77d873bc0d325af01d428e019b"
+    }
+  },
+  {
+    "id": "ACRC-308853",
+    "title": "점용료를 안내도 되는 경우가 있나요?",
+    "complaintContent": "점용료를 안내도 되는 경우가 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "건축",
+    "provenance": {
+      "id": "ACRC-308853",
+      "faqNo": "308853",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261027",
+      "agency": "국토교통부",
+      "rawTitle": "점용료를 안내도 되는 경우가 있나요?",
+      "rawQuestion": "점용료를 안내도 되는 경우가 있나요?",
+      "rawQuestionSha256": "5f64a9361c68c81a1bbbf96d9b0084da576496740d8a3770f1e61ef74223db3b",
+      "normalizedQuestionSha256": "5f64a9361c68c81a1bbbf96d9b0084da576496740d8a3770f1e61ef74223db3b"
+    }
+  },
+  {
+    "id": "ACRC-182180",
+    "title": "도로점용(연결)허가의 금지구간",
+    "complaintContent": "도로변에 도로점용(연결)허가를 얻으려고 하는데 금지구간은 어떤 구간인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "건축",
+    "provenance": {
+      "id": "ACRC-182180",
+      "faqNo": "182180",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261026",
+      "agency": "국토교통부",
+      "rawTitle": "도로점용(연결)허가의 금지구간",
+      "rawQuestion": "도로변에 도로점용(연결)허가를 얻으려고 하는데 금지구간은 어떤 구간인가요?",
+      "rawQuestionSha256": "b16e92344956bfd7f1a9eede67aa804249095952edf5b3f52a16185c5cd1dd0f",
+      "normalizedQuestionSha256": "b16e92344956bfd7f1a9eede67aa804249095952edf5b3f52a16185c5cd1dd0f"
+    }
+  },
+  {
+    "id": "ACRC-254748",
+    "title": "녹지내에서의 도로점용허가 가능 여부",
+    "complaintContent": "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 여부와\n도로점용허가를 받을 수 없다면 법적 및 행정적 근거는 무엇이 있는지요",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "건축",
+    "provenance": {
+      "id": "ACRC-254748",
+      "faqNo": "254748",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261026",
+      "agency": "국토교통부",
+      "rawTitle": "녹지내에서의 도로점용허가 가능 여부",
+      "rawQuestion": "도시계획시설인 녹지에 아파트 진출입 도로로 점용허가를 받을 수 있는지 여부와 &lt;br/&gt;도로점용허가를 받을 수 없다면 법적 및 행정적 근거는 무엇이 있는지요",
+      "rawQuestionSha256": "3f49adc5db62869a7918679d1abbe5954ce8ada57a43d586bc657836c3d0c7c5",
+      "normalizedQuestionSha256": "2c85480e2df83e86d626348d5867b67680fdf5b39b63fb86f22aaaba085853ec"
+    }
+  },
+  {
+    "id": "ACRC-6916730",
+    "title": "담배소매인 지정 신청하려는 경우 필요한 서류가 무엇인지 궁금합니다.",
+    "complaintContent": "담배소매인 지정 신청하려는 경우 필요한 서류가 무엇인지 궁금합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "건축",
+    "provenance": {
+      "id": "ACRC-6916730",
+      "faqNo": "6916730",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261015",
+      "agency": "충청북도 보은군",
+      "rawTitle": "담배소매인 지정 신청하려는 경우 필요한 서류가 무엇인지 궁금합니다. ",
+      "rawQuestion": "담배소매인 지정 신청하려는 경우 필요한 서류가 무엇인지 궁금합니다. ",
+      "rawQuestionSha256": "9ad8a3281e29f9793f5481ab92864dfa95bdb7aa07d236986565b7d8fd906f92",
+      "normalizedQuestionSha256": "af9bad9b457689210bac4214cddb630372b282238bb9c6116161625543922c47"
+    }
+  },
+  {
+    "id": "ACRC-6916946",
+    "title": "고용보험 관련문의",
+    "complaintContent": "고용보험 가입대상자 궁금합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "건축",
+    "provenance": {
+      "id": "ACRC-6916946",
+      "faqNo": "6916946",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261014",
+      "agency": "국세청",
+      "rawTitle": "고용보험 관련문의",
+      "rawQuestion": "고용보험 가입대상자 궁금합니다.",
+      "rawQuestionSha256": "ccc2cc7680ce85a401c15a39e8ece32e671103df39a8a122c1e42bb5ea3ebeb4",
+      "normalizedQuestionSha256": "ccc2cc7680ce85a401c15a39e8ece32e671103df39a8a122c1e42bb5ea3ebeb4"
+    }
+  },
+  {
+    "id": "ACRC-6917328",
+    "title": "입증자료(전세계약서)만으로 미리 입학이 가능여부는?",
+    "complaintContent": "이사할 예정이 있는 경우 입증자료(전세 계약서)만으로 미리 입학이 가능한가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "복지",
+    "provenance": {
+      "id": "ACRC-6917328",
+      "faqNo": "6917328",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261110",
+      "agency": "전남광주통합특별시교육청",
+      "rawTitle": "입증자료(전세계약서)만으로 미리 입학이 가능여부는?",
+      "rawQuestion": "이사할 예정이 있는 경우 입증자료(전세 계약서)만으로 미리 입학이 가능한가요?",
+      "rawQuestionSha256": "e72885c6fd002969644f2c8b8a2233c33c3a9a3228292d7c45dcdcb551898c79",
+      "normalizedQuestionSha256": "e72885c6fd002969644f2c8b8a2233c33c3a9a3228292d7c45dcdcb551898c79"
+    }
+  },
+  {
+    "id": "ACRC-6917285",
+    "title": "이사한 경우 전입신고는 언제까지 해야 하며, 어디에서 신청할 수 있나요?",
+    "complaintContent": "이사한 경우 전입신고는 언제까지 해야 하며, 어디에서 신청할 수 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "복지",
+    "provenance": {
+      "id": "ACRC-6917285",
+      "faqNo": "6917285",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261102",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "이사한 경우 전입신고는 언제까지 해야 하며, 어디에서 신청할 수 있나요?",
+      "rawQuestion": "이사한 경우 전입신고는 언제까지 해야 하며, 어디에서 신청할 수 있나요?",
+      "rawQuestionSha256": "848e7ee18649d58a37e40962b5b162234f50f47609a90a8b27495444f2323c3b",
+      "normalizedQuestionSha256": "848e7ee18649d58a37e40962b5b162234f50f47609a90a8b27495444f2323c3b"
+    }
+  },
+  {
+    "id": "ACRC-6917271",
+    "title": "인감증명서 발급 금지",
+    "complaintContent": "제 인감을 다른사람이 발급 못하게 하고 싶은데 방법이 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "복지",
+    "provenance": {
+      "id": "ACRC-6917271",
+      "faqNo": "6917271",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261031",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "인감증명서 발급 금지",
+      "rawQuestion": "제 인감을 다른사람이 발급 못하게 하고 싶은데 방법이 있나요?",
+      "rawQuestionSha256": "df6b78184e0b109c3ba4cd4b1234ab83a22d31fa205cebed8ccba4ac38397273",
+      "normalizedQuestionSha256": "df6b78184e0b109c3ba4cd4b1234ab83a22d31fa205cebed8ccba4ac38397273"
+    }
+  },
+  {
+    "id": "ACRC-6917261",
+    "title": "부모급여 신청방법 문",
+    "complaintContent": "안녕하세요.\n아이를 출산한 후 부모급여 지원제도에 대해 알아보고 있습니다.\n부모급여는 영아를 양육하는 가정에 지원되는 것으로 알고 있는데, 구체적인 지원 대상과 신청 방법이 궁금하여 문의드립니다.\n부모급여를 지원받을 수 있는 아동의 연령 기준과 월별 지원금액은 어떻게 되나요?\n부모급여는 출생신고 후 자동으로 지급되는 것인지, 별도로 신청해야 하는 것인지 궁금합니다.\n부모급여를 신청하려면 어디에서 신청해야 하며, 신청 시 필요한 서류는 무엇인가요?\n출생 후 일정 기간이 지나서 신청하는 경우에도 출생월부터 소급하여 지원받을 수 있나요?\n부모급여는 매월 언제 지급되는지 궁금합니다.\n부모급여 신청 절차 및 지원 기준에 대해 자세히 안내해 주시면 감사하겠습니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "복지",
+    "provenance": {
+      "id": "ACRC-6917261",
+      "faqNo": "6917261",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261030",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "부모급여 신청방법 문",
+      "rawQuestion": "안녕하세요.\n\n아이를 출산한 후 부모급여 지원제도에 대해 알아보고 있습니다.\n\n부모급여는 영아를 양육하는 가정에 지원되는 것으로 알고 있는데, 구체적인 지원 대상과 신청 방법이 궁금하여 문의드립니다.\n\n부모급여를 지원받을 수 있는 아동의 연령 기준과 월별 지원금액은 어떻게 되나요?\n\n부모급여는 출생신고 후 자동으로 지급되는 것인지, 별도로 신청해야 하는 것인지 궁금합니다.\n\n부모급여를 신청하려면 어디에서 신청해야 하며, 신청 시 필요한 서류는 무엇인가요?\n\n출생 후 일정 기간이 지나서 신청하는 경우에도 출생월부터 소급하여 지원받을 수 있나요?\n\n부모급여는 매월 언제 지급되는지 궁금합니다.\n\n부모급여 신청 절차 및 지원 기준에 대해 자세히 안내해 주시면 감사하겠습니다.",
+      "rawQuestionSha256": "bf2bd23ec1038d8c42e6d24f4ead1a9322d4c9675e5e10147361ade7ad5d7af4",
+      "normalizedQuestionSha256": "6d598d0a6d219c36a91c72b5ecf5150dc56edbddf5720eeaf64c83886e418190"
+    }
+  },
+  {
+    "id": "ACRC-6917217",
+    "title": "농식품바우처 지원대상",
+    "complaintContent": "농식품바우처는 어떤 사람이 지원 받을 수 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "복지",
+    "provenance": {
+      "id": "ACRC-6917217",
+      "faqNo": "6917217",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261029",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "농식품바우처 지원대상",
+      "rawQuestion": "농식품바우처는 어떤 사람이 지원 받을 수 있나요?",
+      "rawQuestionSha256": "5f065c44ec708256268ad618cfa42998be53c1eb163090f9a46926ceb332654d",
+      "normalizedQuestionSha256": "5f065c44ec708256268ad618cfa42998be53c1eb163090f9a46926ceb332654d"
+    }
+  },
+  {
+    "id": "ACRC-6917266",
+    "title": "월세세액공제 문의",
+    "complaintContent": "저는 프리랜서로 일하는 사람입니다. 회사에 다니는 친구는 월세세액공제가 된다고 하던데.. 저도 월세세액공제를 받을수 있나요? 방법을 알려주세요",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "근로",
+    "provenance": {
+      "id": "ACRC-6917266",
+      "faqNo": "6917266",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261031",
+      "agency": "국세청",
+      "rawTitle": "월세세액공제 문의",
+      "rawQuestion": "저는 프리랜서로 일하는 사람입니다. 회사에 다니는 친구는 월세세액공제가 된다고 하던데.. 저도 월세세액공제를 받을수 있나요? 방법을 알려주세요",
+      "rawQuestionSha256": "48b4481b112257e7c0b281927e786d4aeac72809fa9b5a52c973e6222fe6d16b",
+      "normalizedQuestionSha256": "48b4481b112257e7c0b281927e786d4aeac72809fa9b5a52c973e6222fe6d16b"
+    }
+  },
+  {
+    "id": "ACRC-6917254",
+    "title": "해외이주비 자금출처 확인서 관련 문의",
+    "complaintContent": "안녕하세요. 해외이주비 자금출처 확인서 관련 문의드립니다.\n해외이주비(학비 및 생활비) 송금 관련 해외이주비 자금출저 확인서 관련 몇가지 궁금사항이 있어서 문의드립니다.\n통장 사본 및 동 예금․적금의 자금원천이 확인되는 서류는 통장의 잔고가 표시된 자료를 드리면 될까요?\n가족이나 지인에게 받은 경우에는 어떻게 증명 해야 되는지요?\n국내 대리인을 신청할 수 있는지요?\n이에 대한 답변 부탁드립니다.\n감사합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "근로",
+    "provenance": {
+      "id": "ACRC-6917254",
+      "faqNo": "6917254",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261030",
+      "agency": "국세청",
+      "rawTitle": "해외이주비 자금출처 확인서 관련 문의",
+      "rawQuestion": "안녕하세요. 해외이주비 자금출처 확인서 관련 문의드립니다.\n해외이주비(학비 및 생활비) 송금 관련 해외이주비 자금출저 확인서 관련 몇가지 궁금사항이 있어서 문의드립니다.\n통장 사본 및 동 예금․적금의 자금원천이 확인되는 서류는 통장의 잔고가 표시된 자료를 드리면 될까요?\n가족이나 지인에게 받은 경우에는 어떻게 증명 해야 되는지요?\n국내 대리인을 신청할 수 있는지요?\n이에 대한 답변 부탁드립니다.\n감사합니다.",
+      "rawQuestionSha256": "6962bec8c88e903cb0ee33bfc5b12d2514a09a7253d45203cb5c037040e44059",
+      "normalizedQuestionSha256": "6962bec8c88e903cb0ee33bfc5b12d2514a09a7253d45203cb5c037040e44059"
+    }
+  },
+  {
+    "id": "ACRC-6917224",
+    "title": "근로장려금 부정수급 신고",
+    "complaintContent": "근로하지 않은 곳에서 지급명세서를 발급받아\n근로장려금을 부정수급하고 있는 사람이 있는데 신고하고자 합니다.\n신고 방법문의드립니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "근로",
+    "provenance": {
+      "id": "ACRC-6917224",
+      "faqNo": "6917224",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261030",
+      "agency": "국세청",
+      "rawTitle": "근로장려금 부정수급 신고",
+      "rawQuestion": "근로하지 않은 곳에서 지급명세서를 발급받아\n근로장려금을 부정수급하고 있는 사람이 있는데 신고하고자 합니다.\n신고 방법문의드립니다.",
+      "rawQuestionSha256": "5517f609a91525e5fd8207b9a1f7c80e4e4fd64c6f15eff00646f0d9b014e5a8",
+      "normalizedQuestionSha256": "5517f609a91525e5fd8207b9a1f7c80e4e4fd64c6f15eff00646f0d9b014e5a8"
+    }
+  },
+  {
+    "id": "ACRC-6917207",
+    "title": "근로장려금 재검토 신청(202X년 귀속분)",
+    "complaintContent": "본인은 202X년 근로장려금을 신청하였으나 재산합계 2억4천만 원 초과 사유로 지급 대상에서 제외되었습니다.\n당시 주민등록상 동일 주소 세대에 등재되어 있었으나, 배우자와 혼인하여 부부 단위로 독립적인 생계를 유지하고 있습니다.\n해당 세대의 세대주는 배우자의 어머니의 배우자(계부)로, 배우자와 법률상 직계혈족 관계가 아니며, 주민등록 기록상 부모로 등록된 인물도 아닙니다.\n따라서 본인 부부와 해당 세대 사이에는 법적 부양관계나 재산 공동체 관계가 존재하지 않습니다.\n본인 부부는 생계와 재산을 별도로 운영하는 독립 가구임이 명백하므로, 재산 합산으로 탈락된 것은 잘못된 판정임을 분명히 밝힙니다.\n이에 본인 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 주시기를 요청드립니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "근로",
+    "provenance": {
+      "id": "ACRC-6917207",
+      "faqNo": "6917207",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261029",
+      "agency": "국세청",
+      "rawTitle": "근로장려금 재검토 신청(202X년 귀속분)",
+      "rawQuestion": "본인은 202X년 근로장려금을 신청하였으나 재산합계 2억4천만 원 초과 사유로 지급 대상에서 제외되었습니다.\n\n당시 주민등록상 동일 주소 세대에 등재되어 있었으나, 배우자와 혼인하여 부부 단위로 독립적인 생계를 유지하고 있습니다.\n\n해당 세대의 세대주는 배우자의 어머니의 배우자(계부)로, 배우자와 법률상 직계혈족 관계가 아니며, 주민등록 기록상 부모로 등록된 인물도 아닙니다.\n\n따라서 본인 부부와 해당 세대 사이에는 법적 부양관계나 재산 공동체 관계가 존재하지 않습니다.\n\n본인 부부는 생계와 재산을 별도로 운영하는 독립 가구임이 명백하므로, 재산 합산으로 탈락된 것은 잘못된 판정임을 분명히 밝힙니다.\n\n이에 본인 부부를 독립된 가구로 보아 재산 및 가구 요건을 다시 검토해 주시기를 요청드립니다.",
+      "rawQuestionSha256": "835f27257d450dedf7647fa09208033d0294d604b457c614d8a3addec68a783d",
+      "normalizedQuestionSha256": "24c35d2f883d20aaa5a05c76becbc13b77fe567bf205f869e6ac1888e5510181"
+    }
+  },
+  {
+    "id": "ACRC-6917206",
+    "title": "퇴직소득세 신고 관련 문의",
+    "complaintContent": "202X년 X월 XX일 고등학교 교사로 명예퇴직을 했습니다.\n명퇴금을 받으면서 학교에서 퇴직소득에 대한 세금신고를 안한걸로 알고 있습니다.\n제가 직접 신고를 하는게 맞는지요?\n맞다면 신고방법을 알려주십시오. 홈택스에서 할 수 있는지도 알려주십시오.\n상담할려고 여기저기 전화를 해도 연결이 너무 어렵습니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "근로",
+    "provenance": {
+      "id": "ACRC-6917206",
+      "faqNo": "6917206",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261029",
+      "agency": "국세청",
+      "rawTitle": "퇴직소득세 신고 관련 문의",
+      "rawQuestion": "202X년 X월 XX일 고등학교 교사로 명예퇴직을 했습니다.\n명퇴금을 받으면서 학교에서 퇴직소득에 대한 세금신고를 안한걸로 알고 있습니다.\n제가 직접 신고를 하는게 맞는지요?\n맞다면 신고방법을 알려주십시오. 홈택스에서 할 수 있는지도 알려주십시오.\n상담할려고 여기저기 전화를 해도 연결이 너무 어렵습니다.",
+      "rawQuestionSha256": "f85b47eb11a0ee94b27003281a313c766cb0a1817311adc204b8d72b879b03ed",
+      "normalizedQuestionSha256": "f85b47eb11a0ee94b27003281a313c766cb0a1817311adc204b8d72b879b03ed"
+    }
+  },
+  {
+    "id": "ACRC-6917558",
+    "title": "2026년 교원 핵심역량 강화 사업 운영 현황",
+    "complaintContent": "2026년 교원 핵심역량 강화 사업은 어떻게 운영되고 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "교육",
+    "provenance": {
+      "id": "ACRC-6917558",
+      "faqNo": "6917558",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261112",
+      "agency": "부산광역시교육청",
+      "rawTitle": "2026년 교원 핵심역량 강화 사업 운영 현황",
+      "rawQuestion": "2026년 교원 핵심역량 강화 사업은 어떻게 운영되고 있나요?",
+      "rawQuestionSha256": "62543a763889f012053a78d71cea6ab90ea4bce31ba687c624d1df6720b77762",
+      "normalizedQuestionSha256": "62543a763889f012053a78d71cea6ab90ea4bce31ba687c624d1df6720b77762"
+    }
+  },
+  {
+    "id": "ACRC-6917557",
+    "title": "2026 언어문화다양성 교육기반 조성사업",
+    "complaintContent": "「2026 언어문화다양성 교육기반 조성사업」 및 언어문화다양성 시범기관은 무엇인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "교육",
+    "provenance": {
+      "id": "ACRC-6917557",
+      "faqNo": "6917557",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261112",
+      "agency": "부산광역시교육청",
+      "rawTitle": "2026 언어문화다양성 교육기반 조성사업",
+      "rawQuestion": "「2026 언어문화다양성 교육기반 조성사업」 및 언어문화다양성 시범기관은 무엇인가요?",
+      "rawQuestionSha256": "7b9ba9b8e50357d0b2dcc0b11a5de34b941e54c35257b42f483c1a43ca7f9b7c",
+      "normalizedQuestionSha256": "7b9ba9b8e50357d0b2dcc0b11a5de34b941e54c35257b42f483c1a43ca7f9b7c"
+    }
+  },
+  {
+    "id": "ACRC-6917546",
+    "title": "방사청 목록화 관련 질의",
+    "complaintContent": "목록화를 진행하고자 하는데 목록화 가능한 품목, 목록화 절차 등에 대해서 도움이 될 자료를 어디서 찾을 수 있을지 정보를 부탁드립니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "교육",
+    "provenance": {
+      "id": "ACRC-6917546",
+      "faqNo": "6917546",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261111",
+      "agency": "방위사업청",
+      "rawTitle": "방사청 목록화 관련 질의",
+      "rawQuestion": "목록화를 진행하고자 하는데 목록화 가능한 품목, 목록화 절차 등에 대해서 도움이 될 자료를 어디서 찾을 수 있을지 정보를 부탁드립니다.",
+      "rawQuestionSha256": "8de5b35c311bb869b302c011fefca97e66b18b94bd3c177352cd4eddef69fa4e",
+      "normalizedQuestionSha256": "8de5b35c311bb869b302c011fefca97e66b18b94bd3c177352cd4eddef69fa4e"
+    }
+  },
+  {
+    "id": "ACRC-307911",
+    "title": "도로점용료를 5년치 부과하는 근거?",
+    "complaintContent": "어이가없네요.\n몇 년간 아무 소식 없다가\n어느날 갑자기 도로점용료를 5년치 부과하시다니요.\n그 근거를 좀 알고싶습니다!",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "도로",
+    "provenance": {
+      "id": "ACRC-307911",
+      "faqNo": "307911",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261027",
+      "agency": "국토교통부",
+      "rawTitle": "도로점용료를 5년치 부과하는 근거?",
+      "rawQuestion": "어이가없네요.&lt;br/&gt;몇 년간 아무 소식 없다가&lt;br/&gt;어느날 갑자기 도로점용료를 5년치 부과하시다니요.&lt;br/&gt;그 근거를 좀 알고싶습니다!",
+      "rawQuestionSha256": "f720900e055d6a0e22c5c83cb143c5da5d56feeb640be2d52dee4ef4e077a30d",
+      "normalizedQuestionSha256": "9b2077d3280771b32a0e37fcd31e0573ccb89de93f8e767dfb60534204070616"
+    }
+  },
+  {
+    "id": "ACRC-6917540",
+    "title": "국방사업관리사 응시자격 관련 문의",
+    "complaintContent": "국가자격검정 국방사업관리사 3급 응시자격 중 실무자격증에 관한 인정 문의",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "교육",
+    "provenance": {
+      "id": "ACRC-6917540",
+      "faqNo": "6917540",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261111",
+      "agency": "방위사업청",
+      "rawTitle": "국방사업관리사 응시자격 관련 문의",
+      "rawQuestion": "국가자격검정 국방사업관리사 3급 응시자격 중 실무자격증에 관한 인정 문의",
+      "rawQuestionSha256": "b373241981ff0fb0ae78ac5118d73e063627669e1e334b33b0c9f22ad93a99ab",
+      "normalizedQuestionSha256": "b373241981ff0fb0ae78ac5118d73e063627669e1e334b33b0c9f22ad93a99ab"
+    }
+  },
+  {
+    "id": "ACRC-6916211",
+    "title": "EM발효액 수령방법 및 활용법",
+    "complaintContent": "EM발효액은 어떻게 받을 수 있으며, 어떻게 활용하나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "하수",
+    "provenance": {
+      "id": "ACRC-6916211",
+      "faqNo": "6916211",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260821",
+      "agency": "서울특별시 광진구",
+      "rawTitle": "EM발효액 수령방법 및 활용법",
+      "rawQuestion": "EM발효액은 어떻게 받을 수 있으며, 어떻게 활용하나요?",
+      "rawQuestionSha256": "b6ea3358d549c00e7c8788a8e3c0a8d52557469e7fb22af573919d00872fce9c",
+      "normalizedQuestionSha256": "b6ea3358d549c00e7c8788a8e3c0a8d52557469e7fb22af573919d00872fce9c"
+    }
+  },
+  {
+    "id": "ACRC-6916118",
+    "title": "순천시에 물어볼 게 있는데 대표 번호는 무엇인가요?",
+    "complaintContent": "순천시에 여쭤볼 게 있는데 어디 번호에 물어봐야 하는지 모르겠습니다. 콜센터 번호좀 알려주세요",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "하수",
+    "provenance": {
+      "id": "ACRC-6916118",
+      "faqNo": "6916118",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260814",
+      "agency": "전남광주통합특별시 순천시",
+      "rawTitle": "순천시에 물어볼 게 있는데 대표 번호는 무엇인가요?",
+      "rawQuestion": "순천시에 여쭤볼 게 있는데 어디 번호에 물어봐야 하는지 모르겠습니다. 콜센터 번호좀 알려주세요",
+      "rawQuestionSha256": "c6fc97cfb1c1af1fb8c16d89de63330c3b9acc5bdb79cf0882f44737c37868a1",
+      "normalizedQuestionSha256": "c6fc97cfb1c1af1fb8c16d89de63330c3b9acc5bdb79cf0882f44737c37868a1"
+    }
+  },
+  {
+    "id": "ACRC-6915993",
+    "title": "연제구 보건소 방역소독사업은 어떻게 실시하고 있나요?",
+    "complaintContent": "연제구 보건소 방역소독사업은 어떻게 실시하고 있나요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "하수",
+    "provenance": {
+      "id": "ACRC-6915993",
+      "faqNo": "6915993",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260812",
+      "agency": "부산광역시 연제구",
+      "rawTitle": "연제구 보건소 방역소독사업은 어떻게 실시하고 있나요?",
+      "rawQuestion": "연제구 보건소 방역소독사업은 어떻게 실시하고 있나요?",
+      "rawQuestionSha256": "4616c387f6e07c52feeb1226e131c4efdbfaedce5caf0cdcffc2e108eaa54938",
+      "normalizedQuestionSha256": "4616c387f6e07c52feeb1226e131c4efdbfaedce5caf0cdcffc2e108eaa54938"
+    }
+  },
+  {
+    "id": "ACRC-6913908",
+    "title": "빗물받이 설치 기준",
+    "complaintContent": "빗물받이 설치 기준",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "하수",
+    "provenance": {
+      "id": "ACRC-6913908",
+      "faqNo": "6913908",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "경기도 부천시",
+      "rawTitle": "빗물받이 설치 기준",
+      "rawQuestion": "빗물받이 설치 기준",
+      "rawQuestionSha256": "e0b6cb23ca7274944b45a00969709e296ba0740f851d17c1e045d399fdee759c",
+      "normalizedQuestionSha256": "e0b6cb23ca7274944b45a00969709e296ba0740f851d17c1e045d399fdee759c"
+    }
+  },
+  {
+    "id": "ACRC-6914421",
+    "title": "장애인 등록 방법",
+    "complaintContent": "장애인 등록 방법",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "하수",
+    "provenance": {
+      "id": "ACRC-6914421",
+      "faqNo": "6914421",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260803",
+      "agency": "경기도 부천시",
+      "rawTitle": "장애인 등록 방법",
+      "rawQuestion": "장애인 등록 방법",
+      "rawQuestionSha256": "c5c464582d8edd7db860c960523e9af32f64df1eaae4d4872d7a1e9bf6fb1777",
+      "normalizedQuestionSha256": "c5c464582d8edd7db860c960523e9af32f64df1eaae4d4872d7a1e9bf6fb1777"
+    }
+  },
+  {
+    "id": "ACRC-6917174",
+    "title": "금연구역 내 흡연자 발견 시 확인 방법 및 신고 절차",
+    "complaintContent": "공공장소 등에서 흡연자를 발견했을 때, 해당 장소가 정확히 법적 금연구역에 해당하는지 확인하는 방법과, 흡연 행위를 목격했을 경우 구체적인 신고 절차 및 처분 기준이 어떻게 되는지 질의합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "공원",
+    "provenance": {
+      "id": "ACRC-6917174",
+      "faqNo": "6917174",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261030",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "금연구역 내 흡연자 발견 시 확인 방법 및 신고 절차",
+      "rawQuestion": "공공장소 등에서 흡연자를 발견했을 때, 해당 장소가 정확히 법적 금연구역에 해당하는지 확인하는 방법과, 흡연 행위를 목격했을 경우 구체적인 신고 절차 및 처분 기준이 어떻게 되는지 질의합니다.",
+      "rawQuestionSha256": "3def3b64c4c958c53bbd50f88205897910531761a1ac139aa83fc94e544795d2",
+      "normalizedQuestionSha256": "3def3b64c4c958c53bbd50f88205897910531761a1ac139aa83fc94e544795d2"
+    }
+  },
+  {
+    "id": "ACRC-6917167",
+    "title": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+    "complaintContent": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "공원",
+    "provenance": {
+      "id": "ACRC-6917167",
+      "faqNo": "6917167",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261028",
+      "agency": "전북특별자치도 남원시",
+      "rawTitle": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+      "rawQuestion": "드론으로 전경을 촬영하고 싶은데 절차가 어떻게 될까요?",
+      "rawQuestionSha256": "66843c71c59edb93cd6d22d5f29362709a87cdce877e8f1c7f114233a97f278e",
+      "normalizedQuestionSha256": "66843c71c59edb93cd6d22d5f29362709a87cdce877e8f1c7f114233a97f278e"
+    }
+  },
+  {
+    "id": "ACRC-6916878",
+    "title": "모범납세자 제도란?",
+    "complaintContent": "모범납세자 제도가 무엇인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "공원",
+    "provenance": {
+      "id": "ACRC-6916878",
+      "faqNo": "6916878",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261012",
+      "agency": "국세청",
+      "rawTitle": "모범납세자 제도란?",
+      "rawQuestion": "모범납세자 제도가 무엇인가요?",
+      "rawQuestionSha256": "e1cfc1fbceccd37d218e6fa899809d918dad7385c60f090ba846abd2a72ecde7",
+      "normalizedQuestionSha256": "e1cfc1fbceccd37d218e6fa899809d918dad7385c60f090ba846abd2a72ecde7"
+    }
+  },
+  {
+    "id": "ACRC-6916893",
+    "title": "강서구 통합신청사 이전 및 업무 개시 안내",
+    "complaintContent": "강서구 통합신청사 이전 및 업무 개시가 궁금합니다.",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "공원",
+    "provenance": {
+      "id": "ACRC-6916893",
+      "faqNo": "6916893",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20261012",
+      "agency": "서울특별시 강서구",
+      "rawTitle": "강서구 통합신청사 이전 및 업무 개시 안내",
+      "rawQuestion": "강서구 통합신청사 이전 및 업무 개시가 궁금합니다.",
+      "rawQuestionSha256": "353765e2c1c0ec3e175435ef5392abd90f54f6f5c0a2e883c60a5a91e6e06842",
+      "normalizedQuestionSha256": "353765e2c1c0ec3e175435ef5392abd90f54f6f5c0a2e883c60a5a91e6e06842"
+    }
+  },
+  {
+    "id": "ACRC-6916461",
+    "title": "어린이 기호식품 우수판매업소 지정범위",
+    "complaintContent": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건은 무엇인가요?",
+    "location": "",
+    "occurredAt": "",
+    "queryTopic": "공원",
+    "provenance": {
+      "id": "ACRC-6916461",
+      "faqNo": "6916461",
+      "source": {
+        "id": "15074671",
+        "name": "국민권익위원회_민원정책 질의응답조회서비스",
+        "url": "https://www.data.go.kr/data/15074671/openapi.do",
+        "license": "이용허락범위 제한 없음",
+        "licenseCheckedAt": "2026-11-15",
+        "recordKind": "공개 민원 질의응답; 최초 제출 전체 원문 여부 미확인"
+      },
+      "receivedAtRaw": "20260917",
+      "agency": "식품의약품안전처",
+      "rawTitle": "어린이 기호식품 우수판매업소 지정범위",
+      "rawQuestion": "어린이 기호식품 우수 판매업소로 지정받을 수 있는 조건은 무엇인가요?",
+      "rawQuestionSha256": "da0717b8ae4ae928f493f131f8fc6ee62504ad80fff5975f71cbd21cf7e47e06",
+      "normalizedQuestionSha256": "da0717b8ae4ae928f493f131f8fc6ee62504ad80fff5975f71cbd21cf7e47e06"
+    }
+  }
+]
